@@ -1,6 +1,6 @@
 ##
 ## EPITECH PROJECT, 2025
-## Wol3D
+## Wolf3D
 ## File description:
 ## Makefile
 ##
