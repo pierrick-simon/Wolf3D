@@ -28,7 +28,8 @@
 
     #define SHOTGUN_FRAME 0.05
     #define SHOTGUN_NB_TILE 5
-    #define SHOTGUN_SPRITE (sfVector2f){320, 180}
+    #define SHOTGUN_SPRITE_X 320
+    #define SHOTGUN_SPRITE_Y 180
 
 typedef struct game {
     sfRenderWindow *window;

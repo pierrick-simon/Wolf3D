@@ -16,7 +16,7 @@ static void shot_gun_anim(game_t *game, weapon_t *weapon)
         if (diff > SHOTGUN_FRAME * i
             && diff < SHOTGUN_FRAME * (i + 1)
             && weapon->sprite.tile == i) {
-            move_rect(&weapon->sprite, SHOTGUN_SPRITE.x, SHOTGUN_NB_TILE);
+            move_rect(&weapon->sprite, SHOTGUN_SPRITE_X, SHOTGUN_NB_TILE);
             weapon->sprite.tile++;
             break;
         }

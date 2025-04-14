@@ -51,7 +51,8 @@ static void change_weapon(sfEvent event, weapon_t *weapon)
         weapon->weapon = 1;
     if (is_keyboard_input(event, sfKeyNum3))
         weapon->weapon = 2;
-    sfSprite_setTexture(weapon->sprite.sprite, weapon->texture[weapon->weapon], sfTrue);
+    sfSprite_setTexture(weapon->sprite.sprite,
+        weapon->texture[weapon->weapon], sfTrue);
     sfSprite_setTextureRect(weapon->sprite.sprite, weapon->sprite.rectangle);
 }
 

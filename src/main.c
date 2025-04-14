@@ -11,7 +11,7 @@ int main(int ac, char **av)
 {
     game_t game = {NULL};
     weapon_t weapon = {NULL};
-    
+
     init_game(&game);
     init_weapon(&weapon);
     game_loop(&game, &weapon);
