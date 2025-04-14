@@ -1,0 +1,93 @@
+name: CI-CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  MIRROR_URL: git@github.com:EpitechPGEPromo2029/G-ING-210-PAR-2-1-wolf3d-pierrick.simon.git
+  EXECUTABLES: "wolf3d"
+
+jobs:
+  check_coding_style:
+   name: Check coding-style
+   runs-on: ubuntu-latest
+   defaults:
+     run:
+       shell: bash
+   container: ghcr.io/epitech/coding-style-checker:latest
+   steps:
+     - name: Checkout repository
+       uses: actions/checkout@v4
+     - name: Coding-style
+       run: check.sh $(pwd) $(pwd)
+     - name:
+       run: |
+         while read line
+         do
+           TYPE=`echo $line | cut -d ":" -f 3 | cut -c 2-`
+           FILE=`echo $line | cut -d ":" -f 1 | cut -c 3-`
+           LINE=`echo $line | cut -d ":" -f 2`
+           ERROR=`echo $line | cut -d ":" -f 4`
+           echo "::error file=$FILE,line=#$LINE,title=$TYPE coding style error::$ERROR"
+         done < coding-style-reports.log
+         if [ `cat coding-style-reports.log | wc -l` != '0' ]
+         then
+           exit 1
+         fi
+
+  check_program_compilation:
+   name: Check program compilation
+   needs: check_coding_style
+   runs-on: ubuntu-latest
+   defaults:
+     run:
+       shell: bash
+   container: epitechcontent/epitest-docker
+   steps:
+     - name: Checkout repository
+       uses: actions/checkout@v4
+     - name: make
+       timeout-minutes: 2
+       run: make
+     - name: clean
+       run: make clean
+     - name: check files
+       run: |
+         IFS=","
+         ERR=0
+         for exec in `echo ${{ env.EXECUTABLES }}`
+         do
+           if [ ! -f "$exec" ]
+           then
+             ERR=1
+             echo "::error::Error: $exec is missing"
+           fi
+           if [ ! -x "$exec" ]
+           then
+             ERR=1
+             echo "::error::Error: $exec is not executable"
+           fi
+         done
+
+  push_to_mirror:
+    name: Push to mirror
+    needs: check_program_compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        if: ${{github.repository}} != ${{env.MIRROR_URL}}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push repository
+        uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url:
+            ${{ env.MIRROR_URL }}
+          ssh_private_key:
+            ${{ secrets.GIT_SSH_PRIVATE_KEY }}
