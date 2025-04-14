@@ -47,15 +47,17 @@ typedef struct sprite {
 
 typedef struct {
     sprite_t sprite;
-    sfMusic *sound;
+    sfTexture **texture;
+    sfMusic **sound;
     sfInt64 shot;
-} shotgun_t;
+    int weapon;
+} weapon_t;
 
 void init_game(game_t *game);
 sfRenderWindow *create_window(void);
-void init_shotgun(shotgun_t *shotgun);
-void events(game_t *game, shotgun_t *shotgun);
+void init_weapon(weapon_t *weapon);
+void events(game_t *game, weapon_t *weapon);
 void move_rect(sprite_t *sprite, int offset, int max_value);
-void game_loop(game_t *game, shotgun_t *shotgun);
+void game_loop(game_t *game, weapon_t *weapon);
 
 #endif

@@ -43,22 +43,35 @@ static void close_window(sfEvent event, game_t *game)
     }
 }
 
-static void click(sfEvent event, game_t *game, shotgun_t *shotgun)
+static void change_weapon(sfEvent event, weapon_t *weapon)
+{
+    if (is_keyboard_input(event, sfKeyNum1))
+        weapon->weapon = 0;
+    if (is_keyboard_input(event, sfKeyNum2))
+        weapon->weapon = 1;
+    if (is_keyboard_input(event, sfKeyNum3))
+        weapon->weapon = 2;
+    sfSprite_setTexture(weapon->sprite.sprite, weapon->texture[weapon->weapon], sfTrue);
+    sfSprite_setTextureRect(weapon->sprite.sprite, weapon->sprite.rectangle);
+}
+
+static void click(sfEvent event, game_t *game, weapon_t *weapon)
 {
     if (event.type == sfEvtMouseButtonPressed
         && event.mouseButton.button == sfMouseLeft) {
-        shotgun->shot = sfClock_getElapsedTime(game->clock).microseconds;
-        sfMusic_play(shotgun->sound);
+        weapon->shot = sfClock_getElapsedTime(game->clock).microseconds;
+        sfMusic_play(weapon->sound[weapon->weapon]);
     }
 }
 
-void events(game_t *game, shotgun_t *shotgun)
+void events(game_t *game, weapon_t *weapon)
 {
     sfEvent event;
 
     while (sfRenderWindow_pollEvent(game->window, &event)) {
         close_window(event, game);
         music_setvolume(event, game);
-        click(event, game, shotgun);
+        click(event, game, weapon);
+        change_weapon(event, weapon);
     }
 }

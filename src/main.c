@@ -10,10 +10,10 @@
 int main(int ac, char **av)
 {
     game_t game = {NULL};
-    shotgun_t shotgun = {NULL};
+    weapon_t weapon = {NULL};
     
     init_game(&game);
-    init_shotgun(&shotgun);
-    game_loop(&game, &shotgun);
+    init_weapon(&weapon);
+    game_loop(&game, &weapon);
     return EXIT_S;
 }
