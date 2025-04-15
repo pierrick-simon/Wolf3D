@@ -24,6 +24,16 @@ void init_sound_texture(weapon_t *weapon)
         (sfMusic *){sfMusic_createFromFile("asset/shotgun_shot.ogg")};
 }
 
+void init_map(map_t *map)
+{
+    sfVector2f pos = {WIN_WIDTH, WIN_HEIGHT / 2};
+
+    map->ceiling_floor = sfRectangleShape_create();
+    sfRectangleShape_setSize(map->ceiling_floor, pos);
+    map->ceiling_color = CEILING_COLOR;
+    map->floor_color = FLOOR_COLOR;
+}
+
 void init_weapon(weapon_t *weapon)
 {
     weapon->shot = SEC_IN_MICRO * -1;
@@ -49,4 +59,19 @@ void init_game(game_t *game)
     game->window = create_window();
     game->clock = sfClock_create();
     game->music = sfMusic_createFromFile("asset/music.ogg");
+    game->map = malloc(sizeof(map_t));
+    if (game->map == NULL)
+        return;
+    init_map(game->map);
+    game->player = malloc(sizeof(player_t));
+    if (game->player == NULL)
+        return;
+    init_player(game->player);
+}
+
+void init_player(player_t *player)
+{
+    player->angle = (2 * M_PI) / 3;
+    player->x = (MAP_WIDTH) / 2 - 0.1;
+    player->y = (MAP_HEIGHT) / 2 - 0.1;
 }

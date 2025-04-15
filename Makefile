@@ -11,7 +11,9 @@ SRC = src/init.c	\
 		src/creat_window.c	\
 		src/event.c	\
 		src/move_rect.c	\
-		src/game_loop.c
+		src/game_loop.c	\
+		src/is_wall.c	\
+		src/ray_cast.c
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)
 
@@ -25,7 +27,7 @@ LDFLAGS = -Llib
 
 LDLIBS = -lmy
 
-CSFMLFLAG = -lcsfml-system -lcsfml-window -lcsfml-graphics -lcsfml-audio
+CSFMLFLAG = -lcsfml-system -lcsfml-window -lcsfml-graphics -lcsfml-audio -lm
 
 all:	$(NAME)
 

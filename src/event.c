@@ -5,6 +5,7 @@
 ** event
 */
 
+#include <math.h>
 #include "wolf.h"
 
 static sfBool is_keyboard_input(sfEvent event, sfKeyCode key)
@@ -65,6 +66,32 @@ static void click(sfEvent event, game_t *game, weapon_t *weapon)
     }
 }
 
+static void move_player(sfEvent event, game_t *game, player_t *player)
+{
+    sfVector2f v = (sfVector2f){cos(player->angle), sin(player->angle)};
+
+    if (is_keyboard_input(event, sfKeyZ)) {
+        player->x += v.x;
+        player->y += v.y;
+    }
+    if (is_keyboard_input(event, sfKeyS)) {
+        player->x -= v.x;
+        player->y -= v.y;
+    }
+    if (is_keyboard_input(event, sfKeyQ)) {
+        player->x += v.x;
+        player->y -= v.y;
+    }
+    if (is_keyboard_input(event, sfKeyD)) {
+        player->x -= v.x;
+        player->y += v.y;
+    }
+    if (is_keyboard_input(event, sfKeyLeft))
+        player->angle -= 0.1;
+    if (is_keyboard_input(event, sfKeyRight))
+        player->angle += 0.1;
+}
+
 void events(game_t *game, weapon_t *weapon)
 {
     sfEvent event;
@@ -74,5 +101,6 @@ void events(game_t *game, weapon_t *weapon)
         music_setvolume(event, game);
         click(event, game, weapon);
         change_weapon(event, weapon);
+        move_player(event, game, game->player);
     }
 }

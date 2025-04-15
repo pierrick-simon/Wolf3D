@@ -25,15 +25,32 @@ static void shot_gun_anim(game_t *game, weapon_t *weapon)
         weapon->sprite.tile = 0;
 }
 
+void draw_map(game_t *game)
+{
+    sfVector2f pos = {0, 0};
+
+    sfRectangleShape_setPosition(game->map->ceiling_floor, pos);
+    sfRectangleShape_setFillColor(game->map->ceiling_floor, CEILING_COLOR);
+    sfRenderWindow_drawRectangleShape(game->window, game->map->ceiling_floor, NULL);
+    pos = (sfVector2f){0, WIN_HEIGHT / 2};
+    sfRectangleShape_setPosition(game->map->ceiling_floor, pos);
+    sfRectangleShape_setFillColor(game->map->ceiling_floor, FLOOR_COLOR);
+    sfRenderWindow_drawRectangleShape(game->window, game->map->ceiling_floor, NULL);
+}
+
 void game_loop(game_t *game, weapon_t *weapon)
 {
     while (sfRenderWindow_isOpen(game->window) == sfTrue) {
         events(game, weapon);
         shot_gun_anim(game, weapon);
         sfRenderWindow_clear(game->window, sfWhite);
+        sfMusic_setVolume(game->music, 0);
         if (sfMusic_getStatus(game->music) == sfStopped)
             sfMusic_play(game->music);
+        draw_map(game);
+        cast_all_rays(game->window, game->player);
         sfRenderWindow_drawSprite(game->window, weapon->sprite.sprite, NULL);
         sfRenderWindow_display(game->window);
+
     }
 }

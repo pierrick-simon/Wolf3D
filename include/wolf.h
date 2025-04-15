@@ -14,6 +14,10 @@
     #include <SFML/Graphics.h>
     #include <SFML/Audio.h>
 
+    #ifndef M_PI
+        #define M_PI 3.14159265358979323846
+    #endif
+
     #define VOL_MAX 100.0
     #define VOL_MIN 0.0
     #define VOL_GAP 5.0
@@ -31,13 +35,22 @@
     #define SHOTGUN_SPRITE_X 320
     #define SHOTGUN_SPRITE_Y 180
 
-typedef struct game {
-    sfRenderWindow *window;
-    sfClock *clock;
-    sfMusic *music;
-} game_t;
+    #define TILE_SIZE 64
+    #define MAP_WIDTH 15
+    #define MAP_HEIGHT 15
 
-typedef struct sprite {
+    #define FOV ( M_PI / 3)
+    #define NUM_RAYS 800
+
+    #define CEILING_COLOR sfMagenta
+    #define FLOOR_COLOR sfCyan
+
+    #define DEG(rad) (180 / M_PI) * rad
+    #define RAD(deg) (M_PI / 180) * deg
+
+    #define MAX_DISTANCE 100.0
+
+typedef struct sprite_s {
     sfTexture *texture;
     sfSprite *sprite;
     sfVector2f posf;
@@ -46,7 +59,7 @@ typedef struct sprite {
     int tile;
 } sprite_t;
 
-typedef struct {
+typedef struct weapon_s {
     sprite_t sprite;
     sfTexture **texture;
     sfMusic **sound;
@@ -54,11 +67,60 @@ typedef struct {
     int weapon;
 } weapon_t;
 
+typedef struct map_s {
+    sfRectangleShape *ceiling_floor;
+    sfColor ceiling_color;
+    sfColor floor_color;
+} map_t;
+
+typedef struct player_s{
+    float x;
+    float y;
+    float angle;
+} player_t;
+
+typedef struct game_s {
+    sfRenderWindow *window;
+    sfClock *clock;
+    sfMusic *music;
+    map_t *map;
+    player_t *player;
+} game_t;
+
+static const int map[MAP_HEIGHT][MAP_WIDTH] = {
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0/*ici*/, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+};
+
+void init_player (player_t *player);
 void init_game(game_t *game);
 sfRenderWindow *create_window(void);
 void init_weapon(weapon_t *weapon);
 void events(game_t *game, weapon_t *weapon);
 void move_rect(sprite_t *sprite, int offset, int max_value);
 void game_loop(game_t *game, weapon_t *weapon);
+void init_map(map_t *map);
+void cast_all_rays(sfRenderWindow *window, player_t *player);
+float cast_single_ray(player_t *player,
+    float ray_angle, sfRenderWindow *window, float offset_x);
+
+typedef enum wich_line {
+    NONE,
+    HORIZONTAL,
+    VERTICAL
+} wich_line_t;
 
 #endif
