@@ -115,7 +115,7 @@ void events(game_t *game, weapon_t *weapon);
 void move_rect(sprite_t *sprite, int offset, int max_value);
 void game_loop(game_t *game, weapon_t *weapon);
 void init_map(map_t *map);
-void cast_all_rays(sfRenderWindow *window, player_t *player);
+void cast_all_rays(sfRenderWindow *window, game_t *game);
 float cast_single_ray(player_t *player,
     float ray_angle, sfRenderWindow *window, float offest_x, float angle_offset, sfVertex *point);
 
