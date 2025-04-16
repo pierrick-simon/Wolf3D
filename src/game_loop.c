@@ -38,6 +38,11 @@ void draw_map(game_t *game)
     sfRectangleShape_setFillColor(game->map->ceiling_floor, FLOOR_COLOR);
     sfRenderWindow_drawRectangleShape(game->window,
         game->map->ceiling_floor, NULL);
+    pos = (sfVector2f){0, TOOLBAR_POS};
+    sfRectangleShape_setPosition(game->map->ceiling_floor, pos);
+    sfRectangleShape_setFillColor(game->map->ceiling_floor, TOOLBAR_COLOR);
+    sfRenderWindow_drawRectangleShape(game->window,
+        game->map->ceiling_floor, NULL);
 }
 
 void game_loop(game_t *game, weapon_t *weapon)

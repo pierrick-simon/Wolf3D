@@ -24,7 +24,7 @@
 
     #define WIN_HEIGHT 1080
     #define WIN_WIDTH 1920
-    #define WIN_BITS 64
+    #define WIN_BITS 144
     #define WIN_FRAME 60
     #define WIN_NAME "Wolf3D"
 
@@ -45,6 +45,7 @@
 
     #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
     #define FLOOR_COLOR sfColor_fromRGB(149, 149, 149)
+    #define TOOLBAR_COLOR sfColor_fromRGB(49, 49, 49)
 
     #define LEFT_COLOR sfColor_fromRGB(99, 99, 99)
     #define LEFT_SHADOW sfColor_fromRGB(49, 49, 49)
@@ -68,6 +69,7 @@
 
     #define SPRINT_COEF 1.1
     #define SPRINTING_FOV FOV * SPRINT_COEF
+    #define TOOLBAR_POS (WIN_HEIGHT - 130)
 
 typedef enum which_line {
     NONE,
@@ -102,8 +104,6 @@ typedef struct weapon_s {
 
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
-    sfColor ceiling_color;
-    sfColor floor_color;
 } map_t;
 
 typedef struct player_s {
@@ -122,6 +122,7 @@ typedef struct game_s {
     player_t *player;
     sfVertexArray *rays;
     sfRenderStates wall_state;
+    sfBool fullscreen;
 } game_t;
 
 static const int map[MAP_WIDTH][MAP_HEIGHT] = {
@@ -153,7 +154,7 @@ static const int map[MAP_WIDTH][MAP_HEIGHT] = {
 
 void init_player(player_t *player);
 int init_game(game_t *game);
-sfRenderWindow *create_window(void);
+sfRenderWindow *create_window(sfUint32 style, double coeff);
 int init_weapon(weapon_t *weapon);
 void events(game_t *game, weapon_t *weapon);
 void move_rect(sprite_t *sprite, int offset, int max_value);

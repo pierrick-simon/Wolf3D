@@ -69,6 +69,28 @@ static void click(sfEvent event, game_t *game, weapon_t *weapon)
     }
 }
 
+static void resize_window(sfEvent event, game_t *game)
+{
+    sfRenderWindow *new = NULL;
+    sfBool old = game->fullscreen;
+
+    if (is_keyboard_input(event, sfKeyF11)) {
+        if (game->fullscreen == sfFalse) {
+            new = create_window(sfFullscreen, 1);
+            game->fullscreen = sfTrue;
+        } else {
+            new = create_window(sfTitlebar | sfClose, 0.9);
+            game->fullscreen = sfFalse;
+        }
+        if (new != NULL) {
+            sfRenderWindow_close(game->window);
+            sfRenderWindow_destroy(game->window);
+            game->window = new;
+        } else
+            game->fullscreen = old;
+    }
+}
+
 void events(game_t *game, weapon_t *weapon)
 {
     sfEvent event = {0};
@@ -78,6 +100,7 @@ void events(game_t *game, weapon_t *weapon)
         music_setvolume(event, game);
         click(event, game, weapon);
         change_weapon(event, game, weapon);
+        resize_window(event, game);
     }
     game->player->fov = FOV;
     move_player(game->player);
