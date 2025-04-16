@@ -8,13 +8,6 @@
 #include <math.h>
 #include "wolf.h"
 
-static sfBool is_keyboard_input(sfEvent event, sfKeyCode key)
-{
-    if (event.type == sfEvtKeyPressed && event.key.code == key)
-        return sfTrue;
-    return sfFalse;
-}
-
 static void music_setvolume(sfEvent event, game_t *game)
 {
     float volume = sfMusic_getVolume(game->music);
@@ -66,39 +59,15 @@ static void click(sfEvent event, game_t *game, weapon_t *weapon)
     }
 }
 
-static void move_player(sfEvent event, game_t *game, player_t *player)
-{
-    sfVector2f v = (sfVector2f){cos(player->angle) * 2, sin(player->angle) * 2};
-
-    if (is_keyboard_input(event, sfKeyUp)) {
-        player->x += v.x;
-        player->y += v.y;
-    }
-    if (is_keyboard_input(event, sfKeyDown)) {
-        player->x -= v.x;
-        player->y -= v.y;
-    }
-    if (is_keyboard_input(event, sfKeyLeft)) {
-        player->angle -= 0.1;
-        if (player->angle < 0)
-            player->angle = (M_PI * 2) + player->angle;
-    }
-    if (is_keyboard_input(event, sfKeyRight)) {
-        player->angle += 0.1;
-        if (player->angle > (M_PI * 2))
-            player->angle -= (M_PI * 2);
-    }
-}
-
 void events(game_t *game, weapon_t *weapon)
 {
-    sfEvent event;
+    sfEvent event = {0};
 
     while (sfRenderWindow_pollEvent(game->window, &event)) {
         close_window(event, game);
         music_setvolume(event, game);
         click(event, game, weapon);
         change_weapon(event, weapon);
-        move_player(event, game, game->player);
+        move_player(event, game->player);
     }
 }

@@ -36,21 +36,40 @@
     #define SHOTGUN_SPRITE_Y 180
 
     #define TILE_SIZE 64
-    #define MAP_WIDTH 15
-    #define MAP_HEIGHT 15
+    #define MAP_WIDTH 24
+    #define MAP_HEIGHT 24
 
     #define FOV ( M_PI / 3)
-    #define NUM_RAYS 800
+    #define NUM_RAYS WIN_WIDTH
 
-    #define CEILING_COLOR sfMagenta
-    #define FLOOR_COLOR sfCyan
+    #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
+    #define FLOOR_COLOR sfColor_fromRGB(149, 149, 149)
+
+    #define LEFT_COLOR sfColor_fromRGB(99, 99, 99)
+    #define LEFT_SHADOW sfColor_fromRGB(49, 49, 49)
+    #define TOP_COLOR sfColor_fromRGB(59, 59, 59)
+    #define TOP_SHADOW sfColor_fromRGB(9, 9, 9)
 
     #define DEG(rad) (180 / M_PI) * rad
     #define RAD(deg) (M_PI / 180) * deg
 
     #define MAX_DISTANCE 100.0
 
-    #define RENDER_DISTANCE 1000
+    #define RENDER_DISTANCE 1200
+
+    #define PLAYER_SPEED 2.0
+    #define ROTATION_SPPED RAD(3.0)
+    #define FORWARD_COEF 2.0
+
+    #define DISTANCE_COLISION 5.0
+
+typedef enum which_line {
+    NONE,
+    TOP,
+    BOTTOM,
+    LEFT,
+    RIGHT,
+} which_line_t;
 
 typedef struct sprite_s {
     sfTexture *texture;
@@ -75,10 +94,11 @@ typedef struct map_s {
     sfColor floor_color;
 } map_t;
 
-typedef struct player_s{
-    float x;
-    float y;
+typedef struct player_s {
+    sfVector2f pos;
     float angle;
+    sfVector2f v;
+    which_line_t type;
 } player_t;
 
 typedef struct game_s {
@@ -87,27 +107,37 @@ typedef struct game_s {
     sfMusic *music;
     map_t *map;
     player_t *player;
+    sfVertexArray *rays;
 } game_t;
 
-static const int map[MAP_HEIGHT][MAP_WIDTH] = {
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0/*ici*/, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+static const int map[MAP_WIDTH][MAP_HEIGHT] = {
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1},
+    {1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1},
+    {1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 8},
+    {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
+    {1, 0, 8, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 8},
+    {1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1},
+    {1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1},
+    {1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1},
+    {1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 };
 
-void init_player (player_t *player);
+void init_player(player_t *player);
 void init_game(game_t *game);
 sfRenderWindow *create_window(void);
 void init_weapon(weapon_t *weapon);
@@ -115,16 +145,10 @@ void events(game_t *game, weapon_t *weapon);
 void move_rect(sprite_t *sprite, int offset, int max_value);
 void game_loop(game_t *game, weapon_t *weapon);
 void init_map(map_t *map);
-void cast_all_rays(sfRenderWindow *window, game_t *game);
+void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player,
-    float ray_angle, sfRenderWindow *window, float offest_x, float angle_offset, sfVertex *point);
-
-typedef enum which_line {
-    NONE,
-    TOP,
-    BOTTOM,
-    LEFT,
-    RIGHT,
-} which_line_t ;
+    float angle_offset, which_line_t *type);
+void move_player(sfEvent event, player_t *player);
+sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
 
 #endif

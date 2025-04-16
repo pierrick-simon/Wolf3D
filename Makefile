@@ -12,8 +12,9 @@ SRC = src/init.c	\
 		src/event.c	\
 		src/move_rect.c	\
 		src/game_loop.c	\
-		src/is_wall.c	\
-		src/ray_cast.c
+		src/ray_cast.c	\
+		src/move_player.c	\
+		src/is_keyboard_input.c
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)
 

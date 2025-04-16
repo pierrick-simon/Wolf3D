@@ -7,7 +7,7 @@
 
 #include "wolf.h"
 
-int main(int ac, char **av)
+int main(void)
 {
     game_t game = {NULL};
     weapon_t weapon = {NULL};

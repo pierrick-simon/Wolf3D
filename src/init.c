@@ -59,6 +59,10 @@ void init_game(game_t *game)
     game->window = create_window();
     game->clock = sfClock_create();
     game->music = sfMusic_createFromFile("asset/music.ogg");
+    game->rays = sfVertexArray_create();
+    if (game->rays == NULL)
+        return;
+    sfVertexArray_setPrimitiveType(game->rays, sfLines);
     game->map = malloc(sizeof(map_t));
     if (game->map == NULL)
         return;
@@ -71,7 +75,7 @@ void init_game(game_t *game)
 
 void init_player(player_t *player)
 {
-    player->angle = (2 * M_PI) / 3;
-    player->x = (MAP_WIDTH * TILE_SIZE) / 2;
-    player->y = (MAP_HEIGHT * TILE_SIZE) / 2;
+    player->angle = (-2 * M_PI) / 3;
+    player->pos.x = (MAP_WIDTH * TILE_SIZE) / 2 - 92;
+    player->pos.y = (MAP_HEIGHT * TILE_SIZE) / 2 - 92;
 }
