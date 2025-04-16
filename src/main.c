@@ -14,8 +14,13 @@ int main(void)
     map_t map = {NULL};
 
     init_map(&map);
-    init_game(&game);
-    init_weapon(&weapon);
+    if (init_game(&game) == EXIT_F || init_weapon(&weapon) == EXIT_F) {
+        destroy_game(&game);
+        destroy_weapon(&weapon);
+        return EXIT_F;
+    }
     game_loop(&game, &weapon);
+    destroy_game(&game);
+    destroy_weapon(&weapon);
     return EXIT_S;
 }

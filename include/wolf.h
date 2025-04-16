@@ -30,10 +30,11 @@
 
     #define SEC_IN_MICRO 1000000
 
-    #define SHOTGUN_FRAME 0.05
-    #define SHOTGUN_NB_TILE 5
-    #define SHOTGUN_SPRITE_X 320
-    #define SHOTGUN_SPRITE_Y 180
+    #define WEAPON_FRAME 0.05
+    #define WEAPON_NB_TILE 5
+    #define WEAPON_SPRITE_X 320
+    #define WEAPON_SPRITE_Y 180
+    #define NB_WEAPON 3
 
     #define TILE_SIZE 64
     #define MAP_WIDTH 24
@@ -70,6 +71,12 @@ typedef enum which_line {
     LEFT,
     RIGHT,
 } which_line_t;
+
+typedef enum {
+    PUNCH,
+    PISTOL,
+    SHOTGUN,
+} weapon_id_t;
 
 typedef struct sprite_s {
     sfTexture *texture;
@@ -138,9 +145,9 @@ static const int map[MAP_WIDTH][MAP_HEIGHT] = {
 };
 
 void init_player(player_t *player);
-void init_game(game_t *game);
+int init_game(game_t *game);
 sfRenderWindow *create_window(void);
-void init_weapon(weapon_t *weapon);
+int init_weapon(weapon_t *weapon);
 void events(game_t *game, weapon_t *weapon);
 void move_rect(sprite_t *sprite, int offset, int max_value);
 void game_loop(game_t *game, weapon_t *weapon);
@@ -150,5 +157,8 @@ float cast_single_ray(player_t *player,
     float angle_offset, which_line_t *type);
 void move_player(sfEvent event, player_t *player);
 sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
+
+void destroy_weapon(weapon_t *weapon);
+void destroy_game(game_t *game);
 
 #endif

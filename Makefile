@@ -14,7 +14,8 @@ SRC = src/init.c	\
 		src/game_loop.c	\
 		src/ray_cast.c	\
 		src/move_player.c	\
-		src/is_keyboard_input.c
+		src/is_keyboard_input.c	\
+		src/free.c
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)
 

@@ -37,14 +37,19 @@ static void close_window(sfEvent event, game_t *game)
     }
 }
 
-static void change_weapon(sfEvent event, weapon_t *weapon)
+static void change_weapon(sfEvent event, game_t *game, weapon_t *weapon)
 {
+    int current = sfClock_getElapsedTime(game->clock).microseconds;
+    double diff = (double)(current - weapon->shot) / SEC_IN_MICRO;
+
+    if (diff < 0.3)
+        return;
     if (is_keyboard_input(event, sfKeyNum1))
-        weapon->weapon = 0;
+        weapon->weapon = PUNCH;
     if (is_keyboard_input(event, sfKeyNum2))
-        weapon->weapon = 1;
+        weapon->weapon = PISTOL;
     if (is_keyboard_input(event, sfKeyNum3))
-        weapon->weapon = 2;
+        weapon->weapon = SHOTGUN;
     sfSprite_setTexture(weapon->sprite.sprite,
         weapon->texture[weapon->weapon], sfTrue);
     sfSprite_setTextureRect(weapon->sprite.sprite, weapon->sprite.rectangle);
@@ -52,6 +57,11 @@ static void change_weapon(sfEvent event, weapon_t *weapon)
 
 static void click(sfEvent event, game_t *game, weapon_t *weapon)
 {
+    int current = sfClock_getElapsedTime(game->clock).microseconds;
+    double diff = (double)(current - weapon->shot) / SEC_IN_MICRO;
+
+    if (diff < 0.4)
+        return;
     if (event.type == sfEvtMouseButtonPressed
         && event.mouseButton.button == sfMouseLeft) {
         weapon->shot = sfClock_getElapsedTime(game->clock).microseconds;
@@ -67,7 +77,7 @@ void events(game_t *game, weapon_t *weapon)
         close_window(event, game);
         music_setvolume(event, game);
         click(event, game, weapon);
-        change_weapon(event, weapon);
+        change_weapon(event, game, weapon);
         move_player(event, game->player);
     }
 }

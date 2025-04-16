@@ -8,20 +8,27 @@
 #include "wolf.h"
 #include <stdlib.h>
 
-void init_sound_texture(weapon_t *weapon)
+int init_sound_texture(weapon_t *weapon)
 {
-    weapon->texture = malloc(sizeof(sfTexture *) * 3);
-    weapon->sound = malloc(sizeof(sfMusic *) * 3);
-    weapon->texture[0] = sfTexture_createFromFile("asset/punch.png", NULL);
-    weapon->texture[1] = sfTexture_createFromFile("asset/pistol.png", NULL);
-    weapon->texture[2] =
+    weapon->texture = malloc(sizeof(sfTexture *) * NB_WEAPON);
+    weapon->sound = malloc(sizeof(sfMusic *) * NB_WEAPON);
+    if (weapon->texture == NULL || weapon->sound == NULL)
+        return EXIT_F;
+    weapon->texture[PUNCH] = sfTexture_createFromFile("asset/punch.png", NULL);
+    weapon->texture[PISTOL] =
+        sfTexture_createFromFile("asset/pistol.png", NULL);
+    weapon->texture[SHOTGUN] =
         (sfTexture *){sfTexture_createFromFile("asset/shotgun.png", NULL)};
-    weapon->sound[0] =
+    weapon->sound[PUNCH] =
         (sfMusic *){sfMusic_createFromFile("asset/fist_punch.ogg")};
-    weapon->sound[1] =
+    weapon->sound[PISTOL] =
         (sfMusic *){sfMusic_createFromFile("asset/pistol_shot.ogg")};
-    weapon->sound[2] =
+    weapon->sound[SHOTGUN] =
         (sfMusic *){sfMusic_createFromFile("asset/shotgun_shot.ogg")};
+    for (int i = 0; i < NB_WEAPON; i++)
+        if (weapon->texture[i] == NULL || weapon->sound[i] == NULL)
+            return EXIT_F;
+    return EXIT_S;
 }
 
 void init_map(map_t *map)
@@ -34,43 +41,47 @@ void init_map(map_t *map)
     map->floor_color = FLOOR_COLOR;
 }
 
-void init_weapon(weapon_t *weapon)
+int init_weapon(weapon_t *weapon)
 {
     weapon->shot = SEC_IN_MICRO * -1;
     weapon->sprite.sprite = sfSprite_create();
     weapon->sprite.posf = (sfVector2f){WIN_WIDTH / 2, WIN_HEIGHT};
     weapon->sprite.rectangle =
-        (sfIntRect){0, 0, SHOTGUN_SPRITE_X, SHOTGUN_SPRITE_Y};
+        (sfIntRect){0, 0, WEAPON_SPRITE_X, WEAPON_SPRITE_Y};
     weapon->sprite.tile = 0;
     weapon->sprite.scale = (sfVector2f){2, 2};
     weapon->weapon = 0;
-    init_sound_texture(weapon);
+    if (weapon->sprite.sprite == NULL || init_sound_texture(weapon) == EXIT_F)
+        return EXIT_F;
     sfSprite_setOrigin(weapon->sprite.sprite,
-        (sfVector2f){SHOTGUN_SPRITE_X / 2, SHOTGUN_SPRITE_Y});
+        (sfVector2f){WEAPON_SPRITE_X / 2, WEAPON_SPRITE_Y});
     sfSprite_setTexture(weapon->sprite.sprite,
         weapon->texture[weapon->weapon], sfTrue);
     sfSprite_setTextureRect(weapon->sprite.sprite, weapon->sprite.rectangle);
     sfSprite_setScale(weapon->sprite.sprite, weapon->sprite.scale);
     sfSprite_setPosition(weapon->sprite.sprite, weapon->sprite.posf);
+    return EXIT_S;
 }
 
-void init_game(game_t *game)
+int init_game(game_t *game)
 {
     game->window = create_window();
     game->clock = sfClock_create();
     game->music = sfMusic_createFromFile("asset/music.ogg");
     game->rays = sfVertexArray_create();
-    if (game->rays == NULL)
-        return;
+    if (game->window == NULL || game->clock == NULL
+        || game->music == NULL || game->rays == NULL)
+        return EXIT_F;
     sfVertexArray_setPrimitiveType(game->rays, sfLines);
     game->map = malloc(sizeof(map_t));
     if (game->map == NULL)
-        return;
+        return EXIT_F;
     init_map(game->map);
     game->player = malloc(sizeof(player_t));
     if (game->player == NULL)
-        return;
+        return EXIT_F;
     init_player(game->player);
+    return EXIT_S;
 }
 
 void init_player(player_t *player)
