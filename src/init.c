@@ -72,6 +72,6 @@ void init_game(game_t *game)
 void init_player(player_t *player)
 {
     player->angle = (2 * M_PI) / 3;
-    player->x = (MAP_WIDTH) / 2 - 0.1;
-    player->y = (MAP_HEIGHT) / 2 - 0.1;
+    player->x = (MAP_WIDTH * TILE_SIZE) / 2;
+    player->y = (MAP_HEIGHT * TILE_SIZE) / 2;
 }

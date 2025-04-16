@@ -68,28 +68,26 @@ static void click(sfEvent event, game_t *game, weapon_t *weapon)
 
 static void move_player(sfEvent event, game_t *game, player_t *player)
 {
-    sfVector2f v = (sfVector2f){cos(player->angle), sin(player->angle)};
+    sfVector2f v = (sfVector2f){cos(player->angle) * 2, sin(player->angle) * 2};
 
-    if (is_keyboard_input(event, sfKeyZ)) {
+    if (is_keyboard_input(event, sfKeyUp)) {
         player->x += v.x;
         player->y += v.y;
     }
-    if (is_keyboard_input(event, sfKeyS)) {
+    if (is_keyboard_input(event, sfKeyDown)) {
         player->x -= v.x;
         player->y -= v.y;
     }
-    if (is_keyboard_input(event, sfKeyQ)) {
-        player->x += v.x;
-        player->y -= v.y;
-    }
-    if (is_keyboard_input(event, sfKeyD)) {
-        player->x -= v.x;
-        player->y += v.y;
-    }
-    if (is_keyboard_input(event, sfKeyLeft))
+    if (is_keyboard_input(event, sfKeyLeft)) {
         player->angle -= 0.1;
-    if (is_keyboard_input(event, sfKeyRight))
+        if (player->angle < 0)
+            player->angle = (M_PI * 2) + player->angle;
+    }
+    if (is_keyboard_input(event, sfKeyRight)) {
         player->angle += 0.1;
+        if (player->angle > (M_PI * 2))
+            player->angle -= (M_PI * 2);
+    }
 }
 
 void events(game_t *game, weapon_t *weapon)

@@ -50,6 +50,8 @@
 
     #define MAX_DISTANCE 100.0
 
+    #define RENDER_DISTANCE 1000
+
 typedef struct sprite_s {
     sfTexture *texture;
     sfSprite *sprite;
@@ -115,12 +117,14 @@ void game_loop(game_t *game, weapon_t *weapon);
 void init_map(map_t *map);
 void cast_all_rays(sfRenderWindow *window, player_t *player);
 float cast_single_ray(player_t *player,
-    float ray_angle, sfRenderWindow *window, float offset_x);
+    float ray_angle, sfRenderWindow *window, float offest_x, float angle_offset, sfVertex *point);
 
-typedef enum wich_line {
+typedef enum which_line {
     NONE,
-    HORIZONTAL,
-    VERTICAL
-} wich_line_t;
+    TOP,
+    BOTTOM,
+    LEFT,
+    RIGHT,
+} which_line_t ;
 
 #endif
