@@ -123,7 +123,7 @@ float cast_single_ray(player_t *player,
 static void add_ray_to_vertex_array(game_t *game,
     float angle_offset, which_line_t *type, float offset)
 {
-    int len = cast_single_ray(game->player, angle_offset, type);
+    float len = cast_single_ray(game->player, angle_offset, type);
     sfVertex line = {0};
 
     if (*type == TOP || *type == BOTTOM)
