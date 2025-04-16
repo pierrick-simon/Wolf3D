@@ -40,7 +40,7 @@
     #define MAP_WIDTH 24
     #define MAP_HEIGHT 24
 
-    #define FOV ( M_PI / 3)
+    #define FOV (M_PI / 3)
     #define NUM_RAYS WIN_WIDTH
 
     #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
@@ -63,6 +63,11 @@
     #define FORWARD_COEF 2.0
 
     #define DISTANCE_COLISION 5.0
+
+    #define NB_DECIMAL_FLOAT_CMP 6
+
+    #define SPRINT_COEF 1.1
+    #define SPRINTING_FOV FOV * SPRINT_COEF
 
 typedef enum which_line {
     NONE,
@@ -106,6 +111,7 @@ typedef struct player_s {
     float angle;
     sfVector2f v;
     which_line_t type;
+    float fov;
 } player_t;
 
 typedef struct game_s {
@@ -115,6 +121,7 @@ typedef struct game_s {
     map_t *map;
     player_t *player;
     sfVertexArray *rays;
+    sfRenderStates wall_state;
 } game_t;
 
 static const int map[MAP_WIDTH][MAP_HEIGHT] = {
@@ -155,9 +162,8 @@ void init_map(map_t *map);
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player,
     float angle_offset, which_line_t *type);
-void move_player(sfEvent event, player_t *player);
+void move_player(player_t *player);
 sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
-
 void destroy_weapon(weapon_t *weapon);
 void destroy_game(game_t *game);
 

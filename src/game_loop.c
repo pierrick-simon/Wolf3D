@@ -50,7 +50,8 @@ void game_loop(game_t *game, weapon_t *weapon)
         if (sfMusic_getStatus(game->music) == sfStopped)
             sfMusic_play(game->music);
         draw_map(game);
-        sfRenderWindow_drawVertexArray(game->window, game->rays, NULL);
+        sfRenderWindow_drawVertexArray(game->window,
+            game->rays, &game->wall_state);
         sfRenderWindow_drawSprite(game->window, weapon->sprite.sprite, NULL);
         sfRenderWindow_display(game->window);
     }

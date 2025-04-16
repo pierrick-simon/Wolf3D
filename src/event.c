@@ -78,6 +78,7 @@ void events(game_t *game, weapon_t *weapon)
         music_setvolume(event, game);
         click(event, game, weapon);
         change_weapon(event, game, weapon);
-        move_player(event, game->player);
     }
+    game->player->fov = FOV;
+    move_player(game->player);
 }

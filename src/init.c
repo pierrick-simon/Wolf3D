@@ -63,12 +63,21 @@ int init_weapon(weapon_t *weapon)
     return EXIT_S;
 }
 
+static void init_state(game_t *game)
+{
+    game->wall_state.texture =
+        sfTexture_createFromFile("asset/wall.png", NULL);
+    game->wall_state.transform = sfTransform_Identity;
+    game->wall_state.blendMode = sfBlendAlpha;
+}
+
 int init_game(game_t *game)
 {
     game->window = create_window();
     game->clock = sfClock_create();
     game->music = sfMusic_createFromFile("asset/music.ogg");
     game->rays = sfVertexArray_create();
+    init_state(game);
     if (game->window == NULL || game->clock == NULL
         || game->music == NULL || game->rays == NULL)
         return EXIT_F;
@@ -89,4 +98,8 @@ void init_player(player_t *player)
     player->angle = (-2 * M_PI) / 3;
     player->pos.x = (MAP_WIDTH * TILE_SIZE) / 2 - 92;
     player->pos.y = (MAP_HEIGHT * TILE_SIZE) / 2 - 92;
+    player->type = NONE;
+    player->v.x = 0;
+    player->v.y = 0;
+    player->fov = FOV;
 }

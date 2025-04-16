@@ -14,20 +14,30 @@ static sfBool is_wall(float y, float x)
     return sfFalse;
 }
 
-static void move_verticaly(sfEvent event,
-    player_t *player, sfVector2f casted_pos)
+static void sprint(player_t *player, sfVector2f casted_pos)
 {
-    if ((is_keyboard_input(event, sfKeyUp)
-        || is_keyboard_input(event, sfKeyZ))) {
-        if (is_wall(casted_pos.y,
-            casted_pos.x + (player->v.x * DISTANCE_COLISION)) == sfFalse)
-            player->pos.x += player->v.x * FORWARD_COEF;
-        if (is_wall(casted_pos.y + (player->v.y * DISTANCE_COLISION),
-            casted_pos.x) == sfFalse)
-            player->pos.y += player->v.y * FORWARD_COEF;
+    int coef = 1;
+
+    if (sfKeyboard_isKeyPressed(sfKeyLShift)) {
+        coef = 2;
+        player->fov = SPRINTING_FOV;
     }
-    if ((is_keyboard_input(event, sfKeyDown)
-        || is_keyboard_input(event, sfKeyS))) {
+    if (is_wall(casted_pos.y,
+        casted_pos.x + (player->v.x * coef * DISTANCE_COLISION)) == sfFalse)
+        player->pos.x += player->v.x * coef * FORWARD_COEF;
+    if (is_wall(casted_pos.y + (player->v.y * coef * DISTANCE_COLISION),
+        casted_pos.x) == sfFalse)
+        player->pos.y += player->v.y * coef * FORWARD_COEF;
+}
+
+static void move_verticaly(player_t *player, sfVector2f casted_pos)
+{
+    if ((sfKeyboard_isKeyPressed(sfKeyUp))
+        || sfKeyboard_isKeyPressed(sfKeyZ)) {
+        sprint(player, casted_pos);
+    }
+    if ((sfKeyboard_isKeyPressed(sfKeyDown))
+        || sfKeyboard_isKeyPressed(sfKeyS)) {
         if (is_wall(casted_pos.y,
             casted_pos.x - (player->v.x * DISTANCE_COLISION)) == sfFalse)
             player->pos.x -= player->v.x;
@@ -37,10 +47,9 @@ static void move_verticaly(sfEvent event,
     }
 }
 
-static void move_horizontaly(sfEvent event,
-    player_t *player, sfVector2f casted_pos)
+static void move_horizontaly(player_t *player, sfVector2f casted_pos)
 {
-    if (is_keyboard_input(event, sfKeyQ)) {
+    if (sfKeyboard_isKeyPressed(sfKeyQ)) {
         if (is_wall(casted_pos.y,
             casted_pos.x + (player->v.y * DISTANCE_COLISION)) == sfFalse)
             player->pos.x += player->v.y;
@@ -48,7 +57,7 @@ static void move_horizontaly(sfEvent event,
             casted_pos.x) == sfFalse)
             player->pos.y -= player->v.x;
     }
-    if (is_keyboard_input(event, sfKeyD)) {
+    if (sfKeyboard_isKeyPressed(sfKeyD)) {
         if (is_wall(casted_pos.y,
             casted_pos.x - (player->v.y * DISTANCE_COLISION)) == sfFalse)
             player->pos.x -= player->v.y;
@@ -58,25 +67,25 @@ static void move_horizontaly(sfEvent event,
     }
 }
 
-static void rotate_player(sfEvent event, player_t *player)
+static void rotate_player(player_t *player)
 {
-    if (is_keyboard_input(event, sfKeyLeft)) {
+    if (sfKeyboard_isKeyPressed(sfKeyLeft)) {
         player->angle -= ROTATION_SPPED;
         if (player->angle < 0)
             player->angle += (M_PI * 2);
     }
-    if (is_keyboard_input(event, sfKeyRight)) {
+    if (sfKeyboard_isKeyPressed(sfKeyRight)) {
         player->angle += ROTATION_SPPED;
         if (player->angle > (M_PI * 2))
             player->angle -= (M_PI * 2);
     }
 }
 
-void move_player(sfEvent event, player_t *player)
+void move_player(player_t *player)
 {
     sfVector2f casted_pos = {player->pos.x, player->pos.y};
 
-    move_verticaly(event, player, casted_pos);
-    move_horizontaly(event, player, casted_pos);
-    rotate_player(event, player);
+    move_verticaly(player, casted_pos);
+    move_horizontaly(player, casted_pos);
+    rotate_player(player);
 }
