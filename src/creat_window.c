@@ -7,7 +7,7 @@
 
 #include "wolf.h"
 
-sfRenderWindow *create_window(void)
+sfRenderWindow *create_window(sfUint32 style, double coef)
 {
     sfRenderWindow *window = {0};
     sfVideoMode size_of_window = {0};
@@ -16,9 +16,11 @@ sfRenderWindow *create_window(void)
     size_of_window.width = WIN_WIDTH;
     size_of_window.bitsPerPixel = WIN_BITS;
     window = sfRenderWindow_create(size_of_window,
-        WIN_NAME, sfNone, NULL);
+        WIN_NAME, style, NULL);
     if (window == NULL)
         return NULL;
     sfRenderWindow_setFramerateLimit(window, WIN_FRAME);
+    sfRenderWindow_setSize(
+        window, (sfVector2u){WIN_WIDTH * coef, WIN_HEIGHT *coef});
     return window;
 }

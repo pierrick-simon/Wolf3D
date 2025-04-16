@@ -37,15 +37,14 @@ void init_map(map_t *map)
 
     map->ceiling_floor = sfRectangleShape_create();
     sfRectangleShape_setSize(map->ceiling_floor, pos);
-    map->ceiling_color = CEILING_COLOR;
-    map->floor_color = FLOOR_COLOR;
 }
 
 int init_weapon(weapon_t *weapon)
 {
     weapon->shot = SEC_IN_MICRO * -1;
     weapon->sprite.sprite = sfSprite_create();
-    weapon->sprite.posf = (sfVector2f){WIN_WIDTH / 2, WIN_HEIGHT};
+    weapon->sprite.posf =
+        (sfVector2f){WIN_WIDTH / 2, WIN_HEIGHT - WIN_HEIGHT + TOOLBAR_POS};
     weapon->sprite.rectangle =
         (sfIntRect){0, 0, WEAPON_SPRITE_X, WEAPON_SPRITE_Y};
     weapon->sprite.tile = 0;
@@ -65,13 +64,14 @@ int init_weapon(weapon_t *weapon)
 
 int init_game(game_t *game)
 {
-    game->window = create_window();
+    game->window = create_window(sfTitlebar | sfClose, 0.9);
     game->clock = sfClock_create();
     game->music = sfMusic_createFromFile("asset/music.ogg");
     game->rays = sfVertexArray_create();
     if (game->window == NULL || game->clock == NULL
         || game->music == NULL || game->rays == NULL)
         return EXIT_F;
+    game->fullscreen = sfFalse;
     sfVertexArray_setPrimitiveType(game->rays, sfLines);
     game->map = malloc(sizeof(map_t));
     if (game->map == NULL)
