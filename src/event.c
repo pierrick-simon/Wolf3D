@@ -7,6 +7,20 @@
 
 #include "wolf.h"
 
+static void change_scene(sfEvent event, system_t *sys)
+{
+    if (is_keyboard_input(event, sfKeyTab)) {
+        if (sys->scene == MENU) {
+            sys->scene = GAME;
+            return;
+        }
+        if (sys->scene == GAME) {
+            sys->scene = MENU;
+            return;
+        }
+    }
+}
+
 static void music_setvolume(sfEvent event, system_t *sys)
 {
     float volume = sfMusic_getVolume(sys->music);
@@ -63,4 +77,5 @@ void sys_events(sfEvent event, system_t *sys)
     close_window(event, sys);
     resize_window(event, sys);
     music_setvolume(event, sys);
+    change_scene(event, sys);
 }

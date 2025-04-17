@@ -71,6 +71,9 @@
     #define SPRINTING_FOV FOV * SPRINT_COEF
     #define TOOLBAR_POS (WIN_HEIGHT - 130)
 
+    #define GUY_SPRITE_X 612
+    #define GUY_SPRITE_Y 408
+
 typedef enum which_line {
     NONE,
     TOP,
@@ -87,6 +90,7 @@ typedef enum {
 
 typedef enum scene_s {
     GAME,
+    MENU,
     NB_SCENE,
 } scene_t;
 
@@ -127,22 +131,24 @@ typedef struct game_s {
     weapon_t *weapon;
 } game_t;
 
+typedef struct background_s {
+    sfSprite *guy_s;
+    sfTexture *guy_t;
+    sfSprite *wallpaper_s;
+    sfTexture *wallpaper_t;
+} background_t;
+
 typedef struct system_s {
     sfRenderWindow *window;
     sfClock *clock;
     sfMusic *music;
     sfBool fullscreen;
     int scene;
+    background_t *background;
 } system_t;
 
-typedef struct background_s {
-    sfSprite *sprite;
-    sfTexture *texture;
-} background_t;
-
-
 typedef struct menu_t {
-    background_t *background;
+    /**/
 } menu_t;
 
 
@@ -178,6 +184,7 @@ static const int map[MAP_WIDTH][MAP_HEIGHT] = {
 void *init_game(void);
 int init_system(system_t *sys);
 void **init_struct(void);
+void *init_menu(void);
 sfRenderWindow *create_window(sfUint32 style, double coeff);
 
 // event
@@ -193,11 +200,14 @@ float cast_single_ray(player_t *player,
     float angle_offset, which_line_t *type);
 void move_player(player_t *player);
 void draw_game(system_t *sys, void *structure);
+void draw_menu(system_t *sys, void *structure);
 
 // destroy
 
 void destroy_struct(void **structure, int stop);
 void destroy_game(void *structure);
 void destroy_sys(system_t *sys);
+void destroy_menu(void *structure);
+void menu_events(system_t *sys, menu_t *menu);
 
 #endif

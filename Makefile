@@ -15,13 +15,17 @@ SRC =	src/creat_window.c	\
 		src/move_player.c	\
 		src/is_keyboard_input.c	\
 		src/init/init_game.c \
+		src/init/init_menu.c \
 		src/init/init_sys.c	\
 		src/init/init_struct.c	\
 		src/destroy/destroy_game.c \
+		src/destroy/destroy_menu.c \
 		src/destroy/destroy_sys.c	\
 		src/destroy/destroy_struct.c	\
 		src/game/event.c	\
 		src/game/draw_game.c	\
+		src/menu/event.c	\
+		src/menu/draw_menu.c	\
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)
 

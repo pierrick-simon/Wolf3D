@@ -19,6 +19,7 @@ typedef struct scene_func_s {
 
 static const scene_func_t SCENE[] = {
     {GAME, &init_game, &destroy_game, &draw_game},
+    {MENU, &init_menu, &destroy_menu, &draw_menu},
 };
 
 #endif
