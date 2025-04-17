@@ -10,17 +10,15 @@
 int main(void)
 {
     game_t game = {NULL};
-    weapon_t weapon = {NULL};
-    map_t map = {NULL};
+    system_t sys = {NULL};
 
-    init_map(&map);
-    if (init_game(&game) == EXIT_F || init_weapon(&weapon) == EXIT_F) {
+    if (init_game(&game) == EXIT_F || init_system(&sys) == EXIT_F) {
         destroy_game(&game);
-        destroy_weapon(&weapon);
+        destroy_sys(&sys);
         return EXIT_F;
     }
-    game_loop(&game, &weapon);
+    game_loop(&sys, &game);
     destroy_game(&game);
-    destroy_weapon(&weapon);
+    destroy_sys(&sys);
     return EXIT_S;
 }

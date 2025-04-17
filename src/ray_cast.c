@@ -133,14 +133,14 @@ static void add_ray_to_vertex_array(game_t *game,
     len = (TILE_SIZE * WIN_HEIGHT) / (len * cos(angle_offset));
     line.position = (sfVector2f){offset, (WIN_HEIGHT - len) / 2};
     line.texCoords = (sfVector2f){64, 0};
-    sfVertexArray_append(game->rays, line);
+    sfVertexArray_append(game->map->rays, line);
     if (*type == TOP || *type == BOTTOM)
         line.color = TOP_SHADOW;
     if (*type == LEFT || *type == RIGHT)
         line.color = LEFT_SHADOW;
     line.position = (sfVector2f){offset, ((WIN_HEIGHT - len) / 2) + len};
     line.texCoords = (sfVector2f){64, 128};
-    sfVertexArray_append(game->rays, line);
+    sfVertexArray_append(game->map->rays, line);
 }
 
 void cast_all_rays(game_t *game)
@@ -149,7 +149,7 @@ void cast_all_rays(game_t *game)
     float angle_offset = 0.0;
     which_line_t type = NONE;
 
-    sfVertexArray_clear(game->rays);
+    sfVertexArray_clear(game->map->rays);
     for (int i = 0; i <= NUM_RAYS; i++) {
         angle_offset = ((i / (float)NUM_RAYS) * game->player->fov) -
             (game->player->fov / 2);

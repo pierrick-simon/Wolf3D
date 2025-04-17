@@ -95,7 +95,7 @@ typedef struct sprite_s {
 } sprite_t;
 
 typedef struct weapon_s {
-    sprite_t sprite;
+    sprite_t *sprite;
     sfTexture **texture;
     sfMusic **sound;
     sfInt64 shot;
@@ -104,6 +104,8 @@ typedef struct weapon_s {
 
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
+    sfVertexArray *rays;
+    sfRenderStates wall_state;
 } map_t;
 
 typedef struct player_s {
@@ -114,15 +116,17 @@ typedef struct player_s {
     float fov;
 } player_t;
 
-typedef struct game_s {
+typedef struct system_s {
     sfRenderWindow *window;
     sfClock *clock;
     sfMusic *music;
+    sfBool fullscreen;
+} system_t;
+
+typedef struct game_s {
     map_t *map;
     player_t *player;
-    sfVertexArray *rays;
-    sfRenderStates wall_state;
-    sfBool fullscreen;
+    weapon_t *weapon;
 } game_t;
 
 static const int map[MAP_WIDTH][MAP_HEIGHT] = {
@@ -152,20 +156,18 @@ static const int map[MAP_WIDTH][MAP_HEIGHT] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 };
 
-void init_player(player_t *player);
 int init_game(game_t *game);
+int init_system(system_t *sys);
 sfRenderWindow *create_window(sfUint32 style, double coeff);
-int init_weapon(weapon_t *weapon);
-void events(game_t *game, weapon_t *weapon);
+void events(system_t *sys, game_t *game);
 void move_rect(sprite_t *sprite, int offset, int max_value);
-void game_loop(game_t *game, weapon_t *weapon);
-void init_map(map_t *map);
+void game_loop(system_t *sys, game_t *game);
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player,
     float angle_offset, which_line_t *type);
 void move_player(player_t *player);
 sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
-void destroy_weapon(weapon_t *weapon);
 void destroy_game(game_t *game);
+void destroy_sys(system_t *sys);
 
 #endif

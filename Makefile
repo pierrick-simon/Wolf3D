@@ -7,15 +7,17 @@
 
 MAIN = src/main.c
 
-SRC = src/init.c	\
-		src/creat_window.c	\
+SRC =	src/creat_window.c	\
 		src/event.c	\
 		src/move_rect.c	\
 		src/game_loop.c	\
 		src/ray_cast.c	\
 		src/move_player.c	\
 		src/is_keyboard_input.c	\
-		src/free.c
+		src/init/init_game.c \
+		src/init/init_sys.c	\
+		src/destroy/destroy_game.c \
+		src/destroy/destroy_sys.c	\
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)
 
@@ -23,7 +25,7 @@ NAME =	wolf3d
 
 CPPFLAGS = -iquoteinclude -iquotelib
 
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -g3
 
 LDFLAGS = -Llib
 
