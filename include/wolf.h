@@ -85,6 +85,11 @@ typedef enum {
     SHOTGUN,
 } weapon_id_t;
 
+typedef enum scene_s {
+    GAME,
+    NB_SCENE,
+} scene_t;
+
 typedef struct sprite_s {
     sfTexture *texture;
     sfSprite *sprite;
@@ -116,18 +121,30 @@ typedef struct player_s {
     float fov;
 } player_t;
 
-typedef struct system_s {
-    sfRenderWindow *window;
-    sfClock *clock;
-    sfMusic *music;
-    sfBool fullscreen;
-} system_t;
-
 typedef struct game_s {
     map_t *map;
     player_t *player;
     weapon_t *weapon;
 } game_t;
+
+typedef struct system_s {
+    sfRenderWindow *window;
+    sfClock *clock;
+    sfMusic *music;
+    sfBool fullscreen;
+    int scene;
+} system_t;
+
+typedef struct background_s {
+    sfSprite *sprite;
+    sfTexture *texture;
+} background_t;
+
+
+typedef struct menu_t {
+    background_t *background;
+} menu_t;
+
 
 static const int map[MAP_WIDTH][MAP_HEIGHT] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -156,18 +173,31 @@ static const int map[MAP_WIDTH][MAP_HEIGHT] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 };
 
-int init_game(game_t *game);
+// init
+
+void *init_game(void);
 int init_system(system_t *sys);
+void **init_struct(void);
 sfRenderWindow *create_window(sfUint32 style, double coeff);
-void events(system_t *sys, game_t *game);
+
+// event
+
+void game_events(system_t *sys, game_t *game);
+void sys_events(sfEvent event, system_t *sys);
+sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
+
 void move_rect(sprite_t *sprite, int offset, int max_value);
-void game_loop(system_t *sys, game_t *game);
+void sys_loop(system_t *sys, void **structure);
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player,
     float angle_offset, which_line_t *type);
 void move_player(player_t *player);
-sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
-void destroy_game(game_t *game);
+void draw_game(system_t *sys, void *structure);
+
+// destroy
+
+void destroy_struct(void **structure, int stop);
+void destroy_game(void *structure);
 void destroy_sys(system_t *sys);
 
 #endif

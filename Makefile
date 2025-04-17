@@ -10,14 +10,18 @@ MAIN = src/main.c
 SRC =	src/creat_window.c	\
 		src/event.c	\
 		src/move_rect.c	\
-		src/game_loop.c	\
+		src/sys_loop.c	\
 		src/ray_cast.c	\
 		src/move_player.c	\
 		src/is_keyboard_input.c	\
 		src/init/init_game.c \
 		src/init/init_sys.c	\
+		src/init/init_struct.c	\
 		src/destroy/destroy_game.c \
 		src/destroy/destroy_sys.c	\
+		src/destroy/destroy_struct.c	\
+		src/game/event.c	\
+		src/game/draw_game.c	\
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)
 

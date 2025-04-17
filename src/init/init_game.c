@@ -103,17 +103,22 @@ void init_player(player_t *player)
     player->fov = FOV;
 }
 
-int init_game(game_t *game)
+void *init_game(void)
 {
+    game_t *game = malloc(sizeof(game_t));
+
+    if (game == NULL)
+        return NULL;
+    *game = (game_t){NULL};
     game->map = malloc(sizeof(map_t));
-    if (game->map == NULL || init_map(game->map) == EXIT_F)
-        return EXIT_F;
     game->player = malloc(sizeof(player_t));
-    if (game->player == NULL)
-        return EXIT_F;
-    init_player(game->player);
     game->weapon = malloc(sizeof(weapon_t));
-    if (game->weapon == NULL || init_weapon(game->weapon) == EXIT_F)
-        return EXIT_F;
-    return EXIT_S;
+    if (game->map == NULL || init_map(game->map) == EXIT_F
+        || game->player == NULL || game->weapon == NULL
+        || init_weapon(game->weapon) == EXIT_F) {
+        destroy_game(game);
+        return NULL;
+    }
+    init_player(game->player);
+    return (void *)game;
 }

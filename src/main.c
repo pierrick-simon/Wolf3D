@@ -9,16 +9,15 @@
 
 int main(void)
 {
-    game_t game = {NULL};
     system_t sys = {NULL};
+    void **structure = init_struct();
 
-    if (init_game(&game) == EXIT_F || init_system(&sys) == EXIT_F) {
-        destroy_game(&game);
+    if (structure == NULL || init_system(&sys) == EXIT_F) {
         destroy_sys(&sys);
         return EXIT_F;
     }
-    game_loop(&sys, &game);
-    destroy_game(&game);
+    sys_loop(&sys, structure);
+    destroy_struct(structure, NB_SCENE);
     destroy_sys(&sys);
     return EXIT_S;
 }

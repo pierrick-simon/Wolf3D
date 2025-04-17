@@ -37,8 +37,10 @@ static void destroy_map(map_t *map)
         sfVertexArray_destroy(map->rays);
 }
 
-void destroy_game(game_t *game)
+void destroy_game(void *structure)
 {
+    game_t *game = (game_t *)structure;
+
     if (game->weapon != NULL) {
         destroy_weapon(game->weapon);
         free(game->weapon);
@@ -49,4 +51,5 @@ void destroy_game(game_t *game)
         destroy_map(game->map);
         free(game->map);
     }
+    free(game);
 }

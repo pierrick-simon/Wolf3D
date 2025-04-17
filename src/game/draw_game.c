@@ -50,21 +50,21 @@ void draw_toolbar(system_t *sys, game_t *game)
         game->map->ceiling_floor, NULL);
 }
 
-void game_loop(system_t *sys, game_t *game)
+void draw_game(system_t *sys, void *structure)
 {
-    while (sfRenderWindow_isOpen(sys->window) == sfTrue) {
-        events(sys, game);
-        shot_gun_anim(sys, game->weapon);
-        cast_all_rays(game);
-        sfRenderWindow_clear(sys->window, sfWhite);
-        if (sfMusic_getStatus(sys->music) == sfStopped)
-            sfMusic_play(sys->music);
-        draw_map(sys, game);
-        sfRenderWindow_drawVertexArray(sys->window,
-            game->map->rays, &game->map->wall_state);
-        sfRenderWindow_drawSprite(
-            sys->window, game->weapon->sprite->sprite, NULL);
-        draw_toolbar(sys, game);
-        sfRenderWindow_display(sys->window);
-    }
+    game_t *game = (game_t *)structure;
+
+    game_events(sys, game);
+    shot_gun_anim(sys, game->weapon);
+    cast_all_rays(game);
+    sfRenderWindow_clear(sys->window, sfWhite);
+    if (sfMusic_getStatus(sys->music) == sfStopped)
+        sfMusic_play(sys->music);
+    draw_map(sys, game);
+    sfRenderWindow_drawVertexArray(sys->window,
+        game->map->rays, &game->map->wall_state);
+    sfRenderWindow_drawSprite(
+        sys->window, game->weapon->sprite->sprite, NULL);
+    draw_toolbar(sys, game);
+    sfRenderWindow_display(sys->window);
 }
