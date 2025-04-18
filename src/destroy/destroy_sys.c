@@ -32,8 +32,6 @@ void destroy_sys(system_t *sys)
 {
     if (sys->music != NULL)
         sfMusic_destroy(sys->music);
-    if (sys->clock != NULL)
-        sfClock_destroy(sys->clock);
     if (sys->window != NULL)
         sfRenderWindow_destroy(sys->window);
     if (sys->background != NULL) {

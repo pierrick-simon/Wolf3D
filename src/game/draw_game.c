@@ -7,10 +7,9 @@
 
 #include "wolf.h"
 
-static void shot_gun_anim(system_t *sys, weapon_t *weapon)
+static void shot_gun_anim(weapon_t *weapon, sfInt64 time)
 {
-    int current = sfClock_getElapsedTime(sys->clock).microseconds;
-    double diff = (double)(current - weapon->shot) / SEC_IN_MICRO;
+    double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
 
     for (int i = 0; i < WEAPON_NB_TILE; i++) {
         if (diff > WEAPON_FRAME * i
@@ -56,12 +55,21 @@ static void draw_crossair(system_t *sys, player_t *player)
         player->crossair->circle, &player->crossair->state);
 }
 
+static void update_time(time_info_t *time_info)
+{
+    time_info->prev_time = time_info->time;
+    time_info->time = sfClock_getElapsedTime(time_info->clock).microseconds;
+    time_info->delta = (time_info->time - time_info->prev_time) /
+        (float)SEC_IN_MICRO;
+}
+
 void draw_game(system_t *sys, void *structure)
 {
     game_t *game = (game_t *)structure;
 
+    update_time(game->time_info);
     game_events(sys, game);
-    shot_gun_anim(sys, game->weapon);
+    shot_gun_anim(game->weapon, game->time_info->time);
     cast_all_rays(game);
     sfRenderWindow_clear(sys->window, sfWhite);
     if (sfMusic_getStatus(sys->music) == sfStopped)
