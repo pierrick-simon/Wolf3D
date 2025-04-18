@@ -8,6 +8,29 @@
 #include "wolf.h"
 #include <stdlib.h>
 
+static int init_crossair(crossair_t *crossair)
+{
+    crossair->circle = sfCircleShape_create();
+    if (crossair->circle == NULL)
+        return ERROR;
+    sfCircleShape_setFillColor(crossair->circle, sfTransparent);
+    sfCircleShape_setRadius(crossair->circle, 40.0);
+    sfCircleShape_setOutlineThickness(crossair->circle, 3.0);
+    sfCircleShape_setRadius(crossair->circle, CROSSAIR_RADIUS);
+    sfCircleShape_setPosition(crossair->circle, (sfVector2f){(WIN_WIDTH / 2) -
+        CROSSAIR_RADIUS, (WIN_HEIGHT / 2) - CROSSAIR_RADIUS});
+    crossair->state.transform = sfTransform_Identity;
+    crossair->state.blendMode = (sfBlendMode) {
+        .colorSrcFactor = sfBlendFactorOneMinusDstColor,
+        .colorDstFactor = sfBlendFactorOneMinusSrcColor,
+        .colorEquation = sfBlendEquationAdd,
+        .alphaSrcFactor = sfBlendFactorOne,
+        .alphaDstFactor = sfBlendFactorZero,
+        .alphaEquation = sfBlendEquationAdd
+    };
+    return SUCCESS;
+}
+
 static int init_sound_texture(weapon_t *weapon)
 {
     weapon->texture = malloc(sizeof(sfTexture *) * NB_WEAPON);
@@ -92,7 +115,7 @@ static int init_map(map_t *map)
     return SUCCESS;
 }
 
-void init_player(player_t *player)
+static int init_player(player_t *player)
 {
     player->angle = (-2 * M_PI) / 3;
     player->pos.x = (MAP_WIDTH * TILE_SIZE) / 2 - 92;
@@ -101,6 +124,11 @@ void init_player(player_t *player)
     player->v.x = 0;
     player->v.y = 0;
     player->fov = FOV;
+    player->is_sprinting = sfFalse;
+    player->crossair = malloc(sizeof(crossair_t));
+    if (player->crossair == NULL || init_crossair(player->crossair) == ERROR)
+        return ERROR;
+    return SUCCESS;
 }
 
 void *init_game(void)
@@ -115,10 +143,10 @@ void *init_game(void)
     game->weapon = malloc(sizeof(weapon_t));
     if (game->map == NULL || init_map(game->map) == ERROR
         || game->player == NULL || game->weapon == NULL
-        || init_weapon(game->weapon) == ERROR) {
+        || init_weapon(game->weapon) == ERROR
+        || init_player(game->player) == ERROR) {
         destroy_game(game);
         return NULL;
     }
-    init_player(game->player);
     return (void *)game;
 }

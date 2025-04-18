@@ -50,5 +50,6 @@ void game_events(system_t *sys, game_t *game)
         change_weapon(event, sys, game->weapon);
     }
     game->player->fov = FOV;
+    game->player->is_sprinting = sfFalse;
     move_player(game->player);
 }

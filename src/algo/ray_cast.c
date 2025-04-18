@@ -8,7 +8,7 @@
 #include "wolf.h"
 #include <math.h>
 
-static sfBool is_end(sfVector2f *pos, which_line_t *type)
+static sfBool is_end(sfVector2f *pos, intersection_type_t *type)
 {
     sfVector2i casted_pos = {(int)(pos->x / TILE_SIZE),
         (int)(pos->y / TILE_SIZE)};
@@ -47,7 +47,7 @@ static void init_distances(sfVector2f *left,
     top->x = fabs((top->y * v->x) / v->y);
 }
 
-static which_line_t move_by_left(sfVector2f *left,
+static intersection_type_t move_by_left(sfVector2f *left,
     sfVector2f *pos, sfVector2f *v)
 {
     if (v->x > 0)
@@ -63,7 +63,7 @@ static which_line_t move_by_left(sfVector2f *left,
     return BOTTOM;
 }
 
-static which_line_t move_by_top(sfVector2f *top,
+static intersection_type_t move_by_top(sfVector2f *top,
     sfVector2f *pos, sfVector2f *v)
 {
     if (v->y > 0)
@@ -80,7 +80,7 @@ static which_line_t move_by_top(sfVector2f *top,
 }
 
 static float jump_to_next_line(sfVector2f *pos,
-    sfVector2f *v, which_line_t *type)
+    sfVector2f *v, intersection_type_t *type)
 {
     sfVector2f left = {0, 0};
     sfVector2f top = {0, 0};
@@ -99,7 +99,7 @@ static float jump_to_next_line(sfVector2f *pos,
 }
 
 float cast_single_ray(player_t *player,
-    float angle_offset, which_line_t *type)
+    float angle_offset, intersection_type_t *type)
 {
     sfVector2f pos = player->pos;
     sfVector2f v = {cos(player->angle + angle_offset),
@@ -121,7 +121,7 @@ float cast_single_ray(player_t *player,
 }
 
 static void add_ray_to_vertex_array(game_t *game,
-    float angle_offset, which_line_t *type, float offset)
+    float angle_offset, intersection_type_t *type, float offset)
 {
     float len = cast_single_ray(game->player, angle_offset, type);
     sfVertex line = {0};
@@ -131,6 +131,8 @@ static void add_ray_to_vertex_array(game_t *game,
     if (*type == LEFT || *type == RIGHT)
         line.color = LEFT_COLOR;
     len = (TILE_SIZE * WIN_HEIGHT) / (len * cos(angle_offset));
+    if (game->player->is_sprinting == sfTrue)
+        len /= SPRINT_COEF;
     line.position = (sfVector2f){offset, (WIN_HEIGHT - len) / 2};
     line.texCoords = (sfVector2f){64, 0};
     sfVertexArray_append(game->map->rays, line);
@@ -147,7 +149,7 @@ void cast_all_rays(game_t *game)
 {
     float offset = 0;
     float angle_offset = 0.0;
-    which_line_t type = NONE;
+    intersection_type_t type = NONE;
 
     sfVertexArray_clear(game->map->rays);
     for (int i = 0; i <= NUM_RAYS; i++) {
