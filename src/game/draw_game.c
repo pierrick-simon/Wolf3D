@@ -25,7 +25,7 @@ static void shot_gun_anim(system_t *sys, weapon_t *weapon)
         weapon->sprite->tile = 0;
 }
 
-void draw_map(system_t *sys, game_t *game)
+static void draw_map(system_t *sys, game_t *game)
 {
     sfVector2f pos = {0, 0};
 
@@ -40,7 +40,7 @@ void draw_map(system_t *sys, game_t *game)
         game->map->ceiling_floor, NULL);
 }
 
-void draw_toolbar(system_t *sys, game_t *game)
+static void draw_toolbar(system_t *sys, game_t *game)
 {
     sfVector2f pos = (sfVector2f){0, TOOLBAR_POS};
 
@@ -48,6 +48,12 @@ void draw_toolbar(system_t *sys, game_t *game)
     sfRectangleShape_setFillColor(game->map->ceiling_floor, TOOLBAR_COLOR);
     sfRenderWindow_drawRectangleShape(sys->window,
         game->map->ceiling_floor, NULL);
+}
+
+static void draw_crossair(system_t *sys, player_t *player)
+{
+    sfRenderWindow_drawCircleShape(sys->window,
+        player->crossair->circle, &player->crossair->state);
 }
 
 void draw_game(system_t *sys, void *structure)
@@ -66,5 +72,6 @@ void draw_game(system_t *sys, void *structure)
     sfRenderWindow_drawSprite(
         sys->window, game->weapon->sprite->sprite, NULL);
     draw_toolbar(sys, game);
+    draw_crossair(sys, game->player);
     sfRenderWindow_display(sys->window);
 }

@@ -8,6 +8,12 @@
 #include "wolf.h"
 #include <stdlib.h>
 
+static void destroy_player(player_t *player)
+{
+    sfCircleShape_destroy(player->crossair->circle);
+    free(player->crossair);
+}
+
 static void destroy_weapon(weapon_t *weapon)
 {
     for (int i = 0; i < NB_WEAPON; i++) {
@@ -45,8 +51,10 @@ void destroy_game(void *structure)
         destroy_weapon(game->weapon);
         free(game->weapon);
     }
-    if (game->player != NULL)
+    if (game->player != NULL) {
+        destroy_player(game->player);
         free(game->player);
+    }
     if (game->map != NULL) {
         destroy_map(game->map);
         free(game->map);

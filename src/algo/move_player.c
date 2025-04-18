@@ -21,6 +21,7 @@ static void sprint(player_t *player, sfVector2f casted_pos)
     if (sfKeyboard_isKeyPressed(sfKeyLShift)) {
         coef = 2;
         player->fov = SPRINTING_FOV;
+        player->is_sprinting = sfTrue;
     }
     if (is_wall(casted_pos.y,
         casted_pos.x + (player->v.x * coef * DISTANCE_COLISION)) == sfFalse)

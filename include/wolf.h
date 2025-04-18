@@ -40,7 +40,7 @@
     #define MAP_WIDTH 24
     #define MAP_HEIGHT 24
 
-    #define FOV (M_PI / 3)
+    #define FOV RAD(59)
     #define NUM_RAYS WIN_WIDTH
 
     #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
@@ -59,15 +59,15 @@
 
     #define RENDER_DISTANCE 1200
 
-    #define PLAYER_SPEED 2.0
-    #define ROTATION_SPPED RAD(3.0)
-    #define FORWARD_COEF 2.0
+    #define PLAYER_SPEED 1.5
+    #define ROTATION_SPPED RAD(2.5)
+    #define FORWARD_COEF 1.5
 
     #define DISTANCE_COLISION 5.0
 
     #define NB_DECIMAL_FLOAT_CMP 6
 
-    #define SPRINT_COEF 1.1
+    #define SPRINT_COEF 1.2
     #define SPRINTING_FOV FOV * SPRINT_COEF
     #define TOOLBAR_POS (WIN_HEIGHT - 130)
 
@@ -75,6 +75,8 @@
     #define GUY_SPRITE_Y 408
 
     #define SIZE_TEXT 250
+
+    #define CROSSAIR_RADIUS 0.1
 
 typedef enum str_menu_e {
     MENU_TITLE,
@@ -84,13 +86,13 @@ typedef enum str_menu_e {
     NB_MENU,
 } str_menu_t;
 
-typedef enum which_line {
+typedef enum intersection_type {
     NONE,
     TOP,
     BOTTOM,
     LEFT,
     RIGHT,
-} which_line_t;
+} intersection_type_t;
 
 typedef enum {
     PUNCH,
@@ -128,12 +130,19 @@ typedef struct map_s {
     sfRenderStates wall_state;
 } map_t;
 
+typedef struct crossair_s {
+    sfRenderStates state;
+    sfCircleShape *circle;
+} crossair_t;
+
 typedef struct player_s {
     sfVector2f pos;
     float angle;
     sfVector2f v;
-    which_line_t type;
+    intersection_type_t type;
     float fov;
+    sfBool is_sprinting;
+    crossair_t *crossair;
 } player_t;
 
 typedef struct game_s {
@@ -223,7 +232,7 @@ void move_rect(sprite_t *sprite, int offset, int max_value);
 void sys_loop(system_t *sys, void **structure);
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player,
-    float angle_offset, which_line_t *type);
+    float angle_offset, intersection_type_t *type);
 void move_player(player_t *player);
 void draw_game(system_t *sys, void *structure);
 void draw_menu(system_t *sys, void *structure);
