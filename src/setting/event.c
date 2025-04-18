@@ -10,7 +10,7 @@
 void switch_scene(sfEvent event, system_t *sys, setting_t *setting)
 {
     if (is_keyboard_input(event, sfKeyEnter) && setting->str == SETTING_BACK) {
-        sys->scene = str_setting[setting->str].scene;
+        sys->scene = setting->draw[setting->str].scene;
     }
 }
 

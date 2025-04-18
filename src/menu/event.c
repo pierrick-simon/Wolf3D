@@ -10,11 +10,11 @@
 static void switch_scene(sfEvent event, system_t *sys, menu_t *menu)
 {
     if (is_keyboard_input(event, sfKeyEnter)) {
-        if (str_menu[menu->str].scene == QUIT) {
+        if (menu->draw[menu->str].scene == QUIT) {
             sfRenderWindow_close(sys->window);
             sfMusic_setVolume(sys->music, VOL_MIN);
         }
-        sys->scene = str_menu[menu->str].scene;
+        sys->scene = menu->draw[menu->str].scene;
     }
 }
 
