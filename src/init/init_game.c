@@ -131,6 +131,17 @@ static int init_player(player_t *player)
     return SUCCESS;
 }
 
+static int init_time_info(time_info_t *time_info)
+{
+    time_info->clock = sfClock_create();
+    if (time_info->clock == NULL)
+        return ERROR;
+    time_info->time = 0;
+    time_info->prev_time = 0;
+    time_info->delta = 0.0;
+    return SUCCESS;
+}
+
 void *init_game(void)
 {
     game_t *game = malloc(sizeof(game_t));
@@ -141,10 +152,12 @@ void *init_game(void)
     game->map = malloc(sizeof(map_t));
     game->player = malloc(sizeof(player_t));
     game->weapon = malloc(sizeof(weapon_t));
+    game->time_info = malloc(sizeof(time_info_t));
     if (game->map == NULL || init_map(game->map) == ERROR
         || game->player == NULL || game->weapon == NULL
         || init_weapon(game->weapon) == ERROR
-        || init_player(game->player) == ERROR) {
+        || init_player(game->player) == ERROR
+        || init_time_info(game->time_info) == ERROR) {
         destroy_game(game);
         return NULL;
     }

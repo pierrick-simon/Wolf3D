@@ -59,15 +59,15 @@
 
     #define RENDER_DISTANCE 1200
 
-    #define PLAYER_SPEED 1.5
-    #define ROTATION_SPPED RAD(2.5)
+    #define PLAYER_SPEED 100
+    #define ROTATION_SPEED RAD(100)
     #define FORWARD_COEF 1.5
 
     #define DISTANCE_COLISION 5.0
 
     #define NB_DECIMAL_FLOAT_CMP 6
 
-    #define SPRINT_COEF 1.2
+    #define SPRINT_COEF 1.1
     #define SPRINTING_FOV FOV * SPRINT_COEF
     #define TOOLBAR_POS (WIN_HEIGHT - 130)
 
@@ -154,10 +154,18 @@ typedef struct player_s {
     crossair_t *crossair;
 } player_t;
 
+typedef struct time_info_s {
+    sfClock *clock;
+    sfInt64 prev_time;
+    sfInt64 time;
+    double delta;
+} time_info_t;
+
 typedef struct game_s {
     map_t *map;
     player_t *player;
     weapon_t *weapon;
+    time_info_t *time_info;
 } game_t;
 
 typedef struct background_s {
@@ -174,7 +182,6 @@ typedef struct textbox_s {
 
 typedef struct system_s {
     sfRenderWindow *window;
-    sfClock *clock;
     sfMusic *music;
     sfBool fullscreen;
     int scene;
@@ -192,7 +199,6 @@ typedef struct draw_textbox_s {
 typedef struct setting_s {
     int str;
 } setting_t;
-
 
 typedef struct menu_s {
     int str;
@@ -250,7 +256,7 @@ void sys_loop(system_t *sys, void **structure);
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player,
     float angle_offset, intersection_type_t *type);
-void move_player(player_t *player);
+void move_player(player_t *player, double delta);
 void draw_game(system_t *sys, void *structure);
 void draw_menu(system_t *sys, void *structure);
 void draw_setting(system_t *sys, void *structure);

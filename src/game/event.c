@@ -8,10 +8,9 @@
 #include <math.h>
 #include "wolf.h"
 
-static void change_weapon(sfEvent event, system_t *sys, weapon_t *weapon)
+static void change_weapon(sfEvent event, weapon_t *weapon, sfInt64 time)
 {
-    int current = sfClock_getElapsedTime(sys->clock).microseconds;
-    double diff = (double)(current - weapon->shot) / SEC_IN_MICRO;
+    double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
 
     if (diff < 0.3)
         return;
@@ -26,16 +25,15 @@ static void change_weapon(sfEvent event, system_t *sys, weapon_t *weapon)
     sfSprite_setTextureRect(weapon->sprite->sprite, weapon->sprite->rectangle);
 }
 
-static void click(sfEvent event, system_t *sys, weapon_t *weapon)
+static void click(sfEvent event, weapon_t *weapon, sfInt64 time)
 {
-    int current = sfClock_getElapsedTime(sys->clock).microseconds;
-    double diff = (double)(current - weapon->shot) / SEC_IN_MICRO;
+    double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
 
     if (diff < 0.4)
         return;
     if (event.type == sfEvtMouseButtonPressed
         && event.mouseButton.button == sfMouseLeft) {
-        weapon->shot = sfClock_getElapsedTime(sys->clock).microseconds;
+        weapon->shot = time;
         sfMusic_play(weapon->sound[weapon->weapon]);
     }
 }
@@ -46,10 +44,8 @@ void game_events(system_t *sys, game_t *game)
 
     while (sfRenderWindow_pollEvent(sys->window, &event)) {
         sys_events(event, sys);
-        click(event, sys, game->weapon);
-        change_weapon(event, sys, game->weapon);
+        click(event, game->weapon, game->time_info->time);
+        change_weapon(event, game->weapon, game->time_info->time);
     }
-    game->player->fov = FOV;
-    game->player->is_sprinting = sfFalse;
-    move_player(game->player);
+    move_player(game->player, game->time_info->delta);
 }

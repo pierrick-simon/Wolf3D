@@ -40,9 +40,8 @@ static int init_background(background_t *background)
 int init_system(system_t *sys)
 {
     sys->window = create_window(sfFullscreen, 1);
-    sys->clock = sfClock_create();
     sys->music = sfMusic_createFromFile("asset/music.ogg");
-    if (sys->window == NULL || sys->clock == NULL || sys->music == NULL)
+    if (sys->window == NULL || sys->music == NULL)
         return ERROR;
     sys->background = malloc(sizeof(background_t));
     if (sys->background == NULL || init_background(sys->background) == ERROR)

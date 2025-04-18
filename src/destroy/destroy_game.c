@@ -12,6 +12,7 @@ static void destroy_player(player_t *player)
 {
     sfCircleShape_destroy(player->crossair->circle);
     free(player->crossair);
+    free(player);
 }
 
 static void destroy_weapon(weapon_t *weapon)
@@ -31,6 +32,7 @@ static void destroy_weapon(weapon_t *weapon)
             sfSprite_destroy(weapon->sprite->sprite);
         free(weapon->sprite);
     }
+    free(weapon);
 }
 
 static void destroy_map(map_t *map)
@@ -41,23 +43,26 @@ static void destroy_map(map_t *map)
         sfRectangleShape_destroy(map->ceiling_floor);
     if (map->rays != NULL)
         sfVertexArray_destroy(map->rays);
+    free(map);
+}
+
+static void destroy_time_info(time_info_t *time_info)
+{
+    sfClock_destroy(time_info->clock);
+    free(time_info);
 }
 
 void destroy_game(void *structure)
 {
     game_t *game = (game_t *)structure;
 
-    if (game->weapon != NULL) {
+    if (game->weapon != NULL)
         destroy_weapon(game->weapon);
-        free(game->weapon);
-    }
-    if (game->player != NULL) {
+    if (game->player != NULL)
         destroy_player(game->player);
-        free(game->player);
-    }
-    if (game->map != NULL) {
+    if (game->map != NULL)
         destroy_map(game->map);
-        free(game->map);
-    }
+    if (game->time_info != NULL)
+        destroy_time_info(game->time_info);
     free(game);
 }
