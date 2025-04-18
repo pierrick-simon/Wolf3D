@@ -13,7 +13,7 @@ const draw_textbox_t str_menu[] = {
     {"Play", (sfVector2f){WIN_WIDTH * 4 / 7 + 75, WIN_HEIGHT * 2 / 5},
         100, GAME},
     {"Setting", (sfVector2f){WIN_WIDTH * 4 / 7 + 75, WIN_HEIGHT * 3 / 5},
-        100, MENU},
+        100, SETTING},
     {"Quit", (sfVector2f){WIN_WIDTH * 4 / 7 + 75, WIN_HEIGHT * 4 / 5},
         100, QUIT},
 };

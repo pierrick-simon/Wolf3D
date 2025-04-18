@@ -84,6 +84,14 @@ typedef enum str_menu_e {
     NB_MENU,
 } str_menu_t;
 
+typedef enum str_setting_e {
+    SETTING_TITLE,
+    SETTING_FULL,
+    SETTING_SOUND,
+    SETTING_BACK,
+    NB_SETTING,
+} str_setting_t;
+
 typedef enum which_line {
     NONE,
     TOP,
@@ -102,6 +110,7 @@ typedef enum scene_s {
     QUIT = -1,
     GAME,
     MENU,
+    SETTING,
     NB_SCENE,
 } scene_t;
 
@@ -171,11 +180,17 @@ typedef struct draw_textbox_s {
     int scene;
 } draw_textbox_t;
 
-typedef struct menu_t {
+typedef struct setting_s {
+    int str;
+} setting_t;
+
+
+typedef struct menu_s {
     int str;
 } menu_t;
 
 extern const draw_textbox_t str_menu[];
+extern const draw_textbox_t str_setting[];
 
 static const int map[MAP_WIDTH][MAP_HEIGHT] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -210,6 +225,7 @@ void *init_game(void);
 int init_system(system_t *sys);
 void **init_struct(void);
 void *init_menu(void);
+void *init_setting(void);
 sfRenderWindow *create_window(sfUint32 style, double coeff);
 
 // event
@@ -218,6 +234,7 @@ void game_events(system_t *sys, game_t *game);
 void sys_events(sfEvent event, system_t *sys);
 sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
 void menu_events(system_t *sys, menu_t *menu);
+void setting_events(system_t *sys, setting_t *setting);
 
 void move_rect(sprite_t *sprite, int offset, int max_value);
 void sys_loop(system_t *sys, void **structure);
@@ -227,6 +244,7 @@ float cast_single_ray(player_t *player,
 void move_player(player_t *player);
 void draw_game(system_t *sys, void *structure);
 void draw_menu(system_t *sys, void *structure);
+void draw_setting(system_t *sys, void *structure);
 
 void draw_string(system_t *sys, textbox_t *textbox,
     const draw_textbox_t *draw, sfColor color);
@@ -238,5 +256,6 @@ void destroy_struct(void **structure, int stop);
 void destroy_game(void *structure);
 void destroy_sys(system_t *sys);
 void destroy_menu(void *structure);
+void destroy_setting(void *structure);
 
 #endif

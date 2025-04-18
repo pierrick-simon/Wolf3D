@@ -7,7 +7,7 @@
 
 #include "wolf.h"
 
-void switch_scene(sfEvent event, system_t *sys, menu_t *menu)
+static void switch_scene(sfEvent event, system_t *sys, menu_t *menu)
 {
     if (is_keyboard_input(event, sfKeyEnter)) {
         if (str_menu[menu->str].scene == QUIT) {
@@ -18,7 +18,7 @@ void switch_scene(sfEvent event, system_t *sys, menu_t *menu)
     }
 }
 
-void switch_str(sfEvent event, menu_t *menu)
+static void switch_str(sfEvent event, menu_t *menu)
 {
     if (is_keyboard_input(event, sfKeyUp))
         menu->str--;
