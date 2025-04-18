@@ -55,7 +55,7 @@ static void resize_window(sfEvent event, system_t *sys)
     sfRenderWindow *new = NULL;
     sfBool old = sys->fullscreen;
 
-    if (is_keyboard_input(event, sfKeyF11)) {
+    if (is_keyboard_input(event, sfKeySpace)) {
         if (sys->fullscreen == sfFalse) {
             new = create_window(sfFullscreen, 1);
             sys->fullscreen = sfTrue;

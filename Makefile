@@ -27,6 +27,8 @@ SRC =	$(addprefix src/,					\
 			game/draw_game.c				\
 			menu/event.c					\
 			menu/draw_menu.c				\
+			menu/str_menu.c					\
+			draw_func.c                     \
 		)
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)
@@ -35,7 +37,7 @@ NAME =	wolf3d
 
 CPPFLAGS = -iquoteinclude -iquotelib
 
-CFLAGS = -Wall -Wextra -g3
+CFLAGS = -Wall -Wextra
 
 LDFLAGS = -Llib
 

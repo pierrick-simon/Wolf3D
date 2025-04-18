@@ -13,7 +13,7 @@ static int init_sound_texture(weapon_t *weapon)
     weapon->texture = malloc(sizeof(sfTexture *) * NB_WEAPON);
     weapon->sound = malloc(sizeof(sfMusic *) * NB_WEAPON);
     if (weapon->texture == NULL || weapon->sound == NULL)
-        return EXIT_F;
+        return ERROR;
     weapon->texture[PUNCH] = sfTexture_createFromFile("asset/punch.png", NULL);
     weapon->texture[PISTOL] =
         sfTexture_createFromFile("asset/pistol.png", NULL);
@@ -27,8 +27,8 @@ static int init_sound_texture(weapon_t *weapon)
         (sfMusic *){sfMusic_createFromFile("asset/shotgun_shot.ogg")};
     for (int i = 0; i < NB_WEAPON; i++)
         if (weapon->texture[i] == NULL || weapon->sound[i] == NULL)
-            return EXIT_F;
-    return EXIT_S;
+            return ERROR;
+    return SUCCESS;
 }
 
 static int init_weapon_sprite(sprite_t *sprite)
@@ -36,14 +36,14 @@ static int init_weapon_sprite(sprite_t *sprite)
     *sprite = (sprite_t){NULL};
     sprite->sprite = sfSprite_create();
     if (sprite->sprite == NULL)
-        return EXIT_F;
+        return ERROR;
     sprite->posf =
         (sfVector2f){WIN_WIDTH / 2, WIN_HEIGHT - WIN_HEIGHT + TOOLBAR_POS};
     sprite->rectangle =
         (sfIntRect){0, 0, WEAPON_SPRITE_X, WEAPON_SPRITE_Y};
     sprite->tile = 0;
     sprite->scale = (sfVector2f){2, 2};
-    return EXIT_S;
+    return SUCCESS;
 }
 
 static int init_weapon(weapon_t *weapon)
@@ -52,9 +52,9 @@ static int init_weapon(weapon_t *weapon)
     weapon->shot = SEC_IN_MICRO * -1;
     weapon->weapon = 0;
     weapon->sprite = malloc(sizeof(sprite_t));
-    if (weapon->sprite == NULL || init_weapon_sprite(weapon->sprite) == EXIT_F
-        || init_sound_texture(weapon) == EXIT_F)
-        return EXIT_F;
+    if (weapon->sprite == NULL || init_weapon_sprite(weapon->sprite) == ERROR
+        || init_sound_texture(weapon) == ERROR)
+        return ERROR;
     sfSprite_setOrigin(weapon->sprite->sprite,
         (sfVector2f){WEAPON_SPRITE_X / 2, WEAPON_SPRITE_Y});
     sfSprite_setTexture(weapon->sprite->sprite,
@@ -62,7 +62,7 @@ static int init_weapon(weapon_t *weapon)
     sfSprite_setTextureRect(weapon->sprite->sprite, weapon->sprite->rectangle);
     sfSprite_setScale(weapon->sprite->sprite, weapon->sprite->scale);
     sfSprite_setPosition(weapon->sprite->sprite, weapon->sprite->posf);
-    return EXIT_S;
+    return SUCCESS;
 }
 
 static int init_state(map_t *map)
@@ -72,8 +72,8 @@ static int init_state(map_t *map)
     map->wall_state.transform = sfTransform_Identity;
     map->wall_state.blendMode = sfBlendAlpha;
     if (map->wall_state.texture == NULL)
-        return EXIT_F;
-    return EXIT_S;
+        return ERROR;
+    return SUCCESS;
 }
 
 static int init_map(map_t *map)
@@ -83,13 +83,13 @@ static int init_map(map_t *map)
     *map = (map_t){NULL};
     map->ceiling_floor = sfRectangleShape_create();
     if (map->ceiling_floor == NULL)
-        return EXIT_F;
+        return ERROR;
     sfRectangleShape_setSize(map->ceiling_floor, pos);
     map->rays = sfVertexArray_create();
-    if (map->rays == NULL || init_state(map) == EXIT_F)
-        return EXIT_F;
+    if (map->rays == NULL || init_state(map) == ERROR)
+        return ERROR;
     sfVertexArray_setPrimitiveType(map->rays, sfLines);
-    return EXIT_S;
+    return SUCCESS;
 }
 
 void init_player(player_t *player)
@@ -113,9 +113,9 @@ void *init_game(void)
     game->map = malloc(sizeof(map_t));
     game->player = malloc(sizeof(player_t));
     game->weapon = malloc(sizeof(weapon_t));
-    if (game->map == NULL || init_map(game->map) == EXIT_F
+    if (game->map == NULL || init_map(game->map) == ERROR
         || game->player == NULL || game->weapon == NULL
-        || init_weapon(game->weapon) == EXIT_F) {
+        || init_weapon(game->weapon) == ERROR) {
         destroy_game(game);
         return NULL;
     }

@@ -8,7 +8,7 @@
 #ifndef MY_H_
     #define MY_H_
 
-    #define LIB_EXIT_S 0
-    #define LIB_EXIT_F 84
+    #define LIB_SUCCESS 0
+    #define LIB_ERROR 84
 
 #endif

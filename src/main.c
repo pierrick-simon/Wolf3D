@@ -12,12 +12,12 @@ int main(void)
     system_t sys = {NULL};
     void **structure = init_struct();
 
-    if (structure == NULL || init_system(&sys) == EXIT_F) {
+    if (structure == NULL || init_system(&sys) == ERROR) {
         destroy_sys(&sys);
-        return EXIT_F;
+        return ERROR;
     }
     sys_loop(&sys, structure);
     destroy_struct(structure, NB_SCENE);
     destroy_sys(&sys);
-    return EXIT_S;
+    return SUCCESS;
 }

@@ -8,8 +8,8 @@
 #ifndef HEADER_H_
     #define HEADER_H_
 
-    #define EXIT_S 0
-    #define EXIT_F 84
+    #define SUCCESS 0
+    #define ERROR 84
 
     #include <SFML/Graphics.h>
     #include <SFML/Audio.h>
@@ -74,6 +74,16 @@
     #define GUY_SPRITE_X 612
     #define GUY_SPRITE_Y 408
 
+    #define SIZE_TEXT 250
+
+typedef enum str_menu_e {
+    MENU_TITLE,
+    MENU_PLAY,
+    MENU_SETTING,
+    MENU_QUIT,
+    NB_MENU,
+} str_menu_t;
+
 typedef enum which_line {
     NONE,
     TOP,
@@ -89,6 +99,7 @@ typedef enum {
 } weapon_id_t;
 
 typedef enum scene_s {
+    QUIT = -1,
     GAME,
     MENU,
     NB_SCENE,
@@ -138,6 +149,11 @@ typedef struct background_s {
     sfTexture *wallpaper_t;
 } background_t;
 
+typedef struct textbox_s {
+    sfText *text;
+    sfFont *font;
+} textbox_t;
+
 typedef struct system_s {
     sfRenderWindow *window;
     sfClock *clock;
@@ -145,12 +161,21 @@ typedef struct system_s {
     sfBool fullscreen;
     int scene;
     background_t *background;
+    textbox_t *textbox;
 } system_t;
 
+typedef struct draw_textbox_s {
+    char *str;
+    sfVector2f pos;
+    unsigned int size;
+    int scene;
+} draw_textbox_t;
+
 typedef struct menu_t {
-    /**/
+    int str;
 } menu_t;
 
+extern const draw_textbox_t str_menu[];
 
 static const int map[MAP_WIDTH][MAP_HEIGHT] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -192,6 +217,7 @@ sfRenderWindow *create_window(sfUint32 style, double coeff);
 void game_events(system_t *sys, game_t *game);
 void sys_events(sfEvent event, system_t *sys);
 sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
+void menu_events(system_t *sys, menu_t *menu);
 
 void move_rect(sprite_t *sprite, int offset, int max_value);
 void sys_loop(system_t *sys, void **structure);
@@ -202,12 +228,15 @@ void move_player(player_t *player);
 void draw_game(system_t *sys, void *structure);
 void draw_menu(system_t *sys, void *structure);
 
+void draw_string(system_t *sys, textbox_t *textbox,
+    const draw_textbox_t *draw, sfColor color);
+void draw_background(system_t *sys, background_t *background);
+
 // destroy
 
 void destroy_struct(void **structure, int stop);
 void destroy_game(void *structure);
 void destroy_sys(system_t *sys);
 void destroy_menu(void *structure);
-void menu_events(system_t *sys, menu_t *menu);
 
 #endif
