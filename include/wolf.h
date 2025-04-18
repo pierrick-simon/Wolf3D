@@ -78,6 +78,8 @@
 
     #define CROSSAIR_RADIUS 0.1
 
+    #define __maybe_unused  __attribute__((unused))
+
 typedef enum str_menu_e {
     MENU_TITLE,
     MENU_PLAY,
@@ -109,12 +111,20 @@ typedef enum {
 } weapon_id_t;
 
 typedef enum scene_s {
-    QUIT = -1,
     GAME,
     MENU,
     SETTING,
     NB_SCENE,
+    QUIT,
 } scene_t;
+
+static const char *str_scene[] __maybe_unused = {
+    [GAME] = "game",
+    [MENU] = "menu",
+    [SETTING] = "setting",
+    [NB_SCENE] = "",
+    [QUIT] = "quit",
+};
 
 typedef struct sprite_s {
     sfTexture *texture;
@@ -191,15 +201,14 @@ typedef struct draw_textbox_s {
 
 typedef struct setting_s {
     int str;
+    draw_textbox_t *draw;
 } setting_t;
 
 
 typedef struct menu_s {
     int str;
+    draw_textbox_t *draw;
 } menu_t;
-
-extern const draw_textbox_t str_menu[];
-extern const draw_textbox_t str_setting[];
 
 static const int map[MAP_WIDTH][MAP_HEIGHT] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -236,6 +245,7 @@ void **init_struct(void);
 void *init_menu(void);
 void *init_setting(void);
 sfRenderWindow *create_window(sfUint32 style, double coeff);
+draw_textbox_t *init_from_conf(char *path);
 
 // event
 
@@ -256,7 +266,7 @@ void draw_menu(system_t *sys, void *structure);
 void draw_setting(system_t *sys, void *structure);
 
 void draw_string(system_t *sys, textbox_t *textbox,
-    const draw_textbox_t *draw, sfColor color);
+    draw_textbox_t *draw, sfColor color);
 void draw_background(system_t *sys, background_t *background);
 
 // destroy
@@ -266,5 +276,6 @@ void destroy_game(void *structure);
 void destroy_sys(system_t *sys);
 void destroy_menu(void *structure);
 void destroy_setting(void *structure);
+void free_draw_textbox(draw_textbox_t *draw, int stop);
 
 #endif

@@ -16,9 +16,9 @@ void draw_setting(system_t *sys, void *structure)
     draw_background(sys, sys->background);
     for (int i = 0; i < NB_SETTING; i++) {
         if (setting->str == i)
-            draw_string(sys, sys->textbox, &str_setting[i], sfRed);
+            draw_string(sys, sys->textbox, &setting->draw[i], sfRed);
         else
-            draw_string(sys, sys->textbox, &str_setting[i], sfWhite);
+            draw_string(sys, sys->textbox, &setting->draw[i], sfWhite);
     }
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);

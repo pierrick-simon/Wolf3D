@@ -15,5 +15,8 @@ void *init_setting(void)
     if (setting == NULL)
         return NULL;
     setting->str = SETTING_FULL;
+    setting->draw = init_from_conf("config_file/setting.conf");
+    if (setting->draw == NULL)
+        return NULL;
     return (void *)setting;
 }

@@ -12,5 +12,7 @@ void destroy_menu(void *structure)
 {
     menu_t *menu = (menu_t *)structure;
 
+    if (menu->draw != NULL)
+        free_draw_textbox(menu->draw, -1);
     free(menu);
 }

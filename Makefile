@@ -20,20 +20,20 @@ SRC =	$(addprefix src/,					\
 			init/init_setting.c 			\
 			init/init_sys.c					\
 			init/init_struct.c				\
+			init/init_from_conf.c			\
 			destroy/destroy_game.c 			\
 			destroy/destroy_menu.c 			\
 			destroy/destroy_setting.c 		\
 			destroy/destroy_sys.c			\
 			destroy/destroy_struct.c		\
+			destroy/free_draw_textbox.c		\
 			game/event.c					\
 			game/draw_game.c				\
 			menu/event.c					\
 			menu/draw_menu.c				\
-			menu/str_menu.c					\
 			draw_func.c                     \
 			setting/event.c					\
 			setting/draw_setting.c			\
-			setting/str_setting.c			\
 		)
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)

@@ -16,9 +16,9 @@ void draw_menu(system_t *sys, void *structure)
     draw_background(sys, sys->background);
     for (int i = 0; i < NB_MENU; i++) {
         if (menu->str == i)
-            draw_string(sys, sys->textbox, &str_menu[i], sfRed);
+            draw_string(sys, sys->textbox, &menu->draw[i], sfRed);
         else
-            draw_string(sys, sys->textbox, &str_menu[i], sfWhite);
+            draw_string(sys, sys->textbox, &menu->draw[i], sfWhite);
     }
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);

@@ -8,7 +8,7 @@
 #include "wolf.h"
 
 void draw_string(system_t *sys, textbox_t *textbox,
-    const draw_textbox_t *draw, sfColor color)
+    draw_textbox_t *draw, sfColor color)
 {
     sfText_setPosition(textbox->text, draw->pos);
     sfText_setCharacterSize(textbox->text, draw->size);
