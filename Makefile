@@ -7,25 +7,27 @@
 
 MAIN = src/main.c
 
-SRC =	src/creat_window.c	\
-		src/event.c	\
-		src/move_rect.c	\
-		src/sys_loop.c	\
-		src/ray_cast.c	\
-		src/move_player.c	\
-		src/is_keyboard_input.c	\
-		src/init/init_game.c \
-		src/init/init_menu.c \
-		src/init/init_sys.c	\
-		src/init/init_struct.c	\
-		src/destroy/destroy_game.c \
-		src/destroy/destroy_menu.c \
-		src/destroy/destroy_sys.c	\
-		src/destroy/destroy_struct.c	\
-		src/game/event.c	\
-		src/game/draw_game.c	\
-		src/menu/event.c	\
-		src/menu/draw_menu.c	\
+SRC =	$(addprefix src/,					\
+			init/creat_window.c				\
+			events/event.c					\
+			algo/move_rect.c				\
+			sys_loop.c						\
+			algo/ray_cast.c					\
+			algo/move_player.c				\
+			events/is_keyboard_input.c		\
+			init/init_game.c 				\
+			init/init_menu.c 				\
+			init/init_sys.c					\
+			init/init_struct.c				\
+			destroy/destroy_game.c 			\
+			destroy/destroy_menu.c 			\
+			destroy/destroy_sys.c			\
+			destroy/destroy_struct.c		\
+			game/event.c					\
+			game/draw_game.c				\
+			menu/event.c					\
+			menu/draw_menu.c				\
+		)
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)
 
