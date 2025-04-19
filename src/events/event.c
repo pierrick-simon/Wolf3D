@@ -23,23 +23,21 @@ static void change_scene(sfEvent event, system_t *sys)
 
 static void music_setvolume(sfEvent event, system_t *sys)
 {
-    float volume = sfMusic_getVolume(sys->music);
-
     if (is_keyboard_input(event, sfKeyF1)) {
-        if (volume < 1)
-            volume = VOL_MAX;
+        if (sys->volume < 1)
+            sys->volume = VOL_MAX;
         else
-            volume = VOL_MIN;
+            sys->volume = VOL_MIN;
     }
     if (is_keyboard_input(event, sfKeyF2)) {
-        if (volume > VOL_MIN + VOL_GAP)
-            volume -= VOL_GAP;
+        if (sys->volume > VOL_MIN + VOL_GAP)
+            sys->volume -= VOL_GAP;
         else
-            volume = 0.0;
+            sys->volume = 0.0;
     }
-    if (is_keyboard_input(event, sfKeyF3) && volume < VOL_MAX - VOL_GAP)
-        volume += VOL_GAP;
-    sfMusic_setVolume(sys->music, volume);
+    if (is_keyboard_input(event, sfKeyF3) && sys->volume < VOL_MAX - VOL_GAP)
+        sys->volume += VOL_GAP;
+    sfMusic_setVolume(sys->music, sys->volume);
 }
 
 static void close_window(sfEvent event, system_t *sys)

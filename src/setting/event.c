@@ -7,6 +7,16 @@
 
 #include "wolf.h"
 
+void change_volume(sfEvent event, system_t *sys, setting_t *setting)
+{
+    if (setting->str == SETTING_SOUND) {
+        if (is_keyboard_input(event, sfKeyRight) && sys->volume < VOL_MAX)
+            sys->volume += VOL_GAP;
+        if (is_keyboard_input(event, sfKeyLeft) && sys->volume > VOL_MIN)
+            sys->volume -= VOL_GAP;
+    }
+}
+
 void switch_screen(sfEvent event, system_t *sys, setting_t *setting)
 {
     sfRenderWindow *new = NULL;
@@ -61,5 +71,6 @@ void setting_events(system_t *sys, setting_t *setting)
         switch_str(event, setting);
         switch_scene(event, sys, setting);
         switch_screen(event, sys, setting);
+        change_volume(event, sys, setting);
     }
 }

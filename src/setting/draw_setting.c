@@ -7,28 +7,36 @@
 
 #include "wolf.h"
 
-static void draw_rectangle(system_t *sys, setting_t *setting)
+static void draw_sound(system_t *sys, setting_t *setting)
 {
-    double size = setting->draw[SETTING_ON_OFF].size;
+    double x = setting->draw[SETTING_ZERO].pos.x + VOL_OFFSET;
+    double y = setting->draw[SETTING_ZERO].pos.y + VOL_OFFSET / 2;
+    double size_x = VOL_FILL;
+    double size_y = setting->draw[SETTING_ZERO].size / 3;
 
-    sfRectangleShape_setTexture(setting->rect, NULL, sfFalse);
-    sfRectangleShape_setPosition(
-        setting->rect, setting->draw[SETTING_ON_OFF].pos);
+    sfRectangleShape_setPosition(setting->rect, (sfVector2f){x, y});
     sfRectangleShape_setFillColor(setting->rect, sfTransparent);
-    sfRectangleShape_setSize(setting->rect, (sfVector2f){SWITCH, size});
+    sfRectangleShape_setSize(setting->rect, (sfVector2f){size_x, size_y});
     sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
-    sfRectangleShape_setTexture(
-        setting->rect, sys->background->wallpaper_t, sfFalse);
-    sfRectangleShape_setFillColor(setting->rect, sfWhite);
-    sfRectangleShape_setSize(setting->rect, (sfVector2f){SWITCH / 2, size});
+    sfRectangleShape_setFillColor(setting->rect, sfMagenta);
+    sfRectangleShape_setSize(setting->rect,
+        (sfVector2f){size_x * sys->volume / VOL_MAX, size_y});
+    sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
 }
 
 static void draw_fullscreen(system_t *sys, setting_t *setting)
 {
     double x = setting->draw[SETTING_ON_OFF].pos.x;
     double y = setting->draw[SETTING_ON_OFF].pos.y;
+    double size = setting->draw[SETTING_ON_OFF].size;
 
-    draw_rectangle(sys, setting);
+    sfRectangleShape_setPosition(
+        setting->rect, setting->draw[SETTING_ON_OFF].pos);
+    sfRectangleShape_setFillColor(setting->rect, sfTransparent);
+    sfRectangleShape_setSize(setting->rect, (sfVector2f){SWITCH, size});
+    sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
+    sfRectangleShape_setFillColor(setting->rect, PAD);
+    sfRectangleShape_setSize(setting->rect, (sfVector2f){SWITCH / 2, size});
     if (sys->fullscreen == sfTrue) {
         setting->draw[SETTING_ON_OFF].color = sfGreen;
         sfRectangleShape_setPosition(
@@ -51,6 +59,7 @@ void draw_setting(system_t *sys, void *structure)
         draw_string(sys, sys->textbox, &setting->draw[i]);
     }
     draw_fullscreen(sys, setting);
+    draw_sound(sys, setting);
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);
     sfRenderWindow_display(sys->window);

@@ -51,5 +51,6 @@ int init_system(system_t *sys)
         return ERROR;
     sys->fullscreen = sfTrue;
     sys->scene = MENU;
+    sys->volume = VOL_MAX;
     return SUCCESS;
 }

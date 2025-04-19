@@ -79,6 +79,10 @@
     #define CROSSAIR_RADIUS 0.1
 
     #define SWITCH 170
+    #define PAD sfColor_fromRGB(255, 230, 200)
+
+    #define VOL_FILL 400
+    #define VOL_OFFSET 30
 
     #define __maybe_unused  __attribute__((unused))
 
@@ -92,6 +96,8 @@ typedef enum str_menu_e {
 
 typedef enum str_setting_e {
     SETTING_ON_OFF,
+    SETTING_ZERO,
+    SETTING_HUNDRED,
     SETTING_TITLE,
     SETTING_FULL,
     SETTING_SOUND,
@@ -200,6 +206,7 @@ typedef struct system_s {
     int scene;
     background_t *background;
     textbox_t *textbox;
+    double volume;
 } system_t;
 
 typedef struct draw_textbox_s {
