@@ -28,7 +28,7 @@ static int get_scene(char *scene)
         if (strcmp(str_scene[i], scene) == 0)
             return i;
     }
-    return -1;
+    return MENU;
 }
 
 static int parse_conf(draw_textbox_t *draw, char **tab, int i)
