@@ -78,6 +78,8 @@
 
     #define CROSSAIR_RADIUS 0.1
 
+    #define SWITCH 170
+
     #define __maybe_unused  __attribute__((unused))
 
 typedef enum str_menu_e {
@@ -89,6 +91,7 @@ typedef enum str_menu_e {
 } str_menu_t;
 
 typedef enum str_setting_e {
+    SETTING_ON_OFF,
     SETTING_TITLE,
     SETTING_FULL,
     SETTING_SOUND,
@@ -203,12 +206,14 @@ typedef struct draw_textbox_s {
     char *str;
     sfVector2f pos;
     unsigned int size;
+    sfColor color;
     int scene;
 } draw_textbox_t;
 
 typedef struct setting_s {
     int str;
     draw_textbox_t *draw;
+    sfRectangleShape *rect;
 } setting_t;
 
 typedef struct menu_s {
@@ -271,8 +276,7 @@ void draw_game(system_t *sys, void *structure);
 void draw_menu(system_t *sys, void *structure);
 void draw_setting(system_t *sys, void *structure);
 
-void draw_string(system_t *sys, textbox_t *textbox,
-    draw_textbox_t *draw, sfColor color);
+void draw_string(system_t *sys, textbox_t *textbox, draw_textbox_t *draw);
 void draw_background(system_t *sys, background_t *background);
 
 // destroy

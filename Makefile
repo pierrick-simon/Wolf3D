@@ -42,7 +42,7 @@ NAME =	wolf3d
 
 CPPFLAGS = -iquoteinclude -iquotelib
 
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -g3
 
 LDFLAGS = -Llib
 

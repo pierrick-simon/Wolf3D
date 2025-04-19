@@ -16,7 +16,10 @@ void *init_setting(void)
         return NULL;
     setting->str = SETTING_FULL;
     setting->draw = init_from_conf("config_file/setting.conf");
-    if (setting->draw == NULL)
+    setting->rect = sfRectangleShape_create();
+    if (setting->draw == NULL || setting->rect == NULL)
         return NULL;
+    sfRectangleShape_setOutlineThickness(setting->rect, 2);
+    sfRectangleShape_setOutlineColor(setting->rect, sfWhite);
     return (void *)setting;
 }

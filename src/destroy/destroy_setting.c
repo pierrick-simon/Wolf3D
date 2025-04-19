@@ -14,5 +14,7 @@ void destroy_setting(void *structure)
 
     if (setting->draw != NULL)
         free_draw_textbox(setting->draw, -1);
+    if (setting->rect != NULL)
+        sfRectangleShape_destroy(setting->rect);
     free(setting);
 }

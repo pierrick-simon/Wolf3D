@@ -20,6 +20,7 @@ static void switch_scene(sfEvent event, system_t *sys, menu_t *menu)
 
 static void switch_str(sfEvent event, menu_t *menu)
 {
+    menu->draw[menu->str].color = sfWhite;
     if (is_keyboard_input(event, sfKeyUp))
         menu->str--;
     if (is_keyboard_input(event, sfKeyDown))
@@ -28,6 +29,7 @@ static void switch_str(sfEvent event, menu_t *menu)
         menu->str = MENU_PLAY;
     if (menu->str == MENU_TITLE)
         menu->str = MENU_QUIT;
+    menu->draw[menu->str].color = sfRed;
 }
 
 void menu_events(system_t *sys, menu_t *menu)

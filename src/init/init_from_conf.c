@@ -49,6 +49,7 @@ static int parse_conf(draw_textbox_t *draw, char **tab, int i)
     draw[i].pos = (sfVector2f){x, y};
     draw[i].size = atoi(line[5]);
     draw[i].scene = get_scene(line[6]);
+    draw[i].color = sfWhite;
     free_array(line);
     return SUCCESS;
 }
