@@ -94,6 +94,14 @@ typedef enum str_menu_e {
     NB_MENU,
 } str_menu_t;
 
+typedef enum str_pause_e {
+    PAUSE_TITLE,
+    PAUSE_RESUME,
+    PAUSE_SETTING,
+    PAUSE_BACK,
+    NB_PAUSE,
+} str_pause_t;
+
 typedef enum str_setting_e {
     SETTING_ON,
     SETTING_OFF,
@@ -124,6 +132,7 @@ typedef enum scene_s {
     GAME,
     MENU,
     SETTING,
+    PAUSE,
     NB_SCENE,
     QUIT,
 } scene_t;
@@ -132,6 +141,7 @@ static const char *str_scene[] __maybe_unused = {
     [GAME] = "game",
     [MENU] = "menu",
     [SETTING] = "setting",
+    [PAUSE] = "pause",
     [NB_SCENE] = "",
     [QUIT] = "quit",
 };
@@ -200,14 +210,19 @@ typedef struct textbox_s {
     sfFont *font;
 } textbox_t;
 
+typedef struct state_info_s {
+    double volume;
+    sfBool fullscreen;
+    int scene;
+    int old_scene;
+} state_info_t;
+
 typedef struct system_s {
     sfRenderWindow *window;
     sfMusic *music;
-    sfBool fullscreen;
-    int scene;
     background_t *background;
     textbox_t *textbox;
-    double volume;
+    state_info_t *state;
 } system_t;
 
 typedef struct draw_textbox_s {
@@ -223,6 +238,11 @@ typedef struct setting_s {
     draw_textbox_t *draw;
     sfRectangleShape *rect;
 } setting_t;
+
+typedef struct pause_s {
+    int str;
+    draw_textbox_t *draw;
+} pause_t;
 
 typedef struct menu_s {
     int str;
@@ -262,6 +282,7 @@ void *init_game(void);
 int init_system(system_t *sys);
 void **init_struct(void);
 void *init_menu(void);
+void *init_pause(void);
 void *init_setting(void);
 sfRenderWindow *create_window(sfUint32 style, double coeff);
 draw_textbox_t *init_from_conf(char *path);
@@ -273,6 +294,7 @@ void sys_events(sfEvent event, system_t *sys);
 sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
 void menu_events(system_t *sys, menu_t *menu);
 void setting_events(system_t *sys, setting_t *setting);
+void pause_events(system_t *sys, pause_t *pause);
 
 void move_rect(sprite_t *sprite, int offset, int max_value);
 void sys_loop(system_t *sys, void **structure);
@@ -283,6 +305,7 @@ void move_player(player_t *player, double delta);
 void draw_game(system_t *sys, void *structure);
 void draw_menu(system_t *sys, void *structure);
 void draw_setting(system_t *sys, void *structure);
+void draw_pause(system_t *sys, void *structure);
 
 void draw_string(system_t *sys, textbox_t *textbox, draw_textbox_t *draw);
 void draw_background(system_t *sys, background_t *background);
@@ -293,6 +316,7 @@ void destroy_struct(void **structure, int stop);
 void destroy_game(void *structure);
 void destroy_sys(system_t *sys);
 void destroy_menu(void *structure);
+void destroy_pause(void *structure);
 void destroy_setting(void *structure);
 void free_draw_textbox(draw_textbox_t *draw, int stop);
 

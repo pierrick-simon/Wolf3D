@@ -37,6 +37,14 @@ static int init_background(background_t *background)
     return SUCCESS;
 }
 
+static void init_state(state_info_t *state)
+{
+    state->fullscreen = sfTrue;
+    state->scene = MENU;
+    state->old_scene = MENU;
+    state->volume = VOL_MAX;
+}
+
 int init_system(system_t *sys)
 {
     sys->window = create_window(sfFullscreen, 1);
@@ -49,8 +57,9 @@ int init_system(system_t *sys)
     sys->textbox = malloc(sizeof(textbox_t));
     if (sys->textbox == NULL || init_textbox(sys->textbox) == ERROR)
         return ERROR;
-    sys->fullscreen = sfTrue;
-    sys->scene = MENU;
-    sys->volume = VOL_MAX;
+    sys->state = malloc(sizeof(state_info_t));
+    if (sys->state == NULL)
+        return ERROR;
+    init_state(sys->state);
     return SUCCESS;
 }

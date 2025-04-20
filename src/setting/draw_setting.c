@@ -13,7 +13,7 @@ static void draw_sound(system_t *sys, setting_t *setting)
     double y = setting->draw[SETTING_ZERO].pos.y + SETTING_OFFSET / 2;
     double size_x = SETTING_FILL;
     double size_y = setting->draw[SETTING_ZERO].size / 3;
-    double fill = size_x * sys->volume / VOL_MAX;
+    double fill = size_x * sys->state->volume / VOL_MAX;
 
     sfRectangleShape_setPosition(setting->rect, (sfVector2f){x, y});
     sfRectangleShape_setFillColor(setting->rect, sfTransparent);
@@ -37,7 +37,7 @@ static void draw_fullscreen(system_t *sys, setting_t *set)
     double size_y = set->draw[SETTING_ON].size / 3;
     double fill = 0;
 
-    if (sys->fullscreen == sfFalse)
+    if (sys->state->fullscreen == sfFalse)
         fill = SETTING_FILL;
     sfRectangleShape_setPosition(set->rect, (sfVector2f){x, y});
     sfRectangleShape_setFillColor(set->rect, sfTransparent);

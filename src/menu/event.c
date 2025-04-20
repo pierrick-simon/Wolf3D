@@ -7,14 +7,16 @@
 
 #include "wolf.h"
 
-static void switch_scene(sfEvent event, system_t *sys, menu_t *menu)
+static void switch_scene(
+    sfEvent event, system_t *sys, menu_t *menu, state_info_t *state)
 {
     if (is_keyboard_input(event, sfKeyEnter)) {
         if (menu->draw[menu->str].scene == QUIT) {
             sfRenderWindow_close(sys->window);
             sfMusic_setVolume(sys->music, VOL_MIN);
         }
-        sys->scene = menu->draw[menu->str].scene;
+        state->old_scene = state->scene;
+        state->scene = menu->draw[menu->str].scene;
     }
 }
 
@@ -39,6 +41,6 @@ void menu_events(system_t *sys, menu_t *menu)
     while (sfRenderWindow_pollEvent(sys->window, &event)) {
         sys_events(event, sys);
         switch_str(event, menu);
-        switch_scene(event, sys, menu);
+        switch_scene(event, sys, menu, sys->state);
     }
 }

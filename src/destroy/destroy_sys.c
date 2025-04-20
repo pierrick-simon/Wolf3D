@@ -42,4 +42,6 @@ void destroy_sys(system_t *sys)
         destroy_textbox(sys->textbox);
         free(sys->textbox);
     }
+    if (sys->state != NULL)
+        free(sys->state);
 }

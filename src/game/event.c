@@ -38,6 +38,14 @@ static void click(sfEvent event, weapon_t *weapon, sfInt64 time)
     }
 }
 
+static void switch_scene(sfEvent event, state_info_t *state)
+{
+    if (is_keyboard_input(event, sfKeyTab)) {
+        state->old_scene = state->scene;
+        state->scene = PAUSE;
+    }
+}
+
 void game_events(system_t *sys, game_t *game)
 {
     sfEvent event = {0};
@@ -46,6 +54,7 @@ void game_events(system_t *sys, game_t *game)
         sys_events(event, sys);
         click(event, game->weapon, game->time_info->time);
         change_weapon(event, game->weapon, game->time_info->time);
+        switch_scene(event, sys->state);
     }
     move_player(game->player, game->time_info->delta);
 }

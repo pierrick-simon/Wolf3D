@@ -7,37 +7,23 @@
 
 #include "wolf.h"
 
-static void change_scene(sfEvent event, system_t *sys)
-{
-    if (is_keyboard_input(event, sfKeyTab)) {
-        if (sys->scene == MENU) {
-            sys->scene = GAME;
-            return;
-        }
-        if (sys->scene == GAME) {
-            sys->scene = MENU;
-            return;
-        }
-    }
-}
-
-static void music_setvolume(sfEvent event, system_t *sys)
+static void music_setvolume(sfEvent event, system_t *sys, state_info_t *state)
 {
     if (is_keyboard_input(event, sfKeyF1)) {
-        if (sys->volume < 1)
-            sys->volume = VOL_MAX;
+        if (state->volume < 1)
+            state->volume = VOL_MAX;
         else
-            sys->volume = VOL_MIN;
+            state->volume = VOL_MIN;
     }
     if (is_keyboard_input(event, sfKeyF2)) {
-        if (sys->volume > VOL_MIN + VOL_GAP)
-            sys->volume -= VOL_GAP;
+        if (state->volume > VOL_MIN + VOL_GAP)
+            state->volume -= VOL_GAP;
         else
-            sys->volume = 0.0;
+            state->volume = 0.0;
     }
-    if (is_keyboard_input(event, sfKeyF3) && sys->volume < VOL_MAX - VOL_GAP)
-        sys->volume += VOL_GAP;
-    sfMusic_setVolume(sys->music, sys->volume);
+    if (is_keyboard_input(event, sfKeyF3) && state->volume < VOL_MAX - VOL_GAP)
+        state->volume += VOL_GAP;
+    sfMusic_setVolume(sys->music, state->volume);
 }
 
 static void close_window(sfEvent event, system_t *sys)
@@ -48,32 +34,31 @@ static void close_window(sfEvent event, system_t *sys)
     }
 }
 
-static void resize_window(sfEvent event, system_t *sys)
+static void resize_window(sfEvent event, system_t *sys, state_info_t *state)
 {
     sfRenderWindow *new = NULL;
-    sfBool old = sys->fullscreen;
+    sfBool old = state->fullscreen;
 
     if (is_keyboard_input(event, sfKeyF11)) {
-        if (sys->fullscreen == sfFalse) {
+        if (state->fullscreen == sfFalse) {
             new = create_window(sfFullscreen, 1);
-            sys->fullscreen = sfTrue;
+            state->fullscreen = sfTrue;
         } else {
             new = create_window(sfTitlebar | sfClose, 0.5);
-            sys->fullscreen = sfFalse;
+            state->fullscreen = sfFalse;
         }
         if (new != NULL) {
             sfRenderWindow_close(sys->window);
             sfRenderWindow_destroy(sys->window);
             sys->window = new;
         } else
-            sys->fullscreen = old;
+            state->fullscreen = old;
     }
 }
 
 void sys_events(sfEvent event, system_t *sys)
 {
     close_window(event, sys);
-    resize_window(event, sys);
-    music_setvolume(event, sys);
-    change_scene(event, sys);
+    resize_window(event, sys, sys->state);
+    music_setvolume(event, sys, sys->state);
 }
