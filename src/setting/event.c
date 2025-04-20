@@ -7,7 +7,7 @@
 
 #include "wolf.h"
 
-void change_volume(sfEvent event, system_t *sys, setting_t *setting)
+static void change_volume(sfEvent event, system_t *sys, setting_t *setting)
 {
     if (setting->str == SETTING_SOUND) {
         if (is_keyboard_input(event, sfKeyRight) && sys->volume < VOL_MAX)
@@ -17,31 +17,37 @@ void change_volume(sfEvent event, system_t *sys, setting_t *setting)
     }
 }
 
-void switch_screen(sfEvent event, system_t *sys, setting_t *setting)
+static void change_window(system_t *sys, sfRenderWindow *new, sfBool old)
+{
+    if (new != NULL) {
+        sfRenderWindow_close(sys->window);
+        sfRenderWindow_destroy(sys->window);
+        sys->window = new;
+    } else
+        sys->fullscreen = old;
+}
+
+static void switch_screen(sfEvent event, system_t *sys, setting_t *setting)
 {
     sfRenderWindow *new = NULL;
     sfBool old = sys->fullscreen;
 
     if (setting->str == SETTING_FULL) {
-        if (is_keyboard_input(event, sfKeyRight)
+        if (is_keyboard_input(event, sfKeyLeft)
             && sys->fullscreen == sfFalse) {
             new = create_window(sfFullscreen, 1);
             sys->fullscreen = sfTrue;
         }
-        if (is_keyboard_input(event, sfKeyLeft) && sys->fullscreen == sfTrue) {
+        if (is_keyboard_input(event, sfKeyRight)
+            && sys->fullscreen == sfTrue) {
             new = create_window(sfTitlebar | sfClose, 0.5);
             sys->fullscreen = sfFalse;
         }
-        if (new != NULL) {
-            sfRenderWindow_close(sys->window);
-            sfRenderWindow_destroy(sys->window);
-            sys->window = new;
-        } else
-            sys->fullscreen = old;
+        change_window(sys, new, old);
     }
 }
 
-void switch_scene(sfEvent event, system_t *sys, setting_t *setting)
+static void switch_scene(sfEvent event, system_t *sys, setting_t *setting)
 {
     if (is_keyboard_input(event, sfKeyEnter) && setting->str == SETTING_BACK) {
         sys->scene = setting->draw[setting->str].scene;

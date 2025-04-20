@@ -9,43 +9,49 @@
 
 static void draw_sound(system_t *sys, setting_t *setting)
 {
-    double x = setting->draw[SETTING_ZERO].pos.x + VOL_OFFSET;
-    double y = setting->draw[SETTING_ZERO].pos.y + VOL_OFFSET / 2;
-    double size_x = VOL_FILL;
+    double x = setting->draw[SETTING_ZERO].pos.x + SETTING_OFFSET;
+    double y = setting->draw[SETTING_ZERO].pos.y + SETTING_OFFSET / 2;
+    double size_x = SETTING_FILL;
     double size_y = setting->draw[SETTING_ZERO].size / 3;
+    double fill = size_x * sys->volume / VOL_MAX;
 
     sfRectangleShape_setPosition(setting->rect, (sfVector2f){x, y});
     sfRectangleShape_setFillColor(setting->rect, sfTransparent);
     sfRectangleShape_setSize(setting->rect, (sfVector2f){size_x, size_y});
     sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
     sfRectangleShape_setFillColor(setting->rect, sfMagenta);
+    sfRectangleShape_setSize(setting->rect, (sfVector2f){fill, size_y});
+    sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
+    sfRectangleShape_setPosition(setting->rect,
+        (sfVector2f){x + fill - VOL_GAP, y - size_y / 2});
+    sfRectangleShape_setFillColor(setting->rect, sfWhite);
     sfRectangleShape_setSize(setting->rect,
-        (sfVector2f){size_x * sys->volume / VOL_MAX, size_y});
+        (sfVector2f){VOL_GAP * 2, size_y * 2});
     sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
 }
 
-static void draw_fullscreen(system_t *sys, setting_t *setting)
+static void draw_fullscreen(system_t *sys, setting_t *set)
 {
-    double x = setting->draw[SETTING_ON_OFF].pos.x;
-    double y = setting->draw[SETTING_ON_OFF].pos.y;
-    double size = setting->draw[SETTING_ON_OFF].size;
+    double x = set->draw[SETTING_ON].pos.x + (double)SETTING_OFFSET * 1.5;
+    double y = set->draw[SETTING_ON].pos.y + SETTING_OFFSET / 2;
+    double size_y = set->draw[SETTING_ON].size / 3;
+    double fill = 0;
 
-    sfRectangleShape_setPosition(
-        setting->rect, setting->draw[SETTING_ON_OFF].pos);
-    sfRectangleShape_setFillColor(setting->rect, sfTransparent);
-    sfRectangleShape_setSize(setting->rect, (sfVector2f){SWITCH, size});
-    sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
-    sfRectangleShape_setFillColor(setting->rect, PAD);
-    sfRectangleShape_setSize(setting->rect, (sfVector2f){SWITCH / 2, size});
-    if (sys->fullscreen == sfTrue) {
-        setting->draw[SETTING_ON_OFF].color = sfGreen;
-        sfRectangleShape_setPosition(
-            setting->rect, (sfVector2f){x + SWITCH / 2, y});
-        sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
-    } else {
-        setting->draw[SETTING_ON_OFF].color = sfRed;
-        sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
-    }
+    if (sys->fullscreen == sfFalse)
+        fill = SETTING_FILL;
+    sfRectangleShape_setPosition(set->rect, (sfVector2f){x, y});
+    sfRectangleShape_setFillColor(set->rect, sfTransparent);
+    sfRectangleShape_setSize(set->rect, (sfVector2f){SETTING_FILL, size_y});
+    sfRenderWindow_drawRectangleShape(sys->window, set->rect, NULL);
+    sfRectangleShape_setFillColor(set->rect, sfMagenta);
+    sfRectangleShape_setSize(set->rect, (sfVector2f){fill, size_y});
+    sfRenderWindow_drawRectangleShape(sys->window, set->rect, NULL);
+    sfRectangleShape_setPosition(set->rect,
+        (sfVector2f){x + fill - VOL_GAP, y - size_y / 2});
+    sfRectangleShape_setFillColor(set->rect, sfWhite);
+    sfRectangleShape_setSize(set->rect,
+        (sfVector2f){VOL_GAP * 2, size_y * 2});
+    sfRenderWindow_drawRectangleShape(sys->window, set->rect, NULL);
 }
 
 void draw_setting(system_t *sys, void *structure)

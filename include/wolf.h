@@ -81,8 +81,8 @@
     #define SWITCH 170
     #define PAD sfColor_fromRGB(255, 230, 200)
 
-    #define VOL_FILL 400
-    #define VOL_OFFSET 30
+    #define SETTING_FILL 400
+    #define SETTING_OFFSET 30
 
     #define __maybe_unused  __attribute__((unused))
 
@@ -95,7 +95,8 @@ typedef enum str_menu_e {
 } str_menu_t;
 
 typedef enum str_setting_e {
-    SETTING_ON_OFF,
+    SETTING_ON,
+    SETTING_OFF,
     SETTING_ZERO,
     SETTING_HUNDRED,
     SETTING_TITLE,
