@@ -98,8 +98,8 @@ static float jump_to_next_line(sfVector2f *pos,
     return top_line_len;
 }
 
-float cast_single_ray(player_t *player,
-    float angle_offset, intersection_type_t *type)
+float cast_single_ray(player_t *player, float angle_offset,
+    intersection_type_t *type, sfVector2f *intersection_point)
 {
     sfVector2f pos = player->pos;
     sfVector2f v = {cos(player->angle + angle_offset),
@@ -107,55 +107,70 @@ float cast_single_ray(player_t *player,
     float len = 0.0;
 
     *type = NONE;
-    while ((is_end(&pos, type) == sfFalse)) {
-        len += jump_to_next_line(&pos, &v, type);
-        if (len > RENDER_DISTANCE)
-            return 0;
-    }
     if (angle_offset == 0.0) {
         player->v.x = v.x * PLAYER_SPEED;
         player->v.y = v.y * PLAYER_SPEED;
-        player->type = *type;
     }
+    while ((is_end(&pos, type) == sfFalse)) {
+        len += jump_to_next_line(&pos, &v, type);
+        if (len > RENDER_DISTANCE) {
+            intersection_point->x = -1;
+            intersection_point->y = -1;
+            return 0;
+        }
+    }
+    *intersection_point = pos;
     return len;
 }
 
-static void add_ray_to_vertex_array(game_t *game,
-    float angle_offset, intersection_type_t *type, float offset)
+static void set_quads(sfBool start, int i, float o[2], game_t *game)
 {
-    float len = cast_single_ray(game->player, angle_offset, type);
-    sfVertex line = {0};
+    sfVertex line = {.color = sfWhite};
+    static float prev = 0;
 
-    if (*type == TOP || *type == BOTTOM)
-        line.color = TOP_COLOR;
-    if (*type == LEFT || *type == RIGHT)
-        line.color = LEFT_COLOR;
+    if ((start && i != 0) || i == NUM_RAYS) {
+        line.position = (sfVector2f){o[0], (WIN_HEIGHT - prev) / 2};
+        line.texCoords = (sfVector2f){128, 0};
+        sfVertexArray_append(game->map->quads, line);
+        line.position = (sfVector2f){o[0], ((WIN_HEIGHT - prev) / 2) + prev};
+        line.texCoords = (sfVector2f){128, 128};
+        sfVertexArray_append(game->map->quads, line);
+    }
+    if (start) {
+        line.position = (sfVector2f){o[0], ((WIN_HEIGHT - o[1]) / 2) + o[1]};
+        line.texCoords = (sfVector2f){0, 128};
+        sfVertexArray_append(game->map->quads, line);
+        line.position = (sfVector2f){o[0], (WIN_HEIGHT - o[1]) / 2};
+        line.texCoords = (sfVector2f){0, 0};
+        sfVertexArray_append(game->map->quads, line);
+    }
+    prev = o[1];
+}
+
+static void add_ray_to_vertex_array(game_t *game, int i, sfVector2f *prev)
+{
+    intersection_type_t type = NONE;
+    float angle_offset = ((i / (float)NUM_RAYS) * game->player->fov) -
+        (game->player->fov / 2);
+    float offset = i * (float)NUM_RAYS / (float)WIN_WIDTH;
+    sfVector2f pos = {0};
+    float len = cast_single_ray(game->player, angle_offset, &type, &pos);
+    sfBool start = (int)prev->x / TILE_SIZE != (int)pos.x / TILE_SIZE
+        || (int)prev->y / TILE_SIZE != (int)pos.y / TILE_SIZE || pos.x == -1;
+
     len = (TILE_SIZE * WIN_HEIGHT) / (len * cos(angle_offset));
     if (game->player->is_sprinting == sfTrue)
         len /= SPRINT_COEF;
-    line.position = (sfVector2f){offset, (WIN_HEIGHT - len) / 2};
-    line.texCoords = (sfVector2f){64, 0};
-    sfVertexArray_append(game->map->rays, line);
-    if (*type == TOP || *type == BOTTOM)
-        line.color = TOP_SHADOW;
-    if (*type == LEFT || *type == RIGHT)
-        line.color = LEFT_SHADOW;
-    line.position = (sfVector2f){offset, ((WIN_HEIGHT - len) / 2) + len};
-    line.texCoords = (sfVector2f){64, 128};
-    sfVertexArray_append(game->map->rays, line);
+    set_quads(start, i, (float[2]){offset, len}, game);
+    *prev = pos;
 }
 
 void cast_all_rays(game_t *game)
 {
-    float offset = 0;
-    float angle_offset = 0.0;
-    intersection_type_t type = NONE;
+    sfVector2f prev = {-1, -1};
 
-    sfVertexArray_clear(game->map->rays);
+    sfVertexArray_clear(game->map->quads);
     for (int i = 0; i <= NUM_RAYS; i++) {
-        angle_offset = ((i / (float)NUM_RAYS) * game->player->fov) -
-            (game->player->fov / 2);
-        add_ray_to_vertex_array(game, angle_offset, &type, offset);
-        offset += (float)NUM_RAYS / (float)WIN_WIDTH;
+        add_ray_to_vertex_array(game, i, &prev);
     }
 }

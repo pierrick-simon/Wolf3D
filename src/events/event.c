@@ -9,7 +9,7 @@
 
 static void change_scene(sfEvent event, system_t *sys)
 {
-    if (is_keyboard_input(event, sfKeyTab)) {
+    if (is_input(event, sfKeyTab, sfTrue, 3)) {
         if (sys->scene == MENU) {
             sys->scene = GAME;
             return;
@@ -25,26 +25,27 @@ static void music_setvolume(sfEvent event, system_t *sys)
 {
     float volume = sfMusic_getVolume(sys->music);
 
-    if (is_keyboard_input(event, sfKeyF1)) {
+    if (is_input(event, sfKeyF1, sfFalse, 0)) {
         if (volume < 1)
             volume = VOL_MAX;
         else
             volume = VOL_MIN;
     }
-    if (is_keyboard_input(event, sfKeyF2)) {
+    if (is_input(event, sfKeyF2, sfFalse, 0)) {
         if (volume > VOL_MIN + VOL_GAP)
             volume -= VOL_GAP;
         else
             volume = 0.0;
     }
-    if (is_keyboard_input(event, sfKeyF3) && volume < VOL_MAX - VOL_GAP)
+    if (is_input(event, sfKeyF3, sfFalse, 0)
+        && volume < VOL_MAX - VOL_GAP)
         volume += VOL_GAP;
     sfMusic_setVolume(sys->music, volume);
 }
 
 static void close_window(sfEvent event, system_t *sys)
 {
-    if (is_keyboard_input(event, sfKeyEscape) || event.type == sfEvtClosed) {
+    if (is_input(event, sfKeyEscape, sfTrue, 8) || event.type == sfEvtClosed) {
         sfRenderWindow_close(sys->window);
         sfMusic_setVolume(sys->music, VOL_MIN);
     }
@@ -55,7 +56,7 @@ static void resize_window(sfEvent event, system_t *sys)
     sfRenderWindow *new = NULL;
     sfBool old = sys->fullscreen;
 
-    if (is_keyboard_input(event, sfKeyF11)) {
+    if (is_input(event, sfKeyF11, sfFalse, 0)) {
         if (sys->fullscreen == sfFalse) {
             new = create_window(sfFullscreen, 1);
             sys->fullscreen = sfTrue;
