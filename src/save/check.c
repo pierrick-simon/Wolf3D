@@ -33,7 +33,7 @@ int check_angle(char *str)
 
 int check_name(char *str)
 {
-    if (strlen(str ) > MAX_NAME)
+    if (strlen(str) > MAX_NAME)
         return ERROR;
     return SUCCESS;
 }
