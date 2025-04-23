@@ -117,9 +117,9 @@ static int init_map(map_t *map)
 
 static int init_player(player_t *player)
 {
-    player->angle = (-2 * M_PI) / 3;
-    player->pos.x = (MAP_WIDTH * TILE_SIZE) / 2 - 92;
-    player->pos.y = (MAP_HEIGHT * TILE_SIZE) / 2 - 92;
+    player->angle = 0;
+    player->pos.x = -1;
+    player->pos.y = -1;
     player->type = NONE;
     player->v.x = 0;
     player->v.y = 0;
@@ -161,5 +161,6 @@ void *init_game(void)
         destroy_game(game);
         return NULL;
     }
+    game->player->save = NULL;
     return (void *)game;
 }

@@ -5,11 +5,11 @@
 ** move_player.c
 */
 
-#include "wolf.h"
+#include "save.h"
 
-static sfBool is_wall(float y, float x)
+static sfBool is_wall(float y, float x, save_t *save)
 {
-    if (map[(int)y / TILE_SIZE][(int)x / TILE_SIZE] != 0)
+    if (save->map[(int)y / TILE_SIZE][(int)x / TILE_SIZE] != 0)
         return sfTrue;
     return sfFalse;
 }
@@ -24,10 +24,11 @@ static void sprint(player_t *player)
         player->is_sprinting = sfTrue;
     }
     if (is_wall(player->pos.y,
-        player->pos.x + (player->v.x * coef * DISTANCE_COLISION)) == sfFalse)
+        player->pos.x + (player->v.x * coef * DISTANCE_COLISION),
+        player->save) == sfFalse)
         player->pos.x += player->v.x * coef * FORWARD_COEF;
     if (is_wall(player->pos.y + (player->v.y * coef * DISTANCE_COLISION),
-        player->pos.x) == sfFalse)
+        player->pos.x, player->save) == sfFalse)
         player->pos.y += player->v.y * coef * FORWARD_COEF;
 }
 
@@ -40,10 +41,11 @@ static void move_verticaly(player_t *player)
     if ((sfKeyboard_isKeyPressed(sfKeyDown))
         || sfKeyboard_isKeyPressed(sfKeyS)) {
         if (is_wall(player->pos.y,
-            player->pos.x - (player->v.x * DISTANCE_COLISION)) == sfFalse)
+            player->pos.x - (player->v.x * DISTANCE_COLISION),
+            player->save) == sfFalse)
             player->pos.x -= player->v.x;
         if (is_wall(player->pos.y - (player->v.y * DISTANCE_COLISION),
-            player->pos.x) == sfFalse)
+            player->pos.x, player->save) == sfFalse)
             player->pos.y -= player->v.y;
     }
 }
@@ -52,18 +54,20 @@ static void move_horizontaly(player_t *player)
 {
     if (sfKeyboard_isKeyPressed(sfKeyQ)) {
         if (is_wall(player->pos.y,
-            player->pos.x + (player->v.y * DISTANCE_COLISION)) == sfFalse)
+            player->pos.x + (player->v.y * DISTANCE_COLISION),
+            player->save) == sfFalse)
             player->pos.x += player->v.y;
         if (is_wall(player->pos.y - (player->v.x * DISTANCE_COLISION),
-            player->pos.x) == sfFalse)
+            player->pos.x, player->save) == sfFalse)
             player->pos.y -= player->v.x;
     }
     if (sfKeyboard_isKeyPressed(sfKeyD)) {
         if (is_wall(player->pos.y,
-            player->pos.x - (player->v.y * DISTANCE_COLISION)) == sfFalse)
+            player->pos.x - (player->v.y * DISTANCE_COLISION),
+            player->save) == sfFalse)
             player->pos.x -= player->v.y;
         if (is_wall(player->pos.y + (player->v.x * DISTANCE_COLISION),
-            player->pos.x) == sfFalse)
+            player->pos.x, player->save) == sfFalse)
             player->pos.y += player->v.x;
     }
 }

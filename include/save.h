@@ -19,6 +19,8 @@ typedef struct save_s {
     sfVector2f start_pos;
     double start_angle;
     int **map;
+    sfBool init;
+    sfBool update;
 } save_t;
 
 typedef enum {
@@ -51,5 +53,6 @@ static const check_t CHECK[] __maybe_unused = {
 };
 
 void free_map(int size, int **map);
+int get_save(char *file, save_t *save);
 
 #endif

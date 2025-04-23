@@ -5,7 +5,7 @@
 ** game_loop
 */
 
-#include "wolf.h"
+#include "save.h"
 
 static void shot_gun_anim(weapon_t *weapon, sfInt64 time)
 {
@@ -63,10 +63,21 @@ static void update_time(time_info_t *time_info)
         (float)SEC_IN_MICRO;
 }
 
+static void update_save(system_t *sys, player_t *player)
+{
+    if (sys->save->update == sfFalse) {
+        player->pos = sys->save->start_pos;
+        player->angle = sys->save->start_angle;
+        player->save = sys->save;
+        sys->save->update = sfTrue;
+    }
+}
+
 void draw_game(system_t *sys, void *structure)
 {
     game_t *game = (game_t *)structure;
 
+    update_save(sys, game->player);
     update_time(game->time_info);
     game_events(sys, game);
     shot_gun_anim(game->weapon, game->time_info->time);

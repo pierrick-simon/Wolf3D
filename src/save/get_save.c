@@ -73,7 +73,7 @@ static int check_line(char *line, int x)
         count++;
         height = strtok(NULL, " ");
     }
-    if (count <= x)
+    if (count < x)
         return ERROR;
     return SUCCESS;
 }
@@ -96,7 +96,7 @@ static int check_body(char **tab, int x, int y)
         free(line);
         i++;
     }
-    if (i <= y)
+    if (i < y)
         return ERROR;
     return SUCCESS;
 }
@@ -114,8 +114,8 @@ static int check_save(char **tab)
 
 static int check_start(save_t *save)
 {
-    int x = (int)save->start_pos.x % TILE_SIZE;
-    int y = (int)save->start_pos.y % TILE_SIZE;
+    int x = save->start_pos.x / TILE_SIZE;
+    int y = save->start_pos.y / TILE_SIZE;
 
     if (save->size.x * TILE_SIZE < save->start_pos.x
         || save->size.y * TILE_SIZE < save->start_pos.y
@@ -140,9 +140,10 @@ int get_save(char *file, save_t *save)
 {
     char **tab = get_tab(file);
 
+    save->init = sfFalse;
     if (tab == NULL)
         return ERROR;
-    if (check_save(tab) == ERROR || initiate_struct(tab, save)) {
+    if (check_save(tab) == ERROR || initiate_struct(tab, save) == ERROR) {
         free_array(tab);
         return ERROR;
     }
@@ -152,5 +153,7 @@ int get_save(char *file, save_t *save)
         free(save->name);
         return ERROR;
     }
+    save->init = sfTrue;
+    save->update = sfFalse;
     return SUCCESS;
 }

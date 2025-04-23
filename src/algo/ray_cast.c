@@ -5,10 +5,10 @@
 ** ray_cast.c
 */
 
-#include "wolf.h"
+#include "save.h"
 #include <math.h>
 
-static sfBool is_end(sfVector2f *pos, intersection_type_t *type)
+static sfBool is_end(sfVector2f *pos, intersection_type_t *type, save_t *save)
 {
     sfVector2i casted_pos = {(int)(pos->x / TILE_SIZE),
         (int)(pos->y / TILE_SIZE)};
@@ -20,9 +20,9 @@ static sfBool is_end(sfVector2f *pos, intersection_type_t *type)
     if (*type == LEFT)
         --casted_pos.y;
     if (casted_pos.x < 0 || casted_pos.y < 0 ||
-        casted_pos.x >= MAP_WIDTH || casted_pos.y >= MAP_WIDTH)
+        casted_pos.x >= save->size.x || casted_pos.y >= save->size.x)
         return sfTrue;
-    return map[casted_pos.y][casted_pos.x] != 0;
+    return save->map[casted_pos.y][casted_pos.x] != 0;
 }
 
 static float get_line_len(sfVector2f *point)
@@ -107,7 +107,7 @@ float cast_single_ray(player_t *player,
     float len = 0.0;
 
     *type = NONE;
-    while ((is_end(&pos, type) == sfFalse)) {
+    while ((is_end(&pos, type, player->save) == sfFalse)) {
         len += jump_to_next_line(&pos, &v, type);
         if (len > RENDER_DISTANCE)
             return 0;

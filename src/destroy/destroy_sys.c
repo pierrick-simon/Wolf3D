@@ -5,8 +5,8 @@
 ** destroy_sys
 */
 
-#include "wolf.h"
 #include <stdlib.h>
+#include "save.h"
 
 static void destroy_textbox(textbox_t *textbox)
 {
@@ -28,6 +28,14 @@ static void destroy_background(background_t *background)
         sfSprite_destroy(background->wallpaper_s);
 }
 
+static void destroy_save(save_t *save)
+{
+    if (save->init == sfTrue) {
+        free_map(save->size.y, save->map);
+        free(save->name);
+    }
+}
+
 void destroy_sys(system_t *sys)
 {
     if (sys->music != NULL)
@@ -44,4 +52,8 @@ void destroy_sys(system_t *sys)
     }
     if (sys->state != NULL)
         free(sys->state);
+    if (sys->save != NULL) {
+        destroy_save(sys->save);
+        free(sys->save);
+    }
 }
