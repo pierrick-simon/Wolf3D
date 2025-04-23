@@ -87,7 +87,7 @@ void draw_game(system_t *sys, void *structure)
         sfMusic_play(sys->music);
     draw_map(sys, game);
     sfRenderWindow_drawVertexArray(sys->window,
-        game->map->rays, &game->map->wall_state);
+        game->map->quads, &game->map->wall_state);
     sfRenderWindow_drawSprite(
         sys->window, game->weapon->sprite->sprite, NULL);
     draw_toolbar(sys, game);

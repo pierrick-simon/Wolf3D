@@ -174,7 +174,7 @@ typedef struct weapon_s {
 
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
-    sfVertexArray *rays;
+    sfVertexArray *quads;
     sfRenderStates wall_state;
 } map_t;
 
@@ -279,7 +279,8 @@ draw_textbox_t *init_from_conf(char *path);
 
 void game_events(system_t *sys, game_t *game);
 void sys_events(sfEvent event, system_t *sys);
-sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
+sfBool is_input(sfEvent event, sfKeyCode key,
+    sfBool is_joysick, unsigned int joytick_button);
 void menu_events(system_t *sys, menu_t *menu);
 void setting_events(system_t *sys, setting_t *setting);
 void pause_events(system_t *sys, pause_t *pause);
@@ -288,8 +289,8 @@ void normal_map_events(system_t *sys, normal_map_t *normal_map);
 void move_rect(sprite_t *sprite, int offset, int max_value);
 void sys_loop(system_t *sys, void **structure);
 void cast_all_rays(game_t *game);
-float cast_single_ray(player_t *player,
-    float angle_offset, intersection_type_t *type);
+float cast_single_ray(player_t *player, float angle_offset,
+    intersection_type_t *type, sfVector2f *intersection_point);
 void move_player(player_t *player, double delta);
 void draw_game(system_t *sys, void *structure);
 void draw_menu(system_t *sys, void *structure);

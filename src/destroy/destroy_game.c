@@ -41,8 +41,6 @@ static void destroy_map(map_t *map)
         sfTexture_destroy((sfTexture *)map->wall_state.texture);
     if (map->ceiling_floor != NULL)
         sfRectangleShape_destroy(map->ceiling_floor);
-    if (map->rays != NULL)
-        sfVertexArray_destroy(map->rays);
     free(map);
 }
 

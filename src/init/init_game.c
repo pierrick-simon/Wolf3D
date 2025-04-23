@@ -92,10 +92,10 @@ static int init_state(map_t *map)
 {
     map->wall_state.texture =
         sfTexture_createFromFile("asset/wall.png", NULL);
-    map->wall_state.transform = sfTransform_Identity;
-    map->wall_state.blendMode = sfBlendAlpha;
     if (map->wall_state.texture == NULL)
         return ERROR;
+    map->wall_state.transform = sfTransform_Identity;
+    map->wall_state.blendMode = sfBlendAlpha;
     return SUCCESS;
 }
 
@@ -108,10 +108,10 @@ static int init_map(map_t *map)
     if (map->ceiling_floor == NULL)
         return ERROR;
     sfRectangleShape_setSize(map->ceiling_floor, pos);
-    map->rays = sfVertexArray_create();
-    if (map->rays == NULL || init_state(map) == ERROR)
+    map->quads = sfVertexArray_create();
+    if (map->quads == NULL || init_state(map) == ERROR)
         return ERROR;
-    sfVertexArray_setPrimitiveType(map->rays, sfLines);
+    sfVertexArray_setPrimitiveType(map->quads, sfQuads);
     return SUCCESS;
 }
 

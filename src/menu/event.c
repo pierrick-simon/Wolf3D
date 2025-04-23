@@ -10,7 +10,7 @@
 static void switch_scene(
     sfEvent event, system_t *sys, menu_t *menu, state_info_t *state)
 {
-    if (is_keyboard_input(event, sfKeyEnter)) {
+    if (is_input(event, sfKeyEnter, sfTrue, 0)) {
         if (menu->draw[menu->str].scene == QUIT) {
             sfRenderWindow_close(sys->window);
             sfMusic_setVolume(sys->music, VOL_MIN);
@@ -23,9 +23,11 @@ static void switch_scene(
 static void switch_str(sfEvent event, menu_t *menu)
 {
     menu->draw[menu->str].color = sfWhite;
-    if (is_keyboard_input(event, sfKeyUp))
+    if (is_input(event, sfKeyUp, sfFalse, 0)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == -100)
         menu->str--;
-    if (is_keyboard_input(event, sfKeyDown))
+    if (is_input(event, sfKeyDown, sfFalse, 0)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100)
         menu->str++;
     if (menu->str == NB_MENU)
         menu->str = MENU_PLAY;

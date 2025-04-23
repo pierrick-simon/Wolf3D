@@ -14,7 +14,7 @@ SRC =	$(addprefix src/,					\
 			sys_loop.c						\
 			algo/ray_cast.c					\
 			algo/move_player.c				\
-			events/is_keyboard_input.c		\
+			events/is_input.c				\
 			init/init_game.c 				\
 			init/init_menu.c 				\
 			init/init_pause.c 				\

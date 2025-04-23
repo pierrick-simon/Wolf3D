@@ -6,6 +6,7 @@
 */
 
 #include "save.h"
+#include <math.h>
 
 static sfBool is_wall(float y, float x, save_t *save)
 {
@@ -18,7 +19,8 @@ static void sprint(player_t *player)
 {
     int coef = 1;
 
-    if (sfKeyboard_isKeyPressed(sfKeyLShift)) {
+    if (sfKeyboard_isKeyPressed(sfKeyLShift) ||
+        sfJoystick_getAxisPosition(0, sfJoystickZ) > 0) {
         coef = 2;
         player->fov = SPRINTING_FOV;
         player->is_sprinting = sfTrue;
@@ -35,11 +37,13 @@ static void sprint(player_t *player)
 static void move_verticaly(player_t *player)
 {
     if ((sfKeyboard_isKeyPressed(sfKeyUp))
-        || sfKeyboard_isKeyPressed(sfKeyZ)) {
+        || sfKeyboard_isKeyPressed(sfKeyZ)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == -100) {
         sprint(player);
     }
     if ((sfKeyboard_isKeyPressed(sfKeyDown))
-        || sfKeyboard_isKeyPressed(sfKeyS)) {
+        || sfKeyboard_isKeyPressed(sfKeyS)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100) {
         if (is_wall(player->pos.y,
             player->pos.x - (player->v.x * DISTANCE_COLISION),
             player->save) == sfFalse)
@@ -52,7 +56,8 @@ static void move_verticaly(player_t *player)
 
 static void move_horizontaly(player_t *player)
 {
-    if (sfKeyboard_isKeyPressed(sfKeyQ)) {
+    if (sfKeyboard_isKeyPressed(sfKeyQ)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovX) == -100) {
         if (is_wall(player->pos.y,
             player->pos.x + (player->v.y * DISTANCE_COLISION),
             player->save) == sfFalse)
@@ -61,7 +66,8 @@ static void move_horizontaly(player_t *player)
             player->pos.x, player->save) == sfFalse)
             player->pos.y -= player->v.x;
     }
-    if (sfKeyboard_isKeyPressed(sfKeyD)) {
+    if (sfKeyboard_isKeyPressed(sfKeyD)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovX) == 100) {
         if (is_wall(player->pos.y,
             player->pos.x - (player->v.y * DISTANCE_COLISION),
             player->save) == sfFalse)
@@ -74,6 +80,10 @@ static void move_horizontaly(player_t *player)
 
 static void rotate_player(player_t *player, double delta)
 {
+    float x_controler = sfJoystick_getAxisPosition(0, sfJoystickU);
+
+    if (fabs(x_controler) > 30)
+        player->angle += ROTATION_SPEED * delta * (x_controler / 75);
     if (sfKeyboard_isKeyPressed(sfKeyLeft)) {
         player->angle -= ROTATION_SPEED * delta;
         if (player->angle < 0)

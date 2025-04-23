@@ -11,9 +11,13 @@ static void change_volume(
     sfEvent event, state_info_t *state, setting_t *setting)
 {
     if (setting->str == SETTING_SOUND) {
-        if (is_keyboard_input(event, sfKeyRight) && state->volume < VOL_MAX)
+        if ((is_input(event, sfKeyRight, sfFalse, 0) ||
+            sfJoystick_getAxisPosition(0, sfJoystickPovX) == -100)
+            && state->volume < VOL_MAX)
             state->volume += VOL_GAP;
-        if (is_keyboard_input(event, sfKeyLeft) && state->volume > VOL_MIN)
+        if ((is_input(event, sfKeyLeft, sfFalse, 0) ||
+            sfJoystick_getAxisPosition(0, sfJoystickPovX) == 100)
+            && state->volume > VOL_MIN)
             state->volume -= VOL_GAP;
     }
 }
@@ -36,12 +40,12 @@ static void switch_screen(
     sfBool old = state->fullscreen;
 
     if (setting->str == SETTING_FULL) {
-        if (is_keyboard_input(event, sfKeyLeft)
+        if (is_input(event, sfKeyLeft, sfFalse, 0)
             && state->fullscreen == sfFalse) {
             new = create_window(sfFullscreen, 1);
             state->fullscreen = sfTrue;
         }
-        if (is_keyboard_input(event, sfKeyRight)
+        if (is_input(event, sfKeyRight, sfFalse, 0)
             && state->fullscreen == sfTrue) {
             new = create_window(sfTitlebar | sfClose, 0.5);
             state->fullscreen = sfFalse;
@@ -55,7 +59,8 @@ static void switch_scene(
 {
     int old = state->old_scene;
 
-    if (is_keyboard_input(event, sfKeyEnter) && setting->str == SETTING_BACK) {
+    if (is_input(event, sfKeyEnter, sfTrue, 0) &&
+        setting->str == SETTING_BACK) {
         state->old_scene = state->scene;
         state->scene = old;
     }
@@ -64,9 +69,11 @@ static void switch_scene(
 static void switch_str(sfEvent event, setting_t *setting)
 {
     setting->draw[setting->str].color = sfWhite;
-    if (is_keyboard_input(event, sfKeyUp))
+    if (is_input(event, sfKeyUp, sfFalse, 0) ||
+        sfJoystick_getAxisPosition(0, sfJoystickPovY) == -100)
         setting->str--;
-    if (is_keyboard_input(event, sfKeyDown))
+    if (is_input(event, sfKeyDown, sfFalse, 0) ||
+        sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100)
         setting->str++;
     if (setting->str == NB_SETTING)
         setting->str = SETTING_FULL;

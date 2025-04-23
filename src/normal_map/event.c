@@ -10,7 +10,7 @@
 static void switch_scene(sfEvent event, normal_map_t *normal_map,
     system_t *sys, state_info_t *state)
 {
-    if (is_keyboard_input(event, sfKeyEnter)) {
+    if (is_input(event, sfKeyEnter, sfTrue, 0)) {
         if (normal_map->str == NOR_MAP_MAP1)
             get_save("normal_map/test.legend", sys->save);
         state->old_scene = state->scene;
@@ -21,9 +21,11 @@ static void switch_scene(sfEvent event, normal_map_t *normal_map,
 static void switch_str(sfEvent event, normal_map_t *normal_map)
 {
     normal_map->draw[normal_map->str].color = sfWhite;
-    if (is_keyboard_input(event, sfKeyUp))
+    if (is_input(event, sfKeyUp, sfFalse, 0) ||
+        sfJoystick_getAxisPosition(0, sfJoystickPovY) == -100)
         normal_map->str--;
-    if (is_keyboard_input(event, sfKeyDown))
+    if (is_input(event, sfKeyDown, sfFalse, 0) ||
+        sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100)
         normal_map->str++;
     if (normal_map->str == NB_NOR_MAP)
         normal_map->str = NOR_MAP_MAP1;
