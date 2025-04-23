@@ -22,6 +22,7 @@ static const scene_func_t SCENE[] = {
     {MENU, &init_menu, &destroy_menu, &draw_menu},
     {SETTING, &init_setting, &destroy_setting, &draw_setting},
     {PAUSE, &init_pause, &destroy_pause, &draw_pause},
+    {NOR_MAP, &init_normal_map, &destroy_normal_map, &draw_normal_map},
 };
 
 #endif

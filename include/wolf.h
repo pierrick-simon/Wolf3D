@@ -94,6 +94,13 @@ typedef enum str_menu_e {
     NB_MENU,
 } str_menu_t;
 
+typedef enum str_normal_map_e {
+    NOR_MAP_TITLE,
+    NOR_MAP_MAP1,
+    NOR_MAP_BACK,
+    NB_NOR_MAP,
+} str_normal_map_t;
+
 typedef enum str_pause_e {
     PAUSE_TITLE,
     PAUSE_RESUME,
@@ -133,6 +140,7 @@ typedef enum scene_s {
     MENU,
     SETTING,
     PAUSE,
+    NOR_MAP,
     NB_SCENE,
     QUIT,
 } scene_t;
@@ -142,6 +150,7 @@ static const char *str_scene[] __maybe_unused = {
     [MENU] = "menu",
     [SETTING] = "setting",
     [PAUSE] = "pause",
+    [NOR_MAP] = "normal_map",
     [NB_SCENE] = "",
     [QUIT] = "quit",
 };
@@ -244,6 +253,11 @@ typedef struct pause_s {
     draw_textbox_t *draw;
 } pause_t;
 
+typedef struct normal_map_s {
+    int str;
+    draw_textbox_t *draw;
+} normal_map_t;
+
 typedef struct menu_s {
     int str;
     draw_textbox_t *draw;
@@ -282,6 +296,7 @@ void *init_game(void);
 void *init_menu(void);
 void *init_pause(void);
 void *init_setting(void);
+void *init_normal_map(void);
 sfRenderWindow *create_window(sfUint32 style, double coeff);
 draw_textbox_t *init_from_conf(char *path);
 
@@ -293,6 +308,7 @@ sfBool is_keyboard_input(sfEvent event, sfKeyCode key);
 void menu_events(system_t *sys, menu_t *menu);
 void setting_events(system_t *sys, setting_t *setting);
 void pause_events(system_t *sys, pause_t *pause);
+void normal_map_events(system_t *sys, normal_map_t *normal_map);
 
 void move_rect(sprite_t *sprite, int offset, int max_value);
 void sys_loop(system_t *sys, void **structure);
@@ -304,12 +320,13 @@ void draw_game(system_t *sys, void *structure);
 void draw_menu(system_t *sys, void *structure);
 void draw_setting(system_t *sys, void *structure);
 void draw_pause(system_t *sys, void *structure);
-
+void draw_normal_map(system_t *sys, void *structure);
 void draw_string(system_t *sys, textbox_t *textbox, draw_textbox_t *draw);
 void draw_background(system_t *sys, background_t *background);
 
 // destroy
 
+void destroy_normal_map(void *structure);
 void destroy_struct(void **structure, int stop);
 void destroy_game(void *structure);
 void destroy_sys(system_t *sys);
