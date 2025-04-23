@@ -1,0 +1,156 @@
+/*
+** EPITECH PROJECT, 2025
+** Wolf3d
+** File description:
+** get_save
+*/
+
+#include "save.h"
+#include "my.h"
+#include <stdlib.h>
+#include <string.h>
+
+static int initiate_body(char **tab, save_t *save)
+{
+    char *line = NULL;
+    char *nb = NULL;
+
+    save->map = malloc(sizeof(int *) * (save->size.y));
+    if (save->map == NULL)
+        return ERROR;
+    for (int i = 0; i < save->size.y; i++) {
+        save->map[i] = malloc(sizeof(int) * save->size.x);
+        if (save->map[i] == NULL) {
+            free_map(i, save->map);
+            return ERROR;
+        }
+        line = tab[i];
+        nb = strtok(line, " ");
+        for (int j = 0; nb != NULL; j++) {
+            save->map[i][j] = atoi(nb);
+            nb = strtok(NULL, " ");
+        }
+    }
+    return SUCCESS;
+}
+
+static int initiate_struct(char **tab, save_t *save)
+{
+    save->size = (sfVector2i){atoi(tab[SIZE_X]), atoi(tab[SIZE_Y])};
+    save->start_pos = (sfVector2f){atof(tab[START_X]), atof(tab[START_Y])};
+    save->start_angle = atof(tab[START_ANGLE]);
+    save->name = strdup(tab[NAME]);
+    if (save->name == NULL)
+        return ERROR;
+    if (initiate_body(tab + MAP, save) == ERROR) {
+        free(save->name);
+        return ERROR;
+    }
+    return SUCCESS;
+}
+
+static int check_header(char **tab, int *x, int *y)
+{
+    for (int i = 0; CHECK[i].check != NULL; i++) {
+        if (CHECK[i].check(tab[i]) == ERROR)
+            return ERROR;
+    }
+    *x = atoi(tab[SIZE_X]);
+    *y = atoi(tab[SIZE_Y]);
+    return SUCCESS;
+}
+
+static int check_line(char *line, int x)
+{
+    int count = 0;
+    char *height = strtok(line, " ");
+
+    while (height != NULL) {
+        if (count > x)
+            return ERROR;
+        if (is_int_float(height) >= RATIONAL)
+            return ERROR;
+        count++;
+        height = strtok(NULL, " ");
+    }
+    if (count <= x)
+        return ERROR;
+    return SUCCESS;
+}
+
+static int check_body(char **tab, int x, int y)
+{
+    int i = 0;
+    char *line = 0;
+
+    while (tab[i] != NULL) {
+        if (i > y)
+            return ERROR;
+        line = strdup(tab[i]);
+        if (line == NULL)
+            return ERROR;
+        if (check_line(line, x) == ERROR) {
+            free(line);
+            return ERROR;
+        }
+        free(line);
+        i++;
+    }
+    if (i <= y)
+        return ERROR;
+    return SUCCESS;
+}
+
+static int check_save(char **tab)
+{
+    int x = 0;
+    int y = 0;
+
+    if (array_len(tab) < MAP || check_header(tab, &x, &y) == ERROR
+        || check_body(tab + MAP, x, y) == ERROR)
+        return ERROR;
+    return SUCCESS;
+}
+
+static int check_start(save_t *save)
+{
+    int x = (int)save->start_pos.x % TILE_SIZE;
+    int y = (int)save->start_pos.y % TILE_SIZE;
+
+    if (save->size.x * TILE_SIZE < save->start_pos.x
+        || save->size.y * TILE_SIZE < save->start_pos.y
+        || save->map[y][x] != 0)
+            return ERROR;
+    return SUCCESS;
+}
+
+static char **get_tab(char *file)
+{
+    char *fd = open_file(file);
+    char **tab = NULL;
+
+    if (fd == NULL)
+        return NULL;
+    tab = my_str_to_word_array(fd, "\n", "");
+    free(fd);
+    return tab;
+}
+
+int get_save(char *file, save_t *save)
+{
+    char **tab = get_tab(file);
+
+    if (tab == NULL)
+        return ERROR;
+    if (check_save(tab) == ERROR || initiate_struct(tab, save)) {
+        free_array(tab);
+        return ERROR;
+    }
+    free_array(tab);
+    if (check_start(save) == ERROR) {
+        free_map(save->size.y, save->map);
+        free(save->name);
+        return ERROR;
+    }
+    return SUCCESS;
+}

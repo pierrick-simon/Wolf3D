@@ -2,20 +2,20 @@
 ** EPITECH PROJECT, 2025
 ** Wolf3d
 ** File description:
-** draw_menu
+** draw_pause
 */
 
 #include "wolf.h"
 
-void draw_menu(system_t *sys, void *structure)
+void draw_pause(system_t *sys, void *structure)
 {
-    menu_t *menu = (menu_t *)structure;
+    pause_t *pause = (pause_t *)structure;
 
-    menu_events(sys, menu);
+    pause_events(sys, pause);
     sfRenderWindow_clear(sys->window, sfWhite);
     draw_background(sys, sys->background);
-    for (int i = 0; i < NB_MENU; i++)
-        draw_string(sys, sys->textbox, &menu->draw[i]);
+    for (int i = 0; i < NB_PAUSE; i++)
+        draw_string(sys, sys->textbox, &pause->draw[i]);
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);
     sfRenderWindow_display(sys->window);

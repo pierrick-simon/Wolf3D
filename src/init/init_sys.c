@@ -5,7 +5,7 @@
 ** init_sys
 */
 
-#include "wolf.h"
+#include "load_screen.h"
 #include <stdlib.h>
 
 static int init_textbox(textbox_t *textbox)
@@ -37,19 +37,34 @@ static int init_background(background_t *background)
     return SUCCESS;
 }
 
-int init_system(system_t *sys)
+static void init_state(state_info_t *state)
 {
+    state->fullscreen = sfTrue;
+    state->scene = MENU;
+    state->old_scene = MENU;
+    state->volume = VOL_MAX;
+}
+
+int init_system(system_t *sys, load_screen_t *start)
+{
+    draw_load_screen(start, NB_SCENE - 0.8);
+    sys->background = malloc(sizeof(background_t));
+    if (sys->background == NULL || init_background(sys->background) == ERROR)
+        return ERROR;
+    draw_load_screen(start, NB_SCENE - 0.6);
+    sys->textbox = malloc(sizeof(textbox_t));
+    if (sys->textbox == NULL || init_textbox(sys->textbox) == ERROR)
+        return ERROR;
+    draw_load_screen(start, NB_SCENE - 0.4);
+    sys->state = malloc(sizeof(state_info_t));
+    if (sys->state == NULL)
+        return ERROR;
+    init_state(sys->state);
+    draw_load_screen(start, NB_SCENE - 0.2);
     sys->window = create_window(sfFullscreen, 1);
     sys->music = sfMusic_createFromFile("asset/music.ogg");
     if (sys->window == NULL || sys->music == NULL)
         return ERROR;
-    sys->background = malloc(sizeof(background_t));
-    if (sys->background == NULL || init_background(sys->background) == ERROR)
-        return ERROR;
-    sys->textbox = malloc(sizeof(textbox_t));
-    if (sys->textbox == NULL || init_textbox(sys->textbox) == ERROR)
-        return ERROR;
-    sys->fullscreen = sfTrue;
-    sys->scene = MENU;
+    draw_load_screen(start, NB_SCENE);
     return SUCCESS;
 }

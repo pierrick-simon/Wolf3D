@@ -11,7 +11,7 @@
 static void find_scene(system_t *sys, void **structure)
 {
     for (int i = 0; i < NB_SCENE; i++) {
-        if (sys->scene == SCENE[i].id) {
+        if (sys->state->scene == SCENE[i].id) {
             SCENE[i].draw(sys, structure[i]);
             break;
         }

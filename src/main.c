@@ -5,17 +5,15 @@
 ** main
 */
 
-#include "wolf.h"
+#include "load_screen.h"
 
 int main(void)
 {
     system_t sys = {NULL};
-    void **structure = init_struct();
+    void **structure = NULL;
 
-    if (structure == NULL || init_system(&sys) == ERROR) {
-        destroy_sys(&sys);
+    if (load_screen(&structure, &sys) == ERROR)
         return ERROR;
-    }
     sys_loop(&sys, structure);
     destroy_struct(structure, NB_SCENE);
     destroy_sys(&sys);

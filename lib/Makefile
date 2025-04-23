@@ -5,11 +5,14 @@
 ## Makefile
 ##
 
-SRC =
+SRC = 	my_str_to_word_array.c	\
+		open_file.c	\
+		array.c	\
+		is_int_float.c
 
 OBJ = $(SRC:.c=.o)
 
-CFLAGS = -Wall -Wextra -g3
+CFLAGS = -Wall -Wextra
 
 NAMELIB = libmy.a
 
