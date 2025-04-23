@@ -11,6 +11,14 @@
     #define LIB_SUCCESS 0
     #define LIB_ERROR 84
 
+typedef enum {
+    NATURAL,
+    INTEGER,
+    RATIONAL,
+    MY_NAN,
+} nb_group_t;
+
+int is_int_float(char *av);
 char **my_str_to_word_array(
     char const *str, char const *sep, char const *stay_sep);
 char *open_file(const char *file);

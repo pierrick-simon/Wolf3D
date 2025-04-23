@@ -39,6 +39,9 @@ SRC =	$(addprefix src/,					\
 			setting/event.c					\
 			setting/draw_setting.c			\
 			load_screen.c					\
+			save/check.c			 		\
+			save/free_map.c			 		\
+			save/get_save.c			 		\
 		)
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)
@@ -47,7 +50,7 @@ NAME =	wolf3d
 
 CPPFLAGS = -iquoteinclude -iquotelib
 
-CFLAGS = -Wall -Wextra -g3
+CFLAGS = -Wall -Wextra
 
 LDFLAGS = -Llib
 
