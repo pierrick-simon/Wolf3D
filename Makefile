@@ -38,6 +38,7 @@ SRC =	$(addprefix src/,					\
 			draw_func.c                     \
 			setting/event.c					\
 			setting/draw_setting.c			\
+			load_screen.c					\
 		)
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)

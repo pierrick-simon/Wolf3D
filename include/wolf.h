@@ -279,8 +279,6 @@ static const int map[MAP_WIDTH][MAP_HEIGHT] = {
 // init
 
 void *init_game(void);
-int init_system(system_t *sys);
-void **init_struct(void);
 void *init_menu(void);
 void *init_pause(void);
 void *init_setting(void);

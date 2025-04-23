@@ -5,11 +5,11 @@
 ** init_struct
 */
 
-#include "wolf.h"
+#include "load_screen.h"
 #include "scene.h"
 #include <stdlib.h>
 
-void **init_struct(void)
+void **init_struct(load_screen_t *start)
 {
     void **structure = malloc(sizeof(void *) * NB_SCENE);
 
@@ -21,6 +21,7 @@ void **init_struct(void)
             destroy_struct(structure, i);
             return NULL;
         }
+        draw_load_screen(start, i);
     }
     return structure;
 }
