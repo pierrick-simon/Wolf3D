@@ -57,9 +57,9 @@ CPPFLAGS = -iquoteinclude -iquotelib
 
 CFLAGS = -Wall -Wextra
 
-LDFLAGS = -Llib
+LDFLAGS = -Llib -Llib/linked_list
 
-LDLIBS = -lmy
+LDLIBS = -lmy -llinked_list
 
 CSFMLFLAG = -lcsfml-system -lcsfml-window -lcsfml-graphics -lcsfml-audio -lm
 
@@ -67,15 +67,18 @@ all:	$(NAME)
 
 $(NAME):	$(OBJ)
 	$(MAKE) -C ./lib
+	$(MAKE) -C ./lib/linked_list
 	$(CC) -o $(NAME) $(OBJ) $(LDLIBS) $(LDFLAGS) $(CSFMLFLAG)
 
 clean:
 	$(RM) $(OBJ)
 	$(MAKE) -C ./lib clean
+	$(MAKE) -C ./lib/linked_list clean
 
 fclean:		clean
 	$(RM) $(NAME)
 	$(MAKE) -C ./lib fclean
+	$(MAKE) -C ./lib/linked_list fclean
 
 re: fclean all
 
