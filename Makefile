@@ -45,6 +45,7 @@ SRC =	$(addprefix src/,					\
 			save/get_save.c			 		\
 			save/add_node_file.c			\
 			save/free_node_file.c			\
+			save/sort_node_file.c			\
 			save/get_file.c					\
 			save/update_list.c				\
 			save/draw_save.c				\

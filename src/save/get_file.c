@@ -9,10 +9,14 @@
 #include "linked_list.h"
 #include <sys/types.h>
 #include <dirent.h>
+#include "string.h"
 
 static bool pass_file(DIR *dir, struct dirent **next)
 {
-    if ((*next)->d_name[0] == '.') {
+    int len = strlen((*next)->d_name) - strlen(".legend");
+
+    if ((*next)->d_name[0] == '.' || len < 1
+        || strcmp((*next)->d_name + len, ".legend")) {
         *next = readdir(dir);
         return true;
     }
@@ -37,6 +41,7 @@ linked_list_t *get_file(char *path)
         add_node_file(list, next->d_name, path);
         next = readdir(dir);
     }
+    sort_linked_list(list, &sort_node_file);
     closedir(dir);
     return list;
 }

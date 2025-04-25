@@ -9,6 +9,7 @@
     #define SAVE_H_
 
     #include "wolf.h"
+    #include <stdbool.h>
 
     #define MAX_STRLEN 9
     #define MAX_NAME 25
@@ -96,6 +97,7 @@ linked_list_t *get_file(char *path);
 void update_list(info_save_t *info, char *dir);
 void draw_save(
     system_t *sys, info_save_t *info, draw_textbox_t *draw, int start);
+bool sort_node_file(void *data_first, void *data_second);
 
 void *init_normal_map(void);
 void draw_normal_map(system_t *sys, void *structure);
