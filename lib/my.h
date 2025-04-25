@@ -24,5 +24,6 @@ char **my_str_to_word_array(
 char *open_file(const char *file);
 void free_array(char **array);
 int array_len(char **array);
+int get_nblen(int nb);
 
 #endif

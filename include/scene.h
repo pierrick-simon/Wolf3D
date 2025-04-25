@@ -10,6 +10,10 @@
 
     #include "wolf.h"
 
+void *init_normal_map(void);
+void draw_normal_map(system_t *sys, void *structure);
+void destroy_normal_map(void *structure);
+
 typedef struct scene_func_s {
     int id;
     void *(*init)(void);

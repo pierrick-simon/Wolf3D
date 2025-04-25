@@ -5,7 +5,8 @@
 ** destroy_normal_map
 */
 
-#include "wolf.h"
+#include "save.h"
+#include "linked_list.h"
 #include <stdlib.h>
 
 void destroy_normal_map(void *structure)
@@ -14,5 +15,10 @@ void destroy_normal_map(void *structure)
 
     if (normal_map->draw != NULL)
         free_draw_textbox(normal_map->draw, -1);
+    if (normal_map->info != NULL) {
+        if (normal_map->info->list != NULL)
+            free_linked_list(normal_map->info->list, &free_node_file);
+        free(normal_map->info);
+    }
     free(normal_map);
 }

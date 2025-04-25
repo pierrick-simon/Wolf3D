@@ -39,9 +39,15 @@ SRC =	$(addprefix src/,					\
 			setting/event.c					\
 			setting/draw_setting.c			\
 			load_screen.c					\
+			\
 			save/check.c			 		\
 			save/free_map.c			 		\
 			save/get_save.c			 		\
+			save/add_node_file.c			\
+			save/free_node_file.c			\
+			save/get_file.c					\
+			save/update_list.c				\
+			save/draw_save.c				\
 			\
 			normal_map/event.c				\
 			normal_map/draw_normal_map.c	\
