@@ -17,4 +17,3 @@ bool sort_node_file(void *data_first, void *data_second)
         return true;
     return false;
 }
-

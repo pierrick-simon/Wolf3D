@@ -91,6 +91,6 @@ void draw_game(system_t *sys, void *structure)
     sfRenderWindow_drawSprite(
         sys->window, game->weapon->sprite->sprite, NULL);
     draw_toolbar(sys, game);
-    //draw_crossair(sys, game->player);
+    draw_crossair(sys, game->player);
     sfRenderWindow_display(sys->window);
 }
