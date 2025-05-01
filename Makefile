@@ -54,6 +54,11 @@ SRC =	$(addprefix src/,					\
 			normal_map/draw_normal_map.c	\
 			normal_map/destroy_normal_map.c \
 			normal_map/init_normal_map.c 	\
+			\
+			create/event.c					\
+			create/draw_create.c			\
+			create/destroy_create.c 		\
+			create/init_create.c 			\
 		)
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)

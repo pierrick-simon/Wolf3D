@@ -11,8 +11,15 @@
     #include "wolf.h"
     #include <stdbool.h>
 
-    #define MAX_STRLEN 9
-    #define MAX_NAME 25
+    #ifndef MAX_STRLEN
+        #define MAX_STRLEN 3
+    #endif
+    #ifndef MAX_STRLEN_POS
+        #define MAX_STRLEN_POS 5
+    #endif
+    #ifndef MAX_NAME
+        #define MAX_NAME 25
+    #endif
 
     #define NB_SHOW_SAVE 3
     #define POS_OFFSET 20
@@ -20,7 +27,6 @@
 
 typedef struct linked_list_s linked_list_t;
 typedef struct node_s node_t;
-
 typedef struct save_s {
     char *name;
     sfVector2i size;

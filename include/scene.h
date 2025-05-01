@@ -14,6 +14,10 @@ void *init_normal_map(void);
 void draw_normal_map(system_t *sys, void *structure);
 void destroy_normal_map(void *structure);
 
+void *init_create(void);
+void draw_create(system_t *sys, void *structure);
+void destroy_create(void *structure);
+
 typedef struct scene_func_s {
     int id;
     void *(*init)(void);
@@ -27,6 +31,7 @@ static const scene_func_t SCENE[] = {
     {SETTING, &init_setting, &destroy_setting, &draw_setting},
     {PAUSE, &init_pause, &destroy_pause, &draw_pause},
     {NOR_MAP, &init_normal_map, &destroy_normal_map, &draw_normal_map},
+    {CREATE, &init_create, &destroy_create, &draw_create},
 };
 
 #endif

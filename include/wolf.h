@@ -87,6 +87,7 @@
 typedef enum str_menu_e {
     MENU_TITLE,
     MENU_PLAY,
+    MENU_CREATE,
     MENU_SETTING,
     MENU_QUIT,
     NB_MENU,
@@ -132,6 +133,7 @@ typedef enum scene_s {
     SETTING,
     PAUSE,
     NOR_MAP,
+    CREATE,
     NB_SCENE,
     QUIT,
 } scene_t;
@@ -142,6 +144,7 @@ static const char *str_scene[] __maybe_unused = {
     [SETTING] = "setting",
     [PAUSE] = "pause",
     [NOR_MAP] = "normal_map",
+    [CREATE] = "create",
     [NB_SCENE] = "",
     [QUIT] = "quit",
 };
