@@ -7,10 +7,10 @@
 
 #include "wolf.h"
 
-void move_rect(sprite_t *sprite, int offset, int nb_tile)
+void move_rect(sfSprite *sprite, sfIntRect *rect, int offset, int nb_tile)
 {
-    sprite->rectangle.left += offset;
-    if (sprite->rectangle.left >= offset * nb_tile)
-        sprite->rectangle.left = 0;
-    sfSprite_setTextureRect(sprite->sprite, sprite->rectangle);
+    (*rect).left += offset;
+    if ((*rect).left >= offset * nb_tile)
+        (*rect).left = 0;
+    sfSprite_setTextureRect(sprite, *rect);
 }

@@ -7,6 +7,8 @@
 
 #include "wolf.h"
 #include <stdlib.h>
+#include <string.h>
+#include "my.h"
 
 static int init_crossair(crossair_t *crossair)
 {
@@ -31,60 +33,60 @@ static int init_crossair(crossair_t *crossair)
     return SUCCESS;
 }
 
-static int init_sound_texture(weapon_t *weapon)
+int init_weapon(char *info, weapon_info_t *weapon)
 {
-    weapon->texture = malloc(sizeof(sfTexture *) * NB_WEAPON);
-    weapon->sound = malloc(sizeof(sfMusic *) * NB_WEAPON);
-    if (weapon->texture == NULL || weapon->sound == NULL)
+    char **tab = my_str_to_word_array(info, ":", "");
+
+    weapon->texture = NULL;
+    weapon->sound = NULL;
+    if (tab == NULL)
         return ERROR;
-    weapon->texture[PUNCH] = sfTexture_createFromFile("asset/punch.png", NULL);
-    weapon->texture[PISTOL] =
-        sfTexture_createFromFile("asset/pistol.png", NULL);
-    weapon->texture[SHOTGUN] =
-        (sfTexture *){sfTexture_createFromFile("asset/shotgun.png", NULL)};
-    weapon->sound[PUNCH] =
-        (sfMusic *){sfMusic_createFromFile("asset/fist_punch.ogg")};
-    weapon->sound[PISTOL] =
-        (sfMusic *){sfMusic_createFromFile("asset/pistol_shot.ogg")};
-    weapon->sound[SHOTGUN] =
-        (sfMusic *){sfMusic_createFromFile("asset/shotgun_shot.ogg")};
-    for (int i = 0; i < NB_WEAPON; i++)
-        if (weapon->texture[i] == NULL || weapon->sound[i] == NULL)
-            return ERROR;
+    if (array_len(tab) != 5) {
+        free_array(tab);
+        return ERROR;
+    }
+    weapon->texture = sfTexture_createFromFile(tab[0], NULL);
+    weapon->sound = sfMusic_createFromFile(tab[1]);
+    weapon->size = (sfVector2f){atoi(tab[2]), atoi(tab[3])};
+    weapon->nb_tile = atoi(tab[4]);
+    weapon->size.x /= weapon->nb_tile;
+    weapon->rectangle = (sfIntRect){0, 0, weapon->size.x, weapon->size.y};
+    weapon->current_tile = 0;
+    weapon->posf = (sfVector2f){WIN_WIDTH / 2, TOOLBAR_POS};
     return SUCCESS;
 }
 
-static int init_weapon_sprite(sprite_t *sprite)
+int get_weapon_info(weapon_info_t *info)
 {
-    *sprite = (sprite_t){NULL};
-    sprite->sprite = sfSprite_create();
-    if (sprite->sprite == NULL)
+    char **tab = get_tab("config_file/weapon.conf");
+    int return_value = SUCCESS;
+
+    if (tab == NULL)
         return ERROR;
-    sprite->posf =
-        (sfVector2f){WIN_WIDTH / 2, WIN_HEIGHT - WIN_HEIGHT + TOOLBAR_POS};
-    sprite->rectangle =
-        (sfIntRect){0, 0, WEAPON_SPRITE_X, WEAPON_SPRITE_Y};
-    sprite->tile = 0;
-    sprite->scale = (sfVector2f){2, 2};
-    return SUCCESS;
+    for (int i = 0; i < NB_WEAPON; i++) {
+        if (init_weapon(tab[i], &info[i]) == ERROR)
+            return_value = ERROR;
+    }
+    free_array(tab);
+    return return_value;
 }
 
-static int init_weapon(weapon_t *weapon)
+static int init_weapons(weapon_t *weapon)
 {
     *weapon = (weapon_t){NULL};
     weapon->shot = SEC_IN_MICRO * -1;
     weapon->weapon = 0;
-    weapon->sprite = malloc(sizeof(sprite_t));
-    if (weapon->sprite == NULL || init_weapon_sprite(weapon->sprite) == ERROR
-        || init_sound_texture(weapon) == ERROR)
+    weapon->sprite = sfSprite_create();
+    weapon->info = malloc(sizeof(weapon_info_t) * NB_WEAPON);
+    if (weapon->sprite == NULL || weapon->info == NULL
+        || get_weapon_info(weapon->info) == ERROR)
         return ERROR;
-    sfSprite_setOrigin(weapon->sprite->sprite,
-        (sfVector2f){WEAPON_SPRITE_X / 2, WEAPON_SPRITE_Y});
-    sfSprite_setTexture(weapon->sprite->sprite,
-        weapon->texture[weapon->weapon], sfTrue);
-    sfSprite_setTextureRect(weapon->sprite->sprite, weapon->sprite->rectangle);
-    sfSprite_setScale(weapon->sprite->sprite, weapon->sprite->scale);
-    sfSprite_setPosition(weapon->sprite->sprite, weapon->sprite->posf);
+    sfSprite_setOrigin(weapon->sprite,
+        (sfVector2f){weapon->info[0].size.x / 2, weapon->info[0].size.y});
+    sfSprite_setTexture(weapon->sprite, weapon->info[0].texture, sfTrue);
+    sfSprite_setTextureRect(weapon->sprite, weapon->info[0].rectangle);
+    sfSprite_setScale(weapon->sprite, (sfVector2f){2, 2});
+    sfSprite_setPosition(weapon->sprite, weapon->info[0].posf);
     return SUCCESS;
 }
 
@@ -155,7 +157,7 @@ void *init_game(void)
     game->time_info = malloc(sizeof(time_info_t));
     if (game->map == NULL || init_map(game->map) == ERROR
         || game->player == NULL || game->weapon == NULL
-        || init_weapon(game->weapon) == ERROR
+        || init_weapons(game->weapon) == ERROR
         || init_player(game->player) == ERROR
         || init_time_info(game->time_info) == ERROR) {
         destroy_game(game);

@@ -18,20 +18,15 @@ static void destroy_player(player_t *player)
 static void destroy_weapon(weapon_t *weapon)
 {
     for (int i = 0; i < NB_WEAPON; i++) {
-        if (weapon->texture != NULL && weapon->texture[i] != NULL)
-            sfTexture_destroy(weapon->texture[i]);
-        if (weapon->sound != NULL && weapon->sound[i] != NULL)
-            sfMusic_destroy(weapon->sound[i]);
+        if (weapon->info != NULL && weapon->info[i].texture != NULL)
+            sfTexture_destroy(weapon->info[i].texture);
+        if (weapon->info != NULL && weapon->info[i].sound != NULL)
+            sfMusic_destroy(weapon->info[i].sound);
     }
-    if (weapon->texture != NULL)
-        free(weapon->texture);
-    if (weapon->sound != NULL)
-        free(weapon->sound);
-    if (weapon->sprite != NULL) {
-        if (weapon->sprite->sprite != NULL)
-            sfSprite_destroy(weapon->sprite->sprite);
-        free(weapon->sprite);
-    }
+    if (weapon->info != NULL)
+        free(weapon->info);
+    if (weapon->sprite != NULL)
+        sfSprite_destroy(weapon->sprite);
     free(weapon);
 }
 

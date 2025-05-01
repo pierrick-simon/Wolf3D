@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "my.h"
 
 char *open_file(const char *file)
 {
@@ -30,4 +31,16 @@ char *open_file(const char *file)
         return NULL;
     buffer[info.st_size] = '\0';
     return buffer;
+}
+
+char **get_tab(char *file)
+{
+    char *fd = open_file(file);
+    char **tab = NULL;
+
+    if (fd == NULL)
+        return NULL;
+    tab = my_str_to_word_array(fd, "\n", "");
+    free(fd);
+    return tab;
 }

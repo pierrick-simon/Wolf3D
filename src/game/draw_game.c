@@ -10,18 +10,20 @@
 static void shot_gun_anim(weapon_t *weapon, sfInt64 time)
 {
     double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
+    int ind = weapon->weapon;
 
-    for (int i = 0; i < WEAPON_NB_TILE; i++) {
+    for (int i = 0; i < weapon->info[ind].nb_tile; i++) {
         if (diff > WEAPON_FRAME * i
             && diff < WEAPON_FRAME * (i + 1)
-            && weapon->sprite->tile == i) {
-            move_rect(weapon->sprite, WEAPON_SPRITE_X, WEAPON_NB_TILE);
-            weapon->sprite->tile++;
+            && weapon->info[ind].current_tile == i) {
+            move_rect(weapon->sprite, &weapon->info[ind].rectangle,
+                weapon->info[ind].size.x, weapon->info[ind].nb_tile);
+            weapon->info[ind].current_tile++;
             break;
         }
     }
-    if (weapon->sprite->tile == WEAPON_NB_TILE)
-        weapon->sprite->tile = 0;
+    if (weapon->info[ind].current_tile == weapon->info[ind].nb_tile)
+        weapon->info[ind].current_tile = 0;
 }
 
 static void draw_map(system_t *sys, game_t *game)
@@ -89,7 +91,7 @@ void draw_game(system_t *sys, void *structure)
     sfRenderWindow_drawVertexArray(sys->window,
         game->map->quads, &game->map->wall_state);
     sfRenderWindow_drawSprite(
-        sys->window, game->weapon->sprite->sprite, NULL);
+        sys->window, game->weapon->sprite, NULL);
     draw_toolbar(sys, game);
     draw_crossair(sys, game->player);
     sfRenderWindow_display(sys->window);

@@ -30,11 +30,10 @@
 
     #define SEC_IN_MICRO 1000000
 
-    #define WEAPON_FRAME 0.05
+    #define WEAPON_FRAME 0.1
     #define WEAPON_NB_TILE 5
     #define WEAPON_SPRITE_X 320
     #define WEAPON_SPRITE_Y 180
-    #define NB_WEAPON 3
 
     #define TILE_SIZE 64
 
@@ -124,6 +123,8 @@ typedef enum {
     PUNCH,
     PISTOL,
     SHOTGUN,
+    MINIGUN,
+    NB_WEAPON,
 } weapon_id_t;
 
 typedef enum scene_s {
@@ -157,10 +158,19 @@ typedef struct sprite_s {
     int tile;
 } sprite_t;
 
+typedef struct weapon_info_s {
+    sfTexture *texture;
+    sfVector2f posf;
+    sfIntRect rectangle;
+    sfMusic *sound;
+    sfVector2f size;
+    int current_tile;
+    int nb_tile;
+} weapon_info_t;
+
 typedef struct weapon_s {
-    sprite_t *sprite;
-    sfTexture **texture;
-    sfMusic **sound;
+    sfSprite *sprite;
+    weapon_info_t *info;
     sfInt64 shot;
     int weapon;
 } weapon_t;
@@ -272,7 +282,7 @@ void menu_events(system_t *sys, menu_t *menu);
 void setting_events(system_t *sys, setting_t *setting);
 void pause_events(system_t *sys, pause_t *pause);
 
-void move_rect(sprite_t *sprite, int offset, int max_value);
+void move_rect(sfSprite *sprite, sfIntRect *rect, int offset, int nb_tile);
 void sys_loop(system_t *sys, void **structure);
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player, float angle_offset,

@@ -124,18 +124,6 @@ static int check_start(save_t *save)
     return SUCCESS;
 }
 
-static char **get_tab(char *file)
-{
-    char *fd = open_file(file);
-    char **tab = NULL;
-
-    if (fd == NULL)
-        return NULL;
-    tab = my_str_to_word_array(fd, "\n", "");
-    free(fd);
-    return tab;
-}
-
 int get_save(char *file, save_t *save)
 {
     char **tab = get_tab(file);

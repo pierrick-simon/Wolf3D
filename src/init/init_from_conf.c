@@ -10,18 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-static char **get_tab(char *path)
-{
-    char *tmp = open_file(path);
-    char **tab = NULL;
-
-    if (tmp == NULL)
-        return NULL;
-    tab = my_str_to_word_array(tmp, "\n", "");
-    free(tmp);
-    return tab;
-}
-
 static int get_scene(char *scene)
 {
     for (int i = 0; i <= QUIT; i++) {
