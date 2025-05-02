@@ -21,14 +21,21 @@
 typedef struct linked_list_s linked_list_t;
 typedef struct node_s node_t;
 
+typedef struct player_info_s {
+    sfVector2f start_pos;
+    double start_angle;
+    int health;
+    int armor;
+    int ammo;
+} player_info_t;
+
 typedef struct save_s {
     char *name;
     sfVector2i size;
-    sfVector2f start_pos;
-    double start_angle;
     int **map;
     sfBool init;
     sfBool update;
+    player_info_t *info;
 } save_t;
 
 typedef enum {
@@ -38,6 +45,9 @@ typedef enum {
     START_X,
     START_Y,
     START_ANGLE,
+    HEALTH,
+    ARMOR,
+    AMMO,
     MAP,
 } str_t;
 
@@ -78,6 +88,7 @@ int check_size(char *str);
 int check_pos(char *str);
 int check_angle(char *str);
 int check_name(char *str);
+int check_info(char *str);
 
 static const check_t CHECK[] __maybe_unused = {
     [NAME] = {&check_name},
@@ -86,9 +97,13 @@ static const check_t CHECK[] __maybe_unused = {
     [START_X] = {&check_pos},
     [START_Y] = {&check_pos},
     [START_ANGLE] = {&check_angle},
+    [HEALTH] = {&check_info},
+    [ARMOR] = {&check_info},
+    [AMMO] = {&check_info},
     [MAP] = {NULL}
 };
 
+void destroy_save(save_t *save);
 void free_map(int size, int **map);
 int get_save(char *file, save_t *save);
 int add_node_file(linked_list_t *list, char *file, char *dir);

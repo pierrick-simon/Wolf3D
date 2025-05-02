@@ -6,7 +6,8 @@
 */
 
 #include <math.h>
-#include "wolf.h"
+#include "save.h"
+#include "game.h"
 
 static void scroll_weapon(sfEvent event, weapon_t *weapon)
 {
@@ -26,7 +27,7 @@ static void scroll_weapon(sfEvent event, weapon_t *weapon)
 
 static void change_weapon(weapon_t *weapon)
 {
-    fSprite_setOrigin(weapon->sprite,
+    sfSprite_setOrigin(weapon->sprite,
         (sfVector2f){weapon->info[weapon->weapon].size.x / 2,
         weapon->info[weapon->weapon].size.y});
     sfSprite_setTexture(
@@ -36,13 +37,13 @@ static void change_weapon(weapon_t *weapon)
     sfSprite_setPosition(weapon->sprite, weapon->info[weapon->weapon].posf);
 }
 
-static void change_weapons(sfEvent event, weapon_t *weapon, sfInt64 time)
+static void change_weapons(sfEvent event, game_t *game, weapon_t *weapon)
 {
-    double diff_shot = (double)(time - weapon->shot) / SEC_IN_MICRO;
     int prev = weapon->weapon;
 
-    if (diff_shot < 0.3)
+    if (weapon->info[weapon->weapon].current_tile != 0)
         return;
+    game->tool->draw[prev + TOOL_ONE].color = sfWhite;
     scroll_weapon(event, weapon);
     if (is_input(event, sfKeyNum1, sfFalse, 0))
         weapon->weapon = PUNCH;
@@ -54,16 +55,24 @@ static void change_weapons(sfEvent event, weapon_t *weapon, sfInt64 time)
         weapon->weapon = MINIGUN;
     if (prev != weapon->weapon)
         change_weapon(weapon);
+    game->tool->draw[weapon->weapon + TOOL_ONE].color = sfRed;
 }
 
-static void click(sfEvent event, weapon_t *weapon, sfInt64 time)
+static void click(system_t *sys, weapon_t *weapon, sfInt64 time)
 {
     double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
+    int ind = weapon->weapon;
 
-    if (diff < 0.4)
+    if (diff < weapon->info[ind].speed * weapon->info[ind].nb_tile)
         return;
     if ((sfMouse_isButtonPressed(sfMouseLeft)) ||
         sfJoystick_getAxisPosition(0, sfJoystickR) > 0) {
+        if (weapon->weapon != PUNCH && sys->save->info->ammo == 0) {
+            sfMusic_play(weapon->empty);
+            return;
+        }
+        if (weapon->weapon != PUNCH)
+            sys->save->info->ammo--;
         weapon->shot = time;
         sfMusic_play(weapon->info[weapon->weapon].sound);
     }
@@ -83,9 +92,12 @@ void game_events(system_t *sys, game_t *game)
 
     while (sfRenderWindow_pollEvent(sys->window, &event)) {
         sys_events(event, sys);
-        change_weapons(event, game->weapon, game->time_info->time);
+        change_weapons(event, game, game->weapon);
         switch_scene(event, sys->state);
     }
-    click(event, game->weapon, game->time_info->time);
-    move_player(game->player, game->time_info->delta);
+    click(sys, game->weapon, game->time_info->time);
+    move_player(game->player, game->time_info->delta,
+        &game->tool->head->rectangle.left);
+    sfSprite_setTextureRect(
+        game->tool->head->sprite, game->tool->head->rectangle);
 }

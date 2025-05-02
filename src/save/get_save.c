@@ -37,8 +37,12 @@ static int initiate_body(char **tab, save_t *save)
 static int initiate_struct(char **tab, save_t *save)
 {
     save->size = (sfVector2i){atoi(tab[SIZE_X]), atoi(tab[SIZE_Y])};
-    save->start_pos = (sfVector2f){atof(tab[START_X]), atof(tab[START_Y])};
-    save->start_angle = atof(tab[START_ANGLE]);
+    save->info->start_pos =
+        (sfVector2f){atof(tab[START_X]), atof(tab[START_Y])};
+    save->info->start_angle = atof(tab[START_ANGLE]);
+    save->info->health = atoi(tab[HEALTH]);
+    save->info->armor = atoi(tab[ARMOR]);
+    save->info->ammo = atoi(tab[AMMO]);
     save->name = strdup(tab[NAME]);
     if (save->name == NULL)
         return ERROR;
@@ -114,13 +118,17 @@ static int check_save(char **tab)
 
 static int check_start(save_t *save)
 {
-    int x = save->start_pos.x / TILE_SIZE;
-    int y = save->start_pos.y / TILE_SIZE;
+    int x = save->info->start_pos.x / TILE_SIZE;
+    int y = save->info->start_pos.y / TILE_SIZE;
 
-    if (save->size.x * TILE_SIZE < save->start_pos.x
-        || save->size.y * TILE_SIZE < save->start_pos.y
+    if (save->size.x * TILE_SIZE < save->info->start_pos.x
+        || save->size.y * TILE_SIZE < save->info->start_pos.y
         || save->map[y][x] != 0)
             return ERROR;
+    if (save->info->health > MAX_HEALTH)
+        save->info->health = MAX_HEALTH;
+    if (save->info->armor > MAX_HEALTH)
+        save->info->armor = MAX_HEALTH;
     return SUCCESS;
 }
 
@@ -128,6 +136,7 @@ int get_save(char *file, save_t *save)
 {
     char **tab = get_tab(file);
 
+    destroy_save(save);
     save->init = sfFalse;
     if (tab == NULL)
         return ERROR;

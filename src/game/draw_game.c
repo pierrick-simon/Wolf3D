@@ -6,25 +6,7 @@
 */
 
 #include "save.h"
-
-static void shot_gun_anim(weapon_t *weapon, sfInt64 time)
-{
-    double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
-    int ind = weapon->weapon;
-
-    for (int i = 0; i < weapon->info[ind].nb_tile; i++) {
-        if (diff > WEAPON_FRAME * i
-            && diff < WEAPON_FRAME * (i + 1)
-            && weapon->info[ind].current_tile == i) {
-            move_rect(weapon->sprite, &weapon->info[ind].rectangle,
-                weapon->info[ind].size.x, weapon->info[ind].nb_tile);
-            weapon->info[ind].current_tile++;
-            break;
-        }
-    }
-    if (weapon->info[ind].current_tile == weapon->info[ind].nb_tile)
-        weapon->info[ind].current_tile = 0;
-}
+#include "game.h"
 
 static void draw_map(system_t *sys, game_t *game)
 {
@@ -41,14 +23,45 @@ static void draw_map(system_t *sys, game_t *game)
         game->map->ceiling_floor, NULL);
 }
 
-static void draw_toolbar(system_t *sys, game_t *game)
+static void draw_point_bar(system_t *sys, toolbar_t *tool, int ind, int nb)
+{
+    sfVector2f pos = (sfVector2f){tool->draw[ind].pos.x + tool->draw[ind].size
+        + OFFSET_POINT_BAR, TOOLBAR_POS + OFFSET_POINT_BAR};
+    int size = OFFSET_POINT_BAR * 2;
+    double fill = nb * (TOOLBAR_HEIGHT - size) / 100;
+
+    sfRectangleShape_setPosition(tool->rectangle, pos);
+    sfRectangleShape_setSize(tool->rectangle,
+        (sfVector2f){OFFSET_POINT_BAR, TOOLBAR_HEIGHT - size});
+    sfRectangleShape_setOutlineColor(tool->rectangle, sfWhite);
+    sfRectangleShape_setFillColor(tool->rectangle, sfTransparent);
+    sfRenderWindow_drawRectangleShape(sys->window,
+        tool->rectangle, NULL);
+    sfRectangleShape_setPosition(tool->rectangle,
+        (sfVector2f){pos.x, pos.y + TOOLBAR_HEIGHT - size - fill});
+    sfRectangleShape_setSize(tool->rectangle,
+        (sfVector2f){OFFSET_POINT_BAR, fill});
+    sfRectangleShape_setFillColor(tool->rectangle, tool->draw[ind].color);
+    sfRenderWindow_drawRectangleShape(sys->window,
+        tool->rectangle, NULL);
+}
+
+static void draw_toolbar(system_t *sys, toolbar_t *tool)
 {
     sfVector2f pos = (sfVector2f){0, TOOLBAR_POS};
 
-    sfRectangleShape_setPosition(game->map->ceiling_floor, pos);
-    sfRectangleShape_setFillColor(game->map->ceiling_floor, TOOLBAR_COLOR);
+    sfRectangleShape_setPosition(tool->rectangle, pos);
+    sfRectangleShape_setSize(tool->rectangle,
+        (sfVector2f){WIN_WIDTH, TOOLBAR_HEIGHT});
+    sfRectangleShape_setFillColor(tool->rectangle, TOOLBAR_COLOR);
+    sfRectangleShape_setOutlineColor(tool->rectangle, sfTransparent);
     sfRenderWindow_drawRectangleShape(sys->window,
-        game->map->ceiling_floor, NULL);
+        tool->rectangle, NULL);
+    for (int i = 0; i < NB_TOOLBAR; i++)
+        draw_string(sys, sys->textbox, &tool->draw[i]);
+    sfRenderWindow_drawSprite(sys->window, tool->head->sprite, NULL);
+    draw_point_bar(sys, tool, TOOL_ARMOR_NB, sys->save->info->armor);
+    draw_point_bar(sys, tool, TOOL_HEALTH_NB, sys->save->info->health);
 }
 
 static void draw_crossair(system_t *sys, player_t *player)
@@ -57,33 +70,12 @@ static void draw_crossair(system_t *sys, player_t *player)
         player->crossair->circle, &player->crossair->state);
 }
 
-static void update_time(time_info_t *time_info)
-{
-    time_info->prev_time = time_info->time;
-    time_info->time = sfClock_getElapsedTime(time_info->clock).microseconds;
-    time_info->delta = (time_info->time - time_info->prev_time) /
-        (float)SEC_IN_MICRO;
-}
-
-static void update_save(system_t *sys, player_t *player)
-{
-    if (sys->save->update == sfFalse) {
-        player->pos = sys->save->start_pos;
-        player->angle = sys->save->start_angle;
-        player->save = sys->save;
-        sys->save->update = sfTrue;
-    }
-}
-
 void draw_game(system_t *sys, void *structure)
 {
     game_t *game = (game_t *)structure;
 
-    update_save(sys, game->player);
-    update_time(game->time_info);
     game_events(sys, game);
-    shot_gun_anim(game->weapon, game->time_info->time);
-    cast_all_rays(game);
+    update_all(sys, game);
     sfRenderWindow_clear(sys->window, sfWhite);
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);
@@ -92,7 +84,10 @@ void draw_game(system_t *sys, void *structure)
         game->map->quads, &game->map->wall_state);
     sfRenderWindow_drawSprite(
         sys->window, game->weapon->sprite, NULL);
-    draw_toolbar(sys, game);
+    draw_toolbar(sys, game->tool);
     draw_crossair(sys, game->player);
     sfRenderWindow_display(sys->window);
+    sys->save->info->health--;
+    if (sys->save->info->health == 0)
+        sys->save->info->health = 100;
 }

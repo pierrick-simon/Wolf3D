@@ -49,6 +49,15 @@ static void init_state(state_info_t *state, load_screen_t *start)
     draw_load_screen(start, NB_SCENE - 0.4);
 }
 
+static int init_save(save_t *save)
+{
+    save->info = malloc(sizeof(player_info_t));
+    if (save->info == NULL)
+        return ERROR;
+    save->init = sfFalse;
+    return SUCCESS;
+}
+
 int init_system(system_t *sys, load_screen_t *start)
 {
     sys->background = malloc(sizeof(background_t));
@@ -63,9 +72,8 @@ int init_system(system_t *sys, load_screen_t *start)
         return ERROR;
     init_state(sys->state, start);
     sys->save = malloc(sizeof(save_t));
-    if (sys->save == NULL)
+    if (sys->save == NULL || init_save(sys->save) == ERROR)
         return ERROR;
-    sys->save->init = sfFalse;
     sys->window = create_window(sfFullscreen, 1);
     sys->music = sfMusic_createFromFile("asset/music.ogg");
     if (sys->window == NULL || sys->music == NULL)

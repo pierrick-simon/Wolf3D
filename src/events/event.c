@@ -9,23 +9,22 @@
 
 static void music_setvolume(sfEvent event, system_t *sys, state_info_t *state)
 {
-    float volume = sfMusic_getVolume(sys->music);
-
     if (is_input(event, sfKeyF1, sfFalse, 0)) {
-        if (volume < 1)
-            volume = VOL_MAX;
+        if (state->volume < 1)
+            state->volume = VOL_MAX;
         else
             state->volume = VOL_MIN;
     }
     if (is_input(event, sfKeyF2, sfFalse, 0)) {
-        if (volume > VOL_MIN + VOL_GAP)
-            volume -= VOL_GAP;
+        if (state->volume > VOL_MIN + VOL_GAP)
+            state->volume -= VOL_GAP;
         else
             state->volume = 0.0;
     }
-    if (is_input(event, sfKeyF3, sfFalse, 0) && volume < VOL_MAX - VOL_GAP)
-        volume += VOL_GAP;
-    sfMusic_setVolume(sys->music, volume);
+    if (is_input(event, sfKeyF3, sfFalse, 0)
+        && state->volume < VOL_MAX - VOL_GAP)
+        state->volume += VOL_GAP;
+    sfMusic_setVolume(sys->music, state->volume);
 }
 
 static void close_window(sfEvent event, system_t *sys)

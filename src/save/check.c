@@ -10,6 +10,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+int check_info(char *str)
+{
+    if (is_int_float(str) != NATURAL)
+        return ERROR;
+    return SUCCESS;
+}
+
 int check_size(char *str)
 {
     if (strlen(str) > MAX_STRLEN || is_int_float(str) != NATURAL)

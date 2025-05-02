@@ -6,6 +6,7 @@
 */
 
 #include "save.h"
+#include "game.h"
 #include <math.h>
 
 static sfBool is_wall(float y, float x, save_t *save)
@@ -54,10 +55,11 @@ static void move_verticaly(player_t *player)
     }
 }
 
-static void move_horizontaly(player_t *player)
+static void move_left(player_t *player, int *head)
 {
     if (sfKeyboard_isKeyPressed(sfKeyQ)
         || sfJoystick_getAxisPosition(0, sfJoystickPovX) == -100) {
+        *head -= HEAD_SPRITE_X;
         if (is_wall(player->pos.y,
             player->pos.x + (player->v.y * DISTANCE_COLISION),
             player->save) == sfFalse)
@@ -66,8 +68,13 @@ static void move_horizontaly(player_t *player)
             player->pos.x, player->save) == sfFalse)
             player->pos.y -= player->v.x;
     }
+}
+
+static void move_right(player_t *player, int *head)
+{
     if (sfKeyboard_isKeyPressed(sfKeyD)
         || sfJoystick_getAxisPosition(0, sfJoystickPovX) == 100) {
+        *head += HEAD_SPRITE_X;
         if (is_wall(player->pos.y,
             player->pos.x - (player->v.y * DISTANCE_COLISION),
             player->save) == sfFalse)
@@ -78,31 +85,39 @@ static void move_horizontaly(player_t *player)
     }
 }
 
-static void rotate_player(player_t *player, double delta)
+static void rotate_player(player_t *player, double delta, int *head)
 {
     float x_controler = sfJoystick_getAxisPosition(0, sfJoystickU);
 
     if (fabs(x_controler) > 30)
         player->angle += ROTATION_SPEED * delta * (x_controler / 75);
     if (sfKeyboard_isKeyPressed(sfKeyLeft)) {
+        *head -= HEAD_SPRITE_X;
         player->angle -= ROTATION_SPEED * delta;
         if (player->angle < 0)
             player->angle += (M_PI * 2);
     }
     if (sfKeyboard_isKeyPressed(sfKeyRight)) {
         player->angle += ROTATION_SPEED * delta;
+        *head += HEAD_SPRITE_X;
         if (player->angle > (M_PI * 2))
             player->angle -= (M_PI * 2);
     }
 }
 
-void move_player(player_t *player, double delta)
+void move_player(player_t *player, double delta, int *head)
 {
+    *head = HEAD_SPRITE_X;
     player->fov = FOV;
     player->is_sprinting = sfFalse;
     player->v.x *= delta;
     player->v.y *= delta;
     move_verticaly(player);
-    move_horizontaly(player);
-    rotate_player(player, delta);
+    move_left(player, head);
+    move_right(player, head);
+    rotate_player(player, delta, head);
+    if (*head < 0)
+        *head = 0;
+    if (*head > HEAD_SPRITE_X * 2)
+        *head = HEAD_SPRITE_X * 2;
 }

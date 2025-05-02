@@ -28,21 +28,12 @@
     #define WIN_FRAME 60
     #define WIN_NAME "Wolf3D"
 
+    #define GUY_SPRITE_X 612
+    #define GUY_SPRITE_Y 408
+
     #define SEC_IN_MICRO 1000000
 
-    #define WEAPON_FRAME 0.1
-    #define WEAPON_NB_TILE 5
-    #define WEAPON_SPRITE_X 320
-    #define WEAPON_SPRITE_Y 180
-
     #define TILE_SIZE 64
-
-    #define FOV RAD(59)
-    #define NUM_RAYS WIN_WIDTH
-
-    #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
-    #define FLOOR_COLOR sfColor_fromRGB(149, 149, 149)
-    #define TOOLBAR_COLOR sfColor_fromRGB(49, 49, 49)
 
     #define LEFT_COLOR sfColor_fromRGB(99, 99, 99)
     #define LEFT_SHADOW sfColor_fromRGB(49, 49, 49)
@@ -52,34 +43,15 @@
     #define DEG(rad) (180 / M_PI) * rad
     #define RAD(deg) (M_PI / 180) * deg
 
-    #define MAX_DISTANCE 100.0
-
-    #define RENDER_DISTANCE 1200
-
-    #define PLAYER_SPEED 100
-    #define ROTATION_SPEED RAD(100)
-    #define FORWARD_COEF 1.5
-
-    #define DISTANCE_COLISION 5.0
-
-    #define NB_DECIMAL_FLOAT_CMP 6
-
-    #define SPRINT_COEF 1.1
-    #define SPRINTING_FOV FOV * SPRINT_COEF
-    #define TOOLBAR_POS (WIN_HEIGHT - 130)
-
-    #define GUY_SPRITE_X 612
-    #define GUY_SPRITE_Y 408
-
-    #define SIZE_TEXT 250
-
-    #define CROSSAIR_RADIUS 0.1
-
     #define SWITCH 170
     #define PAD sfColor_fromRGB(255, 230, 200)
 
     #define SETTING_FILL 400
     #define SETTING_OFFSET 30
+
+    #define ORANGE sfColor_fromRGB(255, 128, 0)
+
+    #define MAX_HEALTH 100
 
     #define __maybe_unused  __attribute__((unused))
 
@@ -111,22 +83,6 @@ typedef enum str_setting_e {
     NB_SETTING,
 } str_setting_t;
 
-typedef enum intersection_type {
-    NONE,
-    TOP,
-    BOTTOM,
-    LEFT,
-    RIGHT,
-} intersection_type_t;
-
-typedef enum {
-    PUNCH,
-    PISTOL,
-    SHOTGUN,
-    MINIGUN,
-    NB_WEAPON,
-} weapon_id_t;
-
 typedef enum scene_s {
     GAME,
     MENU,
@@ -149,6 +105,14 @@ static const char *str_scene[] __maybe_unused = {
 
 typedef struct save_s save_t;
 
+typedef struct draw_textbox_s {
+    char *str;
+    sfVector2f pos;
+    unsigned int size;
+    sfColor color;
+    int scene;
+} draw_textbox_t;
+
 typedef struct sprite_s {
     sfTexture *texture;
     sfSprite *sprite;
@@ -157,59 +121,6 @@ typedef struct sprite_s {
     sfIntRect rectangle;
     int tile;
 } sprite_t;
-
-typedef struct weapon_info_s {
-    sfTexture *texture;
-    sfVector2f posf;
-    sfIntRect rectangle;
-    sfMusic *sound;
-    sfVector2f size;
-    int current_tile;
-    int nb_tile;
-} weapon_info_t;
-
-typedef struct weapon_s {
-    sfSprite *sprite;
-    weapon_info_t *info;
-    sfInt64 shot;
-    int weapon;
-} weapon_t;
-
-typedef struct map_s {
-    sfRectangleShape *ceiling_floor;
-    sfVertexArray *quads;
-    sfRenderStates wall_state;
-} map_t;
-
-typedef struct crossair_s {
-    sfRenderStates state;
-    sfCircleShape *circle;
-} crossair_t;
-
-typedef struct player_s {
-    sfVector2f pos;
-    float angle;
-    sfVector2f v;
-    intersection_type_t type;
-    float fov;
-    sfBool is_sprinting;
-    crossair_t *crossair;
-    save_t *save;
-} player_t;
-
-typedef struct time_info_s {
-    sfClock *clock;
-    sfInt64 prev_time;
-    sfInt64 time;
-    double delta;
-} time_info_t;
-
-typedef struct game_s {
-    map_t *map;
-    player_t *player;
-    weapon_t *weapon;
-    time_info_t *time_info;
-} game_t;
 
 typedef struct background_s {
     sfSprite *guy_s;
@@ -239,14 +150,6 @@ typedef struct system_s {
     save_t *save;
 } system_t;
 
-typedef struct draw_textbox_s {
-    char *str;
-    sfVector2f pos;
-    unsigned int size;
-    sfColor color;
-    int scene;
-} draw_textbox_t;
-
 typedef struct setting_s {
     int str;
     draw_textbox_t *draw;
@@ -265,7 +168,6 @@ typedef struct menu_s {
 
 // init
 
-void *init_game(void);
 void *init_menu(void);
 void *init_pause(void);
 void *init_setting(void);
@@ -274,7 +176,6 @@ draw_textbox_t *init_from_conf(char *path);
 
 // event
 
-void game_events(system_t *sys, game_t *game);
 void sys_events(sfEvent event, system_t *sys);
 sfBool is_input(sfEvent event, sfKeyCode key,
     sfBool is_joysick, unsigned int joytick_button);
@@ -284,11 +185,6 @@ void pause_events(system_t *sys, pause_t *pause);
 
 void move_rect(sfSprite *sprite, sfIntRect *rect, int offset, int nb_tile);
 void sys_loop(system_t *sys, void **structure);
-void cast_all_rays(game_t *game);
-float cast_single_ray(player_t *player, float angle_offset,
-    intersection_type_t *type, sfVector2f *intersection_point);
-void move_player(player_t *player, double delta);
-void draw_game(system_t *sys, void *structure);
 void draw_menu(system_t *sys, void *structure);
 void draw_setting(system_t *sys, void *structure);
 void draw_pause(system_t *sys, void *structure);
@@ -298,7 +194,6 @@ void draw_background(system_t *sys, background_t *background);
 // destroy
 
 void destroy_struct(void **structure, int stop);
-void destroy_game(void *structure);
 void destroy_sys(system_t *sys);
 void destroy_menu(void *structure);
 void destroy_pause(void *structure);

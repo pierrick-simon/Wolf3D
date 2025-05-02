@@ -5,7 +5,7 @@
 ** init
 */
 
-#include "wolf.h"
+#include "game.h"
 #include <stdlib.h>
 #include <string.h>
 #include "my.h"
@@ -30,63 +30,6 @@ static int init_crossair(crossair_t *crossair)
         .alphaDstFactor = sfBlendFactorZero,
         .alphaEquation = sfBlendEquationAdd
     };
-    return SUCCESS;
-}
-
-int init_weapon(char *info, weapon_info_t *weapon)
-{
-    char **tab = my_str_to_word_array(info, ":", "");
-
-    weapon->texture = NULL;
-    weapon->sound = NULL;
-    if (tab == NULL)
-        return ERROR;
-    if (array_len(tab) != 5) {
-        free_array(tab);
-        return ERROR;
-    }
-    weapon->texture = sfTexture_createFromFile(tab[0], NULL);
-    weapon->sound = sfMusic_createFromFile(tab[1]);
-    weapon->size = (sfVector2f){atoi(tab[2]), atoi(tab[3])};
-    weapon->nb_tile = atoi(tab[4]);
-    weapon->size.x /= weapon->nb_tile;
-    weapon->rectangle = (sfIntRect){0, 0, weapon->size.x, weapon->size.y};
-    weapon->current_tile = 0;
-    weapon->posf = (sfVector2f){WIN_WIDTH / 2, TOOLBAR_POS};
-    return SUCCESS;
-}
-
-int get_weapon_info(weapon_info_t *info)
-{
-    char **tab = get_tab("config_file/weapon.conf");
-    int return_value = SUCCESS;
-
-    if (tab == NULL)
-        return ERROR;
-    for (int i = 0; i < NB_WEAPON; i++) {
-        if (init_weapon(tab[i], &info[i]) == ERROR)
-            return_value = ERROR;
-    }
-    free_array(tab);
-    return return_value;
-}
-
-static int init_weapons(weapon_t *weapon)
-{
-    *weapon = (weapon_t){NULL};
-    weapon->shot = SEC_IN_MICRO * -1;
-    weapon->weapon = 0;
-    weapon->sprite = sfSprite_create();
-    weapon->info = malloc(sizeof(weapon_info_t) * NB_WEAPON);
-    if (weapon->sprite == NULL || weapon->info == NULL
-        || get_weapon_info(weapon->info) == ERROR)
-        return ERROR;
-    sfSprite_setOrigin(weapon->sprite,
-        (sfVector2f){weapon->info[0].size.x / 2, weapon->info[0].size.y});
-    sfSprite_setTexture(weapon->sprite, weapon->info[0].texture, sfTrue);
-    sfSprite_setTextureRect(weapon->sprite, weapon->info[0].rectangle);
-    sfSprite_setScale(weapon->sprite, (sfVector2f){2, 2});
-    sfSprite_setPosition(weapon->sprite, weapon->info[0].posf);
     return SUCCESS;
 }
 
@@ -144,6 +87,40 @@ static int init_time_info(time_info_t *time_info)
     return SUCCESS;
 }
 
+static int init_toolbar_sprite(sprite_t *sprite)
+{
+    double scale = TOOLBAR_HEIGHT / HEAD_SPRITE_Y + 0.4;
+
+    sprite->sprite = sfSprite_create();
+    sprite->texture = sfTexture_createFromFile("asset/head.png", NULL);
+    if (sprite->sprite == NULL || sprite->texture == NULL)
+        return ERROR;
+    sprite->rectangle =
+        (sfIntRect){0, 0, HEAD_SPRITE_X, HEAD_SPRITE_Y};
+    sprite->posf = (sfVector2f){WIN_WIDTH / 2, WIN_HEIGHT};
+    sprite->scale = (sfVector2f){scale, scale};
+    sfSprite_setPosition(sprite->sprite, sprite->posf);
+    sfSprite_setTexture(sprite->sprite, sprite->texture, sfTrue);
+    sfSprite_setTextureRect(sprite->sprite, sprite->rectangle);
+    sfSprite_setScale(sprite->sprite, sprite->scale);
+    sfSprite_setOrigin(
+        sprite->sprite, (sfVector2f){HEAD_SPRITE_X / 2, HEAD_SPRITE_Y});
+    return SUCCESS;
+}
+
+static int init_toolbar(toolbar_t *tool)
+{
+    tool->head = malloc(sizeof(sprite_t));
+    if (tool->head == NULL || init_toolbar_sprite(tool->head) == ERROR)
+        return ERROR;
+    tool->rectangle = sfRectangleShape_create();
+    tool->draw = init_from_conf("config_file/toolbar.conf");
+    if (tool->draw == NULL || tool->rectangle == NULL)
+        return ERROR;
+    sfRectangleShape_setOutlineThickness(tool->rectangle, 2);
+    return SUCCESS;
+}
+
 void *init_game(void)
 {
     game_t *game = malloc(sizeof(game_t));
@@ -151,18 +128,18 @@ void *init_game(void)
     if (game == NULL)
         return NULL;
     *game = (game_t){NULL};
+    game->tool = malloc(sizeof(toolbar_t));
     game->map = malloc(sizeof(map_t));
     game->player = malloc(sizeof(player_t));
     game->weapon = malloc(sizeof(weapon_t));
     game->time_info = malloc(sizeof(time_info_t));
     if (game->map == NULL || init_map(game->map) == ERROR
         || game->player == NULL || game->weapon == NULL
+        || game->tool == NULL || init_toolbar(game->tool) == ERROR
         || init_weapons(game->weapon) == ERROR
         || init_player(game->player) == ERROR
-        || init_time_info(game->time_info) == ERROR) {
-        destroy_game(game);
+        || init_time_info(game->time_info) == ERROR)
         return NULL;
-    }
     game->player->save = NULL;
     return (void *)game;
 }

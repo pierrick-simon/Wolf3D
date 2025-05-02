@@ -28,7 +28,7 @@ static void destroy_background(background_t *background)
         sfSprite_destroy(background->wallpaper_s);
 }
 
-static void destroy_save(save_t *save)
+void destroy_save(save_t *save)
 {
     if (save->init == sfTrue) {
         free_map(save->size.y, save->map);
@@ -54,6 +54,8 @@ void destroy_sys(system_t *sys)
         free(sys->state);
     if (sys->save != NULL) {
         destroy_save(sys->save);
+        if (sys->save->info != NULL)
+            free(sys->save->info);
         free(sys->save);
     }
 }

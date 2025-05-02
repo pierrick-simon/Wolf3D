@@ -15,22 +15,18 @@ SRC =	$(addprefix src/,					\
 			algo/ray_cast.c					\
 			algo/move_player.c				\
 			events/is_input.c				\
-			init/init_game.c 				\
 			init/init_menu.c 				\
 			init/init_pause.c 				\
 			init/init_setting.c 			\
 			init/init_sys.c					\
 			init/init_struct.c				\
 			init/init_from_conf.c			\
-			destroy/destroy_game.c 			\
 			destroy/destroy_menu.c 			\
 			destroy/destroy_pause.c 		\
 			destroy/destroy_setting.c 		\
 			destroy/destroy_sys.c			\
 			destroy/destroy_struct.c		\
 			destroy/free_draw_textbox.c		\
-			game/event.c					\
-			game/draw_game.c				\
 			menu/event.c					\
 			menu/draw_menu.c				\
 			pause/event.c					\
@@ -39,6 +35,13 @@ SRC =	$(addprefix src/,					\
 			setting/event.c					\
 			setting/draw_setting.c			\
 			load_screen.c					\
+			\
+			game/event.c					\
+			game/draw_game.c				\
+			game/destroy_game.c 			\
+			game/init_game.c 				\
+			game/init_weapon.c 				\
+			game/update.c 					\
 			\
 			save/check.c			 		\
 			save/free_map.c			 		\
