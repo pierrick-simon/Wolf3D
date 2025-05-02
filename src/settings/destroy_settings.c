@@ -8,7 +8,7 @@
 #include "wolf.h"
 #include <stdlib.h>
 
-void destroy_setting(void *structure)
+void destroy_settings(void *structure)
 {
     setting_t *setting = (setting_t *)structure;
 

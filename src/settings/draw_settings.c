@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** Wolf3d
 ** File description:
-** draw_setting
+** draw_settings
 */
 
 #include "wolf.h"
@@ -54,14 +54,14 @@ static void draw_fullscreen(system_t *sys, setting_t *set)
     sfRenderWindow_drawRectangleShape(sys->window, set->rect, NULL);
 }
 
-void draw_setting(system_t *sys, void *structure)
+void draw_settings(system_t *sys, void *structure)
 {
     setting_t *setting = (setting_t *)structure;
 
     setting_events(sys, setting);
     sfRenderWindow_clear(sys->window, sfWhite);
     draw_background(sys, sys->background);
-    for (int i = 0; i < NB_SETTING; i++) {
+    for (int i = 0; i < NB_SETTINGS; i++) {
         draw_string(sys, sys->textbox, &setting->draw[i]);
     }
     draw_fullscreen(sys, setting);

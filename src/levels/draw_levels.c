@@ -12,7 +12,7 @@ void draw_normal_map(system_t *sys, void *structure)
 {
     normal_map_t *normal_map = (normal_map_t *)structure;
 
-    normal_map_events(sys, normal_map);
+    levels_events(sys, normal_map);
     update_list(normal_map->info, "normal_map");
     sfRenderWindow_clear(sys->window, sfWhite);
     draw_background(sys, sys->background);

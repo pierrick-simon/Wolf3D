@@ -34,12 +34,12 @@ static void change_window(
 }
 
 static void switch_screen(
-    sfEvent event, system_t *sys, setting_t *setting, state_info_t *state)
+    sfEvent event, system_t *sys, setting_t *settings, state_info_t *state)
 {
     sfRenderWindow *new = NULL;
     sfBool old = state->fullscreen;
 
-    if (setting->str == SETTING_FULL) {
+    if (settings->str == SETTING_FULL) {
         if (is_input(event, sfKeyLeft, sfFalse, 0)
             && state->fullscreen == sfFalse) {
             new = create_window(sfFullscreen, 1);
@@ -75,22 +75,22 @@ static void switch_str(sfEvent event, setting_t *setting)
     if (is_input(event, sfKeyDown, sfFalse, 0) ||
         sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100)
         setting->str++;
-    if (setting->str == NB_SETTING)
+    if (setting->str == NB_SETTINGS)
         setting->str = SETTING_FULL;
     if (setting->str == SETTING_TITLE)
         setting->str = SETTING_BACK;
     setting->draw[setting->str].color = sfRed;
 }
 
-void setting_events(system_t *sys, setting_t *setting)
+void setting_events(system_t *sys, setting_t *settings)
 {
     sfEvent event = {0};
 
     while (sfRenderWindow_pollEvent(sys->window, &event)) {
         sys_events(event, sys);
-        switch_str(event, setting);
-        switch_scene(event, sys->state, setting);
-        switch_screen(event, sys, setting, sys->state);
-        change_volume(event, sys->state, setting);
+        switch_str(event, settings);
+        switch_scene(event, sys->state, settings);
+        switch_screen(event, sys, settings, sys->state);
+        change_volume(event, sys->state, settings);
     }
 }

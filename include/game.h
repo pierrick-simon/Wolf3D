@@ -53,6 +53,17 @@ typedef enum intersection_type {
     RIGHT,
 } intersection_type_t;
 
+typedef enum wall_type {
+    NONE_W,
+    WALL,
+    DESTRUCTABLE,
+} wall_type_t;
+
+typedef struct intersection_s {
+    intersection_type_t type;
+    wall_type_t wall;
+} intersection_t;
+
 typedef enum {
     TOOL_AMMO_NB,
     TOOL_AMMO_STR,
@@ -151,7 +162,7 @@ typedef struct game_s {
 
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player, float angle_offset,
-    intersection_type_t *type, sfVector2f *intersection_point);
+    intersection_t *type, sfVector2f *intersection_point);
 void move_player(player_t *player, double delta, int *head);
 int init_weapons(weapon_t *weapon);
 void update_all(system_t *sys, game_t *game);
@@ -164,4 +175,4 @@ void *init_game(void);
 
 sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
 
-#endif /* !GAME_H_ */
+#endif

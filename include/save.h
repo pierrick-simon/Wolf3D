@@ -122,7 +122,7 @@ bool sort_node_file(void *data_first, void *data_second);
 
 void *init_normal_map(void);
 void draw_normal_map(system_t *sys, void *structure);
-void normal_map_events(system_t *sys, normal_map_t *normal_map);
+void levels_events(system_t *sys, normal_map_t *normal_map);
 void destroy_normal_map(void *structure);
 
 #endif

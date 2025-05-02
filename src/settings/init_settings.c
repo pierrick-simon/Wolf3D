@@ -8,7 +8,7 @@
 #include "wolf.h"
 #include <stdlib.h>
 
-void *init_setting(void)
+void *init_settings(void)
 {
     setting_t *setting = malloc(sizeof(setting_t));
 

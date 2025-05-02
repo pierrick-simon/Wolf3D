@@ -59,7 +59,7 @@
 typedef enum str_menu_e {
     MENU_TITLE,
     MENU_PLAY,
-    MENU_SETTING,
+    MENU_settings,
     MENU_QUIT,
     NB_MENU,
 } str_menu_t;
@@ -67,7 +67,7 @@ typedef enum str_menu_e {
 typedef enum str_pause_e {
     PAUSE_TITLE,
     PAUSE_RESUME,
-    PAUSE_SETTING,
+    PAUSE_settings,
     PAUSE_BACK,
     NB_PAUSE,
 } str_pause_t;
@@ -81,13 +81,13 @@ typedef enum str_setting_e {
     SETTING_FULL,
     SETTING_SOUND,
     SETTING_BACK,
-    NB_SETTING,
+    NB_SETTINGS,
 } str_setting_t;
 
 typedef enum scene_s {
     GAME,
     MENU,
-    SETTING,
+    SETTINGS,
     PAUSE,
     NOR_MAP,
     NB_SCENE,
@@ -97,7 +97,7 @@ typedef enum scene_s {
 static const char *str_scene[] __maybe_unused = {
     [GAME] = "game",
     [MENU] = "menu",
-    [SETTING] = "setting",
+    [SETTINGS] = "settings",
     [PAUSE] = "pause",
     [NOR_MAP] = "normal_map",
     [NB_SCENE] = "",
@@ -171,7 +171,7 @@ typedef struct menu_s {
 
 void *init_menu(void);
 void *init_pause(void);
-void *init_setting(void);
+void *init_settings(void);
 sfRenderWindow *create_window(sfUint32 style, double coeff);
 draw_textbox_t *init_from_conf(char *path);
 
@@ -187,7 +187,7 @@ void pause_events(system_t *sys, pause_t *pause);
 void move_rect(sfSprite *sprite, sfIntRect *rect, int offset, int nb_tile);
 void sys_loop(system_t *sys, void **structure);
 void draw_menu(system_t *sys, void *structure);
-void draw_setting(system_t *sys, void *structure);
+void draw_settings(system_t *sys, void *structure);
 void draw_pause(system_t *sys, void *structure);
 void draw_string(system_t *sys, textbox_t *textbox, draw_textbox_t *draw);
 void draw_background(system_t *sys, background_t *background);
@@ -198,7 +198,7 @@ void destroy_struct(void **structure, int stop);
 void destroy_sys(system_t *sys);
 void destroy_menu(void *structure);
 void destroy_pause(void *structure);
-void destroy_setting(void *structure);
+void destroy_settings(void *structure);
 void free_draw_textbox(draw_textbox_t *draw, int stop);
 
 #endif

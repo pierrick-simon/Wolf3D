@@ -9,7 +9,6 @@ MAIN = src/main.c
 
 SRC =	$(addprefix src/,					\
 			\
-			events/event.c					\
 			sys_loop.c						\
 			load_screen.c					\
 			draw_func.c                     \
@@ -23,35 +22,35 @@ SRC =	$(addprefix src/,					\
 			)								\
 			$(addprefix init/,				\
 				create_window.c				\
-				init_menu.c 				\
-				init_pause.c 				\
-				init_setting.c 				\
 				init_sys.c					\
 				init_struct.c				\
 				init_from_conf.c			\
 			)								\
 			$(addprefix destroy/,			\
-				destroy_menu.c 				\
-				destroy_pause.c 			\
-				destroy_setting.c 			\
 				destroy_sys.c				\
 				destroy_struct.c			\
 				free_draw_textbox.c			\
 			)								\
 			$(addprefix menu/,				\
-				event.c						\
+				init_menu.c 				\
+				destroy_menu.c 				\
+				menu_event.c				\
 				draw_menu.c					\
 			)								\
 			$(addprefix pause/,				\
-				event.c						\
+				init_pause.c 				\
+				destroy_pause.c 			\
+				pause_event.c				\
 				draw_pause.c				\
 			)								\
-			$(addprefix setting/,			\
-				event.c						\
-				draw_setting.c				\
+			$(addprefix settings/,			\
+				init_settings.c 			\
+				destroy_settings.c 			\
+				settings_event.c			\
+				draw_settings.c				\
 			)								\
 			$(addprefix game/,				\
-				event.c						\
+				game_event.c				\
 				draw_game.c					\
 				destroy_game.c 				\
 				init_game.c 				\
@@ -69,14 +68,15 @@ SRC =	$(addprefix src/,					\
 				update_list.c				\
 				draw_save.c					\
 			)								\
-			$(addprefix normal_map/,		\
-				event.c						\
-				draw_normal_map.c			\
-				destroy_normal_map.c		\
-				init_normal_map.c			\
+			$(addprefix levels/,			\
+				levels_event.c				\
+				draw_levels.c				\
+				destroy_levels.c			\
+				init_levels.c				\
 			)								\
 			$(addprefix events/,			\
 				is_input.c					\
+				sys_event.c					\
 			)								\
 		)
 

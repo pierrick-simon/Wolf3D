@@ -9,10 +9,13 @@
 #include "save.h"
 #include "game.h"
 
-static void set_end_quads(game_t *game, float prev, float offset)
+static void set_end_quads(game_t *game,
+    float prev, float offset, wall_type_t wall)
 {
     sfVertex line = {.color = sfWhite};
 
+    if (wall == DESTRUCTABLE)
+        line.color = sfGreen;
     line.position = (sfVector2f){offset, (WIN_HEIGHT - prev) / 2};
     line.texCoords = (sfVector2f){128, 0};
     sfVertexArray_append(game->map->quads, line);
@@ -21,10 +24,13 @@ static void set_end_quads(game_t *game, float prev, float offset)
     sfVertexArray_append(game->map->quads, line);
 }
 
-static void set_start_quads(game_t *game, float len, float offset)
+static void set_start_quads(game_t *game,
+    float len, float offset, wall_type_t wall)
 {
     sfVertex line = {.color = sfWhite};
 
+    if (wall == DESTRUCTABLE)
+        line.color = sfGreen;
     line.position = (sfVector2f){offset, ((WIN_HEIGHT - len) / 2) + len};
     line.texCoords = (sfVector2f){0, 128};
     sfVertexArray_append(game->map->quads, line);
@@ -35,7 +41,7 @@ static void set_start_quads(game_t *game, float len, float offset)
 
 static void add_ray_to_vertex_array(game_t *game, int i, sfVector2f *prev)
 {
-    intersection_type_t type = NONE;
+    intersection_t type = {NONE, NONE_W};
     float angle_offset = ((i / (float)NUM_RAYS) * game->player->fov) -
         (game->player->fov / 2);
     float offset = i * (float)NUM_RAYS / (float)WIN_WIDTH;
@@ -49,9 +55,9 @@ static void add_ray_to_vertex_array(game_t *game, int i, sfVector2f *prev)
     if (game->player->is_sprinting == sfTrue)
         len /= SPRINT_COEF;
     if ((start && i != 0) || i == NUM_RAYS)
-        set_end_quads(game, prev_len, offset);
+        set_end_quads(game, prev_len, offset, type.wall);
     if (start)
-        set_start_quads(game, len, offset);
+        set_start_quads(game, len, offset, type.wall);
     *prev = pos;
     prev_len = len;
 }

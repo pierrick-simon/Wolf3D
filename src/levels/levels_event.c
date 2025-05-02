@@ -109,7 +109,7 @@ static void change_map(sfEvent event, normal_map_t *normal_map)
     }
 }
 
-void normal_map_events(system_t *sys, normal_map_t *normal_map)
+void levels_events(system_t *sys, normal_map_t *normal_map)
 {
     sfEvent event = {0};
 

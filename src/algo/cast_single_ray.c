@@ -9,15 +9,23 @@
 #include "game.h"
 #include <math.h>
 
-static sfBool is_end(sfVector2f *pos, intersection_type_t *type, save_t *save)
+static sfBool is_end(sfVector2f *pos, intersection_t *type, save_t *save)
 {
-    sfVector2i casted_pos = cast_pos(pos, *type);
+    sfVector2i casted_pos = cast_pos(pos, type->type);
 
     if (casted_pos.x < 0 || casted_pos.y < 0)
         return sfFalse;
     if (casted_pos.x >= save->size.x || casted_pos.y >= save->size.x)
         return sfTrue;
-    return save->map[casted_pos.y][casted_pos.x] != 0;
+    if (save->map[casted_pos.y][casted_pos.x] == 1) {
+        type->wall = WALL;
+        return sfTrue;
+    }
+    if (save->map[casted_pos.y][casted_pos.x] == 3) {
+        type->wall = DESTRUCTABLE;
+        return sfTrue;
+    }
+    return sfFalse;
 }
 
 static float get_line_len(sfVector2f *point)
@@ -111,17 +119,16 @@ static void save_center_ray_success(player_t *player,
 }
 
 float cast_single_ray(player_t *player, float angle_offset,
-    intersection_type_t *type, sfVector2f *intersection_point)
+    intersection_t *type, sfVector2f *intersection_point)
 {
     sfVector2f pos = player->pos;
     sfVector2f v = {cos(player->angle + angle_offset),
         sin(player->angle + angle_offset)};
     float len = 0.0;
 
-    *type = NONE;
     save_center_ray(angle_offset, player, &v);
     while ((is_end(&pos, type, player->save) == sfFalse)) {
-        len += jump_to_next_line(&pos, &v, type);
+        len += jump_to_next_line(&pos, &v, &type->type);
         if (len > RENDER_DISTANCE) {
             intersection_point->x = -1;
             intersection_point->y = -1;
@@ -129,7 +136,7 @@ float cast_single_ray(player_t *player, float angle_offset,
         }
     }
     if (angle_offset == 0.0)
-        save_center_ray_success(player, len, *type, &pos);
+        save_center_ray_success(player, len, type->type, &pos);
     *intersection_point = pos;
     return len;
 }
