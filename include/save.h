@@ -27,6 +27,8 @@ typedef struct player_info_s {
     int health;
     int armor;
     int ammo;
+    int score;
+    sfUint64 time;
 } player_info_t;
 
 typedef struct save_s {
@@ -48,6 +50,8 @@ typedef enum {
     HEALTH,
     ARMOR,
     AMMO,
+    SCORE,
+    TIME,
     MAP,
 } str_t;
 
@@ -100,6 +104,8 @@ static const check_t CHECK[] __maybe_unused = {
     [HEALTH] = {&check_info},
     [ARMOR] = {&check_info},
     [AMMO] = {&check_info},
+    [SCORE] = {&check_info},
+    [TIME] = {&check_info},
     [MAP] = {NULL}
 };
 

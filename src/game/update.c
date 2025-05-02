@@ -42,12 +42,14 @@ static void shot_gun_anim(weapon_t *weapon, sfInt64 time)
     update_guns(weapon);
 }
 
-static void update_time(time_info_t *time_info, game_t *game)
+static void update_time(sfUint64 time, time_info_t *time_info, game_t *game)
 {
     int tmp = 0;
     int min = 0;
     int sec = 0;
 
+    if (time_info->time == 0)
+        time_info->time = time;
     time_info->start_time =
         sfClock_getElapsedTime(time_info->clock).microseconds;
     tmp = time_info->time / SEC_IN_MICRO;
@@ -85,7 +87,7 @@ static void update_toolbar_percent(draw_textbox_t *draw, int nb)
         draw->color = sfRed;
 }
 
-static void update_toolbar(system_t *sys, toolbar_t *tool)
+static void update_toolbar(system_t *sys, toolbar_t *tool, double delta)
 {
     int gap = MAX_HEALTH / HEAD_SPRITE_STATUS;
     int count = 0;
@@ -101,13 +103,15 @@ static void update_toolbar(system_t *sys, toolbar_t *tool)
     update_toolbar_percent(
         &tool->draw[TOOL_HEALTH_NB], sys->save->info->health);
     update_toolbar_percent(&tool->draw[TOOL_ARMOR_NB], sys->save->info->armor);
+    sprintf(tool->draw[TOOL_FPS].str, "%3.0f", 1.0 / delta);
+    sprintf(tool->draw[TOOL_SCORE_NB].str, "%09d", sys->save->info->score);
 }
 
 void update_all(system_t *sys, game_t *game)
 {
     update_save(sys, game->player);
-    update_time(game->time_info, game);
-    update_toolbar(sys, game->tool);
+    update_time(sys->save->info->time, game->time_info, game);
+    update_toolbar(sys, game->tool, game->time_info->delta);
     shot_gun_anim(game->weapon, game->time_info->time);
     cast_all_rays(game);
 }
