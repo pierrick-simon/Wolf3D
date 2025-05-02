@@ -39,7 +39,7 @@ static void change_weapon(weapon_t *weapon)
 
 static void change_weapons(sfEvent event, game_t *game, weapon_t *weapon)
 {
-    int prev = weapon->weapon;
+    weapon_id_t prev = weapon->weapon;
 
     if (weapon->info[weapon->weapon].current_tile != 0)
         return;
@@ -58,7 +58,22 @@ static void change_weapons(sfEvent event, game_t *game, weapon_t *weapon)
     game->tool->draw[weapon->weapon + TOOL_ONE].color = sfRed;
 }
 
-static void click(system_t *sys, weapon_t *weapon, sfInt64 time)
+static void destroy_wall(int **map, player_t *player, game_t *game)
+{
+    sfVector2i casted_pos = cast_pos(&player->center_ray.pos,
+        player->center_ray.type);
+
+    if (casted_pos.x < 0 || casted_pos.y < 0)
+        return;
+    for (size_t i = 0; i < NB_WEAPON; ++i) {
+        if (game->weapon->weapon == i && map[casted_pos.y][casted_pos.x] == 3
+            && game->weapon->info[i].range > player->center_ray.distance)
+            map[casted_pos.y][casted_pos.x] = 0;
+    }
+}
+
+static void click(system_t *sys,
+    weapon_t *weapon, sfInt64 time, game_t *game)
 {
     double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
     int ind = weapon->weapon;
@@ -75,6 +90,7 @@ static void click(system_t *sys, weapon_t *weapon, sfInt64 time)
             sys->save->info->ammo--;
         weapon->shot = time;
         sfMusic_play(weapon->info[weapon->weapon].sound);
+        destroy_wall(sys->save->map, game->player, game);
     }
 }
 
@@ -95,7 +111,7 @@ void game_events(system_t *sys, game_t *game)
         change_weapons(event, game, game->weapon);
         switch_scene(event, sys->state);
     }
-    click(sys, game->weapon, game->time_info->time);
+    click(sys, game->weapon, game->time_info->time, game);
     move_player(game->player, game->time_info->delta,
         &game->tool->head->rectangle.left);
     sfSprite_setTextureRect(

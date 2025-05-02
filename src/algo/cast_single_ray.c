@@ -11,17 +11,11 @@
 
 static sfBool is_end(sfVector2f *pos, intersection_type_t *type, save_t *save)
 {
-    sfVector2i casted_pos = {(int)(pos->x / TILE_SIZE),
-        (int)(pos->y / TILE_SIZE)};
+    sfVector2i casted_pos = cast_pos(pos, *type);
 
-    if (*type == NONE)
+    if (casted_pos.x < 0 || casted_pos.y < 0)
         return sfFalse;
-    if (*type == TOP)
-        --casted_pos.x;
-    if (*type == LEFT)
-        --casted_pos.y;
-    if (casted_pos.x < 0 || casted_pos.y < 0 ||
-        casted_pos.x >= save->size.x || casted_pos.y >= save->size.x)
+    if (casted_pos.x >= save->size.x || casted_pos.y >= save->size.x)
         return sfTrue;
     return save->map[casted_pos.y][casted_pos.x] != 0;
 }
@@ -99,6 +93,23 @@ static float jump_to_next_line(sfVector2f *pos,
     return top_line_len;
 }
 
+static void save_center_ray(float angle_offset,
+    player_t *player, sfVector2f *v)
+{
+    if (angle_offset == 0.0) {
+        player->center_ray.v.x = v->x * PLAYER_SPEED;
+        player->center_ray.v.y = v->y * PLAYER_SPEED;
+    }
+}
+
+static void save_center_ray_success(player_t *player,
+    float len, intersection_type_t type, sfVector2f *pos)
+{
+    player->center_ray.distance = len;
+    player->center_ray.type = type;
+    player->center_ray.pos = *pos;
+}
+
 float cast_single_ray(player_t *player, float angle_offset,
     intersection_type_t *type, sfVector2f *intersection_point)
 {
@@ -108,10 +119,7 @@ float cast_single_ray(player_t *player, float angle_offset,
     float len = 0.0;
 
     *type = NONE;
-    if (angle_offset == 0.0) {
-        player->v.x = v.x * PLAYER_SPEED;
-        player->v.y = v.y * PLAYER_SPEED;
-    }
+    save_center_ray(angle_offset, player, &v);
     while ((is_end(&pos, type, player->save) == sfFalse)) {
         len += jump_to_next_line(&pos, &v, type);
         if (len > RENDER_DISTANCE) {
@@ -120,58 +128,8 @@ float cast_single_ray(player_t *player, float angle_offset,
             return 0;
         }
     }
+    if (angle_offset == 0.0)
+        save_center_ray_success(player, len, *type, &pos);
     *intersection_point = pos;
     return len;
-}
-
-static void set_quads(sfBool start, int i, float o[2], game_t *game)
-{
-    sfVertex line = {.color = sfWhite};
-    static float prev = 0;
-
-    if ((start && i != 0) || i == NUM_RAYS) {
-        line.position = (sfVector2f){o[0], (WIN_HEIGHT - prev) / 2};
-        line.texCoords = (sfVector2f){128, 0};
-        sfVertexArray_append(game->map->quads, line);
-        line.position = (sfVector2f){o[0], ((WIN_HEIGHT - prev) / 2) + prev};
-        line.texCoords = (sfVector2f){128, 128};
-        sfVertexArray_append(game->map->quads, line);
-    }
-    if (start) {
-        line.position = (sfVector2f){o[0], ((WIN_HEIGHT - o[1]) / 2) + o[1]};
-        line.texCoords = (sfVector2f){0, 128};
-        sfVertexArray_append(game->map->quads, line);
-        line.position = (sfVector2f){o[0], (WIN_HEIGHT - o[1]) / 2};
-        line.texCoords = (sfVector2f){0, 0};
-        sfVertexArray_append(game->map->quads, line);
-    }
-    prev = o[1];
-}
-
-static void add_ray_to_vertex_array(game_t *game, int i, sfVector2f *prev)
-{
-    intersection_type_t type = NONE;
-    float angle_offset = ((i / (float)NUM_RAYS) * game->player->fov) -
-        (game->player->fov / 2);
-    float offset = i * (float)NUM_RAYS / (float)WIN_WIDTH;
-    sfVector2f pos = {0};
-    float len = cast_single_ray(game->player, angle_offset, &type, &pos);
-    sfBool start = (int)prev->x / TILE_SIZE != (int)pos.x / TILE_SIZE
-        || (int)prev->y / TILE_SIZE != (int)pos.y / TILE_SIZE || pos.x == -1;
-
-    len = (TILE_SIZE * WIN_HEIGHT) / (len * cos(angle_offset));
-    if (game->player->is_sprinting == sfTrue)
-        len /= SPRINT_COEF;
-    set_quads(start, i, (float[2]){offset, len}, game);
-    *prev = pos;
-}
-
-void cast_all_rays(game_t *game)
-{
-    sfVector2f prev = {-1, -1};
-
-    sfVertexArray_clear(game->map->quads);
-    for (int i = 0; i <= NUM_RAYS; i++) {
-        add_ray_to_vertex_array(game, i, &prev);
-    }
 }

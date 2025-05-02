@@ -9,18 +9,8 @@
 #include "my.h"
 #include <stdlib.h>
 
-static int init_weapon(char *info, weapon_info_t *weapon)
+static void set_weapon_info(char **tab, weapon_info_t *weapon)
 {
-    char **tab = my_str_to_word_array(info, ":", "");
-
-    weapon->texture = NULL;
-    weapon->sound = NULL;
-    if (tab == NULL)
-        return ERROR;
-    if (array_len(tab) != 6) {
-        free_array(tab);
-        return ERROR;
-    }
     weapon->texture = sfTexture_createFromFile(tab[0], NULL);
     weapon->sound = sfMusic_createFromFile(tab[1]);
     weapon->size = (sfVector2f){atoi(tab[2]), atoi(tab[3])};
@@ -30,6 +20,22 @@ static int init_weapon(char *info, weapon_info_t *weapon)
     weapon->rectangle = (sfIntRect){0, 0, weapon->size.x, weapon->size.y};
     weapon->current_tile = 0;
     weapon->posf = (sfVector2f){WIN_WIDTH / 2, TOOLBAR_POS};
+    weapon->range = atof(tab[6]);
+}
+
+static int init_weapon(char *info, weapon_info_t *weapon)
+{
+    char **tab = my_str_to_word_array(info, ":", "");
+
+    weapon->texture = NULL;
+    weapon->sound = NULL;
+    if (tab == NULL)
+        return ERROR;
+    if (array_len(tab) != 7) {
+        free_array(tab);
+        return ERROR;
+    }
+    set_weapon_info(tab, weapon);
     return SUCCESS;
 }
 

@@ -10,26 +10,17 @@
 #include <string.h>
 #include "my.h"
 
-static int init_crossair(crossair_t *crossair)
+static int init_crossair(player_t *player)
 {
-    crossair->circle = sfCircleShape_create();
-    if (crossair->circle == NULL)
+    player->crossair = sfCircleShape_create();
+    if (player->crossair == NULL)
         return ERROR;
-    sfCircleShape_setFillColor(crossair->circle, sfTransparent);
-    sfCircleShape_setRadius(crossair->circle, 40.0);
-    sfCircleShape_setOutlineThickness(crossair->circle, 3.0);
-    sfCircleShape_setRadius(crossair->circle, CROSSAIR_RADIUS);
-    sfCircleShape_setPosition(crossair->circle, (sfVector2f){(WIN_WIDTH / 2) -
+    sfCircleShape_setFillColor(player->crossair, sfTransparent);
+    sfCircleShape_setRadius(player->crossair, 40.0);
+    sfCircleShape_setOutlineThickness(player->crossair, 3.0);
+    sfCircleShape_setRadius(player->crossair, CROSSAIR_RADIUS);
+    sfCircleShape_setPosition(player->crossair, (sfVector2f){(WIN_WIDTH / 2) -
         CROSSAIR_RADIUS, (WIN_HEIGHT / 2) - CROSSAIR_RADIUS});
-    crossair->state.transform = sfTransform_Identity;
-    crossair->state.blendMode = (sfBlendMode) {
-        .colorSrcFactor = sfBlendFactorOneMinusDstColor,
-        .colorDstFactor = sfBlendFactorOneMinusSrcColor,
-        .colorEquation = sfBlendEquationAdd,
-        .alphaSrcFactor = sfBlendFactorOne,
-        .alphaDstFactor = sfBlendFactorZero,
-        .alphaEquation = sfBlendEquationAdd
-    };
     return SUCCESS;
 }
 
@@ -66,12 +57,13 @@ static int init_player(player_t *player)
     player->pos.x = -1;
     player->pos.y = -1;
     player->type = NONE;
-    player->v.x = 0;
-    player->v.y = 0;
+    player->center_ray.v.x = 0;
+    player->center_ray.v.y = 0;
+    player->center_ray.distance = 0.0;
+    player->center_ray.type = NONE;
     player->fov = FOV;
     player->is_sprinting = sfFalse;
-    player->crossair = malloc(sizeof(crossair_t));
-    if (player->crossair == NULL || init_crossair(player->crossair) == ERROR)
+    if (init_crossair(player) == ERROR)
         return ERROR;
     return SUCCESS;
 }

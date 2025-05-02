@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** Wolf3D
 ** File description:
-** creat_window
+** create_window
 */
 
 #include "wolf.h"

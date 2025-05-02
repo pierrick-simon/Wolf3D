@@ -8,55 +8,76 @@
 MAIN = src/main.c
 
 SRC =	$(addprefix src/,					\
-			init/creat_window.c				\
+			\
 			events/event.c					\
-			algo/move_rect.c				\
 			sys_loop.c						\
-			algo/ray_cast.c					\
-			algo/move_player.c				\
-			events/is_input.c				\
-			init/init_menu.c 				\
-			init/init_pause.c 				\
-			init/init_setting.c 			\
-			init/init_sys.c					\
-			init/init_struct.c				\
-			init/init_from_conf.c			\
-			destroy/destroy_menu.c 			\
-			destroy/destroy_pause.c 		\
-			destroy/destroy_setting.c 		\
-			destroy/destroy_sys.c			\
-			destroy/destroy_struct.c		\
-			destroy/free_draw_textbox.c		\
-			menu/event.c					\
-			menu/draw_menu.c				\
-			pause/event.c					\
-			pause/draw_pause.c				\
-			draw_func.c                     \
-			setting/event.c					\
-			setting/draw_setting.c			\
 			load_screen.c					\
+			draw_func.c                     \
 			\
-			game/event.c					\
-			game/draw_game.c				\
-			game/destroy_game.c 			\
-			game/init_game.c 				\
-			game/init_weapon.c 				\
-			game/update.c 					\
-			\
-			save/check.c			 		\
-			save/free_map.c			 		\
-			save/get_save.c			 		\
-			save/add_node_file.c			\
-			save/free_node_file.c			\
-			save/sort_node_file.c			\
-			save/get_file.c					\
-			save/update_list.c				\
-			save/draw_save.c				\
-			\
-			normal_map/event.c				\
-			normal_map/draw_normal_map.c	\
-			normal_map/destroy_normal_map.c \
-			normal_map/init_normal_map.c 	\
+			$(addprefix algo/,				\
+				move_rect.c					\
+				cast_single_ray.c			\
+				cast_rays.c					\
+				cast_pos.c					\
+				move_player.c				\
+			)								\
+			$(addprefix init/,				\
+				create_window.c				\
+				init_menu.c 				\
+				init_pause.c 				\
+				init_setting.c 				\
+				init_sys.c					\
+				init_struct.c				\
+				init_from_conf.c			\
+			)								\
+			$(addprefix destroy/,			\
+				destroy_menu.c 				\
+				destroy_pause.c 			\
+				destroy_setting.c 			\
+				destroy_sys.c				\
+				destroy_struct.c			\
+				free_draw_textbox.c			\
+			)								\
+			$(addprefix menu/,				\
+				event.c						\
+				draw_menu.c					\
+			)								\
+			$(addprefix pause/,				\
+				event.c						\
+				draw_pause.c				\
+			)								\
+			$(addprefix setting/,			\
+				event.c						\
+				draw_setting.c				\
+			)								\
+			$(addprefix game/,				\
+				event.c						\
+				draw_game.c					\
+				destroy_game.c 				\
+				init_game.c 				\
+				init_weapon.c 				\
+				update.c 					\
+			)								\
+			$(addprefix save/,				\
+				check.c			 			\
+				free_map.c			 		\
+				get_save.c			 		\
+				add_node_file.c				\
+				free_node_file.c			\
+				sort_node_file.c			\
+				get_file.c					\
+				update_list.c				\
+				draw_save.c					\
+			)								\
+			$(addprefix normal_map/,		\
+				event.c						\
+				draw_normal_map.c			\
+				destroy_normal_map.c		\
+				init_normal_map.c			\
+			)								\
+			$(addprefix events/,			\
+				is_input.c					\
+			)								\
 		)
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)

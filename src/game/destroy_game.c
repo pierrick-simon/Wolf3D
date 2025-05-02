@@ -10,8 +10,7 @@
 
 static void destroy_player(player_t *player)
 {
-    sfCircleShape_destroy(player->crossair->circle);
-    free(player->crossair);
+    sfCircleShape_destroy(player->crossair);
     free(player);
 }
 

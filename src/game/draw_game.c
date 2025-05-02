@@ -67,12 +67,6 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
     draw_point_bar(sys, tool, TOOL_HEALTH_NB, sys->save->info->health);
 }
 
-static void draw_crossair(system_t *sys, player_t *player)
-{
-    sfRenderWindow_drawCircleShape(sys->window,
-        player->crossair->circle, &player->crossair->state);
-}
-
 void draw_game(system_t *sys, void *structure)
 {
     game_t *game = (game_t *)structure;
@@ -87,8 +81,9 @@ void draw_game(system_t *sys, void *structure)
         game->map->quads, &game->map->wall_state);
     sfRenderWindow_drawSprite(
         sys->window, game->weapon->sprite, NULL);
+    sfRenderWindow_drawCircleShape(sys->window,
+            game->player->crossair, NULL);
     draw_toolbar(sys, game->tool);
-    draw_crossair(sys, game->player);
     sfRenderWindow_display(sys->window);
     update_time_end(game->time_info);
     sys->save->info->health--;

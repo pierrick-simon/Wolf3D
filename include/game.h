@@ -86,19 +86,21 @@ typedef struct map_s {
     sfRenderStates wall_state;
 } map_t;
 
-typedef struct crossair_s {
-    sfRenderStates state;
-    sfCircleShape *circle;
-} crossair_t;
+typedef struct center_ray_s {
+    sfVector2f v;
+    sfVector2f pos;
+    float distance;
+    intersection_type_t type;
+} center_ray_t;
 
 typedef struct player_s {
+    center_ray_t center_ray;
     sfVector2f pos;
     float angle;
-    sfVector2f v;
     intersection_type_t type;
     float fov;
     sfBool is_sprinting;
-    crossair_t *crossair;
+    sfCircleShape *crossair;
     save_t *save;
 } player_t;
 
@@ -111,6 +113,7 @@ typedef struct weapon_info_s {
     int current_tile;
     int nb_tile;
     double speed;
+    float range;
 } weapon_info_t;
 
 typedef struct weapon_s {
@@ -118,7 +121,7 @@ typedef struct weapon_s {
     weapon_info_t *info;
     sfInt64 shot;
     sfMusic *empty;
-    int weapon;
+    weapon_id_t weapon;
 } weapon_t;
 
 typedef struct time_info_s {
@@ -156,5 +159,7 @@ void game_events(system_t *sys, game_t *game);
 void draw_game(system_t *sys, void *structure);
 void destroy_game(void *structure);
 void *init_game(void);
+
+sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
 
 #endif /* !GAME_H_ */

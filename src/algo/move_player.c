@@ -27,12 +27,13 @@ static void sprint(player_t *player)
         player->is_sprinting = sfTrue;
     }
     if (is_wall(player->pos.y,
-        player->pos.x + (player->v.x * coef * DISTANCE_COLISION),
+        player->pos.x + (player->center_ray.v.x * coef * DISTANCE_COLISION),
         player->save) == sfFalse)
-        player->pos.x += player->v.x * coef * FORWARD_COEF;
-    if (is_wall(player->pos.y + (player->v.y * coef * DISTANCE_COLISION),
+        player->pos.x += player->center_ray.v.x * coef * FORWARD_COEF;
+    if (is_wall(player->pos.y +
+        (player->center_ray.v.y * coef * DISTANCE_COLISION),
         player->pos.x, player->save) == sfFalse)
-        player->pos.y += player->v.y * coef * FORWARD_COEF;
+        player->pos.y += player->center_ray.v.y * coef * FORWARD_COEF;
 }
 
 static void move_verticaly(player_t *player)
@@ -46,12 +47,13 @@ static void move_verticaly(player_t *player)
         || sfKeyboard_isKeyPressed(sfKeyS)
         || sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100) {
         if (is_wall(player->pos.y,
-            player->pos.x - (player->v.x * DISTANCE_COLISION),
+            player->pos.x - (player->center_ray.v.x * DISTANCE_COLISION),
             player->save) == sfFalse)
-            player->pos.x -= player->v.x;
-        if (is_wall(player->pos.y - (player->v.y * DISTANCE_COLISION),
+            player->pos.x -= player->center_ray.v.x;
+        if (is_wall(player->pos.y -
+            (player->center_ray.v.y * DISTANCE_COLISION),
             player->pos.x, player->save) == sfFalse)
-            player->pos.y -= player->v.y;
+            player->pos.y -= player->center_ray.v.y;
     }
 }
 
@@ -61,12 +63,13 @@ static void move_left(player_t *player, int *head)
         || sfJoystick_getAxisPosition(0, sfJoystickPovX) == -100) {
         *head -= HEAD_SPRITE_X;
         if (is_wall(player->pos.y,
-            player->pos.x + (player->v.y * DISTANCE_COLISION),
+            player->pos.x + (player->center_ray.v.y * DISTANCE_COLISION),
             player->save) == sfFalse)
-            player->pos.x += player->v.y;
-        if (is_wall(player->pos.y - (player->v.x * DISTANCE_COLISION),
+            player->pos.x += player->center_ray.v.y;
+        if (is_wall(player->pos.y -
+            (player->center_ray.v.x * DISTANCE_COLISION),
             player->pos.x, player->save) == sfFalse)
-            player->pos.y -= player->v.x;
+            player->pos.y -= player->center_ray.v.x;
     }
 }
 
@@ -76,12 +79,13 @@ static void move_right(player_t *player, int *head)
         || sfJoystick_getAxisPosition(0, sfJoystickPovX) == 100) {
         *head += HEAD_SPRITE_X;
         if (is_wall(player->pos.y,
-            player->pos.x - (player->v.y * DISTANCE_COLISION),
+            player->pos.x - (player->center_ray.v.y * DISTANCE_COLISION),
             player->save) == sfFalse)
-            player->pos.x -= player->v.y;
-        if (is_wall(player->pos.y + (player->v.x * DISTANCE_COLISION),
+            player->pos.x -= player->center_ray.v.y;
+        if (is_wall(player->pos.y +
+            (player->center_ray.v.x * DISTANCE_COLISION),
             player->pos.x, player->save) == sfFalse)
-            player->pos.y += player->v.x;
+            player->pos.y += player->center_ray.v.x;
     }
 }
 
@@ -110,8 +114,8 @@ void move_player(player_t *player, double delta, int *head)
     *head = HEAD_SPRITE_X;
     player->fov = FOV;
     player->is_sprinting = sfFalse;
-    player->v.x *= delta;
-    player->v.y *= delta;
+    player->center_ray.v.x *= delta;
+    player->center_ray.v.y *= delta;
     move_verticaly(player);
     move_left(player, head);
     move_right(player, head);
