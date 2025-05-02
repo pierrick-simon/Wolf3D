@@ -102,6 +102,16 @@ static void switch_scene(sfEvent event, state_info_t *state)
     }
 }
 
+static void show_fps(sfEvent event, toolbar_t *tool)
+{
+    if (is_input(event, sfKeyF4, sfTrue, 0)) {
+        if (tool->fps == sfTrue)
+            tool->fps = sfFalse;
+        else
+            tool->fps = sfTrue;
+    }
+}
+
 void game_events(system_t *sys, game_t *game)
 {
     sfEvent event = {0};
@@ -110,6 +120,7 @@ void game_events(system_t *sys, game_t *game)
         sys_events(event, sys);
         change_weapons(event, game, game->weapon);
         switch_scene(event, sys->state);
+        show_fps(event, game->tool);
     }
     click(sys, game->weapon, game->time_info->time, game);
     move_player(game->player, game->time_info->delta,

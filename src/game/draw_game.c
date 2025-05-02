@@ -60,8 +60,11 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
     sfRenderWindow_drawRectangleShape(sys->window,
         tool->rectangle, NULL);
     sfRectangleShape_setTexture(tool->rectangle, NULL, sfTrue);
-    for (int i = 0; i < NB_TOOLBAR; i++)
+    for (int i = 0; i < NB_TOOLBAR; i++) {
+        if (tool->fps == sfFalse && i == TOOL_FPS)
+            continue;
         draw_string(sys, sys->textbox, &tool->draw[i]);
+    }
     sfRenderWindow_drawSprite(sys->window, tool->head->sprite, NULL);
     draw_point_bar(sys, tool, TOOL_ARMOR_NB, sys->save->info->armor);
     draw_point_bar(sys, tool, TOOL_HEALTH_NB, sys->save->info->health);

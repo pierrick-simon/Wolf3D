@@ -69,6 +69,7 @@ typedef enum {
     TOOL_TIME_STR,
     TOOL_SCORE_NB,
     TOOL_SCORE_STR,
+    TOOL_FPS,
     NB_TOOLBAR,
 } str_toolbar_t;
 
@@ -137,6 +138,7 @@ typedef struct toolbar_s {
     draw_textbox_t *draw;
     sfRectangleShape *rectangle;
     sfTexture *background;
+    sfBool fps;
 } toolbar_t;
 
 typedef struct game_s {
