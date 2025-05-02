@@ -60,6 +60,8 @@ static void destroy_tool(toolbar_t *tool)
     }
     if (tool->rectangle != NULL)
         sfRectangleShape_destroy(tool->rectangle);
+    if (tool->background != NULL)
+        sfTexture_destroy(tool->background);
     free(tool);
 }
 

@@ -42,11 +42,26 @@ static void shot_gun_anim(weapon_t *weapon, sfInt64 time)
     update_guns(weapon);
 }
 
-static void update_time(time_info_t *time_info)
+static void update_time(time_info_t *time_info, game_t *game)
 {
-    time_info->prev_time = time_info->time;
-    time_info->time = sfClock_getElapsedTime(time_info->clock).microseconds;
-    time_info->delta = (time_info->time - time_info->prev_time) /
+    int tmp = 0;
+    int min = 0;
+    int sec = 0;
+
+    time_info->start_time =
+        sfClock_getElapsedTime(time_info->clock).microseconds;
+    tmp = time_info->time / SEC_IN_MICRO;
+    min = tmp / MIN_IN_SEC;
+    sec = tmp % MIN_IN_SEC;
+    sprintf(game->tool->draw[TOOL_TIME_NB].str, "%02d:%02d", min, sec);
+}
+
+void update_time_end(time_info_t *time_info)
+{
+    time_info->end_time =
+        sfClock_getElapsedTime(time_info->clock).microseconds;
+    time_info->time += time_info->end_time - time_info->start_time;
+    time_info->delta = (time_info->end_time - time_info->start_time) /
         (float)SEC_IN_MICRO;
 }
 
@@ -91,7 +106,7 @@ static void update_toolbar(system_t *sys, toolbar_t *tool)
 void update_all(system_t *sys, game_t *game)
 {
     update_save(sys, game->player);
-    update_time(game->time_info);
+    update_time(game->time_info, game);
     update_toolbar(sys, game->tool);
     shot_gun_anim(game->weapon, game->time_info->time);
     cast_all_rays(game);

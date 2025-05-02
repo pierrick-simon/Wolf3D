@@ -82,7 +82,8 @@ static int init_time_info(time_info_t *time_info)
     if (time_info->clock == NULL)
         return ERROR;
     time_info->time = 0;
-    time_info->prev_time = 0;
+    time_info->start_time = 0;
+    time_info->end_time = 0;
     time_info->delta = 0.0;
     return SUCCESS;
 }
@@ -115,6 +116,7 @@ static int init_toolbar(toolbar_t *tool)
         return ERROR;
     tool->rectangle = sfRectangleShape_create();
     tool->draw = init_from_conf("config_file/toolbar.conf");
+    tool->background = sfTexture_createFromFile("asset/toolbar.png", NULL);
     if (tool->draw == NULL || tool->rectangle == NULL)
         return ERROR;
     sfRectangleShape_setOutlineThickness(tool->rectangle, 2);

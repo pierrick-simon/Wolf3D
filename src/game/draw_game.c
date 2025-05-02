@@ -53,10 +53,13 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
     sfRectangleShape_setPosition(tool->rectangle, pos);
     sfRectangleShape_setSize(tool->rectangle,
         (sfVector2f){WIN_WIDTH, TOOLBAR_HEIGHT});
-    sfRectangleShape_setFillColor(tool->rectangle, TOOLBAR_COLOR);
+    sfRectangleShape_setFillColor(tool->rectangle,
+        sfColor_fromRGB(100, 100, 100));
+    sfRectangleShape_setTexture(tool->rectangle, tool->background, sfTrue);
     sfRectangleShape_setOutlineColor(tool->rectangle, sfTransparent);
     sfRenderWindow_drawRectangleShape(sys->window,
         tool->rectangle, NULL);
+    sfRectangleShape_setTexture(tool->rectangle, NULL, sfTrue);
     for (int i = 0; i < NB_TOOLBAR; i++)
         draw_string(sys, sys->textbox, &tool->draw[i]);
     sfRenderWindow_drawSprite(sys->window, tool->head->sprite, NULL);
@@ -87,7 +90,8 @@ void draw_game(system_t *sys, void *structure)
     draw_toolbar(sys, game->tool);
     draw_crossair(sys, game->player);
     sfRenderWindow_display(sys->window);
+    update_time_end(game->time_info);
     sys->save->info->health--;
     if (sys->save->info->health == 0)
-        sys->save->info->health = 100;
+        sys->save->info->health = MAX_HEALTH;
 }

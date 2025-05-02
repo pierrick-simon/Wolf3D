@@ -32,6 +32,7 @@
     #define GUY_SPRITE_Y 408
 
     #define SEC_IN_MICRO 1000000
+    #define MIN_IN_SEC 60
 
     #define TILE_SIZE 64
 

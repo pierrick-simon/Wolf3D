@@ -65,6 +65,10 @@ typedef enum {
     TOOL_ARM,
     TOOL_ARMOR_NB,
     TOOL_ARMOR_STR,
+    TOOL_TIME_NB,
+    TOOL_TIME_STR,
+    TOOL_SCORE_NB,
+    TOOL_SCORE_STR,
     NB_TOOLBAR,
 } str_toolbar_t;
 
@@ -119,7 +123,8 @@ typedef struct weapon_s {
 
 typedef struct time_info_s {
     sfClock *clock;
-    sfInt64 prev_time;
+    sfInt64 start_time;
+    sfInt64 end_time;
     sfInt64 time;
     double delta;
 } time_info_t;
@@ -128,6 +133,7 @@ typedef struct toolbar_s {
     sprite_t *head;
     draw_textbox_t *draw;
     sfRectangleShape *rectangle;
+    sfTexture *background;
 } toolbar_t;
 
 typedef struct game_s {
@@ -144,6 +150,7 @@ float cast_single_ray(player_t *player, float angle_offset,
 void move_player(player_t *player, double delta, int *head);
 int init_weapons(weapon_t *weapon);
 void update_all(system_t *sys, game_t *game);
+void update_time_end(time_info_t *time_info);
 
 void game_events(system_t *sys, game_t *game);
 void draw_game(system_t *sys, void *structure);
