@@ -78,6 +78,12 @@ SRC =	$(addprefix src/,					\
 			$(addprefix events/,			\
 				is_input.c					\
 			)								\
+			$(addprefix map/,		\
+				event.c						\
+				draw_map.c			\
+				destroy_map.c		\
+				init_map.c			\
+			)								\
 		)
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)

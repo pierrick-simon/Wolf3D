@@ -7,27 +7,30 @@
 
 #include "save.h"
 #include "linked_list.h"
+#include <string.h>
 
-static int load_map(maps_t *maps, system_t *sys)
+static int get_map_name(maps_t *maps, system_t *sys)
 {
-    int return_value = SUCCESS;
     node_t *head = maps->info->current_file;
 
-    if (maps->str == NOR_MAP_SAVE1)
-        return_value = get_save(((file_t *)head->data)->path, sys->save);
-    if (maps->str == NOR_MAP_SAVE2)
-        return_value = get_save(((file_t *)head->next->data)->path, sys->save);
-    if (maps->str == NOR_MAP_SAVE3)
-        return_value = get_save(
-            ((file_t *)head->next->next->data)->path, sys->save);
-    return return_value;
+    if (maps->str < MAPS_SAVE1 || maps->str > MAPS_SAVE3)
+        return SUCCESS;
+    if (maps->str == MAPS_SAVE1)
+        sys->save->name = strdup(((file_t *)head->data)->name);
+    if (maps->str == MAPS_SAVE2)
+        sys->save->name = strdup(((file_t *)head->next->data)->name);
+    if (maps->str == MAPS_SAVE3)
+        sys->save->name = strdup(((file_t *)head->next->next->data)->name);
+    if (sys->save->name == NULL)
+        return ERROR;
+    return SUCCESS;
 }
 
 static void switch_scene(sfEvent event, maps_t *maps,
     system_t *sys, state_info_t *state)
 {
     if (is_input(event, sfKeyEnter, sfTrue, 0)) {
-        if (load_map(maps, sys) == ERROR)
+        if (get_map_name(maps, sys) == ERROR)
             return;
         state->old_scene = state->scene;
         state->scene = maps->draw[maps->str].scene;
@@ -40,15 +43,15 @@ static void switch_scene(sfEvent event, maps_t *maps,
 static void check_save_minus(maps_t *maps)
 {
     node_t *head = maps->info->current_file;
-    int tmp = NOR_MAP_SUB;
+    int tmp = MAPS_SUB;
 
-    if (tmp == NOR_MAP_SUB && head != NULL)
+    if (tmp == MAPS_SUB && head != NULL)
         tmp++;
-    if (tmp == NOR_MAP_SAVE1 && head->next != NULL)
+    if (tmp == MAPS_SAVE1 && head->next != NULL)
         tmp++;
-    if (tmp == NOR_MAP_SAVE2 && head->next->next != NULL)
+    if (tmp == MAPS_SAVE2 && head->next->next != NULL)
         tmp++;
-    if (maps->str > tmp && maps->str < NOR_MAP_BACK)
+    if (maps->str > tmp && maps->str < MAPS_BACK)
         maps->str = tmp;
 }
 
@@ -56,12 +59,12 @@ static void check_save_plus(maps_t *maps)
 {
     node_t *head = maps->info->current_file;
 
-    if (maps->str == NOR_MAP_SAVE1 && head == NULL)
-        maps->str = NOR_MAP_BACK;
-    if (maps->str == NOR_MAP_SAVE2 && head->next == NULL)
-        maps->str = NOR_MAP_BACK;
-    if (maps->str == NOR_MAP_SAVE3 && head->next->next == NULL)
-        maps->str = NOR_MAP_BACK;
+    if (maps->str == MAPS_SAVE1 && head == NULL)
+        maps->str = MAPS_BACK;
+    if (maps->str == MAPS_SAVE2 && head->next == NULL)
+        maps->str = MAPS_BACK;
+    if (maps->str == MAPS_SAVE3 && head->next->next == NULL)
+        maps->str = MAPS_BACK;
 }
 
 static void switch_str(sfEvent event, maps_t *maps)
@@ -77,10 +80,10 @@ static void switch_str(sfEvent event, maps_t *maps)
         maps->str++;
         check_save_plus(maps);
     }
-    if (maps->str == NB_NOR_MAP)
-        maps->str = NOR_MAP_SUB;
-    if (maps->str == NOR_MAP_TITLE)
-        maps->str = NOR_MAP_BACK;
+    if (maps->str == NB_MAPS)
+        maps->str = MAPS_SUB;
+    if (maps->str == MAPS_TITLE)
+        maps->str = MAPS_BACK;
     maps->draw[maps->str].color = sfRed;
 }
 
@@ -93,7 +96,7 @@ static sfBool move_right(info_save_t *info)
 
 static void change_map(sfEvent event, maps_t *maps)
 {
-    if (maps->str == NOR_MAP_SUB) {
+    if (maps->str == MAPS_SUB) {
         if (is_input(event, sfKeyRight, sfFalse, 0)
             && move_right(maps->info) == sfTrue) {
             maps->info->file += NB_SHOW_SAVE;

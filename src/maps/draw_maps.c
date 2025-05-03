@@ -16,10 +16,10 @@ void draw_maps(system_t *sys, void *structure)
     update_list(maps->info, "maps");
     sfRenderWindow_clear(sys->window, sfWhite);
     draw_background(sys, sys->background);
-    draw_string(sys, sys->textbox, &maps->draw[NOR_MAP_TITLE]);
-    draw_string(sys, sys->textbox, &maps->draw[NOR_MAP_SUB]);
-    draw_string(sys, sys->textbox, &maps->draw[NOR_MAP_BACK]);
-    draw_save(sys, maps->info, maps->draw, NOR_MAP_SAVE1);
+    draw_string(sys, sys->textbox, &maps->draw[MAPS_TITLE]);
+    draw_string(sys, sys->textbox, &maps->draw[MAPS_SUB]);
+    draw_string(sys, sys->textbox, &maps->draw[MAPS_BACK]);
+    draw_save(sys, maps->info, maps->draw, MAPS_SAVE1);
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);
     sfRenderWindow_display(sys->window);

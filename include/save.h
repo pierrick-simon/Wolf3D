@@ -14,6 +14,8 @@
     #define MAX_STRLEN 9
     #define MAX_NAME 25
 
+    #define LEN_SAVE 13
+
     #define NB_SHOW_SAVE 3
     #define POS_OFFSET 20
     #define POS_COEFF 2.5
@@ -52,7 +54,7 @@ typedef enum {
     AMMO,
     SCORE,
     TIME,
-    MAP,
+    COOR,
 } str_t;
 
 typedef struct file_s {
@@ -61,14 +63,23 @@ typedef struct file_s {
 } file_t;
 
 typedef enum str_maps_e {
-    NOR_MAP_TITLE,
-    NOR_MAP_SUB,
-    NOR_MAP_SAVE1,
-    NOR_MAP_SAVE2,
-    NOR_MAP_SAVE3,
-    NOR_MAP_BACK,
-    NB_NOR_MAP,
+    MAPS_TITLE,
+    MAPS_SUB,
+    MAPS_SAVE1,
+    MAPS_SAVE2,
+    MAPS_SAVE3,
+    MAPS_BACK,
+    NB_MAPS,
 } str_maps_t;
+
+typedef enum str_map_e {
+    MAP_TITLE,
+    MAP_PLAY,
+    MAP_CONTINUE,
+    MAP_SCORE,
+    MAP_BACK,
+    NB_MAP,
+} str_map_t;
 
 typedef struct info_save_s {
     int file;
@@ -83,6 +94,13 @@ typedef struct maps_s {
     draw_textbox_t *draw;
     info_save_t *info;
 } maps_t;
+
+typedef struct select_map_s {
+    int str;
+    draw_textbox_t *draw;
+    sfBool save;
+    sfBool check;
+} select_map_t;
 
 typedef struct check_s {
     int (*check)(char *str);
@@ -106,7 +124,7 @@ static const check_t CHECK[] __maybe_unused = {
     [AMMO] = {&check_info},
     [SCORE] = {&check_info},
     [TIME] = {&check_info},
-    [MAP] = {NULL}
+    [COOR] = {NULL}
 };
 
 void destroy_save(save_t *save);
@@ -124,5 +142,10 @@ void *init_maps(void);
 void draw_maps(system_t *sys, void *structure);
 void maps_events(system_t *sys, maps_t *maps);
 void destroy_maps(void *structure);
+
+void *init_map(void);
+void draw_map(system_t *sys, void *structure);
+void map_events(system_t *sys, select_map_t *map);
+void destroy_map(void *structure);
 
 #endif

@@ -8,7 +8,7 @@
 #include "save.h"
 #include "game.h"
 
-static void draw_map(system_t *sys, game_t *game)
+static void draw_coor(system_t *sys, game_t *game)
 {
     sfVector2f pos = {0, 0};
 
@@ -79,7 +79,7 @@ void draw_game(system_t *sys, void *structure)
     sfRenderWindow_clear(sys->window, sfWhite);
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);
-    draw_map(sys, game);
+    draw_coor(sys, game);
     sfRenderWindow_drawVertexArray(sys->window,
         game->map->quads, &game->map->wall_state);
     sfRenderWindow_drawSprite(

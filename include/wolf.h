@@ -51,6 +51,7 @@
     #define SETTING_OFFSET 30
 
     #define ORANGE sfColor_fromRGB(255, 128, 0)
+    #define GREY sfColor_fromRGB(93, 93, 93)
 
     #define MAX_HEALTH 100
 
@@ -89,7 +90,8 @@ typedef enum scene_s {
     MENU,
     SETTING,
     PAUSE,
-    NOR_MAP,
+    MAPS,
+    MAP,
     NB_SCENE,
     QUIT,
 } scene_t;
@@ -99,7 +101,8 @@ static const char *str_scene[] __maybe_unused = {
     [MENU] = "menu",
     [SETTING] = "setting",
     [PAUSE] = "pause",
-    [NOR_MAP] = "maps",
+    [MAPS] = "maps",
+    [MAP] = "map",
     [NB_SCENE] = "",
     [QUIT] = "quit",
 };
