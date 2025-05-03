@@ -99,7 +99,7 @@ static const char *str_scene[] __maybe_unused = {
     [MENU] = "menu",
     [SETTING] = "setting",
     [PAUSE] = "pause",
-    [NOR_MAP] = "normal_map",
+    [NOR_MAP] = "maps",
     [NB_SCENE] = "",
     [QUIT] = "quit",
 };

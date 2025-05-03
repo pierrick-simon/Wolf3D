@@ -10,9 +10,9 @@
 
     #include "wolf.h"
 
-void *init_normal_map(void);
-void draw_normal_map(system_t *sys, void *structure);
-void destroy_normal_map(void *structure);
+void *init_maps(void);
+void draw_maps(system_t *sys, void *structure);
+void destroy_maps(void *structure);
 
 void draw_game(system_t *sys, void *structure);
 void destroy_game(void *structure);
@@ -30,7 +30,7 @@ static const scene_func_t SCENE[] = {
     {MENU, &init_menu, &destroy_menu, &draw_menu},
     {SETTING, &init_setting, &destroy_setting, &draw_setting},
     {PAUSE, &init_pause, &destroy_pause, &draw_pause},
-    {NOR_MAP, &init_normal_map, &destroy_normal_map, &draw_normal_map},
+    {NOR_MAP, &init_maps, &destroy_maps, &draw_maps},
 };
 
 #endif

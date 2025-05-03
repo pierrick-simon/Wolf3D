@@ -60,7 +60,7 @@ typedef struct file_s {
     char *name;
 } file_t;
 
-typedef enum str_normal_map_e {
+typedef enum str_maps_e {
     NOR_MAP_TITLE,
     NOR_MAP_SUB,
     NOR_MAP_SAVE1,
@@ -68,7 +68,7 @@ typedef enum str_normal_map_e {
     NOR_MAP_SAVE3,
     NOR_MAP_BACK,
     NB_NOR_MAP,
-} str_normal_map_t;
+} str_maps_t;
 
 typedef struct info_save_s {
     int file;
@@ -78,11 +78,11 @@ typedef struct info_save_s {
     sfBool update;
 } info_save_t;
 
-typedef struct normal_map_s {
+typedef struct maps_s {
     int str;
     draw_textbox_t *draw;
     info_save_t *info;
-} normal_map_t;
+} maps_t;
 
 typedef struct check_s {
     int (*check)(char *str);
@@ -120,9 +120,9 @@ void draw_save(
     system_t *sys, info_save_t *info, draw_textbox_t *draw, int start);
 bool sort_node_file(void *data_first, void *data_second);
 
-void *init_normal_map(void);
-void draw_normal_map(system_t *sys, void *structure);
-void normal_map_events(system_t *sys, normal_map_t *normal_map);
-void destroy_normal_map(void *structure);
+void *init_maps(void);
+void draw_maps(system_t *sys, void *structure);
+void maps_events(system_t *sys, maps_t *maps);
+void destroy_maps(void *structure);
 
 #endif

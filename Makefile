@@ -69,11 +69,11 @@ SRC =	$(addprefix src/,					\
 				update_list.c				\
 				draw_save.c					\
 			)								\
-			$(addprefix normal_map/,		\
+			$(addprefix maps/,		\
 				event.c						\
-				draw_normal_map.c			\
-				destroy_normal_map.c		\
-				init_normal_map.c			\
+				draw_maps.c			\
+				destroy_maps.c		\
+				init_maps.c			\
 			)								\
 			$(addprefix events/,			\
 				is_input.c					\
