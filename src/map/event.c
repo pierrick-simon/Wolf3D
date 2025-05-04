@@ -13,6 +13,7 @@
 static int load_map(select_map_t *map, system_t *sys, char *name)
 {
     char *tmp = NULL;
+    int exit = SUCCESS;
 
     if (map->str != MAP_PLAY && map->str != MAP_CONTINUE)
         return SUCCESS;
@@ -23,7 +24,17 @@ static int load_map(select_map_t *map, system_t *sys, char *name)
         sprintf(tmp, "maps/%s.legend", name);
     if (map->str == MAP_CONTINUE)
         sprintf(tmp, "save/%s.legend", name);
-    return get_save(tmp, sys->save);
+    exit = get_save(tmp, sys->save);
+    free(tmp);
+    return exit;
+}
+
+static void reset_str(select_map_t *map)
+{
+    map->draw[map->str].color = sfWhite;
+    map->str = MAP_PLAY;
+    map->save = sfFalse;
+    map->check = sfFalse;
 }
 
 static void switch_scene(
@@ -40,12 +51,13 @@ static void switch_scene(
             sys->save->name = tmp;
             return;
         }
+        if (map->str == MAP_SCORE)
+            sys->save->name = tmp;
+        if (map->str != MAP_SCORE)
+            free(tmp);
         state->old_scene = state->scene;
         state->scene = map->draw[map->str].scene;
-        map->str = MENU_PLAY;
-        map->save = sfFalse;
-        map->check = sfFalse;
-        free(tmp);
+        reset_str(map);
     }
 }
 

@@ -12,7 +12,7 @@
     #include <stdbool.h>
 
     #define MAX_STRLEN 9
-    #define MAX_NAME 25
+    #define MAX_NAME 15
 
     #define LEN_SAVE 13
 
@@ -52,7 +52,7 @@ typedef enum {
     HEALTH,
     ARMOR,
     AMMO,
-    SCORE,
+    CURRENT_SCORE,
     TIME,
     COOR,
 } str_t;
@@ -122,7 +122,7 @@ static const check_t CHECK[] __maybe_unused = {
     [HEALTH] = {&check_info},
     [ARMOR] = {&check_info},
     [AMMO] = {&check_info},
-    [SCORE] = {&check_info},
+    [CURRENT_SCORE] = {&check_info},
     [TIME] = {&check_info},
     [COOR] = {NULL}
 };
@@ -137,6 +137,7 @@ void update_list(info_save_t *info, char *dir);
 void draw_save(
     system_t *sys, info_save_t *info, draw_textbox_t *draw, int start);
 bool sort_node_file(void *data_first, void *data_second);
+void save_score(save_t *save, char *name);
 
 void *init_maps(void);
 void draw_maps(system_t *sys, void *structure);

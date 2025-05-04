@@ -60,6 +60,8 @@ void sort_linked_list(
     node_t *current = list->head;
     node_t *node = NULL;
 
+    if (current == NULL)
+        return;
     while (current->next != NULL) {
         node = find_switch_node(current, sort_data);
         if (node != current) {

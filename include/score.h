@@ -8,10 +8,51 @@
 #ifndef SCORE_H_
     #define SCORE_H_
 
-typedef struct score_s {
+    #include "wolf.h"
+    #include <stdbool.h>
+
+    #define SCORE_LEN 12
+    #define TIME_LEN 7
+    #define NB_SHOW_SCORE 10
+    #define SCORE_OFFSET 55
+
+typedef struct linked_list_s linked_list_t;
+typedef struct node_s node_t;
+
+typedef enum score_str_e {
+    SCORE_TITLE,
+    SCORE_SUB,
+    SCORE_RANG,
+    SCORE_NAME,
+    SCORE_TIME,
+    SCORE_SCORE,
+    SCORE_BACK,
+    NB_SCORE,
+} score_str_t;
+
+typedef struct score_info_s {
     char *name;
-    int time;
-    int score;
+    char *time;
+    char *score;
+} score_info_t;
+
+typedef struct score_s {
+    int nb_page;
+    int current;
+    linked_list_t *list;
+    node_t *current_score;
+    sfBool update;
+    int str;
+    draw_textbox_t *draw;
 } score_t;
+
+void free_info_score(void *data);
+linked_list_t *get_score(char *name);
+bool sort_score(void *data1, void *data2);
+
+void *init_score(void);
+void draw_score(system_t *sys, void *structure);
+void score_events(system_t *sys, score_t *score);
+void destroy_score(void *structure);
 
 #endif /* !SCORE_H_ */

@@ -68,21 +68,31 @@ SRC =	$(addprefix src/,					\
 				get_file.c					\
 				update_list.c				\
 				draw_save.c					\
+				save_score.c				\
 			)								\
-			$(addprefix maps/,		\
+			$(addprefix maps/,				\
 				event.c						\
-				draw_maps.c			\
-				destroy_maps.c		\
-				init_maps.c			\
+				draw_maps.c					\
+				destroy_maps.c				\
+				init_maps.c					\
 			)								\
 			$(addprefix events/,			\
 				is_input.c					\
 			)								\
-			$(addprefix map/,		\
+			$(addprefix map/,				\
 				event.c						\
-				draw_map.c			\
-				destroy_map.c		\
-				init_map.c			\
+				draw_map.c					\
+				destroy_map.c				\
+				init_map.c					\
+			)								\
+			$(addprefix score/,				\
+				event.c						\
+				draw_score.c				\
+				destroy_score.c				\
+				init_score.c				\
+				get_score.c 				\
+				free_info_score.c           \
+				sort_score.c				\
 			)								\
 		)
 

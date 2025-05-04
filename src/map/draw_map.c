@@ -6,6 +6,7 @@
 */
 
 #include "save.h"
+#include "my.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <stddef.h>
@@ -40,13 +41,14 @@ void draw_map(system_t *sys, void *structure)
     select_map_t *map = (select_map_t *)structure;
 
     check_save(sys->save->name, map);
-    map_events(sys, map);
     sfRenderWindow_clear(sys->window, sfWhite);
     draw_background(sys, sys->background);
-    sprintf(map->draw[MAP_TITLE].str, "%s", sys->save->name);
+    sprintf(map->draw[MAP_TITLE].str, "%*s",
+        get_offset(sys->save->name, MAX_NAME), sys->save->name);
     for (int i = 0; i < NB_MAP; i++)
         draw_string(sys, sys->textbox, &map->draw[i]);
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);
     sfRenderWindow_display(sys->window);
+    map_events(sys, map);
 }

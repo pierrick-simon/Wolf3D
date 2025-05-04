@@ -15,5 +15,4 @@ void free_node_file(void *data)
 
     free(file->name);
     free(file->path);
-    free(file);
 }
