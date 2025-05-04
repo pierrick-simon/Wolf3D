@@ -20,6 +20,8 @@
     #define POS_OFFSET 20
     #define POS_COEFF 2.5
 
+    #define SAVE_TIME 0.3
+
 typedef struct linked_list_s linked_list_t;
 typedef struct node_s node_t;
 
@@ -138,6 +140,7 @@ void draw_save(
     system_t *sys, info_save_t *info, draw_textbox_t *draw, int start);
 bool sort_node_file(void *data_first, void *data_second);
 void save_score(save_t *save, char *name);
+void save_map(save_t *save);
 
 void *init_maps(void);
 void draw_maps(system_t *sys, void *structure);

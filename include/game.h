@@ -70,6 +70,7 @@ typedef enum {
     TOOL_SCORE_NB,
     TOOL_SCORE_STR,
     TOOL_FPS,
+    TOOL_SAVE,
     NB_TOOLBAR,
 } str_toolbar_t;
 
@@ -139,6 +140,8 @@ typedef struct toolbar_s {
     sfRectangleShape *rectangle;
     sfTexture *background;
     sfBool fps;
+    sfInt64 save;
+    sfBool saving;
 } toolbar_t;
 
 typedef struct game_s {
@@ -152,7 +155,7 @@ typedef struct game_s {
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player, float angle_offset,
     intersection_type_t *type, sfVector2f *intersection_point);
-void move_player(player_t *player, double delta, int *head);
+void move_player(player_t *player, save_t *save, double delta, int *head);
 int init_weapons(weapon_t *weapon);
 void update_all(system_t *sys, game_t *game);
 void update_time_end(time_info_t *time_info);

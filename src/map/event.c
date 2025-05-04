@@ -47,6 +47,7 @@ static void switch_scene(
         if (tmp == NULL)
             return;
         free(sys->save->name);
+        sys->save->name = NULL;
         if (load_map(map, sys, tmp) == ERROR) {
             sys->save->name = tmp;
             return;

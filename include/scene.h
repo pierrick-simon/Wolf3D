@@ -26,6 +26,10 @@ void draw_game(system_t *sys, void *structure);
 void destroy_game(void *structure);
 void *init_game(void);
 
+void *init_leave(void);
+void draw_leave(system_t *sys, void *structure);
+void destroy_leave(void *structure);
+
 typedef struct scene_func_s {
     int id;
     void *(*init)(void);
@@ -41,6 +45,7 @@ static const scene_func_t SCENE[] = {
     {MAPS, &init_maps, &destroy_maps, &draw_maps},
     {MAP, &init_map, &destroy_map, &draw_map},
     {SCORE, &init_score, &destroy_score, &draw_score},
+    {LEAVE, &init_leave, &destroy_leave, &draw_leave},
 };
 
 #endif

@@ -22,7 +22,7 @@ void save_score(save_t *save, char *name)
     if (tmp == NULL)
         return;
     sprintf(tmp, "score/%s.conf", save->name);
-    fd = open(tmp, O_CREAT | O_WRONLY | O_APPEND);
+    fd = open(tmp, O_CREAT | O_WRONLY | O_APPEND, 0744);
     free(tmp);
     if (fd == -1)
         return;

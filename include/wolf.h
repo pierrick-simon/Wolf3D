@@ -93,6 +93,7 @@ typedef enum scene_s {
     MAPS,
     MAP,
     SCORE,
+    LEAVE,
     NB_SCENE,
     QUIT,
 } scene_t;
@@ -105,6 +106,7 @@ static const char *str_scene[] __maybe_unused = {
     [MAPS] = "maps",
     [MAP] = "map",
     [SCORE] = "score",
+    [LEAVE] = "leave",
     [NB_SCENE] = "",
     [QUIT] = "quit",
 };

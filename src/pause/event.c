@@ -12,10 +12,14 @@ static void switch_scene(sfEvent event, state_info_t *state, pause_t *pause)
     if (is_input(event, sfKeyEnter, sfTrue, 0)) {
         state->old_scene = state->scene;
         state->scene = pause->draw[pause->str].scene;
+        pause->draw[pause->str].color = sfWhite;
+        pause->str = PAUSE_RESUME;
     }
     if (is_input(event, sfKeyTab, sfTrue, 3)) {
         state->old_scene = state->scene;
         state->scene = GAME;
+        pause->draw[pause->str].color = sfWhite;
+        pause->str = PAUSE_RESUME;
     }
 }
 

@@ -69,6 +69,7 @@ SRC =	$(addprefix src/,					\
 				update_list.c				\
 				draw_save.c					\
 				save_score.c				\
+				save_map.c 					\
 			)								\
 			$(addprefix maps/,				\
 				event.c						\
@@ -93,6 +94,12 @@ SRC =	$(addprefix src/,					\
 				get_score.c 				\
 				free_info_score.c           \
 				sort_score.c				\
+			)								\
+			$(addprefix leave/,				\
+				event.c						\
+				draw_leave.c				\
+				destroy_leave.c				\
+				init_leave.c				\
 			)								\
 		)
 

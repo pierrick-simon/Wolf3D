@@ -37,6 +37,8 @@ static void switch_scene(sfEvent event, maps_t *maps,
         free_linked_list(maps->info->list, &free_node_file);
         maps->info->list = NULL;
         maps->info->update = sfFalse;
+        maps->draw[maps->str].color = sfWhite;
+        maps->str = MAPS_SUB;
     }
 }
 

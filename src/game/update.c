@@ -42,7 +42,8 @@ static void shot_gun_anim(weapon_t *weapon, sfInt64 time)
     update_guns(weapon);
 }
 
-static void update_time(sfUint64 time, time_info_t *time_info, game_t *game)
+static void update_time(
+    save_t *save, sfUint64 time, time_info_t *time_info, game_t *game)
 {
     int tmp = 0;
     int min = 0;
@@ -56,6 +57,7 @@ static void update_time(sfUint64 time, time_info_t *time_info, game_t *game)
     min = tmp / MIN_IN_SEC;
     sec = tmp % MIN_IN_SEC;
     sprintf(game->tool->draw[TOOL_TIME_NB].str, "%02d:%02d", min, sec);
+    save->info->time = time_info->time;
 }
 
 void update_time_end(time_info_t *time_info)
@@ -75,6 +77,8 @@ static void update_save(system_t *sys, player_t *player)
         player->save = sys->save;
         sys->save->update = sfTrue;
     }
+    sys->save->info->start_pos = player->pos;
+    sys->save->info->start_angle = player->angle;
 }
 
 static void update_toolbar_percent(draw_textbox_t *draw, int nb)
@@ -107,10 +111,27 @@ static void update_toolbar(system_t *sys, toolbar_t *tool, double delta)
     sprintf(tool->draw[TOOL_SCORE_NB].str, "%09d", sys->save->info->score);
 }
 
+static void update_saving(system_t *sys, toolbar_t *tool)
+{
+    float sec = (float)(sys->save->info->time - tool->save) / SEC_IN_MICRO;
+
+    if (tool->save == -1 || sec > 1) {
+        tool->saving = sfFalse;
+        return;
+    }
+    tool->saving = sfTrue;
+    sprintf(tool->draw[TOOL_SAVE].str, "saving...");
+    if (sec < SAVE_TIME * 2)
+        sprintf(tool->draw[TOOL_SAVE].str, "saving..");
+    if (sec < SAVE_TIME)
+        sprintf(tool->draw[TOOL_SAVE].str, "saving.");
+}
+
 void update_all(system_t *sys, game_t *game)
 {
     update_save(sys, game->player);
-    update_time(sys->save->info->time, game->time_info, game);
+    update_saving(sys, game->tool);
+    update_time(sys->save, sys->save->info->time, game->time_info, game);
     update_toolbar(sys, game->tool, game->time_info->delta);
     shot_gun_anim(game->weapon, game->time_info->time);
     cast_all_rays(game);
