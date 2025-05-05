@@ -10,6 +10,18 @@
 
     #include "wolf.h"
 
+    #define DANSE_TILE 8
+    #define DANSE_HEIGHT 83
+    #define DANSE_WIDTH 75
+    #define DANSE_SCALE 6
+    #define DANSE_OFFSET 60
+    #define DANSE_SWITCH 10
+
+    #define WIN_OFFSET 125
+    #define WIN_SIZE 50
+
+    #define MAX_NAME_SCORE 3
+
 typedef enum {
     LEAVE_TITLE,
     LEAVE_SAVE,
@@ -23,9 +35,38 @@ typedef struct leave_s {
     draw_textbox_t *draw;
 } leave_t;
 
+typedef enum {
+    WIN_TITLE,
+    WIN_NAME,
+    WIN_TIME,
+    WIN_SCORE,
+    WIN_ENTER,
+    WIN_SEE_SCORE,
+    WIN_RESTART,
+    WIN_MENU,
+    NB_WIN,
+} str_win_t;
+
+typedef struct win_s {
+    str_win_t str;
+    draw_textbox_t *draw;
+    sprite_t *danse;
+    sfClock *clock;
+    char *name;
+    char name_tmp[4];
+    char time[7];
+    char score[10];
+    sfBool update;
+} win_t;
+
 void *init_leave(void);
 void draw_leave(system_t *sys, void *structure);
 void leave_events(system_t *sys, leave_t *leave);
 void destroy_leave(void *structure);
+
+void *init_win(void);
+void draw_win(system_t *sys, void *structure);
+void win_events(system_t *sys, win_t *win);
+void destroy_win(void *structure);
 
 #endif /* !QUIT_H_ */

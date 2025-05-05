@@ -131,7 +131,7 @@ static void interact(int **map, player_t *player, system_t *sys)
             map[casted_pos.y][casted_pos.x] = 0;
         if (player->center_ray.distance < 258.0 &&
             map[casted_pos.y][casted_pos.x] == wall_textures[FINAL].value)
-            sys->state->scene = MENU;
+            sys->state->scene = WIN;
     }
 }
 

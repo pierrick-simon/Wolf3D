@@ -10,6 +10,10 @@
 
     #include "wolf.h"
 
+void *init_win(void);
+void draw_win(system_t *sys, void *structure);
+void destroy_win(void *structure);
+
 void *init_score(void);
 void draw_score(system_t *sys, void *structure);
 void destroy_score(void *structure);
@@ -46,6 +50,7 @@ static const scene_func_t SCENE[] = {
     {MAP, &init_map, &destroy_map, &draw_map},
     {SCORE, &init_score, &destroy_score, &draw_score},
     {LEAVE, &init_leave, &destroy_leave, &draw_leave},
+    {WIN, &init_win, &destroy_win, &draw_win}
 };
 
 #endif

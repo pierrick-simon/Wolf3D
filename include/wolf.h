@@ -26,7 +26,7 @@
     #define WIN_WIDTH 1920
     #define WIN_BITS 144
     #define WIN_FRAME 60
-    #define WIN_NAME "Wolf3D"
+    #define WINDOW_NAME "Wolf3D"
 
     #define GUY_SPRITE_X 612
     #define GUY_SPRITE_Y 408
@@ -97,6 +97,7 @@ typedef enum scene_s {
     MAP,
     SCORE,
     LEAVE,
+    WIN,
     NB_SCENE,
     QUIT,
 } scene_t;
@@ -110,6 +111,7 @@ static const char *str_scene[] __maybe_unused = {
     [MAP] = "map",
     [SCORE] = "score",
     [LEAVE] = "leave",
+    [WIN] = "win",
     [NB_SCENE] = "",
     [QUIT] = "quit",
 };

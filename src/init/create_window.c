@@ -16,7 +16,7 @@ sfRenderWindow *create_window(sfUint32 style, double coef)
     size_of_window.width = WIN_WIDTH;
     size_of_window.bitsPerPixel = WIN_BITS;
     window = sfRenderWindow_create(size_of_window,
-        WIN_NAME, style, NULL);
+        WINDOW_NAME, style, NULL);
     if (window == NULL)
         return NULL;
     sfRenderWindow_setFramerateLimit(window, WIN_FRAME);
