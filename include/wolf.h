@@ -102,7 +102,7 @@ typedef enum scene_s {
 static const char *str_scene[] __maybe_unused = {
     [GAME] = "game",
     [MENU] = "menu",
-    [SETTINGS] = "settings",
+    [SETTINGS] = "setting",
     [PAUSE] = "pause",
     [MAPS] = "maps",
     [MAP] = "map",

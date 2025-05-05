@@ -22,7 +22,7 @@ static void scroll_weapon(sfEvent event, weapon_t *weapon)
     if (weapon->weapon == NB_WEAPON)
         weapon->weapon = PUNCH;
     if (weapon->weapon == NO_WEAPON)
-        weapon->weapon = SHOTGUN;
+        weapon->weapon = MINIGUN;
     } while (weapon->info[weapon->weapon].bag != sfTrue);
 }
 

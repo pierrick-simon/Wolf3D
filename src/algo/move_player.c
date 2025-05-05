@@ -22,9 +22,11 @@ static void sprint(player_t *player, save_t *save)
 
     if (sfKeyboard_isKeyPressed(sfKeyLShift) ||
         sfJoystick_getAxisPosition(0, sfJoystickZ) > 0) {
-        coef = 2;
-        player->fov = SPRINTING_FOV;
         player->is_sprinting = sfTrue;
+        if (save->info->stamina != 0) {
+            coef = 2;
+            player->fov = SPRINTING_FOV;
+        }
     }
     if (is_wall(player->pos.y,
         player->pos.x + (player->center_ray.v.x * coef * DISTANCE_COLISION),

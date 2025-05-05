@@ -43,6 +43,7 @@ static int initiate_struct(char **tab, save_t *save)
     save->info->health = atoi(tab[HEALTH]);
     save->info->armor = atoi(tab[ARMOR]);
     save->info->ammo = atoi(tab[AMMO]);
+    save->info->stamina = atoi(tab[STAMINA]);
     save->info->score = atoi(tab[CURRENT_SCORE]);
     save->info->time = atoi(tab[TIME]) * SEC_IN_MICRO;
     save->info->weapons = atoi(tab[WEAPONS]);

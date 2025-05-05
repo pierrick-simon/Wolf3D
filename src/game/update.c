@@ -10,55 +10,6 @@
 #include <stdio.h>
 #include <math.h>
 
-static void update_inbag(weapon_t *weapon, toolbar_t *tool, int bag)
-{
-    for (int i = 0; i < NB_WEAPON; i++) {
-        if (((int)pow(2, i) & bag) == 0) {
-            tool->draw[i + TOOL_ONE].color = GREY;
-            weapon->info[i].bag = sfFalse;
-        } else {
-            tool->draw[i + TOOL_ONE].color = sfWhite;
-            weapon->info[i].bag = sfTrue;
-        }
-    }
-}
-
-static void update_guns(weapon_t *weapon, toolbar_t *tool, int bag)
-{
-    int ind = weapon->weapon;
-
-    update_inbag(weapon, tool, bag);
-    tool->draw[weapon->weapon + TOOL_ONE].color = sfRed;
-    if (weapon->info[ind].current_tile == weapon->info[ind].nb_tile)
-        weapon->info[ind].current_tile = 0;
-    if (ind == PUNCH) {
-        if (weapon->info[ind].current_tile == 0)
-            weapon->info[ind].posf.x = HAND_POS;
-        else
-            weapon->info[ind].posf.x = PUNCH_POS;
-    }
-    sfSprite_setPosition(weapon->sprite, weapon->info[ind].posf);
-}
-
-static void shot_gun_anim(
-    weapon_t *weapon, sfInt64 time, toolbar_t *tool, int bag)
-{
-    double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
-    int ind = weapon->weapon;
-
-    for (int i = 0; i < weapon->info[ind].nb_tile; i++) {
-        if (diff > weapon->info[ind].speed * i
-            && diff < weapon->info[ind].speed * (i + 1)
-            && weapon->info[ind].current_tile == i) {
-            move_rect(weapon->sprite, &weapon->info[ind].rectangle,
-                weapon->info[ind].size.x, weapon->info[ind].nb_tile);
-            weapon->info[ind].current_tile++;
-            break;
-        }
-    }
-    update_guns(weapon, tool, bag);
-}
-
 static void update_time(
     save_t *save, sfUint64 time, time_info_t *time_info, game_t *game)
 {
@@ -86,13 +37,15 @@ void update_time_end(time_info_t *time_info)
         (float)SEC_IN_MICRO;
 }
 
-static void update_save(system_t *sys, player_t *player)
+static void update_save(system_t *sys, player_t *player, toolbar_t *tool)
 {
     if (sys->save->update == sfFalse) {
         player->pos = sys->save->info->start_pos;
         player->angle = sys->save->info->start_angle;
         player->save = sys->save;
         sys->save->update = sfTrue;
+        tool->sprint = 0;
+        tool->no_sprint = 0;
     }
     sys->save->info->start_pos = player->pos;
     sys->save->info->start_angle = player->angle;
@@ -124,6 +77,8 @@ static void update_toolbar(system_t *sys, toolbar_t *tool, double delta)
     update_toolbar_percent(
         &tool->draw[TOOL_HEALTH_NB], sys->save->info->health);
     update_toolbar_percent(&tool->draw[TOOL_ARMOR_NB], sys->save->info->armor);
+    update_toolbar_percent(
+        &tool->draw[TOOL_STAM_NB], sys->save->info->stamina);
     sprintf(tool->draw[TOOL_FPS].str, "%3.0f", 1.0 / delta);
     sprintf(tool->draw[TOOL_SCORE_NB].str, "%09d", sys->save->info->score);
 }
@@ -144,11 +99,33 @@ static void update_saving(system_t *sys, toolbar_t *tool)
         sprintf(tool->draw[TOOL_SAVE].str, "saving.");
 }
 
+static void update_sprint(
+    toolbar_t *tool, save_t *save, sfBool sprint, double delta)
+{
+    if (save->info->stamina != 100 && sprint == sfFalse
+        && tool->no_sprint > SEC_IN_MICRO) {
+        save->info->stamina++;
+        tool->no_sprint = 0;
+    }
+    if (save->info->stamina == 0)
+        sprint = sfFalse;
+    if (tool->sprint > SEC_IN_MICRO / 10 && tool->sprint != 0) {
+        save->info->stamina--;
+        tool->sprint = 0;
+    }
+    if (sprint == sfFalse)
+        tool->no_sprint += delta * SEC_IN_MICRO;
+    else
+        tool->sprint += delta * SEC_IN_MICRO;
+}
+
 void update_all(system_t *sys, game_t *game)
 {
-    update_save(sys, game->player);
+    update_save(sys, game->player, game->tool);
     update_saving(sys, game->tool);
     update_time(sys->save, sys->save->info->time, game->time_info, game);
+    update_sprint(game->tool, sys->save, game->player->is_sprinting,
+        game->time_info->delta);
     update_toolbar(sys, game->tool, game->time_info->delta);
     shot_gun_anim(game->weapon, game->time_info->time,
         game->tool, sys->save->info->weapons);

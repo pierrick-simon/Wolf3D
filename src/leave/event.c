@@ -14,17 +14,19 @@ static void switch_scene(
     int tmp = state->old_scene;
 
     if (is_input(event, sfKeyEnter, sfTrue, 0)) {
-        leave->draw[leave->str].color = sfWhite;
-        leave->str = LEAVE_SAVE;
         if (leave->str == LEAVE_CANCEL) {
             state->old_scene = state->scene;
             state->scene = tmp;
+            leave->draw[leave->str].color = sfWhite;
+            leave->str = LEAVE_SAVE;
             return;
         }
         if (leave->str == LEAVE_SAVE)
             save_map(sys->save);
         state->old_scene = state->scene;
         state->scene = PAUSE;
+        leave->draw[leave->str].color = sfWhite;
+        leave->str = LEAVE_SAVE;
     }
 }
 

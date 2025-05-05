@@ -85,13 +85,15 @@ typedef enum {
     TOOL_AMMO_STR,
     TOOL_HEALTH_NB,
     TOOL_HEALTH_STR,
+    TOOL_ARMOR_NB,
+    TOOL_ARMOR_STR,
     TOOL_ONE,
     TOOL_TWO,
     TOOL_THREE,
     TOOL_FOUR,
     TOOL_ARM,
-    TOOL_ARMOR_NB,
-    TOOL_ARMOR_STR,
+    TOOL_STAM_NB,
+    TOOL_STAM_STR,
     TOOL_TIME_NB,
     TOOL_TIME_STR,
     TOOL_SCORE_NB,
@@ -171,6 +173,8 @@ typedef struct toolbar_s {
     sfTexture *background;
     sfBool fps;
     sfInt64 save;
+    sfInt64 sprint;
+    sfInt64 no_sprint;
     sfBool saving;
 } toolbar_t;
 
@@ -189,6 +193,7 @@ void move_player(player_t *player, double delta, int *head);
 int init_weapons(weapon_t *weapon);
 void update_all(system_t *sys, game_t *game);
 void update_time_end(time_info_t *time_info);
+void shot_gun_anim(weapon_t *weapon, sfInt64 time, toolbar_t *tool, int bag);
 
 void game_events(system_t *sys, game_t *game);
 void draw_game(system_t *sys, void *structure);

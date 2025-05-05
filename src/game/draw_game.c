@@ -57,6 +57,7 @@ static void draw_tool_strings(system_t *sys, toolbar_t *tool)
     sfRenderWindow_drawSprite(sys->window, tool->head->sprite, NULL);
     draw_point_bar(sys, tool, TOOL_ARMOR_NB, sys->save->info->armor);
     draw_point_bar(sys, tool, TOOL_HEALTH_NB, sys->save->info->health);
+    draw_point_bar(sys, tool, TOOL_STAM_NB, sys->save->info->stamina);
 }
 
 static void draw_toolbar(system_t *sys, toolbar_t *tool)
