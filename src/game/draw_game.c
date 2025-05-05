@@ -28,7 +28,7 @@ static void draw_point_bar(system_t *sys, toolbar_t *tool, int ind, int nb)
     sfVector2f pos = (sfVector2f){tool->draw[ind].pos.x + tool->draw[ind].size
         + OFFSET_POINT_BAR, TOOLBAR_POS + OFFSET_POINT_BAR};
     int size = OFFSET_POINT_BAR * 2;
-    double fill = nb * (TOOLBAR_HEIGHT - size) / 100;
+    double fill = nb * (TOOLBAR_HEIGHT - size) / MAX_JOYSTICK;
 
     sfRectangleShape_setPosition(tool->rectangle, pos);
     sfRectangleShape_setSize(tool->rectangle,

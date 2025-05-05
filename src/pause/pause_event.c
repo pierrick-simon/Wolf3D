@@ -50,10 +50,10 @@ static void switch_str(sfEvent event, pause_t *pause)
 {
     pause->draw[pause->str].color = sfWhite;
     if (is_input(event, sfKeyUp, sfFalse, 0)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == -100)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK)
         pause->str--;
     if (is_input(event, sfKeyDown, sfFalse, 0)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK)
         pause->str++;
     if (pause->str == NB_PAUSE)
         pause->str = PAUSE_RESUME;

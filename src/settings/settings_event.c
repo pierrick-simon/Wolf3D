@@ -12,11 +12,11 @@ static void change_volume(
 {
     if (setting->str == SETTING_SOUND) {
         if ((is_input(event, sfKeyRight, sfFalse, 0) ||
-            sfJoystick_getAxisPosition(0, sfJoystickPovX) == -100)
+            sfJoystick_getAxisPosition(0, sfJoystickPovX) == - MAX_JOYSTICK)
             && state->volume < VOL_MAX)
             state->volume += VOL_GAP;
         if ((is_input(event, sfKeyLeft, sfFalse, 0) ||
-            sfJoystick_getAxisPosition(0, sfJoystickPovX) == 100)
+            sfJoystick_getAxisPosition(0, sfJoystickPovX) == MAX_JOYSTICK)
             && state->volume > VOL_MIN)
             state->volume -= VOL_GAP;
     }
@@ -72,10 +72,10 @@ static void switch_str(sfEvent event, setting_t *setting)
 {
     setting->draw[setting->str].color = sfWhite;
     if (is_input(event, sfKeyUp, sfFalse, 0) ||
-        sfJoystick_getAxisPosition(0, sfJoystickPovY) == -100)
+        sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK)
         setting->str--;
     if (is_input(event, sfKeyDown, sfFalse, 0) ||
-        sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100)
+        sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK)
         setting->str++;
     if (setting->str == NB_SETTINGS)
         setting->str = SETTING_FULL;

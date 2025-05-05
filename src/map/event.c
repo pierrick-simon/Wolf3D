@@ -79,10 +79,10 @@ static void switch_str(sfEvent event, select_map_t *map)
 
     map->draw[map->str].color = sfWhite;
     if (is_input(event, sfKeyUp, sfFalse, 0)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == -100)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK)
         map->str--;
     if (is_input(event, sfKeyDown, sfFalse, 0)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK)
         map->str++;
     check_continue(map, prev);
     if (map->str == NB_MAP)

@@ -40,12 +40,12 @@ static void move_verticaly(player_t *player, save_t *save)
 {
     if ((sfKeyboard_isKeyPressed(sfKeyUp))
         || sfKeyboard_isKeyPressed(sfKeyZ)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == -100) {
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK) {
         sprint(player, save);
     }
     if ((sfKeyboard_isKeyPressed(sfKeyDown))
         || sfKeyboard_isKeyPressed(sfKeyS)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100) {
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK) {
         if (is_wall(player->pos.y,
             player->pos.x - (player->center_ray.v.x * DISTANCE_COLISION),
             save) == sfFalse)
@@ -60,7 +60,7 @@ static void move_verticaly(player_t *player, save_t *save)
 static void move_left(player_t *player, save_t *save, int *head)
 {
     if (sfKeyboard_isKeyPressed(sfKeyQ)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovX) == -100) {
+        || sfJoystick_getAxisPosition(0, sfJoystickPovX) == - MAX_JOYSTICK) {
         *head -= HEAD_SPRITE_X;
         if (is_wall(player->pos.y,
             player->pos.x + (player->center_ray.v.y * DISTANCE_COLISION),
@@ -76,7 +76,7 @@ static void move_left(player_t *player, save_t *save, int *head)
 static void move_right(player_t *player, save_t *save, int *head)
 {
     if (sfKeyboard_isKeyPressed(sfKeyD)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovX) == 100) {
+        || sfJoystick_getAxisPosition(0, sfJoystickPovX) == MAX_JOYSTICK) {
         *head += HEAD_SPRITE_X;
         if (is_wall(player->pos.y,
             player->pos.x - (player->center_ray.v.y * DISTANCE_COLISION),

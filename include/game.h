@@ -52,6 +52,7 @@ typedef enum wall_type {
     WALL,
     DESTRUCTIBLE,
     DOOR,
+    FINAL,
 } wall_type_t;
 
 typedef struct int_wall_texture_s {
@@ -61,8 +62,9 @@ typedef struct int_wall_texture_s {
 
 static const int_wall_texture_t wall_textures[] = {
     [WALL] = {1, "asset/wall.png"},
-    [DESTRUCTIBLE] = {3, "asset/door.png"},
+    [DESTRUCTIBLE] = {3, "asset/destructible.png"},
     [DOOR] = {2, "asset/door.png"},
+    [FINAL] = {4, "asset/final.png"},
 };
 
     #define NB_WALL_TXT ARRAY_LENGHT(wall_textures)

@@ -26,10 +26,10 @@ static void switch_str(sfEvent event, menu_t *menu)
 {
     menu->draw[menu->str].color = sfWhite;
     if (is_input(event, sfKeyUp, sfFalse, 0)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == -100)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK)
         menu->str--;
     if (is_input(event, sfKeyDown, sfFalse, 0)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK)
         menu->str++;
     if (menu->str == NB_MENU)
         menu->str = MENU_PLAY;
