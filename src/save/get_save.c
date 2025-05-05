@@ -45,6 +45,7 @@ static int initiate_struct(char **tab, save_t *save)
     save->info->ammo = atoi(tab[AMMO]);
     save->info->score = atoi(tab[CURRENT_SCORE]);
     save->info->time = atoi(tab[TIME]) * SEC_IN_MICRO;
+    save->info->weapons = atoi(tab[WEAPONS]);
     save->name = strdup(tab[NAME]);
     if (save->name == NULL)
         return ERROR;

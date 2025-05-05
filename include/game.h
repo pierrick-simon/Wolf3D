@@ -86,6 +86,7 @@ typedef enum {
 } str_toolbar_t;
 
 typedef enum {
+    NO_WEAPON = -1,
     PUNCH,
     PISTOL,
     SHOTGUN,
@@ -127,6 +128,8 @@ typedef struct weapon_info_s {
     int nb_tile;
     double speed;
     float range;
+    sfBool bag;
+    int key;
 } weapon_info_t;
 
 typedef struct weapon_s {

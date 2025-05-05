@@ -5,13 +5,36 @@
 ** event
 */
 
-#include "wolf.h"
+#include "save.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-static void switch_scene(sfEvent event, state_info_t *state, pause_t *pause)
+static int load_restart(pause_t *pause, system_t *sys, char *name)
+{
+    char *tmp = NULL;
+    int exit = SUCCESS;
+
+    if (pause->str != PAUSE_RESTART)
+        return SUCCESS;
+    tmp = malloc(sizeof(char) * (strlen(name) + LEN_SAVE));
+    if (tmp == NULL)
+        return ERROR;
+    sprintf(tmp, "maps/%s.legend", name);
+    exit = get_save(tmp, sys->save);
+    free(tmp);
+    return exit;
+}
+
+static void switch_scene(
+    sfEvent event, state_info_t *state, pause_t *pause, system_t *sys)
 {
     if (is_input(event, sfKeyEnter, sfTrue, 0)) {
         state->old_scene = state->scene;
-        state->scene = pause->draw[pause->str].scene;
+        if (load_restart(pause, sys, sys->save->name) == ERROR)
+            state->scene = MAPS;
+        else
+            state->scene = pause->draw[pause->str].scene;
         pause->draw[pause->str].color = sfWhite;
         pause->str = PAUSE_RESUME;
     }
@@ -46,6 +69,6 @@ void pause_events(system_t *sys, pause_t *pause)
     while (sfRenderWindow_pollEvent(sys->window, &event)) {
         sys_events(event, sys);
         switch_str(event, pause);
-        switch_scene(event, sys->state, pause);
+        switch_scene(event, sys->state, pause, sys);
     }
 }
