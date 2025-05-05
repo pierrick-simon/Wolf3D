@@ -34,10 +34,10 @@ static void switch_str(sfEvent event, leave_t *leave)
 {
     leave->draw[leave->str].color = sfWhite;
     if (is_input(event, sfKeyUp, sfFalse, 0)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == -100)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK)
         leave->str--;
     if (is_input(event, sfKeyDown, sfFalse, 0)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == 100)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK)
         leave->str++;
     if (leave->str == NB_LEAVE)
         leave->str = LEAVE_SAVE;

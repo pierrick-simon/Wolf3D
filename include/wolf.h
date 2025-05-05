@@ -57,6 +57,8 @@
 
     #define __maybe_unused  __attribute__((unused))
 
+    #define MAX_JOYSTICK 100.0
+
 typedef enum str_menu_e {
     MENU_TITLE,
     MENU_PLAY,
@@ -146,8 +148,8 @@ typedef struct textbox_s {
 typedef struct state_info_s {
     double volume;
     sfBool fullscreen;
-    int scene;
-    int old_scene;
+    scene_t scene;
+    scene_t old_scene;
 } state_info_t;
 
 typedef struct system_s {
