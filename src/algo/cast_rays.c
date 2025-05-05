@@ -9,40 +9,32 @@
 #include "save.h"
 #include "game.h"
 
-static void set_end_quads(game_t *game,
-    float prev, float offset, wall_type_t wall)
+static float get_texture_x(intersection_type_t type, sfVector2f *intersection)
 {
-    sfVertex line = {.color = sfWhite};
-    static wall_type_t prev_wall = NO_WALL;
-    static float prev_offset = 0;
-
-    if (prev_offset > offset)
-        prev_wall = NO_WALL;
-    if (prev_wall == DESTRUCTIBLE)
-        line.color = sfGreen;
-    line.position = (sfVector2f){offset, (WIN_HEIGHT - prev) / 2};
-    line.texCoords = (sfVector2f){128, 0};
-    sfVertexArray_append(game->map->quads, line);
-    line.position = (sfVector2f){offset, ((WIN_HEIGHT - prev) / 2) + prev};
-    line.texCoords = (sfVector2f){128, 128};
-    sfVertexArray_append(game->map->quads, line);
-    prev_wall = wall;
-    prev_offset = offset;
+    if (type == TOP || type == BOTTOM)
+        return (fmod(intersection->y, (float)TILE_SIZE) /
+            (float)TILE_SIZE) * 128.0;
+    return (fmod(intersection->x, (float)TILE_SIZE) /
+        (float)TILE_SIZE) * 128.0;
 }
 
-static void set_start_quads(game_t *game,
-    float len, float offset, wall_type_t wall)
+static void add_line(float offset, float len, float y, game_t *game)
 {
     sfVertex line = {.color = sfWhite};
 
-    if (wall == DESTRUCTIBLE)
-        line.color = sfGreen;
     line.position = (sfVector2f){offset, ((WIN_HEIGHT - len) / 2) + len};
-    line.texCoords = (sfVector2f){0, 128};
+    line.texCoords = (sfVector2f){y, 128};
     sfVertexArray_append(game->map->quads, line);
     line.position = (sfVector2f){offset, (WIN_HEIGHT - len) / 2};
-    line.texCoords = (sfVector2f){0, 0};
+    line.texCoords = (sfVector2f){y, 0};
     sfVertexArray_append(game->map->quads, line);
+}
+
+static void set_line(game_t *game, float len, float offset,
+    float y)
+{
+    for (int i = 0; i < RAY_LENGHT; ++i)
+        add_line(offset + i, len, y, game);
 }
 
 static void add_ray_to_vertex_array(game_t *game, int i, sfVector2f *prev)
@@ -53,19 +45,12 @@ static void add_ray_to_vertex_array(game_t *game, int i, sfVector2f *prev)
     float offset = i * (float)NUM_RAYS / (float)WIN_WIDTH;
     sfVector2f pos = {0};
     float len = cast_single_ray(game->player, angle_offset, &type, &pos);
-    sfBool start = (int)prev->x / TILE_SIZE != (int)pos.x / TILE_SIZE
-        || (int)prev->y / TILE_SIZE != (int)pos.y / TILE_SIZE || pos.x == -1;
-    static float prev_len = 0;
 
     len = (TILE_SIZE * WIN_HEIGHT) / (len * cos(angle_offset));
     if (game->player->is_sprinting == sfTrue)
         len /= SPRINT_COEF;
-    if ((start && i != 0) || i == NUM_RAYS)
-        set_end_quads(game, prev_len, offset, type.wall);
-    if (start)
-        set_start_quads(game, len, offset, type.wall);
+    set_line(game, len, offset, get_texture_x(type.type, &pos));
     *prev = pos;
-    prev_len = len;
 }
 
 void cast_all_rays(game_t *game)
@@ -73,7 +58,7 @@ void cast_all_rays(game_t *game)
     sfVector2f prev = {-1, -1};
 
     sfVertexArray_clear(game->map->quads);
-    for (int i = 0; i <= NUM_RAYS; i++) {
+    for (int i = 0; i <= NUM_RAYS; i += RAY_LENGHT) {
         add_ray_to_vertex_array(game, i, &prev);
     }
 }
