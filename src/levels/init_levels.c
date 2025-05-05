@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** Wolf3d
 ** File description:
-** init_normal_map
+** init_maps
 */
 
 #include "save.h"
@@ -17,19 +17,19 @@ static void init_info_save(info_save_t *info)
     info->nb_page = 0;
 }
 
-void *init_normal_map(void)
+void *init_maps(void)
 {
-    normal_map_t *normal_map = malloc(sizeof(normal_map_t));
+    maps_t *maps = malloc(sizeof(maps_t));
 
-    if (normal_map == NULL)
+    if (maps == NULL)
         return NULL;
-    normal_map->str = MENU_PLAY;
-    normal_map->draw = init_from_conf("config_file/normal_map.conf");
-    if (normal_map->draw == NULL)
+    maps->str = MENU_PLAY;
+    maps->draw = init_from_conf("config_file/maps.conf");
+    if (maps->draw == NULL)
         return NULL;
-    normal_map->info = malloc(sizeof(info_save_t));
-    if (normal_map->info == NULL)
+    maps->info = malloc(sizeof(info_save_t));
+    if (maps->info == NULL)
         return NULL;
-    init_info_save(normal_map->info);
-    return (void *)normal_map;
+    init_info_save(maps->info);
+    return (void *)maps;
 }

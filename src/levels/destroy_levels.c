@@ -2,23 +2,23 @@
 ** EPITECH PROJECT, 2025
 ** Wolf3d
 ** File description:
-** destroy_normal_map
+** destroy_maps
 */
 
 #include "save.h"
 #include "linked_list.h"
 #include <stdlib.h>
 
-void destroy_normal_map(void *structure)
+void destroy_maps(void *structure)
 {
-    normal_map_t *normal_map = (normal_map_t *)structure;
+    maps_t *maps = (maps_t *)structure;
 
-    if (normal_map->draw != NULL)
-        free_draw_textbox(normal_map->draw, -1);
-    if (normal_map->info != NULL) {
-        if (normal_map->info->list != NULL)
-            free_linked_list(normal_map->info->list, &free_node_file);
-        free(normal_map->info);
+    if (maps->draw != NULL)
+        free_draw_textbox(maps->draw, -1);
+    if (maps->info != NULL) {
+        if (maps->info->list != NULL)
+            free_linked_list(maps->info->list, &free_node_file);
+        free(maps->info);
     }
-    free(normal_map);
+    free(maps);
 }

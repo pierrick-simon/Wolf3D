@@ -70,11 +70,11 @@ SRC =	$(addprefix src/,					\
 				save_score.c				\
 				save_map.c 					\
 			)								\
-			$(addprefix maps/,				\
-				event.c						\
-				draw_maps.c					\
-				destroy_maps.c				\
-				init_maps.c					\
+			$(addprefix levels/,			\
+				levels_event.c				\
+				draw_levels.c				\
+				destroy_levels.c			\
+				init_levels.c				\
 			)								\
 			$(addprefix events/,			\
 				is_input.c					\
