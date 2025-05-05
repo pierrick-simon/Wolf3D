@@ -54,9 +54,9 @@ typedef enum intersection_type {
 } intersection_type_t;
 
 typedef enum wall_type {
-    NONE_W,
+    NO_WALL,
     WALL,
-    DESTRUCTABLE,
+    DESTRUCTIBLE,
 } wall_type_t;
 
 typedef struct intersection_s {

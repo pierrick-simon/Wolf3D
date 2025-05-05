@@ -13,8 +13,12 @@ static void set_end_quads(game_t *game,
     float prev, float offset, wall_type_t wall)
 {
     sfVertex line = {.color = sfWhite};
+    static wall_type_t prev_wall = NO_WALL;
+    static float prev_offset = 0;
 
-    if (wall == DESTRUCTABLE)
+    if (prev_offset > offset)
+        prev_wall = NO_WALL;
+    if (prev_wall == DESTRUCTIBLE)
         line.color = sfGreen;
     line.position = (sfVector2f){offset, (WIN_HEIGHT - prev) / 2};
     line.texCoords = (sfVector2f){128, 0};
@@ -22,6 +26,8 @@ static void set_end_quads(game_t *game,
     line.position = (sfVector2f){offset, ((WIN_HEIGHT - prev) / 2) + prev};
     line.texCoords = (sfVector2f){128, 128};
     sfVertexArray_append(game->map->quads, line);
+    prev_wall = wall;
+    prev_offset = offset;
 }
 
 static void set_start_quads(game_t *game,
@@ -29,7 +35,7 @@ static void set_start_quads(game_t *game,
 {
     sfVertex line = {.color = sfWhite};
 
-    if (wall == DESTRUCTABLE)
+    if (wall == DESTRUCTIBLE)
         line.color = sfGreen;
     line.position = (sfVector2f){offset, ((WIN_HEIGHT - len) / 2) + len};
     line.texCoords = (sfVector2f){0, 128};
@@ -41,7 +47,7 @@ static void set_start_quads(game_t *game,
 
 static void add_ray_to_vertex_array(game_t *game, int i, sfVector2f *prev)
 {
-    intersection_t type = {NONE, NONE_W};
+    intersection_t type = {NONE, NO_WALL};
     float angle_offset = ((i / (float)NUM_RAYS) * game->player->fov) -
         (game->player->fov / 2);
     float offset = i * (float)NUM_RAYS / (float)WIN_WIDTH;

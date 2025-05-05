@@ -22,7 +22,7 @@ static sfBool is_end(sfVector2f *pos, intersection_t *type, save_t *save)
         return sfTrue;
     }
     if (save->map[casted_pos.y][casted_pos.x] == 3) {
-        type->wall = DESTRUCTABLE;
+        type->wall = DESTRUCTIBLE;
         return sfTrue;
     }
     return sfFalse;
