@@ -31,8 +31,10 @@ static void destroy_background(background_t *background)
 void destroy_save(save_t *save)
 {
     if (save->init == sfTrue) {
-        free_map(save->size.y, save->map);
-        free(save->name);
+        if (save->map != NULL)
+            free_map(save->size.y, save->map);
+        if (save->map != NULL)
+            free(save->name);
     }
 }
 

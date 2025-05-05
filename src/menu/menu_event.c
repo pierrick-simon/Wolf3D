@@ -17,6 +17,8 @@ static void switch_scene(
         }
         state->old_scene = state->scene;
         state->scene = menu->draw[menu->str].scene;
+        menu->draw[menu->str].color = sfWhite;
+        menu->str = MENU_PLAY;
     }
 }
 

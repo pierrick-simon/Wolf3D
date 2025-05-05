@@ -8,7 +8,7 @@
 #include "save.h"
 #include "game.h"
 
-static void draw_map(system_t *sys, game_t *game)
+static void draw_coor(system_t *sys, game_t *game)
 {
     sfVector2f pos = {0, 0};
 
@@ -46,6 +46,19 @@ static void draw_point_bar(system_t *sys, toolbar_t *tool, int ind, int nb)
         tool->rectangle, NULL);
 }
 
+static void draw_tool_strings(system_t *sys, toolbar_t *tool)
+{
+    for (int i = 0; i < NB_TOOLBAR; i++) {
+        if ((tool->fps == sfFalse && i == TOOL_FPS)
+            || (tool->saving == sfFalse && i == TOOL_SAVE))
+            continue;
+        draw_string(sys, sys->textbox, &tool->draw[i]);
+    }
+    sfRenderWindow_drawSprite(sys->window, tool->head->sprite, NULL);
+    draw_point_bar(sys, tool, TOOL_ARMOR_NB, sys->save->info->armor);
+    draw_point_bar(sys, tool, TOOL_HEALTH_NB, sys->save->info->health);
+}
+
 static void draw_toolbar(system_t *sys, toolbar_t *tool)
 {
     sfVector2f pos = (sfVector2f){0, TOOLBAR_POS};
@@ -60,14 +73,7 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
     sfRenderWindow_drawRectangleShape(sys->window,
         tool->rectangle, NULL);
     sfRectangleShape_setTexture(tool->rectangle, NULL, sfTrue);
-    for (int i = 0; i < NB_TOOLBAR; i++) {
-        if (tool->fps == sfFalse && i == TOOL_FPS)
-            continue;
-        draw_string(sys, sys->textbox, &tool->draw[i]);
-    }
-    sfRenderWindow_drawSprite(sys->window, tool->head->sprite, NULL);
-    draw_point_bar(sys, tool, TOOL_ARMOR_NB, sys->save->info->armor);
-    draw_point_bar(sys, tool, TOOL_HEALTH_NB, sys->save->info->health);
+    draw_tool_strings(sys, tool);
 }
 
 void draw_game(system_t *sys, void *structure)
@@ -79,7 +85,7 @@ void draw_game(system_t *sys, void *structure)
     sfRenderWindow_clear(sys->window, sfWhite);
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);
-    draw_map(sys, game);
+    draw_coor(sys, game);
     sfRenderWindow_drawVertexArray(sys->window,
         game->map->quads, &game->map->wall_state);
     sfRenderWindow_drawSprite(

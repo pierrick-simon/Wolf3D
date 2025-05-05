@@ -43,12 +43,12 @@ static int initiate_struct(char **tab, save_t *save)
     save->info->health = atoi(tab[HEALTH]);
     save->info->armor = atoi(tab[ARMOR]);
     save->info->ammo = atoi(tab[AMMO]);
-    save->info->score = atoi(tab[SCORE]);
+    save->info->score = atoi(tab[CURRENT_SCORE]);
     save->info->time = atoi(tab[TIME]) * SEC_IN_MICRO;
     save->name = strdup(tab[NAME]);
     if (save->name == NULL)
         return ERROR;
-    if (initiate_body(tab + MAP, save) == ERROR) {
+    if (initiate_body(tab + COOR, save) == ERROR) {
         free(save->name);
         return ERROR;
     }
@@ -112,8 +112,8 @@ static int check_save(char **tab)
     int x = 0;
     int y = 0;
 
-    if (array_len(tab) < MAP || check_header(tab, &x, &y) == ERROR
-        || check_body(tab + MAP, x, y) == ERROR)
+    if (array_len(tab) < COOR || check_header(tab, &x, &y) == ERROR
+        || check_body(tab + COOR, x, y) == ERROR)
         return ERROR;
     return SUCCESS;
 }

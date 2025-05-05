@@ -26,5 +26,6 @@ void free_array(char **array);
 int array_len(char **array);
 int get_nblen(int nb);
 char **get_tab(char *file);
+int get_offset(char *str, int max_len);
 
 #endif

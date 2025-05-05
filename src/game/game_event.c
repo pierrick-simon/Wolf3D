@@ -112,6 +112,14 @@ static void show_fps(sfEvent event, toolbar_t *tool)
     }
 }
 
+static void save_game(sfEvent event, save_t *save, toolbar_t *tool)
+{
+    if (is_input(event, sfKeyF5, sfFalse, 0)) {
+        save_map(save);
+        tool->save = save->info->time;
+    }
+}
+
 void game_events(system_t *sys, game_t *game)
 {
     sfEvent event = {0};
@@ -121,6 +129,7 @@ void game_events(system_t *sys, game_t *game)
         change_weapons(event, game, game->weapon);
         switch_scene(event, sys->state);
         show_fps(event, game->tool);
+        save_game(event, sys->save, game->tool);
     }
     click(sys, game->weapon, game->time_info->time, game);
     move_player(game->player, game->time_info->delta,

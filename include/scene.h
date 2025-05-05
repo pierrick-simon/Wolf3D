@@ -10,13 +10,25 @@
 
     #include "wolf.h"
 
-void *init_normal_map(void);
-void draw_normal_map(system_t *sys, void *structure);
-void destroy_normal_map(void *structure);
+void *init_score(void);
+void draw_score(system_t *sys, void *structure);
+void destroy_score(void *structure);
+
+void *init_map(void);
+void draw_map(system_t *sys, void *structure);
+void destroy_map(void *structure);
+
+void *init_maps(void);
+void draw_maps(system_t *sys, void *structure);
+void destroy_maps(void *structure);
 
 void draw_game(system_t *sys, void *structure);
 void destroy_game(void *structure);
 void *init_game(void);
+
+void *init_leave(void);
+void draw_leave(system_t *sys, void *structure);
+void destroy_leave(void *structure);
 
 typedef struct scene_func_s {
     int id;
@@ -30,7 +42,10 @@ static const scene_func_t SCENE[] = {
     {MENU, &init_menu, &destroy_menu, &draw_menu},
     {SETTINGS, &init_settings, &destroy_settings, &draw_settings},
     {PAUSE, &init_pause, &destroy_pause, &draw_pause},
-    {NOR_MAP, &init_normal_map, &destroy_normal_map, &draw_normal_map},
+    {MAPS, &init_maps, &destroy_maps, &draw_maps},
+    {MAP, &init_map, &destroy_map, &draw_map},
+    {SCORE, &init_score, &destroy_score, &draw_score},
+    {LEAVE, &init_leave, &destroy_leave, &draw_leave},
 };
 
 #endif

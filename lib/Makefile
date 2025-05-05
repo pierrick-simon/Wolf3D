@@ -9,7 +9,8 @@ SRC = 	my_str_to_word_array.c	\
 		open_file.c	\
 		array.c	\
 		is_int_float.c	\
-		get_nblen.c
+		get_nblen.c	\
+		get_offset.c
 
 OBJ = $(SRC:.c=.o)
 

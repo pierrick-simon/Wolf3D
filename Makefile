@@ -67,16 +67,39 @@ SRC =	$(addprefix src/,					\
 				get_file.c					\
 				update_list.c				\
 				draw_save.c					\
+				save_score.c				\
+				save_map.c 					\
 			)								\
-			$(addprefix levels/,			\
-				levels_event.c				\
-				draw_levels.c				\
-				destroy_levels.c			\
-				init_levels.c				\
+			$(addprefix maps/,				\
+				event.c						\
+				draw_maps.c					\
+				destroy_maps.c				\
+				init_maps.c					\
 			)								\
 			$(addprefix events/,			\
 				is_input.c					\
 				sys_event.c					\
+			)								\
+			$(addprefix map/,				\
+				event.c						\
+				draw_map.c					\
+				destroy_map.c				\
+				init_map.c					\
+			)								\
+			$(addprefix score/,				\
+				event.c						\
+				draw_score.c				\
+				destroy_score.c				\
+				init_score.c				\
+				get_score.c 				\
+				free_info_score.c           \
+				sort_score.c				\
+			)								\
+			$(addprefix leave/,				\
+				event.c						\
+				draw_leave.c				\
+				destroy_leave.c				\
+				init_leave.c				\
 			)								\
 		)
 

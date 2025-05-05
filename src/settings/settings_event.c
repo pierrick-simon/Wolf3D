@@ -63,6 +63,8 @@ static void switch_scene(
         setting->str == SETTING_BACK) {
         state->old_scene = state->scene;
         state->scene = old;
+        setting->draw[setting->str].color = sfWhite;
+        setting->str = SETTING_FULL;
     }
 }
 

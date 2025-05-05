@@ -114,6 +114,8 @@ static int init_toolbar(toolbar_t *tool)
     sfRectangleShape_setOutlineThickness(tool->rectangle, 2);
     tool->fps = sfFalse;
     tool->draw[TOOL_FPS].color = sfRed;
+    tool->save = -1;
+    tool->saving = sfFalse;
     return SUCCESS;
 }
 
