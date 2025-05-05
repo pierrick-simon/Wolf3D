@@ -47,7 +47,7 @@ static int init_map(map_t *map)
     map->quads = sfVertexArray_create();
     if (map->quads == NULL || init_state(map) == ERROR)
         return ERROR;
-    sfVertexArray_setPrimitiveType(map->quads, sfQuads);
+    sfVertexArray_setPrimitiveType(map->quads, sfLines);
     return SUCCESS;
 }
 
