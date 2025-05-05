@@ -8,11 +8,27 @@
 #include "game.h"
 #include "save.h"
 #include <stdio.h>
+#include <math.h>
 
-static void update_guns(weapon_t *weapon)
+static void update_inbag(weapon_t *weapon, toolbar_t *tool, int bag)
+{
+    for (int i = 0; i < NB_WEAPON; i++) {
+        if (((int)pow(2, i) & bag) == 0) {
+            tool->draw[i + TOOL_ONE].color = GREY;
+            weapon->info[i].bag = sfFalse;
+        } else {
+            tool->draw[i + TOOL_ONE].color = sfWhite;
+            weapon->info[i].bag = sfTrue;
+        }
+    }
+}
+
+static void update_guns(weapon_t *weapon, toolbar_t *tool, int bag)
 {
     int ind = weapon->weapon;
 
+    update_inbag(weapon, tool, bag);
+    tool->draw[weapon->weapon + TOOL_ONE].color = sfRed;
     if (weapon->info[ind].current_tile == weapon->info[ind].nb_tile)
         weapon->info[ind].current_tile = 0;
     if (ind == PUNCH) {
@@ -24,7 +40,8 @@ static void update_guns(weapon_t *weapon)
     sfSprite_setPosition(weapon->sprite, weapon->info[ind].posf);
 }
 
-static void shot_gun_anim(weapon_t *weapon, sfInt64 time)
+static void shot_gun_anim(
+    weapon_t *weapon, sfInt64 time, toolbar_t *tool, int bag)
 {
     double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
     int ind = weapon->weapon;
@@ -39,7 +56,7 @@ static void shot_gun_anim(weapon_t *weapon, sfInt64 time)
             break;
         }
     }
-    update_guns(weapon);
+    update_guns(weapon, tool, bag);
 }
 
 static void update_time(
@@ -133,6 +150,7 @@ void update_all(system_t *sys, game_t *game)
     update_saving(sys, game->tool);
     update_time(sys->save, sys->save->info->time, game->time_info, game);
     update_toolbar(sys, game->tool, game->time_info->delta);
-    shot_gun_anim(game->weapon, game->time_info->time);
+    shot_gun_anim(game->weapon, game->time_info->time,
+        game->tool, sys->save->info->weapons);
     cast_all_rays(game);
 }

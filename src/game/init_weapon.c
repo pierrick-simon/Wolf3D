@@ -16,11 +16,13 @@ static void set_weapon_info(char **tab, weapon_info_t *weapon)
     weapon->size = (sfVector2f){atoi(tab[2]), atoi(tab[3])};
     weapon->nb_tile = atoi(tab[4]);
     weapon->speed = atof(tab[5]);
+    weapon->range = atof(tab[6]);
+    weapon->key = atoi(tab[7]);
     weapon->size.x /= weapon->nb_tile;
     weapon->rectangle = (sfIntRect){0, 0, weapon->size.x, weapon->size.y};
     weapon->current_tile = 0;
     weapon->posf = (sfVector2f){WIN_WIDTH / 2, TOOLBAR_POS};
-    weapon->range = atof(tab[6]);
+    weapon->bag = sfTrue;
 }
 
 static int init_weapon(char *info, weapon_info_t *weapon)
@@ -31,7 +33,7 @@ static int init_weapon(char *info, weapon_info_t *weapon)
     weapon->sound = NULL;
     if (tab == NULL)
         return ERROR;
-    if (array_len(tab) != 7) {
+    if (array_len(tab) != 8) {
         free_array(tab);
         return ERROR;
     }

@@ -68,6 +68,7 @@ typedef enum str_menu_e {
 typedef enum str_pause_e {
     PAUSE_TITLE,
     PAUSE_RESUME,
+    PAUSE_RESTART,
     PAUSE_SETTINGS,
     PAUSE_BACK,
     NB_PAUSE,

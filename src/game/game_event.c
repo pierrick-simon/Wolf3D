@@ -11,18 +11,19 @@
 
 static void scroll_weapon(sfEvent event, weapon_t *weapon)
 {
-    if (is_input(event, sfKeyA, sfTrue, 4)) {
-        if (weapon->weapon == PUNCH)
-            weapon->weapon = SHOTGUN;
-        else
-            --weapon->weapon;
-    }
-    if (is_input(event, sfKeyE, sfTrue, 5)) {
-        if (weapon->weapon == SHOTGUN)
-            weapon->weapon = PUNCH;
-        else
-            ++weapon->weapon;
-    }
+    sfBool minus = is_input(event, sfKeyA, sfTrue, 4);
+    sfBool plus = is_input(event, sfKeyE, sfTrue, 5);
+
+    do {
+    if (minus)
+        --weapon->weapon;
+    if (plus)
+        ++weapon->weapon;
+    if (weapon->weapon == NB_WEAPON)
+        weapon->weapon = PUNCH;
+    if (weapon->weapon == NO_WEAPON)
+        weapon->weapon = SHOTGUN;
+    } while (weapon->info[weapon->weapon].bag != sfTrue);
 }
 
 static void change_weapon(weapon_t *weapon)
@@ -45,14 +46,11 @@ static void change_weapons(sfEvent event, game_t *game, weapon_t *weapon)
         return;
     game->tool->draw[prev + TOOL_ONE].color = sfWhite;
     scroll_weapon(event, weapon);
-    if (is_input(event, sfKeyNum1, sfFalse, 0))
-        weapon->weapon = PUNCH;
-    if (is_input(event, sfKeyNum2, sfFalse, 0))
-        weapon->weapon = PISTOL;
-    if (is_input(event, sfKeyNum3, sfFalse, 0))
-        weapon->weapon = SHOTGUN;
-    if (is_input(event, 51, sfFalse, 0))
-        weapon->weapon = MINIGUN;
+    for (int i = 0; i < NB_WEAPON; i++) {
+        if (is_input(event, weapon->info[i].key, sfFalse, 0)
+        && weapon->info[i].bag == sfTrue)
+        weapon->weapon = i;
+    }
     if (prev != weapon->weapon)
         change_weapon(weapon);
     game->tool->draw[weapon->weapon + TOOL_ONE].color = sfRed;
@@ -65,7 +63,7 @@ static void destroy_wall(int **map, player_t *player, game_t *game)
 
     if (casted_pos.x < 0 || casted_pos.y < 0)
         return;
-    for (size_t i = 0; i < NB_WEAPON; ++i) {
+    for (weapon_id_t i = 0; i < NB_WEAPON; ++i) {
         if (game->weapon->weapon == i && map[casted_pos.y][casted_pos.x] == 3
             && game->weapon->info[i].range > player->center_ray.distance)
             map[casted_pos.y][casted_pos.x] = 0;

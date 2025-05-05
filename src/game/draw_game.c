@@ -66,8 +66,7 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
     sfRectangleShape_setPosition(tool->rectangle, pos);
     sfRectangleShape_setSize(tool->rectangle,
         (sfVector2f){WIN_WIDTH, TOOLBAR_HEIGHT});
-    sfRectangleShape_setFillColor(tool->rectangle,
-        sfColor_fromRGB(100, 100, 100));
+    sfRectangleShape_setFillColor(tool->rectangle, GREY);
     sfRectangleShape_setTexture(tool->rectangle, tool->background, sfTrue);
     sfRectangleShape_setOutlineColor(tool->rectangle, sfTransparent);
     sfRenderWindow_drawRectangleShape(sys->window,
@@ -87,8 +86,8 @@ void draw_game(system_t *sys, void *structure)
 {
     game_t *game = (game_t *)structure;
 
-    game_events(sys, game);
     update_all(sys, game);
+    game_events(sys, game);
     sfRenderWindow_clear(sys->window, sfWhite);
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);
