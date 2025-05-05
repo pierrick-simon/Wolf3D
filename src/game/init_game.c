@@ -24,14 +24,16 @@ static int init_crossair(player_t *player)
     return SUCCESS;
 }
 
-static int init_state(map_t *map)
+static int init_states(map_t *map)
 {
-    map->wall_state.texture =
-        sfTexture_createFromFile("asset/wall.png", NULL);
-    if (map->wall_state.texture == NULL)
-        return ERROR;
-    map->wall_state.transform = sfTransform_Identity;
-    map->wall_state.blendMode = sfBlendAlpha;
+    for (size_t i = 0; i < NB_WALL_TXT; ++i) {
+        map->wall_states[i].texture =
+            sfTexture_createFromFile(wall_textures[i].paths, NULL);
+        if (map->wall_states[i].texture == NULL)
+            return ERROR;
+        map->wall_states[i].transform = sfTransform_Identity;
+        map->wall_states[i].blendMode = sfBlendAlpha;
+    }
     return SUCCESS;
 }
 
@@ -44,10 +46,12 @@ static int init_map(map_t *map)
     if (map->ceiling_floor == NULL)
         return ERROR;
     sfRectangleShape_setSize(map->ceiling_floor, pos);
-    map->quads = sfVertexArray_create();
-    if (map->quads == NULL || init_state(map) == ERROR)
-        return ERROR;
-    sfVertexArray_setPrimitiveType(map->quads, sfLines);
+    for (size_t i = 0; i < NB_WALL_TXT; ++i) {
+        map->lines[i] = sfVertexArray_create();
+        if (map->lines[i] == NULL || init_states(map) == ERROR)
+            return ERROR;
+        sfVertexArray_setPrimitiveType(map->lines[i], sfLines);
+    }
     return SUCCESS;
 }
 

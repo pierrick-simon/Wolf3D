@@ -33,8 +33,9 @@ static void destroy_weapon(weapon_t *weapon)
 
 static void destroy_map(map_t *map)
 {
-    if (map->wall_state.texture != NULL)
-        sfTexture_destroy((sfTexture *)map->wall_state.texture);
+    for (size_t i = 0; i < NB_WALL_TXT; ++i)
+        if (map->wall_states[i].texture != NULL)
+            sfTexture_destroy((sfTexture *)map->wall_states[i].texture);
     if (map->ceiling_floor != NULL)
         sfRectangleShape_destroy(map->ceiling_floor);
     free(map);

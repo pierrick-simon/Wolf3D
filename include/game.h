@@ -46,6 +46,27 @@
 
     #define OFFSET_POINT_BAR 20
 
+    #define ARRAY_LENGHT(x) (sizeof(x) / sizeof(*x))
+
+typedef enum wall_type {
+    WALL,
+    DESTRUCTIBLE,
+    DOOR,
+} wall_type_t;
+
+typedef struct int_wall_texture_s {
+    int const value;
+    char *const paths;
+} int_wall_texture_t;
+
+static const int_wall_texture_t wall_textures[] = {
+    [WALL] = {1, "asset/wall.png"},
+    [DESTRUCTIBLE] = {3, "asset/door.png"},
+    [DOOR] = {2, "asset/door.png"},
+};
+
+    #define NB_WALL_TXT ARRAY_LENGHT(wall_textures)
+
 typedef enum intersection_type {
     NONE,
     TOP,
@@ -53,12 +74,6 @@ typedef enum intersection_type {
     LEFT,
     RIGHT,
 } intersection_type_t;
-
-typedef enum wall_type {
-    NO_WALL,
-    WALL,
-    DESTRUCTIBLE,
-} wall_type_t;
 
 typedef struct intersection_s {
     intersection_type_t type;
@@ -96,8 +111,8 @@ typedef enum {
 
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
-    sfVertexArray *quads;
-    sfRenderStates wall_state;
+    sfVertexArray *lines[NB_WALL_TXT];
+    sfRenderStates wall_states[NB_WALL_TXT];
 } map_t;
 
 typedef struct center_ray_s {

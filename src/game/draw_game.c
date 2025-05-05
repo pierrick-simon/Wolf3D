@@ -76,6 +76,13 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
     draw_tool_strings(sys, tool);
 }
 
+static void draw_lines(system_t *sys, game_t *game)
+{
+    for (size_t i = 0; i < NB_WALL_TXT; ++i)
+        sfRenderWindow_drawVertexArray(sys->window,
+            game->map->lines[i], &game->map->wall_states[i]);
+}
+
 void draw_game(system_t *sys, void *structure)
 {
     game_t *game = (game_t *)structure;
@@ -86,12 +93,11 @@ void draw_game(system_t *sys, void *structure)
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);
     draw_coor(sys, game);
-    sfRenderWindow_drawVertexArray(sys->window,
-        game->map->quads, &game->map->wall_state);
-    sfRenderWindow_drawSprite(
-        sys->window, game->weapon->sprite, NULL);
+    draw_lines(sys, game);
+    sfRenderWindow_drawSprite(sys->window,
+        game->weapon->sprite, NULL);
     sfRenderWindow_drawCircleShape(sys->window,
-            game->player->crossair, NULL);
+        game->player->crossair, NULL);
     draw_toolbar(sys, game->tool);
     sfRenderWindow_display(sys->window);
     update_time_end(game->time_info);

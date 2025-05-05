@@ -17,13 +17,11 @@ static sfBool is_end(sfVector2f *pos, intersection_t *type, save_t *save)
         return sfFalse;
     if (casted_pos.x >= save->size.x || casted_pos.y >= save->size.x)
         return sfTrue;
-    if (save->map[casted_pos.y][casted_pos.x] == 1) {
-        type->wall = WALL;
-        return sfTrue;
-    }
-    if (save->map[casted_pos.y][casted_pos.x] == 3) {
-        type->wall = DESTRUCTIBLE;
-        return sfTrue;
+    for (size_t i = 0; i < NB_WALL_TXT; ++i) {
+        if (save->map[casted_pos.y][casted_pos.x] == wall_textures[i].value) {
+            type->wall = i;
+            return sfTrue;
+        }
     }
     return sfFalse;
 }
