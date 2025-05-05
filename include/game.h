@@ -18,7 +18,7 @@
     #define RAY_LENGHT 2
 
     #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
-    #define FLOOR_COLOR sfColor_fromRGB(149, 149, 149)
+    #define FLOOR_COLOR sfColor_fromRGB(139, 139, 139)
     #define TOOLBAR_COLOR sfColor_fromRGB(49, 49, 49)
 
     #define MAX_DISTANCE 100.0

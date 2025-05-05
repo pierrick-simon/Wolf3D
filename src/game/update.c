@@ -40,8 +40,8 @@ static void update_guns(weapon_t *weapon, toolbar_t *tool, int bag)
     sfSprite_setPosition(weapon->sprite, weapon->info[ind].posf);
 }
 
-static void shot_gun_anim(
-    weapon_t *weapon, sfInt64 time, toolbar_t *tool, int bag)
+static void shot_gun_anim(weapon_t *weapon,
+    sfInt64 time, toolbar_t *tool, int bag)
 {
     double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
     int ind = weapon->weapon;

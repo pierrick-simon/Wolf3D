@@ -78,7 +78,7 @@ static void click(system_t *sys,
 
     if (diff < weapon->info[ind].speed * weapon->info[ind].nb_tile)
         return;
-    if ((sfMouse_isButtonPressed(sfMouseLeft)) ||
+    if (sfMouse_isButtonPressed(sfMouseLeft) ||
         sfJoystick_getAxisPosition(0, sfJoystickR) > 0) {
         if (weapon->weapon != PUNCH && sys->save->info->ammo == 0) {
             sfMusic_play(weapon->empty);
@@ -118,6 +118,20 @@ static void save_game(sfEvent event, save_t *save, toolbar_t *tool)
     }
 }
 
+static void door(int **map, player_t *player)
+{
+    sfVector2i casted_pos = cast_pos(&player->center_ray.pos,
+        player->center_ray.type);
+
+    if (casted_pos.x < 0 || casted_pos.y < 0)
+        return;
+    if (sfMouse_isButtonPressed(sfMouseRight) &&
+        player->center_ray.distance < 258.0 &&
+        map[casted_pos.y][casted_pos.x] == wall_textures[DOOR].value) {
+        map[casted_pos.y][casted_pos.x] = 0;
+    }
+}
+
 void game_events(system_t *sys, game_t *game)
 {
     sfEvent event = {0};
@@ -130,8 +144,9 @@ void game_events(system_t *sys, game_t *game)
         save_game(event, sys->save, game->tool);
     }
     click(sys, game->weapon, game->time_info->time, game);
+    door(sys->save->map, game->player);
     move_player(game->player, game->time_info->delta,
         &game->tool->head->rectangle.left);
-    sfSprite_setTextureRect(
-        game->tool->head->sprite, game->tool->head->rectangle);
+    sfSprite_setTextureRect(game->tool->head->sprite,
+        game->tool->head->rectangle);
 }
