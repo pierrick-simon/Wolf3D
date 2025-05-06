@@ -126,10 +126,10 @@ static void interact(int **map, player_t *player, system_t *sys)
     if (casted_pos.x < 0 || casted_pos.y < 0)
         return;
     if (sfKeyboard_isKeyPressed(sfKeyF)) {
-        if (player->center_ray.distance < 258.0 &&
+        if (player->center_ray.distance < OPEN_DISTANCE &&
             map[casted_pos.y][casted_pos.x] == wall_textures[DOOR].value)
             map[casted_pos.y][casted_pos.x] = 0;
-        if (player->center_ray.distance < 258.0 &&
+        if (player->center_ray.distance < FINISH_DISTANCE &&
             map[casted_pos.y][casted_pos.x] == wall_textures[FINAL].value)
             sys->state->scene = MENU;
     }

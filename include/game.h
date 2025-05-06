@@ -48,6 +48,9 @@
 
     #define ARRAY_LENGHT(x) (sizeof(x) / sizeof(*x))
 
+    #define OPEN_DISTANCE 256.0
+    #define FINISH_DISTANCE 64.0
+
 typedef enum wall_type {
     WALL,
     DESTRUCTIBLE,
