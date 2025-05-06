@@ -89,6 +89,7 @@ static void click(system_t *sys,
         weapon->shot = time;
         sfMusic_play(weapon->info[weapon->weapon].sound);
         destroy_wall(sys->save->map, game->player, game);
+        sys->save->info->score += 10;
     }
 }
 
