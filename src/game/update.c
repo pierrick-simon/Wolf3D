@@ -119,6 +119,25 @@ static void update_sprint(
         tool->sprint += delta * SEC_IN_MICRO;
 }
 
+static void update_interact(toolbar_t *tool, player_t *player, int **map)
+{
+    sfVector2i casted_pos = cast_pos(&player->center_ray.pos,
+        player->center_ray.type);
+
+    if (casted_pos.x < 0 || casted_pos.y < 0) {
+        tool->interact = sfFalse;
+        return;
+    }
+    if ((player->center_ray.distance < OPEN_DISTANCE &&
+        map[casted_pos.y][casted_pos.x] == wall_textures[DOOR].value)
+        || (player->center_ray.distance < FINISH_DISTANCE &&
+        map[casted_pos.y][casted_pos.x] == wall_textures[FINAL].value)) {
+            tool->interact = sfTrue;
+            return;
+    }
+    tool->interact = sfFalse;
+}
+
 void update_all(system_t *sys, game_t *game)
 {
     update_save(sys, game->player, game->tool);
@@ -127,6 +146,7 @@ void update_all(system_t *sys, game_t *game)
     update_sprint(game->tool, sys->save, game->player->is_sprinting,
         game->time_info->delta);
     update_toolbar(sys, game->tool, game->time_info->delta);
+    update_interact(game->tool, game->player, sys->save->map);
     shot_gun_anim(game->weapon, game->time_info->time,
         game->tool, sys->save->info->weapons);
     cast_all_rays(game);

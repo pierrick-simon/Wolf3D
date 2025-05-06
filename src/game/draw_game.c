@@ -50,7 +50,8 @@ static void draw_tool_strings(system_t *sys, toolbar_t *tool)
 {
     for (int i = 0; i < NB_TOOLBAR; i++) {
         if ((tool->fps == sfFalse && i == TOOL_FPS)
-            || (tool->saving == sfFalse && i == TOOL_SAVE))
+            || (tool->saving == sfFalse && i == TOOL_SAVE)
+            || (tool->interact == sfFalse && i == TOOL_INTERACT))
             continue;
         draw_string(sys, sys->textbox, &tool->draw[i]);
     }

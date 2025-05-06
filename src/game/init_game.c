@@ -120,6 +120,7 @@ static int init_toolbar(toolbar_t *tool)
     tool->draw[TOOL_FPS].color = sfRed;
     tool->save = -1;
     tool->saving = sfFalse;
+    tool->interact = sfFalse;
     return SUCCESS;
 }
 

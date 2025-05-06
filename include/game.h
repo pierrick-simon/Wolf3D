@@ -48,7 +48,7 @@
 
     #define ARRAY_LENGHT(x) (sizeof(x) / sizeof(*x))
 
-    #define OPEN_DISTANCE 256.0
+    #define OPEN_DISTANCE 128.0
     #define FINISH_DISTANCE 64.0
 
 typedef enum wall_type {
@@ -105,6 +105,7 @@ typedef enum {
     TOOL_SCORE_STR,
     TOOL_FPS,
     TOOL_SAVE,
+    TOOL_INTERACT,
     NB_TOOLBAR,
 } str_toolbar_t;
 
@@ -181,6 +182,7 @@ typedef struct toolbar_s {
     sfInt64 sprint;
     sfInt64 no_sprint;
     sfBool saving;
+    sfBool interact;
 } toolbar_t;
 
 typedef struct game_s {
