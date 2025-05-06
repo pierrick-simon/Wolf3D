@@ -102,6 +102,12 @@ SRC =	$(addprefix src/,					\
 				destroy_leave.c				\
 				init_leave.c				\
 			)								\
+			$(addprefix win/,				\
+				win_event.c					\
+				draw_win.c					\
+				destroy_win.c				\
+				init_win.c					\
+			)								\
 		)
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)

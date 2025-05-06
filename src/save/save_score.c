@@ -27,6 +27,6 @@ void save_score(save_t *save, char *name)
     if (fd == -1)
         return;
     dprintf(fd, "\n%s:%d:%d",
-        name, (int)(save->info->time / SEC_IN_MICRO), save->info->score);
+        name, save->info->score, (int)(save->info->time / SEC_IN_MICRO));
     close(fd);
 }
