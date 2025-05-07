@@ -11,13 +11,14 @@
 
 static void set_weapon_info(char **tab, weapon_info_t *weapon)
 {
-    weapon->texture = sfTexture_createFromFile(tab[0], NULL);
-    weapon->sound = sfMusic_createFromFile(tab[1]);
-    weapon->size = (sfVector2f){atoi(tab[2]), atoi(tab[3])};
-    weapon->nb_tile = atoi(tab[4]);
-    weapon->speed = atof(tab[5]);
-    weapon->range = atof(tab[6]);
-    weapon->key = atoi(tab[7]);
+    weapon->texture = sfTexture_createFromFile(tab[LOAD_W_TEXTURE], NULL);
+    weapon->sound = sfMusic_createFromFile(tab[LOAD_W_MUSIC]);
+    weapon->size = (sfVector2f)
+        {atoi(tab[LOAD_W_POS_X]), atoi(tab[LOAD_W_POS_Y])};
+    weapon->nb_tile = atoi(tab[LOAD_W_TILE]);
+    weapon->speed = atof(tab[LOAD_W_SPEED]);
+    weapon->range = atof(tab[LOAD_W_RANGE]);
+    weapon->key = atoi(tab[LOAD_W_KEY]);
     weapon->size.x /= weapon->nb_tile;
     weapon->rectangle = (sfIntRect){0, 0, weapon->size.x, weapon->size.y};
     weapon->current_tile = 0;
@@ -33,7 +34,7 @@ static int init_weapon(char *info, weapon_info_t *weapon)
     weapon->sound = NULL;
     if (tab == NULL)
         return ERROR;
-    if (array_len(tab) != 8) {
+    if (array_len(tab) != NB_W_LOAD) {
         free_array(tab);
         return ERROR;
     }

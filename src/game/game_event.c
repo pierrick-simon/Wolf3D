@@ -70,15 +70,14 @@ static void destroy_wall(int **map, player_t *player, game_t *game)
     }
 }
 
-static void click(system_t *sys,
-    weapon_t *weapon, sfInt64 time, game_t *game)
+static void click(system_t *sys, weapon_t *weapon, game_t *game)
 {
-    double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
+    double diff = (double)(game->time_info->time - weapon->shot) / SEC_IN_MICRO;
     int ind = weapon->weapon;
 
     if (diff < weapon->info[ind].speed * weapon->info[ind].nb_tile)
         return;
-    if (sfMouse_isButtonPressed(sfMouseLeft) ||
+    if (sfKeyboard_isKeyPressed(sfKeySpace) ||
         sfJoystick_getAxisPosition(0, sfJoystickR) > 0) {
         if (weapon->weapon != PUNCH && sys->save->info->ammo == 0) {
             sfMusic_play(weapon->empty);
@@ -86,7 +85,7 @@ static void click(system_t *sys,
         }
         if (weapon->weapon != PUNCH)
             sys->save->info->ammo--;
-        weapon->shot = time;
+        weapon->shot = game->time_info->time;
         sfMusic_play(weapon->info[weapon->weapon].sound);
         destroy_wall(sys->save->map, game->player, game);
         sys->save->info->score += 10;
@@ -95,7 +94,7 @@ static void click(system_t *sys,
 
 static void switch_scene(sfEvent event, state_info_t *state)
 {
-    if (is_input(event, sfKeyTab, sfTrue, 3)) {
+    if (is_input(event, sfKeyEscape, sfTrue, 3)) {
         state->old_scene = state->scene;
         state->scene = PAUSE;
     }
@@ -147,7 +146,7 @@ void game_events(system_t *sys, game_t *game)
         show_fps(event, game->tool);
         save_game(event, sys->save, game->tool);
     }
-    click(sys, game->weapon, game->time_info->time, game);
+    click(sys, game->weapon, game);
     interact(sys->save->map, game->player, sys);
     move_player(game->player, game->time_info->delta,
         &game->tool->head->rectangle.left);

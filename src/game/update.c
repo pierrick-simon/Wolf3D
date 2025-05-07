@@ -37,12 +37,13 @@ void update_time_end(time_info_t *time_info)
         (float)SEC_IN_MICRO;
 }
 
-static void update_save(system_t *sys, player_t *player, toolbar_t *tool)
+static void update_save(system_t *sys, player_t *player, toolbar_t *tool, time_info_t *time)
 {
     if (sys->save->update == sfFalse) {
         player->pos = sys->save->info->start_pos;
         player->angle = sys->save->info->start_angle;
         player->save = sys->save;
+        time->time = 0;
         sys->save->update = sfTrue;
         tool->sprint = 0;
         tool->no_sprint = 0;
@@ -140,7 +141,7 @@ static void update_interact(toolbar_t *tool, player_t *player, int **map)
 
 void update_all(system_t *sys, game_t *game)
 {
-    update_save(sys, game->player, game->tool);
+    update_save(sys, game->player, game->tool, game->time_info);
     update_saving(sys, game->tool);
     update_time(sys->save, sys->save->info->time, game->time_info, game);
     update_sprint(game->tool, sys->save, game->player->is_sprinting,

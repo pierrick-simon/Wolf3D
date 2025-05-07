@@ -29,8 +29,10 @@ static int load_map(select_map_t *map, system_t *sys, char *name)
     return exit;
 }
 
-static void reset_str(select_map_t *map)
+static void reset_str(select_map_t *map, state_info_t *state, str_map_t id)
 {
+    state->old_scene = state->scene;
+    state->scene = map->draw[id].scene;
     map->draw[map->str].color = sfWhite;
     map->str = MAP_PLAY;
     map->save = sfFalse;
@@ -56,10 +58,10 @@ static void switch_scene(
             sys->save->name = tmp;
         if (map->str != MAP_SCORE)
             free(tmp);
-        state->old_scene = state->scene;
-        state->scene = map->draw[map->str].scene;
-        reset_str(map);
+        reset_str(map, state, map->str);
     }
+    if (is_input(event, sfKeyEscape, sfFalse, 0))
+        reset_str(map, state, MAP_BACK);
 }
 
 static void check_continue(select_map_t *map, int prev)

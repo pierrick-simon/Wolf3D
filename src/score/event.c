@@ -11,10 +11,10 @@
 static void switch_scene(
     sfEvent event, score_t *score, state_info_t *state)
 {
-    if (is_input(event, sfKeyEnter, sfTrue, 0)) {
-        if (score->str == SCORE_SUB) {
-            return;
-        }
+    if ((is_input(event, sfKeyEnter, sfTrue, 0) && score->str == SCORE_SUB)
+        || is_input(event, sfKeyEscape, sfFalse, 0)) {
+        if (is_input(event, sfKeyEscape, sfFalse, 0))
+            score->str = SCORE_BACK;
         state->old_scene = state->scene;
         state->scene = score->draw[score->str].scene;
         free_linked_list(score->list, &free_info_score);

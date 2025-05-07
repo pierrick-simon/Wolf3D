@@ -20,7 +20,8 @@
     #define WIN_OFFSET 125
     #define WIN_SIZE 50
 
-    #define MAX_NAME_SCORE 3
+    #define MAX_NAME_SCORE 10
+    #define DEAULT_NAME_SCORE 3    
 
 typedef enum {
     LEAVE_TITLE,
@@ -53,7 +54,7 @@ typedef struct win_s {
     sprite_t *danse;
     sfClock *clock;
     char *name;
-    char name_tmp[4];
+    char name_tmp[MAX_NAME_SCORE + 1];
     char time[7];
     char score[10];
     sfBool update;

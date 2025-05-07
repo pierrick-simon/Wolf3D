@@ -40,6 +40,15 @@ static void switch_scene(sfEvent event, maps_t *maps,
         maps->draw[maps->str].color = sfWhite;
         maps->str = MAPS_SUB;
     }
+    if (is_input(event, sfKeyEscape, sfFalse, 0)) {
+        state->old_scene = state->scene;
+        state->scene = maps->draw[MAPS_BACK].scene;
+        free_linked_list(maps->info->list, &free_node_file);
+        maps->info->list = NULL;
+        maps->info->update = sfFalse;
+        maps->draw[maps->str].color = sfWhite;
+        maps->str = MAPS_SUB;
+    }
 }
 
 static void check_save_minus(maps_t *maps)

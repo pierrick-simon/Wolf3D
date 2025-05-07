@@ -51,6 +51,18 @@
     #define OPEN_DISTANCE 128.0
     #define FINISH_DISTANCE 64.0
 
+typedef enum {
+    LOAD_W_TEXTURE,
+    LOAD_W_MUSIC,
+    LOAD_W_POS_X,
+    LOAD_W_POS_Y,
+    LOAD_W_TILE,
+    LOAD_W_SPEED,
+    LOAD_W_RANGE,
+    LOAD_W_KEY,
+    NB_W_LOAD,
+} load_weapon_info_t;
+
 typedef enum wall_type {
     WALL,
     DESTRUCTIBLE,

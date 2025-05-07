@@ -33,15 +33,15 @@ static void get_line(linked_list_t *list, char **tab)
         free_array(tab);
         return;
     }
-    node->name = tab[0];
-    node->score = tab[1];
-    node->time = get_time(atoi(tab[2]));
+    node->name = tab[LOAD_S_NAME];
+    node->score = tab[LOAD_S_SCORE];
+    node->time = get_time(atoi(tab[LOAD_S_TIME]));
     if (node->time == NULL) {
         free_array(tab);
         free(node);
         return;
     }
-    free(tab[2]);
+    free(tab[LOAD_S_TIME]);
     free(tab);
     push_to_head(list, node);
 }

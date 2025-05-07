@@ -19,6 +19,13 @@
 typedef struct linked_list_s linked_list_t;
 typedef struct node_s node_t;
 
+typedef enum {
+    LOAD_S_NAME,
+    LOAD_S_SCORE,
+    LOAD_S_TIME,
+    NB_S_LOAD,
+} load_score_t;
+
 typedef enum score_str_e {
     SCORE_TITLE,
     SCORE_SUB,

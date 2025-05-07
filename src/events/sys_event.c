@@ -29,7 +29,8 @@ static void music_setvolume(sfEvent event, system_t *sys, state_info_t *state)
 
 static void close_window(sfEvent event, system_t *sys)
 {
-    if (is_input(event, sfKeyEscape, sfTrue, 8) || event.type == sfEvtClosed) {
+    if ((sfKeyboard_isKeyPressed(sfKeyLAlt) && sfKeyboard_isKeyPressed(sfKeyF4))
+        || event.type == sfEvtClosed) {
         sfRenderWindow_close(sys->window);
         sfMusic_setVolume(sys->music, VOL_MIN);
     }

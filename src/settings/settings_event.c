@@ -59,8 +59,9 @@ static void switch_scene(
 {
     int old = state->old_scene;
 
-    if (is_input(event, sfKeyEnter, sfTrue, 0) &&
-        setting->str == SETTING_BACK) {
+    if ((is_input(event, sfKeyEnter, sfTrue, 0)
+        && setting->str == SETTING_BACK)
+        || is_input(event, sfKeyEscape, sfFalse, 0)) {
         state->old_scene = state->scene;
         state->scene = old;
         setting->draw[setting->str].color = sfWhite;

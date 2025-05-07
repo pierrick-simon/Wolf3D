@@ -29,7 +29,7 @@ static int load_restart(win_t *win, system_t *sys, char *name)
 
 static void update_score(system_t *sys, char *str)
 {
-    for (int i = 0; i < MAX_NAME_SCORE; i++) {
+    for (int i = 0; i < DEAULT_NAME_SCORE; i++) {
         if (str[i] == '\0')
             str[i] = '-';
     }
@@ -41,7 +41,10 @@ static void update_score(system_t *sys, char *str)
 static void switch_scene(
     sfEvent event, system_t *sys, win_t *win, state_info_t *state)
 {
-    if (is_input(event, sfKeyEnter, sfTrue, 0)) {
+    if (is_input(event, sfKeyEnter, sfTrue, 0)
+        || is_input(event, sfKeyEscape, sfFalse, 0)) {
+        if (is_input(event, sfKeyEscape, sfFalse, 0))
+            win->str = WIN_MENU;
         update_score(sys, win->name);
         state->old_scene = state->scene;
         if (load_restart(win, sys, sys->save->name) == ERROR)
