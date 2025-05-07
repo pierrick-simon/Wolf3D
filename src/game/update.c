@@ -37,7 +37,8 @@ void update_time_end(time_info_t *time_info)
         (float)SEC_IN_MICRO;
 }
 
-static void update_save(system_t *sys, player_t *player, toolbar_t *tool, time_info_t *time)
+static void update_save(
+    system_t *sys, player_t *player, toolbar_t *tool, time_info_t *time)
 {
     if (sys->save->update == sfFalse) {
         player->pos = sys->save->info->start_pos;

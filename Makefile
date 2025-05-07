@@ -12,6 +12,7 @@ SRC =	$(addprefix src/,					\
 			sys_loop.c						\
 			load_screen.c					\
 			draw_func.c                     \
+			check_env.c						\
 			\
 			$(addprefix algo/,				\
 				move_rect.c					\

@@ -72,7 +72,8 @@ static void destroy_wall(int **map, player_t *player, game_t *game)
 
 static void click(system_t *sys, weapon_t *weapon, game_t *game)
 {
-    double diff = (double)(game->time_info->time - weapon->shot) / SEC_IN_MICRO;
+    double diff = (double)(game->time_info->time - weapon->shot)
+        / SEC_IN_MICRO;
     int ind = weapon->weapon;
 
     if (diff < weapon->info[ind].speed * weapon->info[ind].nb_tile)

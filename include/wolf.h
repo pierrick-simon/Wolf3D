@@ -179,6 +179,8 @@ typedef struct menu_s {
     draw_textbox_t *draw;
 } menu_t;
 
+int check_env(char **env);
+
 // init
 
 void *init_menu(void);

@@ -28,6 +28,8 @@ static void get_line(linked_list_t *list, char **tab)
 {
     score_info_t *node = NULL;
 
+    if (array_len(tab) != NB_S_LOAD)
+        return;
     node = malloc(sizeof(score_info_t));
     if (node == NULL) {
         free_array(tab);

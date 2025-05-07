@@ -21,7 +21,7 @@
     #define WIN_SIZE 50
 
     #define MAX_NAME_SCORE 10
-    #define DEAULT_NAME_SCORE 3    
+    #define DEAULT_NAME_SCORE 3
 
 typedef enum {
     LEAVE_TITLE,
