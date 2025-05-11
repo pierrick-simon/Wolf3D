@@ -34,6 +34,24 @@ static int initiate_body(char **tab, save_t *save)
     return SUCCESS;
 }
 
+static int get_dup_info(char **tab, save_t *save)
+{
+    save->name = strdup(tab[NAME]);
+    if (save->name == NULL)
+        return ERROR;
+    save->music_path = strdup(tab[MUSIC]);
+    if (save->music_path == NULL)
+        return ERROR;
+    save->music = sfMusic_createFromFile(tab[MUSIC]);
+    if (save->music_path == NULL)
+        return ERROR;
+    if (initiate_body(tab + COOR, save) == ERROR) {
+        free(save->name);
+        return ERROR;
+    }
+    return SUCCESS;
+}
+
 static int initiate_struct(char **tab, save_t *save)
 {
     save->size = (sfVector2i){atoi(tab[SIZE_X]), atoi(tab[SIZE_Y])};
@@ -47,14 +65,8 @@ static int initiate_struct(char **tab, save_t *save)
     save->info->score = atoi(tab[CURRENT_SCORE]);
     save->info->time = atoi(tab[TIME]) * SEC_IN_MICRO;
     save->info->weapons = atoi(tab[WEAPONS]);
-    save->name = strdup(tab[NAME]);
-    if (save->name == NULL)
-        return ERROR;
-    if (initiate_body(tab + COOR, save) == ERROR) {
-        free(save->name);
-        return ERROR;
-    }
-    return SUCCESS;
+    save->info->start_weapon = atoi(tab[START_WEAPON]);
+    return get_dup_info(tab, save);
 }
 
 static int check_header(char **tab, int *x, int *y)

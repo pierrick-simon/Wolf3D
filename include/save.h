@@ -35,11 +35,14 @@ typedef struct player_info_s {
     int score;
     sfUint64 time;
     int weapons;
+    int start_weapon;
 } player_info_t;
 
 typedef struct save_s {
     char *name;
     sfVector2i size;
+    sfMusic *music;
+    char *music_path;
     int **map;
     sfBool init;
     sfBool update;
@@ -60,6 +63,8 @@ typedef enum {
     CURRENT_SCORE,
     TIME,
     WEAPONS,
+    START_WEAPON,
+    MUSIC,
     COOR,
 } str_t;
 
@@ -132,6 +137,7 @@ static const check_t CHECK[] __maybe_unused = {
     [CURRENT_SCORE] = {&check_info},
     [TIME] = {&check_info},
     [WEAPONS] = {&check_info},
+    [START_WEAPON] = {&check_info},
     [COOR] = {NULL}
 };
 

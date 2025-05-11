@@ -10,7 +10,8 @@
 
 static void destroy_player(player_t *player)
 {
-    sfCircleShape_destroy(player->crossair);
+    if (player->crossair != NULL)
+        sfCircleShape_destroy(player->crossair);
     free(player);
 }
 
@@ -79,5 +80,9 @@ void destroy_game(void *structure)
         destroy_time_info(game->time_info);
     if (game->tool != NULL)
         destroy_tool(game->tool);
+    for (int i = 0; i < NB_MUSIC; i++) {
+        if (game->music[i] != NULL)
+            sfMusic_destroy(game->music[i]);
+    }
     free(game);
 }

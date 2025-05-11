@@ -23,6 +23,27 @@ static void update_inbag(weapon_t *weapon, toolbar_t *tool, int bag)
     }
 }
 
+static void update_guns_movement(
+    weapon_t *weapon, toolbar_t *tool, time_info_t *time)
+{
+    int ind = weapon->weapon;
+
+    if ((tool->head->rectangle.left == 0
+        && weapon->horizontal_offset > MAX_WIDTH * SKIP)
+        || (tool->head->rectangle.left == HEAD_SPRITE_X
+        && weapon->horizontal_offset > 0))
+        weapon->horizontal_offset -= (double)time->delta * MIN_IN_SEC;
+    else if ((tool->head->rectangle.left == HEAD_SPRITE_X * 2
+        && weapon->horizontal_offset < MAX_WIDTH)
+        || (tool->head->rectangle.left == HEAD_SPRITE_X
+        && weapon->horizontal_offset < 0))
+        weapon->horizontal_offset += (double)time->delta * MIN_IN_SEC;
+    sfSprite_setPosition(weapon->sprite, (sfVector2f){weapon->info[ind].posf.x
+        + weapon->horizontal_offset, weapon->info[ind].posf.y
+        + (cos((double)(time->time / (SEC_IN_MICRO
+        / MOV_OFFSET_GUN))) * MOV_OFFSET_GUN) + MOV_OFFSET_GUN});
+}
+
 static void update_guns(weapon_t *weapon, toolbar_t *tool, int bag)
 {
     int ind = weapon->weapon;
@@ -37,15 +58,17 @@ static void update_guns(weapon_t *weapon, toolbar_t *tool, int bag)
         else
             weapon->info[ind].posf.x = PUNCH_POS;
     }
-    sfSprite_setPosition(weapon->sprite, weapon->info[ind].posf);
 }
 
-void shot_gun_anim(weapon_t *weapon, sfInt64 time, toolbar_t *tool, int bag)
+void shot_gun_anim(
+    weapon_t *weapon, time_info_t *time, toolbar_t *tool, int bag)
 {
-    double diff = (double)(time - weapon->shot) / SEC_IN_MICRO;
+    double diff = (double)(time->time - weapon->shot) / SEC_IN_MICRO;
     int ind = weapon->weapon;
 
     for (int i = 0; i < weapon->info[ind].nb_tile; i++) {
+        if (weapon->shot == -1)
+            break;
         if (diff > weapon->info[ind].speed * i
             && diff < weapon->info[ind].speed * (i + 1)
             && weapon->info[ind].current_tile == i) {
@@ -56,4 +79,5 @@ void shot_gun_anim(weapon_t *weapon, sfInt64 time, toolbar_t *tool, int bag)
         }
     }
     update_guns(weapon, tool, bag);
+    update_guns_movement(weapon, tool, time);
 }

@@ -37,20 +37,26 @@ void update_time_end(time_info_t *time_info)
         (float)SEC_IN_MICRO;
 }
 
-static void update_save(
-    system_t *sys, player_t *player, toolbar_t *tool, time_info_t *time)
+static void update_save(system_t *sys, game_t *game)
 {
     if (sys->save->update == sfFalse) {
-        player->pos = sys->save->info->start_pos;
-        player->angle = sys->save->info->start_angle;
-        player->save = sys->save;
-        time->time = 0;
+        game->player->pos = sys->save->info->start_pos;
+        game->player->angle = sys->save->info->start_angle;
+        game->player->save = sys->save;
+        game->time_info->time = 0;
+        game->tool->sprint = 0;
+        game->tool->no_sprint = 0;
+        game->weapon->horizontal_offset = 0;
+        game->weapon->shot = -1;
+        game->weapon->weapon = (int)log2(sys->save->info->start_weapon);
+        sfSprite_setTexture(game->weapon->sprite,
+            game->weapon->info[game->weapon->weapon].texture, sfTrue);
+        sfSprite_setTextureRect(game->weapon->sprite,
+            game->weapon->info[game->weapon->weapon].rectangle);
         sys->save->update = sfTrue;
-        tool->sprint = 0;
-        tool->no_sprint = 0;
     }
-    sys->save->info->start_pos = player->pos;
-    sys->save->info->start_angle = player->angle;
+    sys->save->info->start_pos = game->player->pos;
+    sys->save->info->start_angle = game->player->angle;
 }
 
 static void update_toolbar_percent(draw_textbox_t *draw, int nb)
@@ -140,16 +146,29 @@ static void update_interact(toolbar_t *tool, player_t *player, int **map)
     tool->interact = sfFalse;
 }
 
+static void update_music_volume(
+    system_t *sys, weapon_t *weapon, sfMusic **music)
+{
+    double volume = sys->state->volume;
+
+    sfMusic_setVolume(sys->save->music, volume);
+    for (int i = 0; i < NB_MUSIC; i++)
+        sfMusic_setVolume(music[i], volume);
+    for (int i = 0; i < NB_WEAPON; i++)
+        sfMusic_setVolume(weapon->info[i].sound, volume);
+}
+
 void update_all(system_t *sys, game_t *game)
 {
-    update_save(sys, game->player, game->tool, game->time_info);
+    update_save(sys, game);
     update_saving(sys, game->tool);
     update_time(sys->save, sys->save->info->time, game->time_info, game);
     update_sprint(game->tool, sys->save, game->player->is_sprinting,
         game->time_info->delta);
     update_toolbar(sys, game->tool, game->time_info->delta);
     update_interact(game->tool, game->player, sys->save->map);
-    shot_gun_anim(game->weapon, game->time_info->time,
+    update_music_volume(sys, game->weapon, game->music);
+    shot_gun_anim(game->weapon, game->time_info,
         game->tool, sys->save->info->weapons);
     cast_all_rays(game);
 }

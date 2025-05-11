@@ -33,8 +33,12 @@ void destroy_save(save_t *save)
     if (save->init == sfTrue) {
         if (save->map != NULL)
             free_map(save->size.y, save->map);
-        if (save->map != NULL)
+        if (save->name != NULL)
             free(save->name);
+        if (save->music_path != NULL)
+            free(save->music_path);
+        if (save->music != NULL)
+            sfMusic_destroy(save->music);
     }
 }
 

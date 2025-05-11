@@ -10,6 +10,7 @@
 
     #define SUCCESS 0
     #define ERROR 84
+    #define SKIP -1
 
     #include <SFML/Graphics.h>
     #include <SFML/Audio.h>

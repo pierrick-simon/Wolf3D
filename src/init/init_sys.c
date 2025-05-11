@@ -75,7 +75,7 @@ int init_system(system_t *sys, load_screen_t *start)
     if (sys->save == NULL || init_save(sys->save) == ERROR)
         return ERROR;
     sys->window = create_window(sfFullscreen, 1);
-    sys->music = sfMusic_createFromFile("asset/music.ogg");
+    sys->music = sfMusic_createFromFile("asset/menu_music.ogg");
     if (sys->window == NULL || sys->music == NULL)
         return ERROR;
     return SUCCESS;

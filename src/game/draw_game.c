@@ -89,10 +89,12 @@ void draw_game(system_t *sys, void *structure)
     game_t *game = (game_t *)structure;
 
     update_all(sys, game);
+    sfMusic_pause(sys->music);
+    if (sfMusic_getStatus(sys->save->music) == sfStopped
+        || sfMusic_getStatus(sys->save->music) == sfPaused)
+        sfMusic_play(sys->save->music);
     game_events(sys, game);
     sfRenderWindow_clear(sys->window, sfWhite);
-    if (sfMusic_getStatus(sys->music) == sfStopped)
-        sfMusic_play(sys->music);
     draw_coor(sys, game);
     draw_lines(sys, game);
     sfRenderWindow_drawSprite(sys->window,
@@ -102,7 +104,4 @@ void draw_game(system_t *sys, void *structure)
     draw_toolbar(sys, game->tool);
     sfRenderWindow_display(sys->window);
     update_time_end(game->time_info);
-    sys->save->info->health--;
-    if (sys->save->info->health == 0)
-        sys->save->info->health = MAX_HEALTH;
 }

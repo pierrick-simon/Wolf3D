@@ -12,6 +12,8 @@
 
     #define HAND_POS WIN_WIDTH / 2 + 200
     #define PUNCH_POS WIN_WIDTH / 2 - 200
+    #define MOV_OFFSET_GUN 4
+    #define MAX_WIDTH 30
 
     #define FOV RAD(59)
     #define NUM_RAYS WIN_WIDTH
@@ -48,7 +50,7 @@
 
     #define ARRAY_LENGHT(x) (sizeof(x) / sizeof(*x))
 
-    #define OPEN_DISTANCE 128.0
+    #define OPEN_DISTANCE 96.0
     #define FINISH_DISTANCE 64.0
 
 typedef enum {
@@ -130,6 +132,14 @@ typedef enum {
     NB_WEAPON,
 } weapon_id_t;
 
+typedef enum {
+    DESTROY_WALL,
+    DOOR_MU,
+    END_LEVEL,
+    FOOTSTEPP,
+    NB_MUSIC,
+} music_id_t;
+
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
     sfVertexArray *lines[NB_WALL_TXT];
@@ -174,6 +184,7 @@ typedef struct weapon_s {
     sfInt64 shot;
     sfMusic *empty;
     weapon_id_t weapon;
+    double horizontal_offset;
 } weapon_t;
 
 typedef struct time_info_s {
@@ -203,16 +214,19 @@ typedef struct game_s {
     weapon_t *weapon;
     time_info_t *time_info;
     toolbar_t *tool;
+    sfMusic *music[NB_MUSIC];
 } game_t;
 
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player, float angle_offset,
     intersection_t *type, sfVector2f *intersection_point);
-void move_player(player_t *player, double delta, int *head);
+void move_player(
+    player_t *player, double delta, int *head, sfMusic *footstepp);
 int init_weapons(weapon_t *weapon);
 void update_all(system_t *sys, game_t *game);
 void update_time_end(time_info_t *time_info);
-void shot_gun_anim(weapon_t *weapon, sfInt64 time, toolbar_t *tool, int bag);
+void shot_gun_anim(
+    weapon_t *weapon, time_info_t *time, toolbar_t *tool, int bag);
 
 void game_events(system_t *sys, game_t *game);
 void draw_game(system_t *sys, void *structure);

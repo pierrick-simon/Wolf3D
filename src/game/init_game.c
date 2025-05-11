@@ -124,6 +124,18 @@ static int init_toolbar(toolbar_t *tool)
     return SUCCESS;
 }
 
+static int init_music(sfMusic **music)
+{
+    music[DESTROY_WALL] = sfMusic_createFromFile("asset/destroy_wall.ogg");
+    music[DOOR_MU] = sfMusic_createFromFile("asset/door.ogg");
+    music[END_LEVEL] = sfMusic_createFromFile("asset/end_level.ogg");
+    music[FOOTSTEPP] = sfMusic_createFromFile("asset/footstepps.ogg");
+    for (int i = 0; i < NB_MUSIC; i++)
+        if (music[i] == NULL)
+            return ERROR;
+    return SUCCESS;
+}
+
 void *init_game(void)
 {
     game_t *game = malloc(sizeof(game_t));
@@ -141,7 +153,8 @@ void *init_game(void)
         || game->tool == NULL || init_toolbar(game->tool) == ERROR
         || init_weapons(game->weapon) == ERROR
         || init_player(game->player) == ERROR
-        || init_time_info(game->time_info) == ERROR)
+        || init_time_info(game->time_info) == ERROR
+        || init_music(game->music) == ERROR)
         return NULL;
     game->player->save = NULL;
     return (void *)game;

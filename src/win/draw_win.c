@@ -57,6 +57,7 @@ static void update_win(save_t *save, win_t *win)
 void draw_win(system_t *sys, void *structure)
 {
     win_t *win = (win_t *)structure;
+    sfSoundStatus music = sfMusic_getStatus(sys->music);
 
     update_win(sys->save, win);
     win_events(sys, win);
@@ -68,7 +69,8 @@ void draw_win(system_t *sys, void *structure)
     draw_info(sys, &win->draw[WIN_TIME], win->time);
     draw_info(sys, &win->draw[WIN_SCORE], win->score);
     draw_danse(sys, win->danse, win->clock);
-    if (sfMusic_getStatus(sys->music) == sfStopped)
+    sfMusic_stop(sys->save->music);
+    if (music == sfStopped || music == sfPaused)
         sfMusic_play(sys->music);
     sfRenderWindow_display(sys->window);
 }

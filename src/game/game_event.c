@@ -65,8 +65,11 @@ static void destroy_wall(int **map, player_t *player, game_t *game)
         return;
     for (weapon_id_t i = 0; i < NB_WEAPON; ++i) {
         if (game->weapon->weapon == i && map[casted_pos.y][casted_pos.x] == 3
-            && game->weapon->info[i].range > player->center_ray.distance)
+            && game->weapon->info[i].range > player->center_ray.distance) {
             map[casted_pos.y][casted_pos.x] = 0;
+            player->save->info->score += 10;
+            sfMusic_play(game->music[DESTROY_WALL]);
+        }
     }
 }
 
@@ -89,7 +92,6 @@ static void click(system_t *sys, weapon_t *weapon, game_t *game)
         weapon->shot = game->time_info->time;
         sfMusic_play(weapon->info[weapon->weapon].sound);
         destroy_wall(sys->save->map, game->player, game);
-        sys->save->info->score += 10;
     }
 }
 
@@ -119,7 +121,7 @@ static void save_game(sfEvent event, save_t *save, toolbar_t *tool)
     }
 }
 
-static void interact(int **map, player_t *player, system_t *sys)
+static void interact(int **map, player_t *player, system_t *sys, game_t *game)
 {
     sfVector2i casted_pos = cast_pos(&player->center_ray.pos,
         player->center_ray.type);
@@ -128,11 +130,15 @@ static void interact(int **map, player_t *player, system_t *sys)
         return;
     if (sfKeyboard_isKeyPressed(sfKeyF)) {
         if (player->center_ray.distance < OPEN_DISTANCE &&
-            map[casted_pos.y][casted_pos.x] == wall_textures[DOOR].value)
+            map[casted_pos.y][casted_pos.x] == wall_textures[DOOR].value) {
             map[casted_pos.y][casted_pos.x] = 0;
+            sfMusic_play(game->music[DOOR_MU]);
+        }
         if (player->center_ray.distance < FINISH_DISTANCE &&
-            map[casted_pos.y][casted_pos.x] == wall_textures[FINAL].value)
+            map[casted_pos.y][casted_pos.x] == wall_textures[FINAL].value) {
             sys->state->scene = WIN;
+            sfMusic_play(game->music[END_LEVEL]);
+        }
     }
 }
 
@@ -148,9 +154,9 @@ void game_events(system_t *sys, game_t *game)
         save_game(event, sys->save, game->tool);
     }
     click(sys, game->weapon, game);
-    interact(sys->save->map, game->player, sys);
+    interact(sys->save->map, game->player, sys, game);
     move_player(game->player, game->time_info->delta,
-        &game->tool->head->rectangle.left);
+        &game->tool->head->rectangle.left, game->music[FOOTSTEPP]);
     sfSprite_setTextureRect(game->tool->head->sprite,
         game->tool->head->rectangle);
 }
