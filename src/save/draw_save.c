@@ -32,6 +32,29 @@ static void draw_page(
     free(str);
 }
 
+void draw_save_loop(
+    system_t *sys, node_t *head, draw_textbox_t *draw, int start)
+{
+    draw_textbox_t tmp = {NULL};
+    int count = 0;
+
+    for (int i = start; i < start + NB_SHOW_SAVE; i++) {
+        if (head == NULL)
+            break;
+        tmp = draw[i];
+        tmp.str = ((file_t *)head->data)->name;
+        draw_string(sys, sys->textbox, &tmp);
+        head = head->next;
+        count++;
+    }
+    for (int i = count + start; i < start + NB_SHOW_SAVE; i++) {
+        tmp = draw[i];
+        tmp.str = "---";
+        tmp.color = GREY;
+        draw_string(sys, sys->textbox, &tmp);
+    }
+}
+
 void draw_save(
     system_t *sys, info_save_t *info, draw_textbox_t *draw, int start)
 {
@@ -42,15 +65,9 @@ void draw_save(
     if (head == NULL) {
         tmp = draw[start];
         tmp.str = "There is no file!!";
+        tmp.color = GREY;
         draw_string(sys, sys->textbox, &tmp);
         return;
     }
-    for (int i = start; i < start + NB_SHOW_SAVE; i++) {
-        if (head == NULL)
-            return;
-        tmp = draw[i];
-        tmp.str = ((file_t *)head->data)->name;
-        draw_string(sys, sys->textbox, &tmp);
-        head = head->next;
-    }
+    draw_save_loop(sys, head, draw, start);
 }

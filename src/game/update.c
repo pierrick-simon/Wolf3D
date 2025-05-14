@@ -37,28 +37,6 @@ void update_time_end(time_info_t *time_info)
         (float)SEC_IN_MICRO;
 }
 
-static void update_save(system_t *sys, game_t *game)
-{
-    if (sys->save->update == sfFalse) {
-        game->player->pos = sys->save->info->start_pos;
-        game->player->angle = sys->save->info->start_angle;
-        game->player->save = sys->save;
-        game->time_info->time = 0;
-        game->tool->sprint = 0;
-        game->tool->no_sprint = 0;
-        game->weapon->horizontal_offset = 0;
-        game->weapon->shot = -1;
-        game->weapon->weapon = (int)log2(sys->save->info->start_weapon);
-        sfSprite_setTexture(game->weapon->sprite,
-            game->weapon->info[game->weapon->weapon].texture, sfTrue);
-        sfSprite_setTextureRect(game->weapon->sprite,
-            game->weapon->info[game->weapon->weapon].rectangle);
-        sys->save->update = sfTrue;
-    }
-    sys->save->info->start_pos = game->player->pos;
-    sys->save->info->start_angle = game->player->angle;
-}
-
 static void update_toolbar_percent(draw_textbox_t *draw, int nb)
 {
     sprintf(draw->str, "%03d", nb);

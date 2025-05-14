@@ -18,5 +18,6 @@ void update_list(info_save_t *info, char *dir)
     if (info->nb_page < 1)
         info->nb_page = 1;
     info->current_file = info->list->head;
+    info->file = 0;
     info->update = sfTrue;
 }

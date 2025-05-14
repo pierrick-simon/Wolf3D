@@ -29,15 +29,15 @@ static void update_guns_movement(
     int ind = weapon->weapon;
 
     if ((tool->head->rectangle.left == 0
-        && weapon->horizontal_offset > MAX_WIDTH * SKIP)
-        || (tool->head->rectangle.left == HEAD_SPRITE_X
-        && weapon->horizontal_offset > 0))
-        weapon->horizontal_offset -= (double)time->delta * MIN_IN_SEC;
-    else if ((tool->head->rectangle.left == HEAD_SPRITE_X * 2
         && weapon->horizontal_offset < MAX_WIDTH)
         || (tool->head->rectangle.left == HEAD_SPRITE_X
         && weapon->horizontal_offset < 0))
         weapon->horizontal_offset += (double)time->delta * MIN_IN_SEC;
+    else if ((tool->head->rectangle.left == HEAD_SPRITE_X * 2
+        && weapon->horizontal_offset > MAX_WIDTH * SKIP)
+        || (tool->head->rectangle.left == HEAD_SPRITE_X
+        && weapon->horizontal_offset > 0))
+        weapon->horizontal_offset -= (double)time->delta * MIN_IN_SEC;
     sfSprite_setPosition(weapon->sprite, (sfVector2f){weapon->info[ind].posf.x
         + weapon->horizontal_offset, weapon->info[ind].posf.y
         + (cos((double)(time->time / (SEC_IN_MICRO

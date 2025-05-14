@@ -58,6 +58,7 @@ SRC =	$(addprefix src/,					\
 				init_weapon.c 				\
 				update.c 					\
 				update_weapon.c 			\
+				update_save.c 			\
 			)								\
 			$(addprefix save/,				\
 				check.c			 			\

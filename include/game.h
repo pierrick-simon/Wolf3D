@@ -225,6 +225,7 @@ void move_player(
 int init_weapons(weapon_t *weapon);
 void update_all(system_t *sys, game_t *game);
 void update_time_end(time_info_t *time_info);
+void update_save(system_t *sys, game_t *game);
 void shot_gun_anim(
     weapon_t *weapon, time_info_t *time, toolbar_t *tool, int bag);
 
