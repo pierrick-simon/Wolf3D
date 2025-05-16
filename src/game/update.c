@@ -69,14 +69,19 @@ static void update_toolbar(system_t *sys, toolbar_t *tool, double delta)
     sprintf(tool->draw[TOOL_SCORE_NB].str, "%09d", sys->save->info->score);
 }
 
-static void update_saving(system_t *sys, toolbar_t *tool)
+static void update_saving(system_t *sys, toolbar_t *tool, float delta)
 {
-    float sec = (float)(sys->save->info->time - tool->save) / SEC_IN_MICRO;
+    float sec = 0;
 
+    tool->last_save += delta;
+    if (tool->last_save > AUTO_SAVE)
+        tool->save = sys->save->info->time;
+    sec = (float)(sys->save->info->time - tool->save) / SEC_IN_MICRO;
     if (tool->save == -1 || sec > 1) {
         tool->saving = sfFalse;
         return;
     }
+    tool->last_save = 0;
     tool->saving = sfTrue;
     sprintf(tool->draw[TOOL_SAVE].str, "saving...");
     if (sec < SAVE_TIME * 2)
@@ -139,7 +144,7 @@ static void update_music_volume(
 void update_all(system_t *sys, game_t *game)
 {
     update_save(sys, game);
-    update_saving(sys, game->tool);
+    update_saving(sys, game->tool, game->time_info->delta);
     update_time(sys->save, sys->save->info->time, game->time_info, game);
     update_sprint(game->tool, sys->save, game->player->is_sprinting,
         game->time_info->delta);
@@ -149,4 +154,6 @@ void update_all(system_t *sys, game_t *game)
     shot_gun_anim(game->weapon, game->time_info,
         game->tool, sys->save->info->weapons);
     cast_all_rays(game);
+    if (sys->save->info->health == 0)
+        sys->state->scene = LOSE;
 }

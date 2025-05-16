@@ -17,6 +17,13 @@
     #define DANSE_OFFSET 60
     #define DANSE_SWITCH 10
 
+    #define CHAIR_TILE 8
+    #define CHAIR_HEIGHT 87
+    #define CHAIR_WIDTH 356
+    #define CHAIR_SCALE 5
+    #define CHAIR_OFFSET 80
+    #define CHAIR_SWITCH 10
+
     #define WIN_OFFSET 125
     #define WIN_SIZE 50
 
@@ -48,6 +55,17 @@ typedef enum {
     NB_WIN,
 } str_win_t;
 
+typedef enum {
+    LOSE_TITLE,
+    LOSE_NAME,
+    LOSE_TIME,
+    LOSE_SCORE,
+    LOSE_RESTART,
+    LOSE_SEE_SCORE,
+    LOSE_MENU,
+    NB_LOSE,
+} str_lose_t;
+
 typedef struct win_s {
     str_win_t str;
     draw_textbox_t *draw;
@@ -60,6 +78,17 @@ typedef struct win_s {
     sfBool update;
 } win_t;
 
+typedef struct lose_s {
+    str_lose_t str;
+    draw_textbox_t *draw;
+    sprite_t *spin_chair;
+    sfClock *clock;
+    char *name;
+    char time[7];
+    char score[10];
+    sfBool update;
+} lose_t;
+
 void *init_leave(void);
 void draw_leave(system_t *sys, void *structure);
 void leave_events(system_t *sys, leave_t *leave);
@@ -69,5 +98,10 @@ void *init_win(void);
 void draw_win(system_t *sys, void *structure);
 void win_events(system_t *sys, win_t *win);
 void destroy_win(void *structure);
+
+void *init_lose(void);
+void draw_lose(system_t *sys, void *structure);
+void lose_events(system_t *sys, lose_t *lose);
+void destroy_lose(void *structure);
 
 #endif /* !QUIT_H_ */

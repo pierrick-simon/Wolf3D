@@ -110,6 +110,12 @@ SRC =	$(addprefix src/,					\
 				destroy_win.c				\
 				init_win.c					\
 			)								\
+			$(addprefix lose/,				\
+				lose_event.c				\
+				draw_lose.c					\
+				destroy_lose.c				\
+				init_lose.c					\
+			)								\
 		)
 
 OBJ = $(SRC:.c=.o) $(MAIN:.c=.o)

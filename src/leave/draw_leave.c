@@ -6,6 +6,7 @@
 */
 
 #include "quit.h"
+#include "save.h"
 
 void draw_leave(system_t *sys, void *structure)
 {
@@ -16,7 +17,7 @@ void draw_leave(system_t *sys, void *structure)
     draw_background(sys, sys->background);
     for (int i = 0; i < NB_LEAVE; i++)
         draw_string(sys, sys->textbox, &leave->draw[i]);
-    if (sfMusic_getStatus(sys->music) == sfStopped)
-        sfMusic_play(sys->music);
+    if (sfMusic_getStatus(sys->save->music) == sfStopped)
+        sfMusic_play(sys->save->music);
     sfRenderWindow_display(sys->window);
 }

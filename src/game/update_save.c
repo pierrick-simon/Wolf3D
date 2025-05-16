@@ -32,7 +32,8 @@ void update_save(system_t *sys, game_t *game)
         game->time_info->time = 0;
         game->tool->sprint = 0;
         game->tool->no_sprint = 0;
-        game->tool->saving = -1;
+        game->tool->save = -1;
+        game->tool->last_save = 0;
         update_save_weapon(sys, game->weapon);
         sys->save->update = sfTrue;
     }

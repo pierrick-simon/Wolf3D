@@ -53,6 +53,8 @@
     #define OPEN_DISTANCE 96.0
     #define FINISH_DISTANCE 64.0
 
+    #define AUTO_SAVE 30
+
 typedef enum {
     LOAD_W_TEXTURE,
     LOAD_W_MUSIC,
@@ -204,6 +206,7 @@ typedef struct toolbar_s {
     sfInt64 save;
     sfInt64 sprint;
     sfInt64 no_sprint;
+    float last_save;
     sfBool saving;
     sfBool interact;
 } toolbar_t;

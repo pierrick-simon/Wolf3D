@@ -39,6 +39,7 @@ static void check_save(char *name, select_map_t *map)
 void draw_map(system_t *sys, void *structure)
 {
     select_map_t *map = (select_map_t *)structure;
+    sfSoundStatus music = sfMusic_getStatus(sys->music);
 
     check_save(sys->save->name, map);
     sfRenderWindow_clear(sys->window, sfWhite);
@@ -47,7 +48,9 @@ void draw_map(system_t *sys, void *structure)
         get_offset(sys->save->name, MAX_NAME), sys->save->name);
     for (int i = 0; i < NB_MAP; i++)
         draw_string(sys, sys->textbox, &map->draw[i]);
-    if (sfMusic_getStatus(sys->music) == sfStopped)
+    if (sys->save->music != NULL)
+        sfMusic_pause(sys->save->music);
+    if (music == sfStopped || music == sfPaused)
         sfMusic_play(sys->music);
     sfRenderWindow_display(sys->window);
     map_events(sys, map);
