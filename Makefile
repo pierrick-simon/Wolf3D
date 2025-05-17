@@ -60,6 +60,7 @@ SRC =	$(addprefix src/,					\
 				update_weapon.c 			\
 				update_save.c 				\
 				draw_mini_map.c 			\
+				init_toolbar.c				\
 			)								\
 			$(addprefix save/,				\
 				check.c			 			\
@@ -127,7 +128,7 @@ NAME =	wolf3d
 
 CPPFLAGS = -iquoteinclude -iquotelib
 
-CFLAGS = -Wall -Wextra -g3
+CFLAGS = -Wall -Wextra
 
 LDFLAGS = -Llib -Llib/linked_list
 

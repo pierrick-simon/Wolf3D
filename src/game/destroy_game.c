@@ -66,10 +66,35 @@ static void destroy_tool(toolbar_t *tool)
     free(tool);
 }
 
+static void destroy_light(light_t *light)
+{
+    if (light->night_render != NULL)
+        sfRenderTexture_destroy(light->night_render);
+    if (light->night != NULL)
+        sfSprite_destroy(light->night);
+    if (light->overlay != NULL)
+        sfRectangleShape_destroy(light->overlay);
+    if (light->flashlight != NULL)
+        sfCircleShape_destroy(light->flashlight);
+    free(light);
+}
+
+static void destroy_music_rectangle(
+    sfMusic **music, sfRectangleShape *mini_map)
+{
+    for (int i = 0; i < NB_MUSIC; i++) {
+        if (music[i] != NULL)
+            sfMusic_destroy(music[i]);
+    }
+    if (mini_map != NULL)
+        sfRectangleShape_destroy(mini_map);
+}
+
 void destroy_game(void *structure)
 {
     game_t *game = (game_t *)structure;
 
+    destroy_music_rectangle(game->music, game->mini_map);
     if (game->weapon != NULL)
         destroy_weapon(game->weapon);
     if (game->player != NULL)
@@ -80,11 +105,7 @@ void destroy_game(void *structure)
         destroy_time_info(game->time_info);
     if (game->tool != NULL)
         destroy_tool(game->tool);
-    for (int i = 0; i < NB_MUSIC; i++) {
-        if (game->music[i] != NULL)
-            sfMusic_destroy(game->music[i]);
-    }
-    if (game->mini_map != NULL)
-        sfRectangleShape_destroy(game->mini_map);
+    if (game->light != NULL)
+        destroy_light(game->light);
     free(game);
 }

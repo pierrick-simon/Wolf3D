@@ -84,46 +84,6 @@ static int init_time_info(time_info_t *time_info)
     return SUCCESS;
 }
 
-static int init_toolbar_sprite(sprite_t *sprite)
-{
-    double scale = TOOLBAR_HEIGHT / HEAD_SPRITE_Y + 0.4;
-
-    sprite->sprite = sfSprite_create();
-    sprite->texture = sfTexture_createFromFile("asset/head.png", NULL);
-    if (sprite->sprite == NULL || sprite->texture == NULL)
-        return ERROR;
-    sprite->rectangle =
-        (sfIntRect){0, 0, HEAD_SPRITE_X, HEAD_SPRITE_Y};
-    sprite->posf = (sfVector2f){WIN_WIDTH / 2, WIN_HEIGHT};
-    sprite->scale = (sfVector2f){scale, scale};
-    sfSprite_setPosition(sprite->sprite, sprite->posf);
-    sfSprite_setTexture(sprite->sprite, sprite->texture, sfTrue);
-    sfSprite_setTextureRect(sprite->sprite, sprite->rectangle);
-    sfSprite_setScale(sprite->sprite, sprite->scale);
-    sfSprite_setOrigin(
-        sprite->sprite, (sfVector2f){HEAD_SPRITE_X / 2, HEAD_SPRITE_Y});
-    return SUCCESS;
-}
-
-static int init_toolbar(toolbar_t *tool)
-{
-    tool->head = malloc(sizeof(sprite_t));
-    if (tool->head == NULL || init_toolbar_sprite(tool->head) == ERROR)
-        return ERROR;
-    tool->rectangle = sfRectangleShape_create();
-    tool->draw = init_from_conf("config_file/toolbar.conf");
-    tool->background = sfTexture_createFromFile("asset/toolbar.png", NULL);
-    if (tool->draw == NULL || tool->rectangle == NULL)
-        return ERROR;
-    sfRectangleShape_setOutlineThickness(tool->rectangle, 2);
-    tool->fps = sfFalse;
-    tool->draw[TOOL_FPS].color = sfRed;
-    tool->save = -1;
-    tool->saving = sfFalse;
-    tool->interact = sfFalse;
-    return SUCCESS;
-}
-
 static int init_music(sfMusic **music)
 {
     music[DESTROY_WALL] = sfMusic_createFromFile("asset/destroy_wall.ogg");
@@ -136,11 +96,48 @@ static int init_music(sfMusic **music)
     return SUCCESS;
 }
 
+static void init_light_info(light_t *light)
+{
+    light->flash_on = sfFalse;
+    light->night_on = sfFalse;
+    light->last_min = 0;
+    sfSprite_setTexture(light->night, light->night_texture, sfTrue);
+    sfRectangleShape_setSize(light->overlay,
+        (sfVector2f){WIN_WIDTH, WIN_HEIGHT});
+    sfRectangleShape_setFillColor(light->overlay, OVERLAY_COLOR);
+    sfCircleShape_setRadius(light->flashlight, FLASHLIGHT);
+    sfCircleShape_setOrigin(light->flashlight,
+        (sfVector2f){FLASHLIGHT, FLASHLIGHT});
+    sfCircleShape_setFillColor(light->flashlight, sfTransparent);
+    sfCircleShape_setPosition(light->flashlight,
+        (sfVector2f){WIN_WIDTH / 2, WIN_HEIGHT / 2});
+}
+
+static int init_light(light_t *light)
+{
+    light->night_render = sfRenderTexture_create(
+        WIN_WIDTH, WIN_HEIGHT, sfFalse);
+    light->night = sfSprite_create();
+    light->overlay = sfRectangleShape_create();
+    light->flashlight = sfCircleShape_create();
+    if (light->night_render == NULL || light->night == NULL
+        || light->overlay == NULL || light->flashlight == NULL)
+        return ERROR;
+    light->state = (sfRenderStates){.blendMode = sfBlendNone,
+        .transform = sfTransform_Identity, .texture = NULL, .shader = NULL};
+    light->night_texture = sfRenderTexture_getTexture(light->night_render);
+    if (light->night_texture == NULL)
+        return ERROR;
+    init_light_info(light);
+    return SUCCESS;
+}
+
 static int check_init(game_t *game)
 {
     if (game->map == NULL || init_map(game->map) == ERROR
         || game->player == NULL || game->weapon == NULL
         || game->tool == NULL || game->mini_map == NULL
+        || game->light == NULL || init_light(game->light) == ERROR
         || init_toolbar(game->tool) == ERROR
         || init_weapons(game->weapon) == ERROR
         || init_player(game->player) == ERROR
@@ -162,6 +159,7 @@ void *init_game(void)
     game->player = malloc(sizeof(player_t));
     game->weapon = malloc(sizeof(weapon_t));
     game->time_info = malloc(sizeof(time_info_t));
+    game->light = malloc(sizeof(light_t));
     game->mini_map = sfRectangleShape_create();
     if (check_init(game) == ERROR)
         return SUCCESS;

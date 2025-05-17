@@ -84,6 +84,29 @@ static void draw_lines(system_t *sys, game_t *game)
             game->map->lines[i], &game->map->wall_states[i]);
 }
 
+static void flash_light(system_t *sys, light_t *light)
+{
+    int current_min = sys->save->info->time / SEC_IN_MICRO / MIN_IN_SEC;
+
+    if (current_min != light->last_min) {
+        if (light->night_on == sfFalse)
+            light->night_on = sfTrue;
+        else
+            light->night_on = sfFalse;
+        light->last_min = current_min;
+    }
+    if (light->night_on == sfTrue) {
+        sfRenderTexture_clear(light->night_render, sfTransparent);
+        sfRenderTexture_drawRectangleShape(
+            light->night_render, light->overlay, NULL);
+        if (light->flash_on == sfTrue)
+            sfRenderTexture_drawCircleShape(
+                light->night_render, light->flashlight, &light->state);
+        sfRenderTexture_display(light->night_render);
+        sfRenderWindow_drawSprite(sys->window, light->night, NULL);
+    }
+}
+
 void draw_game(system_t *sys, void *structure)
 {
     game_t *game = (game_t *)structure;
@@ -101,6 +124,7 @@ void draw_game(system_t *sys, void *structure)
         game->weapon->sprite, NULL);
     sfRenderWindow_drawCircleShape(sys->window,
         game->player->crossair, NULL);
+    flash_light(sys, game->light);
     draw_toolbar(sys, game->tool);
     draw_minimap(sys, game->mini_map, game->tool->background);
     sfRenderWindow_display(sys->window);

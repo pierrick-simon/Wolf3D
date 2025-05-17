@@ -68,6 +68,9 @@
     #define MINI_MAP_RAY 3.0
     #define MINIOFF(pos) ((float)(pos % TILE_SIZE) * MINI_MAP_TILE / TILE_SIZE)
 
+    #define OVERLAY_COLOR sfColor_fromRGBA(0, 0, 0, 200)
+    #define FLASHLIGHT 300
+
 typedef enum {
     LOAD_W_TEXTURE,
     LOAD_W_MUSIC,
@@ -155,6 +158,18 @@ typedef enum {
     NB_MUSIC,
 } music_id_t;
 
+typedef struct light_s {
+    sfRenderTexture *night_render;
+    const sfTexture *night_texture;
+    sfSprite *night;
+    sfRectangleShape *overlay;
+    sfCircleShape *flashlight;
+    sfRenderStates state;
+    sfBool flash_on;
+    sfBool night_on;
+    int last_min;
+} light_t;
+
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
     sfVertexArray *lines[NB_WALL_TXT];
@@ -231,6 +246,7 @@ typedef struct game_s {
     weapon_t *weapon;
     time_info_t *time_info;
     toolbar_t *tool;
+    light_t *light;
     sfMusic *music[NB_MUSIC];
 } game_t;
 
@@ -247,6 +263,7 @@ void shot_gun_anim(
     weapon_t *weapon, time_info_t *time, toolbar_t *tool, int bag);
 void draw_minimap(
     system_t *sys, sfRectangleShape *mini_map, sfTexture *texture);
+int init_toolbar(toolbar_t *tool);
 
 void game_events(system_t *sys, game_t *game);
 void draw_game(system_t *sys, void *structure);

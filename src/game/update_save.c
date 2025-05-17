@@ -34,6 +34,8 @@ void update_save(system_t *sys, game_t *game)
         game->tool->no_sprint = 0;
         game->tool->save = -1;
         game->tool->last_save = 0;
+        game->light->last_min = sys->save->info->time
+            / SEC_IN_MICRO / MIN_IN_SEC;
         update_save_weapon(sys, game->weapon);
         sys->save->update = sfTrue;
     }

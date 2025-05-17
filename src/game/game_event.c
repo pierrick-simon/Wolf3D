@@ -103,20 +103,23 @@ static void switch_scene(sfEvent event, state_info_t *state)
     }
 }
 
-static void show_fps(sfEvent event, toolbar_t *tool)
+static void tool_interact(
+    sfEvent event, save_t *save, toolbar_t *tool, light_t *light)
 {
+    if (is_input(event, sfKeyF5, sfFalse, 0))
+        tool->save = save->info->time;
     if (is_input(event, sfKeyF4, sfTrue, 0)) {
         if (tool->fps == sfTrue)
             tool->fps = sfFalse;
         else
             tool->fps = sfTrue;
     }
-}
-
-static void save_game(sfEvent event, save_t *save, toolbar_t *tool)
-{
-    if (is_input(event, sfKeyF5, sfFalse, 0))
-        tool->save = save->info->time;
+    if (is_input(event, sfKeyV, sfFalse, 0)) {
+        if (light->flash_on == sfTrue)
+            light->flash_on = sfFalse;
+        else
+            light->flash_on = sfTrue;
+    }
 }
 
 static void interact(int **map, player_t *player, system_t *sys, game_t *game)
@@ -148,8 +151,7 @@ void game_events(system_t *sys, game_t *game)
         sys_events(event, sys);
         change_weapons(event, game, game->weapon);
         switch_scene(event, sys->state);
-        show_fps(event, game->tool);
-        save_game(event, sys->save, game->tool);
+        tool_interact(event, sys->save, game->tool, game->light);
     }
     click(sys, game->weapon, game);
     interact(sys->save->map, game->player, sys, game);
