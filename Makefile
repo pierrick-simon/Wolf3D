@@ -58,7 +58,8 @@ SRC =	$(addprefix src/,					\
 				init_weapon.c 				\
 				update.c 					\
 				update_weapon.c 			\
-				update_save.c 			\
+				update_save.c 				\
+				draw_mini_map.c 			\
 			)								\
 			$(addprefix save/,				\
 				check.c			 			\
@@ -72,6 +73,8 @@ SRC =	$(addprefix src/,					\
 				draw_save.c					\
 				save_score.c				\
 				save_map.c 					\
+				init_mini_map_color.c 		\
+				free_mini_map_color.c 		\
 			)								\
 			$(addprefix levels/,			\
 				levels_event.c				\
@@ -124,7 +127,7 @@ NAME =	wolf3d
 
 CPPFLAGS = -iquoteinclude -iquotelib
 
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -g3
 
 LDFLAGS = -Llib -Llib/linked_list
 

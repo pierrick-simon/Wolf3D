@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include "save.h"
+#include "game.h"
 
 static void destroy_textbox(textbox_t *textbox)
 {
@@ -39,6 +40,9 @@ void destroy_save(save_t *save)
             free(save->music_path);
         if (save->music != NULL)
             sfMusic_destroy(save->music);
+        if (save->mini_map != NULL)
+            free_mini_map_color(save->mini_map,
+                save->size.y + MINI_MAP_OFFSET * 2);
     }
 }
 

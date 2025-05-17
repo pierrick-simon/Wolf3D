@@ -156,7 +156,8 @@ int get_save(char *file, save_t *save)
     save->init = sfFalse;
     if (tab == NULL)
         return ERROR;
-    if (check_save(tab) == ERROR || initiate_struct(tab, save) == ERROR) {
+    if (check_save(tab) == ERROR || initiate_struct(tab, save) == ERROR
+        || init_mini_map_color(save) == ERROR) {
         free_array(tab);
         return ERROR;
     }

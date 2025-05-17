@@ -115,10 +115,8 @@ static void show_fps(sfEvent event, toolbar_t *tool)
 
 static void save_game(sfEvent event, save_t *save, toolbar_t *tool)
 {
-    if (is_input(event, sfKeyF5, sfFalse, 0)) {
-        save_map(save);
+    if (is_input(event, sfKeyF5, sfFalse, 0))
         tool->save = save->info->time;
-    }
 }
 
 static void interact(int **map, player_t *player, system_t *sys, game_t *game)

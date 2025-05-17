@@ -44,6 +44,7 @@ typedef struct save_s {
     sfMusic *music;
     char *music_path;
     int **map;
+    sfColor **mini_map;
     sfBool init;
     sfBool update;
     player_info_t *info;
@@ -153,6 +154,8 @@ void draw_save(
 bool sort_node_file(void *data_first, void *data_second);
 void save_score(save_t *save, char *name);
 void save_map(save_t *save);
+void free_mini_map_color(sfColor **color, int y);
+int init_mini_map_color(save_t *save);
 
 void *init_maps(void);
 void draw_maps(system_t *sys, void *structure);

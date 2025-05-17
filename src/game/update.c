@@ -81,6 +81,8 @@ static void update_saving(system_t *sys, toolbar_t *tool, float delta)
         tool->saving = sfFalse;
         return;
     }
+    if (sec > 0.1)
+        save_map(sys->save);
     tool->last_save = 0;
     tool->saving = sfTrue;
     sprintf(tool->draw[TOOL_SAVE].str, "saving...");

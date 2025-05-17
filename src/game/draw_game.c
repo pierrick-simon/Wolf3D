@@ -102,6 +102,7 @@ void draw_game(system_t *sys, void *structure)
     sfRenderWindow_drawCircleShape(sys->window,
         game->player->crossair, NULL);
     draw_toolbar(sys, game->tool);
+    draw_minimap(sys, game->mini_map, game->tool->background);
     sfRenderWindow_display(sys->window);
     update_time_end(game->time_info);
 }

@@ -84,5 +84,7 @@ void destroy_game(void *structure)
         if (game->music[i] != NULL)
             sfMusic_destroy(game->music[i]);
     }
+    if (game->mini_map != NULL)
+        sfRectangleShape_destroy(game->mini_map);
     free(game);
 }

@@ -136,6 +136,20 @@ static int init_music(sfMusic **music)
     return SUCCESS;
 }
 
+static int check_init(game_t *game)
+{
+    if (game->map == NULL || init_map(game->map) == ERROR
+        || game->player == NULL || game->weapon == NULL
+        || game->tool == NULL || game->mini_map == NULL
+        || init_toolbar(game->tool) == ERROR
+        || init_weapons(game->weapon) == ERROR
+        || init_player(game->player) == ERROR
+        || init_time_info(game->time_info) == ERROR
+        || init_music(game->music) == ERROR)
+        return ERROR;
+    return SUCCESS;
+}
+
 void *init_game(void)
 {
     game_t *game = malloc(sizeof(game_t));
@@ -148,14 +162,9 @@ void *init_game(void)
     game->player = malloc(sizeof(player_t));
     game->weapon = malloc(sizeof(weapon_t));
     game->time_info = malloc(sizeof(time_info_t));
-    if (game->map == NULL || init_map(game->map) == ERROR
-        || game->player == NULL || game->weapon == NULL
-        || game->tool == NULL || init_toolbar(game->tool) == ERROR
-        || init_weapons(game->weapon) == ERROR
-        || init_player(game->player) == ERROR
-        || init_time_info(game->time_info) == ERROR
-        || init_music(game->music) == ERROR)
-        return NULL;
+    game->mini_map = sfRectangleShape_create();
+    if (check_init(game) == ERROR)
+        return SUCCESS;
     game->player->save = NULL;
     return (void *)game;
 }
