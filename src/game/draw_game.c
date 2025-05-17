@@ -91,12 +91,12 @@ static void smooth_night_day(system_t *sys, light_t *light)
 
     if (sec > light->sec || (sec == 0 && light->sec != 1))
         light->sec = sec;
-    if (sec == 0) {
+    if (light->sec == 0) {
         if (light->night_on == sfFalse)
             light->night_on = sfTrue;
         else
             light->night_on = sfFalse;
-        light->sec++;
+        light->sec = 1;
     }
     if (tmp <= 0)
         return;
