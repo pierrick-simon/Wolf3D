@@ -100,11 +100,11 @@ static void init_light_info(light_t *light)
 {
     light->flash_on = sfFalse;
     light->night_on = sfFalse;
-    light->last_min = 0;
+    light->sec = 1;
     sfSprite_setTexture(light->night, light->night_texture, sfTrue);
     sfRectangleShape_setSize(light->overlay,
         (sfVector2f){WIN_WIDTH, WIN_HEIGHT});
-    sfRectangleShape_setFillColor(light->overlay, OVERLAY_COLOR);
+    sfRectangleShape_setFillColor(light->overlay, sfTransparent);
     sfCircleShape_setRadius(light->flashlight, FLASHLIGHT);
     sfCircleShape_setOrigin(light->flashlight,
         (sfVector2f){FLASHLIGHT, FLASHLIGHT});

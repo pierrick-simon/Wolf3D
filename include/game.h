@@ -70,6 +70,9 @@
 
     #define OVERLAY_COLOR sfColor_fromRGBA(0, 0, 0, 200)
     #define FLASHLIGHT 300
+    #define OVERLAY_STEP 10
+    #define OVERLAY_MAX 200
+    #define SMOOTH_OVERLAY 99
 
 typedef enum {
     LOAD_W_TEXTURE,
@@ -167,7 +170,7 @@ typedef struct light_s {
     sfRenderStates state;
     sfBool flash_on;
     sfBool night_on;
-    int last_min;
+    int sec;
 } light_t;
 
 typedef struct map_s {

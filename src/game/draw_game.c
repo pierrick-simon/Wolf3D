@@ -84,27 +84,41 @@ static void draw_lines(system_t *sys, game_t *game)
             game->map->lines[i], &game->map->wall_states[i]);
 }
 
-static void flash_light(system_t *sys, light_t *light)
+static void smooth_night_day(system_t *sys, light_t *light)
 {
-    int current_min = sys->save->info->time / SEC_IN_MICRO / MIN_IN_SEC;
+    int sec = sys->save->info->time / (SEC_IN_MICRO / 2) % (MIN_IN_SEC * 2);
+    int tmp = sec - SMOOTH_OVERLAY;
 
-    if (current_min != light->last_min) {
+    if (sec > light->sec || (sec == 0 && light->sec != 1))
+        light->sec = sec;
+    if (sec == 0) {
         if (light->night_on == sfFalse)
             light->night_on = sfTrue;
         else
             light->night_on = sfFalse;
-        light->last_min = current_min;
+        light->sec++;
     }
-    if (light->night_on == sfTrue) {
-        sfRenderTexture_clear(light->night_render, sfTransparent);
-        sfRenderTexture_drawRectangleShape(
-            light->night_render, light->overlay, NULL);
-        if (light->flash_on == sfTrue)
-            sfRenderTexture_drawCircleShape(
-                light->night_render, light->flashlight, &light->state);
-        sfRenderTexture_display(light->night_render);
-        sfRenderWindow_drawSprite(sys->window, light->night, NULL);
-    }
+    if (tmp <= 0)
+        return;
+    if (light->night_on == sfFalse)
+        sfRectangleShape_setFillColor(light->overlay,
+            sfColor_fromRGBA(0, 0, 0, tmp * OVERLAY_STEP));
+    else
+        sfRectangleShape_setFillColor(light->overlay,
+            sfColor_fromRGBA(0, 0, 0, OVERLAY_MAX - (tmp * OVERLAY_STEP)));
+}
+
+static void flash_light(system_t *sys, light_t *light)
+{
+    smooth_night_day(sys, light);
+    sfRenderTexture_clear(light->night_render, sfTransparent);
+    sfRenderTexture_drawRectangleShape(
+        light->night_render, light->overlay, NULL);
+    if (light->flash_on == sfTrue)
+        sfRenderTexture_drawCircleShape(
+            light->night_render, light->flashlight, &light->state);
+    sfRenderTexture_display(light->night_render);
+    sfRenderWindow_drawSprite(sys->window, light->night, NULL);
 }
 
 void draw_game(system_t *sys, void *structure)
