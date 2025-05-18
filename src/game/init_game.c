@@ -26,14 +26,12 @@ static int init_crossair(player_t *player)
 
 static int init_states(map_t *map)
 {
-    for (size_t i = 0; i < NB_WALL_TXT; ++i) {
-        map->wall_states[i].texture =
-            sfTexture_createFromFile(wall_textures[i].paths, NULL);
-        if (map->wall_states[i].texture == NULL)
-            return ERROR;
-        map->wall_states[i].transform = sfTransform_Identity;
-        map->wall_states[i].blendMode = sfBlendAlpha;
-    }
+    map->wall_states.texture =
+        sfTexture_createFromFile("asset/walls.png", NULL);
+    if (map->wall_states.texture == NULL)
+        return ERROR;
+    map->wall_states.transform = sfTransform_Identity;
+    map->wall_states.blendMode = sfBlendAlpha;
     return SUCCESS;
 }
 
@@ -46,12 +44,10 @@ static int init_map(map_t *map)
     if (map->ceiling_floor == NULL)
         return ERROR;
     sfRectangleShape_setSize(map->ceiling_floor, pos);
-    for (size_t i = 0; i < NB_WALL_TXT; ++i) {
-        map->lines[i] = sfVertexArray_create();
-        if (map->lines[i] == NULL || init_states(map) == ERROR)
-            return ERROR;
-        sfVertexArray_setPrimitiveType(map->lines[i], sfLines);
-    }
+    map->lines = sfVertexArray_create();
+    if (map->lines == NULL || init_states(map) == ERROR)
+        return ERROR;
+    sfVertexArray_setPrimitiveType(map->lines, sfLines);
     return SUCCESS;
 }
 
@@ -89,7 +85,7 @@ static int init_music(sfMusic **music)
     music[DESTROY_WALL] = sfMusic_createFromFile("asset/destroy_wall.ogg");
     music[DOOR_MU] = sfMusic_createFromFile("asset/door.ogg");
     music[END_LEVEL] = sfMusic_createFromFile("asset/end_level.ogg");
-    music[FOOTSTEPP] = sfMusic_createFromFile("asset/footstepps.ogg");
+    music[FOOTSTEPS] = sfMusic_createFromFile("asset/footsteps.ogg");
     for (int i = 0; i < NB_MUSIC; i++)
         if (music[i] == NULL)
             return ERROR;
