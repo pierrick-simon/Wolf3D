@@ -122,6 +122,21 @@ static void tool_interact(
     }
 }
 
+static void open_door(system_t *sys, sfVector2i *pos)
+{
+    node_t *node = sys->save->doors->head;
+    door_t *data = NULL;
+
+    while (node != NULL) {
+        data = (door_t *)node->data;
+        if (data->pos.x == pos->x && data->pos.y == pos->y &&
+            data->activated == sfFalse) {
+            data->activated = sfTrue;
+        }
+        node = node->next;
+    }
+}
+
 static void interact(int **map, player_t *player, system_t *sys, game_t *game)
 {
     sfVector2i casted_pos = cast_pos(&player->center_ray.pos,
@@ -132,7 +147,7 @@ static void interact(int **map, player_t *player, system_t *sys, game_t *game)
     if (sfKeyboard_isKeyPressed(sfKeyF)) {
         if (player->center_ray.distance < OPEN_DISTANCE &&
             map[casted_pos.y][casted_pos.x] == wall_textures[DOOR].value) {
-            map[casted_pos.y][casted_pos.x] = 0;
+            open_door(sys, &casted_pos);
             sfMusic_play(game->music[DOOR_MU]);
         }
         if (player->center_ray.distance < FINISH_DISTANCE &&

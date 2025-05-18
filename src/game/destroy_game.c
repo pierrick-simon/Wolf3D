@@ -6,6 +6,7 @@
 */
 
 #include "game.h"
+#include "linked_list.h"
 #include <stdlib.h>
 
 static void destroy_player(player_t *player)

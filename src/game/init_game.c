@@ -6,6 +6,7 @@
 */
 
 #include "game.h"
+#include "linked_list.h"
 #include <stdlib.h>
 #include <string.h>
 #include "my.h"
@@ -130,13 +131,14 @@ static int init_light(light_t *light)
 
 static int check_init(game_t *game)
 {
-    if (game->map == NULL || init_map(game->map) == ERROR
+    if (game->map == NULL
         || game->player == NULL || game->weapon == NULL
         || game->tool == NULL || game->mini_map == NULL
         || game->light == NULL || init_light(game->light) == ERROR
         || init_toolbar(game->tool) == ERROR
         || init_weapons(game->weapon) == ERROR
         || init_player(game->player) == ERROR
+        || init_map(game->map) == ERROR
         || init_time_info(game->time_info) == ERROR
         || init_music(game->music) == ERROR)
         return ERROR;

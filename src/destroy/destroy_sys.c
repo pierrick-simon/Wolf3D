@@ -43,6 +43,8 @@ void destroy_save(save_t *save)
         if (save->mini_map != NULL)
             free_mini_map_color(save->mini_map,
                 save->size.y + MINI_MAP_OFFSET * 2);
+        if (save->doors != NULL)
+            free_linked_list(save->doors, free);
     }
 }
 

@@ -28,8 +28,8 @@ typedef struct linked_list_s {
 
 void sort_linked_list(
     linked_list_t *list, bool (*sort_data)(void *first, void *second));
-void delete_node(linked_list_t *list, node_t *actual_node
-    , void (*free_data)(void *data));
+void delete_node(linked_list_t *list, node_t *actual_node,
+    void (*free_data)(void *data));
 void push_to_head(linked_list_t *list, void *data);
 void push_to_tail(linked_list_t *list, void *data);
 linked_list_t *initialize_linked_list(void);

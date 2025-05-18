@@ -48,6 +48,7 @@ typedef struct save_s {
     sfBool init;
     sfBool update;
     player_info_t *info;
+    linked_list_t *doors;
 } save_t;
 
 typedef enum {

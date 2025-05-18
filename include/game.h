@@ -9,6 +9,7 @@
     #define GAME_H_
 
     #include "wolf.h"
+    #include "linked_list.h"
 
     #define HAND_POS WIN_WIDTH / 2 + 200
     #define PUNCH_POS WIN_WIDTH / 2 - 200
@@ -79,6 +80,9 @@
 
     #define X_INDEX 0
     #define Y_INDEX 1
+
+    #define LEN_INDEX 0
+    #define FACTOR_INDEX 1
 
 typedef enum {
     LOAD_W_TEXTURE,
@@ -178,6 +182,12 @@ typedef struct light_s {
     sfBool night_on;
     int sec;
 } light_t;
+
+typedef struct door_s {
+    sfVector2i pos;
+    float state;
+    sfBool activated;
+} door_t;
 
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;

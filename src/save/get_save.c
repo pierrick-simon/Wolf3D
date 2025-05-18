@@ -6,9 +6,26 @@
 */
 
 #include "save.h"
+#include "game.h"
 #include "my.h"
 #include <stdlib.h>
 #include <string.h>
+
+static void add_value(save_t *save, int i, int j, int nb)
+{
+    door_t *data = NULL;
+
+    save->map[i][j] = nb;
+    if (save->map[i][j] == wall_textures[DOOR].value) {
+        data = malloc(sizeof(door_t));
+        if (data == NULL)
+            return;
+        data->pos = (sfVector2i){j, i};
+        data->state = 1.0;
+        data->activated = sfFalse;
+        push_to_head(save->doors, data);
+    }
+}
 
 static int initiate_body(char **tab, save_t *save)
 {
@@ -27,7 +44,7 @@ static int initiate_body(char **tab, save_t *save)
         line = tab[i];
         nb = strtok(line, " ");
         for (int j = 0; nb != NULL; j++) {
-            save->map[i][j] = atoi(nb);
+            add_value(save, i, j, atoi(nb));
             nb = strtok(NULL, " ");
         }
     }
@@ -45,7 +62,8 @@ static int get_dup_info(char **tab, save_t *save)
     save->music = sfMusic_createFromFile(tab[MUSIC]);
     if (save->music_path == NULL)
         return ERROR;
-    if (initiate_body(tab + COOR, save) == ERROR) {
+    save->doors = initialize_linked_list();
+    if (save->doors == NULL || initiate_body(tab + COOR, save) == ERROR) {
         free(save->name);
         return ERROR;
     }

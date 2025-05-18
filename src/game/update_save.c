@@ -23,8 +23,33 @@ static void update_save_weapon(system_t *sys, weapon_t *weapon)
     weapon->info[weapon->weapon].size.y});
 }
 
+static void change_door(door_t *data, game_t *game, system_t *sys)
+{
+    data->state -= game->time_info->delta;
+    if (data->state < 0.0)
+        data->state = 0.0;
+    if (data->state == 0.0)
+        sys->save->map[data->pos.y][data->pos.x] = 0;
+}
+
+static void update_doors(system_t *sys, game_t *game)
+{
+    node_t *node = sys->save->doors->head;
+    door_t *data = NULL;
+
+    while (node != NULL) {
+        data = (door_t *)node->data;
+        if (data->activated == sfTrue &&
+            sys->save->map[data->pos.y][data->pos.x] != 0) {
+            change_door(data, game, sys);
+        }
+        node = node->next;
+    }
+}
+
 void update_save(system_t *sys, game_t *game)
 {
+    update_doors(sys, game);
     if (sys->save->update == sfFalse) {
         game->player->pos = sys->save->info->start_pos;
         game->player->angle = sys->save->info->start_angle;
