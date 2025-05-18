@@ -12,14 +12,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static char *get_time(int time)
+static char *get_time(int time, char **tab)
 {
     int min = time / MIN_IN_SEC;
     int sec = time % MIN_IN_SEC;
     char *tmp = malloc(sizeof(char) * (get_nblen(min) + get_nblen(sec) + 2));
 
-    if (tmp == NULL)
+    if (tmp == NULL) {
+        free_array(tab);
         return NULL;
+    }
     sprintf(tmp, "%02d:%02d", min, sec);
     return tmp;
 }
@@ -37,9 +39,9 @@ static void get_line(linked_list_t *list, char **tab)
     }
     node->name = tab[LOAD_S_NAME];
     node->score = tab[LOAD_S_SCORE];
-    node->time = get_time(atoi(tab[LOAD_S_TIME]));
+    node->time_sec = atoi(tab[LOAD_S_TIME]);
+    node->time = get_time(node->time_sec, tab);
     if (node->time == NULL) {
-        free_array(tab);
         free(node);
         return;
     }

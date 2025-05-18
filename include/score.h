@@ -41,6 +41,7 @@ typedef struct score_info_s {
     char *name;
     char *time;
     char *score;
+    int time_sec;
 } score_info_t;
 
 typedef struct score_s {
@@ -50,12 +51,14 @@ typedef struct score_s {
     node_t *current_score;
     sfBool update;
     int str;
+    sfBool sort;
     draw_textbox_t *draw;
 } score_t;
 
 void free_info_score(void *data);
 linked_list_t *get_score(char *name);
-bool sort_score(void *data1, void *data2);
+bool sort_by_score(void *data1, void *data2);
+bool sort_by_time(void *data1, void *data2);
 
 void *init_score(void);
 void draw_score(system_t *sys, void *structure);
