@@ -9,6 +9,7 @@
 #include "save.h"
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 static void draw_danse(system_t *sys, sprite_t *danse, sfClock *clock)
 {
@@ -34,10 +35,28 @@ static void draw_info(system_t *sys, draw_textbox_t *draw, char *str)
     draw_string(sys, sys->textbox, &tmp);
 }
 
-static void update_win(save_t *save, win_t *win)
+static void set_win(save_t *save, win_t *win)
 {
     int min = 0;
     int sec = 0;
+
+    if (win->update == sfFalse) {
+        win->prev_score = save->info->score;
+        win->score_update = save->info->score;
+        save->info->score *= pow(
+            MAX_BONUS / (save->info->time / SEC_IN_MICRO), BONUS_COEF);
+        win->score_step = (save->info->score - win->prev_score) / DRAW_BONUS;
+        if (save->info->score > MAX_SCORE || save->info->score < 0)
+            save->info->score = MAX_SCORE;
+        min = save->info->time / SEC_IN_MICRO / MIN_IN_SEC;
+        sec = save->info->time / SEC_IN_MICRO % MIN_IN_SEC;
+        sprintf(win->time, "%02d:%02d", min, sec);
+        win->update = sfTrue;
+    }
+}
+
+static void update_win(save_t *save, win_t *win)
+{
     int len = strlen(win->name);
 
     sprintf(win->name_tmp, "%s", win->name);
@@ -45,13 +64,13 @@ static void update_win(save_t *save, win_t *win)
         win->name_tmp[i] = '-';
     }
     win->name_tmp[MAX_NAME_SCORE] = '\0';
-    if (win->update == sfFalse) {
-        min = save->info->time / SEC_IN_MICRO / MIN_IN_SEC;
-        sec = save->info->time / SEC_IN_MICRO % MIN_IN_SEC;
-        sprintf(win->score, "%09d", save->info->score);
-        sprintf(win->time, "%02d:%02d", min, sec);
-        win->update = sfTrue;
-    }
+    if (win->score_update < save->info->score - win->score_step)
+        win->score_update += win->score_step;
+    else if (win->score_update < save->info->score)
+        win->score_update++;
+    sprintf(win->score, "%09d", win->score_update);
+    sprintf(win->draw[WIN_BONUS_SCORE].str, "+ %d",
+        win->score_update - win->prev_score);
 }
 
 void draw_win(system_t *sys, void *structure)
@@ -59,6 +78,7 @@ void draw_win(system_t *sys, void *structure)
     win_t *win = (win_t *)structure;
     sfSoundStatus music = sfMusic_getStatus(sys->music);
 
+    set_win(sys->save, win);
     update_win(sys->save, win);
     win_events(sys, win);
     sfRenderWindow_clear(sys->window, sfWhite);

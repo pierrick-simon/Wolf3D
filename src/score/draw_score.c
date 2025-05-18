@@ -45,7 +45,8 @@ static void update_score(char *name, score_t *score)
         score->nb_page = 1;
     sprintf(score->draw[SCORE_TITLE].str, "%*s",
         get_offset(name, MAX_NAME), name);
-    sort_linked_list(score->list, &sort_score);
+    score->sort = sfTrue;
+    sort_linked_list(score->list, &sort_by_score);
     score->current_score = score->list->head;
     score->update = sfTrue;
 }

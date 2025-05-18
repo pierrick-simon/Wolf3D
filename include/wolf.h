@@ -61,6 +61,8 @@
 
     #define MAX_JOYSTICK 100.0
 
+    #define MAX_SCORE 999999999
+
 typedef enum str_menu_e {
     MENU_TITLE,
     MENU_PLAY,

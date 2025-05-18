@@ -30,6 +30,10 @@
     #define MAX_NAME_SCORE 10
     #define DEAULT_NAME_SCORE 3
 
+    #define MAX_BONUS 300
+    #define BONUS_COEF 1.2
+    #define DRAW_BONUS 200
+
 typedef enum {
     LEAVE_TITLE,
     LEAVE_SAVE,
@@ -48,6 +52,7 @@ typedef enum {
     WIN_NAME,
     WIN_TIME,
     WIN_SCORE,
+    WIN_BONUS_SCORE,
     WIN_ENTER,
     WIN_SEE_SCORE,
     WIN_RESTART,
@@ -75,6 +80,9 @@ typedef struct win_s {
     char name_tmp[MAX_NAME_SCORE + 1];
     char time[7];
     char score[10];
+    int score_update;
+    int prev_score;
+    int score_step;
     sfBool update;
 } win_t;
 

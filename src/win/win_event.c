@@ -53,6 +53,7 @@ static void switch_scene(
             state->scene = win->draw[win->str].scene;
         state->scene = win->draw[win->str].scene;
         win->draw[win->str].color = sfWhite;
+        win->update = sfFalse;
         win->str = WIN_ENTER;
     }
 }

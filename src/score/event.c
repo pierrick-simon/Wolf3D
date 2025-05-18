@@ -67,6 +67,21 @@ static void change_page(sfEvent event, score_t *score)
     }
 }
 
+static void change_sort(sfEvent event, score_t *score)
+{
+    if (is_input(event, sfKeyE, sfFalse, 0)) {
+        if (score->sort == sfTrue) {
+            score->sort = sfFalse;
+            sort_linked_list(score->list, &sort_by_time);
+        } else {
+            score->sort = sfTrue;
+            sort_linked_list(score->list, &sort_by_score);
+        }
+        score->current_score = score->list->head;
+        score->current = 1;
+    }
+}
+
 void score_events(system_t *sys, score_t *score)
 {
     sfEvent event = {0};
@@ -76,5 +91,6 @@ void score_events(system_t *sys, score_t *score)
         switch_str(event, score);
         switch_scene(event, score, sys->state);
         change_page(event, score);
+        change_sort(event, score);
     }
 }
