@@ -79,9 +79,8 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
 
 static void draw_lines(system_t *sys, game_t *game)
 {
-    for (size_t i = 0; i < NB_WALL_TXT; ++i)
-        sfRenderWindow_drawVertexArray(sys->window,
-            game->map->lines[i], &game->map->wall_states[i]);
+    sfRenderWindow_drawVertexArray(sys->window,
+        game->map->lines, &game->map->wall_states);
 }
 
 static void smooth_night_day(system_t *sys, light_t *light)

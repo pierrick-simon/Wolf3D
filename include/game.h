@@ -17,7 +17,7 @@
 
     #define FOV RAD(59)
     #define NUM_RAYS WIN_WIDTH
-    #define RAY_LENGHT 2
+    #define RAY_LENGTH 2
 
     #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
     #define FLOOR_COLOR sfColor_fromRGB(139, 139, 139)
@@ -48,7 +48,7 @@
 
     #define OFFSET_POINT_BAR 20
 
-    #define ARRAY_LENGHT(x) (sizeof(x) / sizeof(*x))
+    #define ARRAY_LENGTH(x) (sizeof(x) / sizeof(*x))
 
     #define OPEN_DISTANCE 96.0
     #define FINISH_DISTANCE 64.0
@@ -74,6 +74,12 @@
     #define OVERLAY_MAX 200
     #define SMOOTH_OVERLAY 99
 
+    #define WALL_TEXTURE_X 128.0
+    #define WALL_TEXTURE_Y 128.0
+
+    #define X_INDEX 0
+    #define Y_INDEX 1
+
 typedef enum {
     LOAD_W_TEXTURE,
     LOAD_W_MUSIC,
@@ -95,17 +101,17 @@ typedef enum wall_type {
 
 typedef struct int_wall_texture_s {
     int const value;
-    char *const paths;
+    int const text_offset_y;
 } int_wall_texture_t;
 
 static const int_wall_texture_t wall_textures[] = {
-    [WALL] = {1, "asset/wall.png"},
-    [DESTRUCTIBLE] = {3, "asset/destructible.png"},
-    [DOOR] = {2, "asset/door.png"},
-    [FINAL] = {4, "asset/final.png"},
+    [WALL] = {1, WALL_TEXTURE_Y * 0},
+    [DESTRUCTIBLE] = {3, WALL_TEXTURE_Y * 1},
+    [FINAL] = {4, WALL_TEXTURE_Y * 2},
+    [DOOR] = {2, WALL_TEXTURE_Y * 3},
 };
 
-    #define NB_WALL_TXT ARRAY_LENGHT(wall_textures)
+    #define NB_WALL_TXT ARRAY_LENGTH(wall_textures)
 
 typedef enum intersection_type {
     NONE,
@@ -157,7 +163,7 @@ typedef enum {
     DESTROY_WALL,
     DOOR_MU,
     END_LEVEL,
-    FOOTSTEPP,
+    FOOTSTEPS,
     NB_MUSIC,
 } music_id_t;
 
@@ -175,8 +181,8 @@ typedef struct light_s {
 
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
-    sfVertexArray *lines[NB_WALL_TXT];
-    sfRenderStates wall_states[NB_WALL_TXT];
+    sfVertexArray *lines;
+    sfRenderStates wall_states;
 } map_t;
 
 typedef struct center_ray_s {
