@@ -196,7 +196,6 @@ typedef struct door_s {
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
     sfVertexArray *lines;
-    sfVertexArray *back_doors;
     sfRenderStates wall_states;
 } map_t;
 

@@ -45,14 +45,10 @@ static int init_map(map_t *map)
     if (map->ceiling_floor == NULL)
         return ERROR;
     sfRectangleShape_setSize(map->ceiling_floor, pos);
-    map->back_doors = sfVertexArray_create();
-    if (map->back_doors == NULL)
-        return ERROR;
     map->lines = sfVertexArray_create();
     if (map->lines == NULL || init_states(map) == ERROR)
         return ERROR;
     sfVertexArray_setPrimitiveType(map->lines, sfLines);
-    sfVertexArray_setPrimitiveType(map->back_doors, sfLines);
     return SUCCESS;
 }
 
