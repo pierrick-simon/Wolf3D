@@ -23,7 +23,7 @@ static void write_enemies(save_t *save, int fd)
     while (head != NULL) {
         tmp = head->data;
         dprintf(fd, "%d:%f:%f:%d\n",
-            tmp->id, tmp->pos.x, tmp->pos.y, tmp->health);
+            tmp->type, tmp->pos.x, tmp->pos.y, tmp->health);
         head = head->next;
     }
 }
@@ -37,7 +37,7 @@ static void write_items(save_t *save, int fd)
     while (head != NULL) {
         tmp = head->data;
         dprintf(fd, "%d:%f:%f:%d\n",
-            tmp->id, tmp->pos.x, tmp->pos.y, tmp->quantity);
+            tmp->type, tmp->pos.x, tmp->pos.y, tmp->quantity);
         head = head->next;
     }
 }

@@ -11,7 +11,7 @@
 
 static int check_item(char **tab)
 {
-    if (is_int_float(tab[I_ID]) != NATURAL || atoi(tab[I_ID]) >= NB_ITEM)
+    if (is_int_float(tab[I_TYPE]) != NATURAL || atoi(tab[I_TYPE]) >= NB_ITEM)
         return ERROR;
     if (is_int_float(tab[I_POS_X]) == MY_NAN
         || is_int_float(tab[I_POS_Y]) == MY_NAN)
@@ -19,6 +19,19 @@ static int check_item(char **tab)
     if (is_int_float(tab[I_QUANTITY]) != NATURAL)
         return ERROR;
     return SUCCESS;
+}
+
+static void fill_node_item(
+    linked_list_t *items, item_t *item, char **tab)
+{
+    static int id = 0;
+
+    item->id = id;
+    item->type = atoi(tab[E_TYPE]);
+    item->pos = (sfVector2f){atof(tab[I_POS_X]), atof(tab[I_POS_Y])};
+    item->quantity = atoi(tab[I_QUANTITY]);
+    push_to_tail(items, item);
+    id++;
 }
 
 int add_node_item(linked_list_t *items, char *line)
@@ -37,10 +50,7 @@ int add_node_item(linked_list_t *items, char *line)
         free_array(tab);
         return ERROR;
     }
-    item->id = atoi(tab[I_ID]);
-    item->pos = (sfVector2f){atof(tab[I_POS_X]), atof(tab[I_POS_Y])};
-    item->quantity = atoi(tab[I_QUANTITY]);
-    push_to_tail(items, item);
+    fill_node_item(items, item, tab);
     free_array(tab);
     return SUCCESS;
 }
