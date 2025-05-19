@@ -16,6 +16,7 @@ SRC =	$(addprefix src/,					\
 			\
 			$(addprefix algo/,				\
 				move_rect.c					\
+				center_ray.c				\
 				get_pourcentage.c			\
 				cast_single_ray.c			\
 				cast_rays.c					\
@@ -142,6 +143,12 @@ all:	$(NAME)
 $(NAME):	$(OBJ)
 	$(MAKE) -C ./lib
 	$(MAKE) -C ./lib/linked_list
+	$(CC) -o $(NAME) $(OBJ) $(LDLIBS) $(LDFLAGS) $(CSFMLFLAG)
+
+debug:	CFLAGS+=-g3
+debug:	fclean $(OBJ)
+	$(MAKE) -C ./lib CFLAGS+=-g3
+	$(MAKE) -C ./lib/linked_list CFLAGS+=-g3
 	$(CC) -o $(NAME) $(OBJ) $(LDLIBS) $(LDFLAGS) $(CSFMLFLAG)
 
 clean:

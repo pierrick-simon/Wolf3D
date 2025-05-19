@@ -16,7 +16,7 @@
     #define MOV_OFFSET_GUN 4
     #define MAX_WIDTH 30
 
-    #define FOV RAD(50)
+    #define FOV RAD(60)
     #define RAY_LENGTH 2
     #define NB_RAYS WIN_WIDTH / RAY_LENGTH
 
@@ -304,5 +304,6 @@ void *init_game(void);
 float get_pourcentage_wall(intersection_type_t type, sfVector2f *intersection);
 float get_door_pourcentage(save_t *save, sfVector2i *pos);
 sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
+void center_ray(player_t *player);
 
 #endif

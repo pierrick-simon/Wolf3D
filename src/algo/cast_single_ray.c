@@ -102,23 +102,6 @@ static float jump_to_next_line(sfVector2f *pos,
     return top_line_len;
 }
 
-static void save_center_ray(float angle_offset,
-    player_t *player, sfVector2f *v)
-{
-    if (angle_offset == 0.0) {
-        player->center_ray.v.x = v->x * PLAYER_SPEED;
-        player->center_ray.v.y = v->y * PLAYER_SPEED;
-    }
-}
-
-static void save_center_ray_success(player_t *player,
-    float len, intersection_type_t type, sfVector2f *pos)
-{
-    player->center_ray.distance = len;
-    player->center_ray.type = type;
-    player->center_ray.pos = *pos;
-}
-
 float cast_single_ray(player_t *player, float angle_offset,
     intersection_t *type, sfVector2f *intersection_point)
 {
@@ -127,7 +110,6 @@ float cast_single_ray(player_t *player, float angle_offset,
         sin(player->angle + angle_offset)};
     float len = 0.0;
 
-    save_center_ray(angle_offset, player, &v);
     while ((is_end(&pos, type, player->save) == sfFalse)) {
         len += jump_to_next_line(&pos, &v, &type->type);
         if (len > RENDER_DISTANCE) {
@@ -136,8 +118,6 @@ float cast_single_ray(player_t *player, float angle_offset,
             return 0;
         }
     }
-    if (angle_offset == 0.0)
-        save_center_ray_success(player, len, type->type, &pos);
     *intersection_point = pos;
     return len;
 }

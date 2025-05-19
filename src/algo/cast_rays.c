@@ -31,33 +31,33 @@ static void add_line(float offset, float len_factor[2],
     sfVertex line = {.color = sfWhite};
     float a = ((1 - len_factor[FACTOR_INDEX]) * WALL_TEXTURE_X);
 
-    line.position = (sfVector2f){offset, ((WIN_HEIGHT -
+    line.position = (sfVector2f){offset * 2, ((WIN_HEIGHT -
         len_factor[LEN_INDEX]) / 2) + (len_factor[LEN_INDEX])};
     line.texCoords = (sfVector2f){pos[Y_INDEX] + a, pos[X_INDEX]};
     game->map->rays[(int)offset].down = line;
-    line.position = (sfVector2f){offset,
+    line.position = (sfVector2f){offset * 2,
         (WIN_HEIGHT - len_factor[LEN_INDEX]) / 2};
     line.texCoords = (sfVector2f){pos[Y_INDEX] + a, pos[X_INDEX] +
         (WALL_TEXTURE_X)};
     game->map->rays[(int)offset].up = line;
 }
 
-static void set_line(float offset, float len_factor[2],
+static void set_line(int i, float len_factor[2],
     float pos[2], game_t *game)
 {
-    add_line(offset, len_factor, pos, game);
+    add_line(i, len_factor, pos, game);
 }
 
 static void add_ray_to_vertex_array(game_t *game, int i)
 {
     intersection_t type = {NONE, WALL};
-    float angle_offset = ((i / (float)WIN_WIDTH) * game->player->fov) -
+    float angle_offset = ((i * 2 / (float)WIN_WIDTH) * game->player->fov) -
         (game->player->fov / 2);
     sfVector2f pos = {0};
     float len = cast_single_ray(game->player, angle_offset, &type, &pos);
     float factor = get_door_status(game, &type, &pos);
 
-    len = (TILE_SIZE * WIN_HEIGHT) / (len * cos(angle_offset) * 1.1);
+    len = (TILE_SIZE * WIN_HEIGHT) / (len * cos(angle_offset));
     if (game->player->is_sprinting == sfTrue)
         len /= SPRINT_COEF;
     set_line(i, (float[]){len, factor},
@@ -67,7 +67,6 @@ static void add_ray_to_vertex_array(game_t *game, int i)
 
 void cast_all_rays(game_t *game)
 {
-    for (int i = 0; i < WIN_WIDTH; ++i) {
+    for (int i = 0; i < NB_RAYS; ++i)
         add_ray_to_vertex_array(game, i);
-    }
 }

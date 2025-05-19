@@ -154,6 +154,7 @@ static void handle_footstepp(player_t *player, int *head, sfMusic *footstepp)
 
 void move_player(player_t *player, double delta, int *head, sfMusic *footstepp)
 {
+    center_ray(player);
     *head = HEAD_SPRITE_X;
     player->fov = FOV;
     player->is_sprinting = sfFalse;

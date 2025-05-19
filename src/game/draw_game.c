@@ -81,7 +81,7 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
 
 static void draw_lines(system_t *sys, game_t *game)
 {
-    for (int i = 0; i < WIN_WIDTH; ++i) {
+    for (int i = 0; i < NB_RAYS; ++i) {
         sfVertexArray_clear(game->map->line);
         for (int j = 0; j < RAY_LENGTH; ++j) {
             sfVertexArray_append(game->map->line, game->map->rays[i].down);
