@@ -51,12 +51,12 @@ static void draw_tool_strings(system_t *sys, toolbar_t *tool)
     for (int i = 0; i < NB_TOOLBAR; i++) {
         if ((tool->fps == sfFalse && i == TOOL_FPS)
             || (tool->saving == sfFalse && i == TOOL_SAVE)
-            || (tool->interact == sfFalse && i == TOOL_INTERACT))
+            || (tool->interact == sfFalse && i == TOOL_INTERACT)
+            || i == TOOL_FLASH_NB)
             continue;
         draw_string(sys, sys->textbox, &tool->draw[i]);
     }
-    sfRenderWindow_drawSprite(sys->window, tool->head->sprite, NULL);
-    draw_point_bar(sys, tool, TOOL_ARMOR_NB, sys->save->info->armor);
+    draw_point_bar(sys, tool, TOOL_FLASH_NB, sys->save->info->flashlight);
     draw_point_bar(sys, tool, TOOL_HEALTH_NB, sys->save->info->health);
     draw_point_bar(sys, tool, TOOL_STAM_NB, sys->save->info->stamina);
 }
@@ -74,6 +74,8 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
     sfRenderWindow_drawRectangleShape(sys->window,
         tool->rectangle, NULL);
     sfRectangleShape_setTexture(tool->rectangle, NULL, sfTrue);
+    sfRenderWindow_drawSprite(sys->window, tool->head->sprite, NULL);
+    sfRenderWindow_drawSprite(sys->window, tool->flashlight->sprite, NULL);
     draw_tool_strings(sys, tool);
 }
 

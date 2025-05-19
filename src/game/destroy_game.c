@@ -47,10 +47,8 @@ static void destroy_time_info(time_info_t *time_info)
     free(time_info);
 }
 
-static void destroy_tool(toolbar_t *tool)
+static void destroy_tool_sprite(toolbar_t *tool)
 {
-    if (tool->draw != NULL)
-        free_draw_textbox(tool->draw, -1);
     if (tool->head != NULL) {
         if (tool->head->texture != NULL)
             sfTexture_destroy(tool->head->texture);
@@ -58,6 +56,20 @@ static void destroy_tool(toolbar_t *tool)
             sfSprite_destroy(tool->head->sprite);
         free(tool->head);
     }
+    if (tool->flashlight != NULL) {
+        if (tool->flashlight->texture != NULL)
+            sfTexture_destroy(tool->flashlight->texture);
+        if (tool->flashlight->sprite != NULL)
+            sfSprite_destroy(tool->flashlight->sprite);
+        free(tool->flashlight);
+    }
+}
+
+static void destroy_tool(toolbar_t *tool)
+{
+    if (tool->draw != NULL)
+        free_draw_textbox(tool->draw, -1);
+    destroy_tool_sprite(tool);
     if (tool->rectangle != NULL)
         sfRectangleShape_destroy(tool->rectangle);
     if (tool->background != NULL)

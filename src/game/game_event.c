@@ -119,6 +119,8 @@ static void tool_interact(
             light->flash_on = sfFalse;
         else
             light->flash_on = sfTrue;
+        move_rect(tool->flashlight->sprite, &tool->flashlight->rectangle,
+            FLASHLIGHT_SPRITE_X, FLASHLIGHT_SPRITE_STATUS);
     }
 }
 

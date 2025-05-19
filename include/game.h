@@ -47,6 +47,11 @@
     #define HEAD_SPRITE_Y 90
     #define HEAD_SPRITE_STATUS 5
 
+    #define FLASHLIGHT_SPRITE_X (double)137 / 2
+    #define FLASHLIGHT_SPRITE_Y 130
+    #define FLASHLIGHT_SPRITE_STATUS 2
+    #define FLASHLIGHT_COEF 0.28
+
     #define OFFSET_POINT_BAR 20
 
     #define ARRAY_LENGTH(x) (sizeof(x) / sizeof(*x))
@@ -135,8 +140,7 @@ typedef enum {
     TOOL_AMMO_STR,
     TOOL_HEALTH_NB,
     TOOL_HEALTH_STR,
-    TOOL_ARMOR_NB,
-    TOOL_ARMOR_STR,
+    TOOL_FLASH_NB,
     TOOL_ONE,
     TOOL_TWO,
     TOOL_THREE,
@@ -246,6 +250,7 @@ typedef struct time_info_s {
 
 typedef struct toolbar_s {
     sprite_t *head;
+    sprite_t *flashlight;
     draw_textbox_t *draw;
     sfRectangleShape *rectangle;
     sfTexture *background;
