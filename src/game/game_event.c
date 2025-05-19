@@ -119,6 +119,8 @@ static void tool_interact(
             light->flash_on = sfFalse;
         else
             light->flash_on = sfTrue;
+        move_rect(tool->flashlight->sprite, &tool->flashlight->rectangle,
+            FLASHLIGHT_SPRITE_X, FLASHLIGHT_SPRITE_STATUS);
     }
 }
 
@@ -152,7 +154,7 @@ static void interact(int **map, player_t *player, system_t *sys, game_t *game)
         }
         if (player->center_ray.distance < FINISH_DISTANCE &&
             map[casted_pos.y][casted_pos.x] == wall_textures[FINAL].value) {
-            sys->state->scene = WIN;
+            sys->state->scene = LOSE;
             sfMusic_play(game->music[END_LEVEL]);
         }
     }

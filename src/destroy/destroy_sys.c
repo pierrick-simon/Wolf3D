@@ -44,8 +44,26 @@ void destroy_save(save_t *save)
             free_mini_map_color(save->mini_map,
                 save->size.y + MINI_MAP_OFFSET * 2);
         if (save->doors != NULL)
-            free_linked_list(save->doors, free);
+            empty_linked_list(save->doors, free);
+        if (save->enemies != NULL)
+            empty_linked_list(save->enemies, free);
+        if (save->items != NULL)
+            empty_linked_list(save->items, free);
     }
+}
+
+static void destroy_all_save(save_t *save)
+{
+    destroy_save(save);
+    if (save->info != NULL)
+        free(save->info);
+    if (save->doors != NULL)
+        free_linked_list(save->doors, free);
+    if (save->enemies != NULL)
+        free_linked_list(save->enemies, free);
+    if (save->items != NULL)
+        free_linked_list(save->items, free);
+    free(save);
 }
 
 void destroy_sys(system_t *sys)
@@ -64,10 +82,6 @@ void destroy_sys(system_t *sys)
     }
     if (sys->state != NULL)
         free(sys->state);
-    if (sys->save != NULL) {
-        destroy_save(sys->save);
-        if (sys->save->info != NULL)
-            free(sys->save->info);
-        free(sys->save);
-    }
+    if (sys->save != NULL)
+        destroy_all_save(sys->save);
 }

@@ -16,6 +16,8 @@ SRC =	$(addprefix src/,					\
 			\
 			$(addprefix algo/,				\
 				move_rect.c					\
+				center_ray.c				\
+				get_pourcentage.c			\
 				cast_single_ray.c			\
 				cast_rays.c					\
 				cast_pos.c					\
@@ -63,12 +65,17 @@ SRC =	$(addprefix src/,					\
 				init_toolbar.c				\
 			)								\
 			$(addprefix save/,				\
+				$(addprefix list/,			\
+					add_node_file.c			\
+					free_node_file.c		\
+					sort_node_file.c		\
+					add_node_item.c			\
+					add_node_enemie.c		\
+				)							\
+				check_save.c 				\
 				check.c			 			\
 				free_map.c			 		\
 				get_save.c			 		\
-				add_node_file.c				\
-				free_node_file.c			\
-				sort_node_file.c			\
 				get_file.c					\
 				update_list.c				\
 				draw_save.c					\
@@ -141,6 +148,12 @@ all:	$(NAME)
 $(NAME):	$(OBJ)
 	$(MAKE) -C ./lib
 	$(MAKE) -C ./lib/linked_list
+	$(CC) -o $(NAME) $(OBJ) $(LDLIBS) $(LDFLAGS) $(CSFMLFLAG)
+
+debug:	CFLAGS+=-g3
+debug:	fclean $(OBJ)
+	$(MAKE) -C ./lib CFLAGS+=-g3
+	$(MAKE) -C ./lib/linked_list CFLAGS+=-g3
 	$(CC) -o $(NAME) $(OBJ) $(LDLIBS) $(LDFLAGS) $(CSFMLFLAG)
 
 clean:

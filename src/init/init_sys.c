@@ -7,6 +7,7 @@
 
 #include "load_screen.h"
 #include "save.h"
+#include "linked_list.h"
 #include <stdlib.h>
 
 static int init_textbox(textbox_t *textbox, load_screen_t *start)
@@ -52,7 +53,11 @@ static void init_state(state_info_t *state, load_screen_t *start)
 static int init_save(save_t *save)
 {
     save->info = malloc(sizeof(player_info_t));
-    if (save->info == NULL)
+    save->doors = initialize_linked_list();
+    save->enemies = initialize_linked_list();
+    save->items = initialize_linked_list();
+    if (save->info == NULL || save->enemies == NULL
+        || save->doors == NULL || save->items == NULL)
         return ERROR;
     save->init = sfFalse;
     save->music = NULL;

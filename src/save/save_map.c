@@ -6,6 +6,7 @@
 */
 
 #include "save.h"
+#include "linked_list.h"
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -13,12 +14,41 @@
 #include <stdio.h>
 #include <string.h>
 
+static void write_enemies(save_t *save, int fd)
+{
+    node_t *head = save->enemies->head;
+    enemie_t *tmp = NULL;
+
+    dprintf(fd, "%d\n", get_list_len(save->enemies));
+    while (head != NULL) {
+        tmp = head->data;
+        dprintf(fd, "%d:%f:%f:%d\n",
+            tmp->id, tmp->pos.x, tmp->pos.y, tmp->health);
+        head = head->next;
+    }
+}
+
+static void write_items(save_t *save, int fd)
+{
+    node_t *head = save->items->head;
+    item_t *tmp = NULL;
+
+    dprintf(fd, "%d\n", get_list_len(save->items));
+    while (head != NULL) {
+        tmp = head->data;
+        dprintf(fd, "%d:%f:%f:%d\n",
+            tmp->id, tmp->pos.x, tmp->pos.y, tmp->quantity);
+        head = head->next;
+    }
+}
+
 static void write_header(save_t *save, int fd)
 {
-    dprintf(fd, "%s\n%d\n%d\n%f\n%f\n%f\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%s\n",
+    dprintf(fd, "%s\n%d\n%d\n%f\n%f\n%f\n%d\n"
+        "%.0f\n%d\n%d\n%d\n%d\n%d\n%d\n%s\n",
         save->name, save->size.x, save->size.y, save->info->start_pos.x,
         save->info->start_pos.y, save->info->start_angle, save->info->health,
-        save->info->armor, save->info->ammo, save->info->stamina,
+        save->info->flashlight, save->info->ammo, save->info->stamina,
         save->info->score, (int)save->info->time / SEC_IN_MICRO,
         save->info->weapons, save->info->start_weapon, save->music_path);
 }
@@ -45,6 +75,8 @@ void save_map(save_t *save)
     if (fd == -1)
         return;
     write_header(save, fd);
+    write_enemies(save, fd);
+    write_items(save, fd);
     write_body(save, fd);
     close(fd);
 }

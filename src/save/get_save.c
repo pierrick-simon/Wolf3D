@@ -51,7 +51,7 @@ static int initiate_body(char **tab, save_t *save)
     return SUCCESS;
 }
 
-static int get_dup_info(char **tab, save_t *save)
+static int get_dup_info(char **tab, save_t *save, int offset)
 {
     save->name = strdup(tab[NAME]);
     if (save->name == NULL)
@@ -62,107 +62,47 @@ static int get_dup_info(char **tab, save_t *save)
     save->music = sfMusic_createFromFile(tab[MUSIC]);
     if (save->music_path == NULL)
         return ERROR;
-    save->doors = initialize_linked_list();
-    if (save->doors == NULL || initiate_body(tab + COOR, save) == ERROR) {
+    if (initiate_body(tab + COOR + offset, save) == ERROR) {
         free(save->name);
         return ERROR;
     }
     return SUCCESS;
 }
 
-static int initiate_struct(char **tab, save_t *save)
+static int initiate_struct(char **tab, save_t *save, int offset)
 {
     save->size = (sfVector2i){atoi(tab[SIZE_X]), atoi(tab[SIZE_Y])};
     save->info->start_pos =
         (sfVector2f){atof(tab[START_X]), atof(tab[START_Y])};
     save->info->start_angle = atof(tab[START_ANGLE]);
     save->info->health = atoi(tab[HEALTH]);
-    save->info->armor = atoi(tab[ARMOR]);
+    save->info->flashlight = atoi(tab[FLASHLIGHT_INFO]);
     save->info->ammo = atoi(tab[AMMO]);
     save->info->stamina = atoi(tab[STAMINA]);
     save->info->score = atoi(tab[CURRENT_SCORE]);
     save->info->time = atoi(tab[TIME]) * SEC_IN_MICRO;
     save->info->weapons = atoi(tab[WEAPONS]);
     save->info->start_weapon = atoi(tab[START_WEAPON]);
-    return get_dup_info(tab, save);
+    return get_dup_info(tab, save, offset);
 }
 
-static int check_header(char **tab, int *x, int *y)
+static int get_save_all(save_t *save, char **tab)
 {
-    for (int i = 0; CHECK[i].check != NULL; i++) {
-        if (CHECK[i].check(tab[i]) == ERROR)
-            return ERROR;
-    }
-    *x = atoi(tab[SIZE_X]);
-    *y = atoi(tab[SIZE_Y]);
-    return SUCCESS;
-}
+    int offset = 0;
 
-static int check_line(char *line, int x)
-{
-    int count = 0;
-    char *height = strtok(line, " ");
-
-    while (height != NULL) {
-        if (count > x)
-            return ERROR;
-        if (is_int_float(height) >= RATIONAL)
-            return ERROR;
-        count++;
-        height = strtok(NULL, " ");
-    }
-    if (count < x)
+    if (check_save(save, tab, &offset) == ERROR
+        || initiate_struct(tab, save, offset) == ERROR
+        || init_mini_map_color(save) == ERROR) {
+        free_array(tab);
+        destroy_save(save);
         return ERROR;
-    return SUCCESS;
-}
-
-static int check_body(char **tab, int x, int y)
-{
-    int i = 0;
-    char *line = 0;
-
-    while (tab[i] != NULL) {
-        if (i > y)
-            return ERROR;
-        line = strdup(tab[i]);
-        if (line == NULL)
-            return ERROR;
-        if (check_line(line, x) == ERROR) {
-            free(line);
-            return ERROR;
-        }
-        free(line);
-        i++;
     }
-    if (i < y)
+    free_array(tab);
+    if (check_start(save) == ERROR) {
+        free_map(save->size.y, save->map);
+        destroy_save(save);
         return ERROR;
-    return SUCCESS;
-}
-
-static int check_save(char **tab)
-{
-    int x = 0;
-    int y = 0;
-
-    if (array_len(tab) < COOR || check_header(tab, &x, &y) == ERROR
-        || check_body(tab + COOR, x, y) == ERROR)
-        return ERROR;
-    return SUCCESS;
-}
-
-static int check_start(save_t *save)
-{
-    int x = save->info->start_pos.x / TILE_SIZE;
-    int y = save->info->start_pos.y / TILE_SIZE;
-
-    if (save->size.x * TILE_SIZE < save->info->start_pos.x
-        || save->size.y * TILE_SIZE < save->info->start_pos.y
-        || save->map[y][x] != 0)
-            return ERROR;
-    if (save->info->health > MAX_HEALTH)
-        save->info->health = MAX_HEALTH;
-    if (save->info->armor > MAX_HEALTH)
-        save->info->armor = MAX_HEALTH;
+    }
     return SUCCESS;
 }
 
@@ -174,17 +114,8 @@ int get_save(char *file, save_t *save)
     save->init = sfFalse;
     if (tab == NULL)
         return ERROR;
-    if (check_save(tab) == ERROR || initiate_struct(tab, save) == ERROR
-        || init_mini_map_color(save) == ERROR) {
-        free_array(tab);
+    if (get_save_all(save, tab) == ERROR)
         return ERROR;
-    }
-    free_array(tab);
-    if (check_start(save) == ERROR) {
-        free_map(save->size.y, save->map);
-        free(save->name);
-        return ERROR;
-    }
     save->init = sfTrue;
     save->update = sfFalse;
     return SUCCESS;

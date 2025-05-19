@@ -16,9 +16,9 @@
     #define MOV_OFFSET_GUN 4
     #define MAX_WIDTH 30
 
-    #define FOV RAD(59)
-    #define NUM_RAYS WIN_WIDTH
+    #define FOV RAD(60)
     #define RAY_LENGTH 2
+    #define NB_RAYS WIN_WIDTH / RAY_LENGTH
 
     #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
     #define FLOOR_COLOR sfColor_fromRGB(139, 139, 139)
@@ -46,6 +46,11 @@
     #define HEAD_SPRITE_X 77
     #define HEAD_SPRITE_Y 90
     #define HEAD_SPRITE_STATUS 5
+
+    #define FLASHLIGHT_SPRITE_X (double)137 / 2
+    #define FLASHLIGHT_SPRITE_Y 130
+    #define FLASHLIGHT_SPRITE_STATUS 2
+    #define FLASHLIGHT_COEF 0.28
 
     #define OFFSET_POINT_BAR 20
 
@@ -135,8 +140,7 @@ typedef enum {
     TOOL_AMMO_STR,
     TOOL_HEALTH_NB,
     TOOL_HEALTH_STR,
-    TOOL_ARMOR_NB,
-    TOOL_ARMOR_STR,
+    TOOL_FLASH_NB,
     TOOL_ONE,
     TOOL_TWO,
     TOOL_THREE,
@@ -189,9 +193,16 @@ typedef struct door_s {
     sfBool activated;
 } door_t;
 
+typedef struct ray_s {
+    float len;
+    sfVertex up;
+    sfVertex down;
+} ray_t;
+
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
-    sfVertexArray *lines;
+    sfVertexArray *line;
+    ray_t rays[WIN_WIDTH];
     sfRenderStates wall_states;
 } map_t;
 
@@ -246,6 +257,7 @@ typedef struct time_info_s {
 
 typedef struct toolbar_s {
     sprite_t *head;
+    sprite_t *flashlight;
     draw_textbox_t *draw;
     sfRectangleShape *rectangle;
     sfTexture *background;
@@ -289,6 +301,9 @@ void draw_game(system_t *sys, void *structure);
 void destroy_game(void *structure);
 void *init_game(void);
 
+float get_pourcentage_wall(intersection_type_t type, sfVector2f *intersection);
+float get_door_pourcentage(save_t *save, sfVector2i *pos);
 sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
+void center_ray(player_t *player);
 
 #endif

@@ -39,5 +39,6 @@ void print_linked_list(node_t *list, void (*print_func)(void *data));
 node_t *get_list_node(linked_list_t *list, void *data_to_compare,
     bool (*compare_func)(void *node_data, void *data_to_compare));
 node_t *get_nth_node(linked_list_t *list, int index, int mode);
+void empty_linked_list(linked_list_t *list, void (*free_data)(void *data));
 
 #endif

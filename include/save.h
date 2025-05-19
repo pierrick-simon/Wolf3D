@@ -25,11 +25,41 @@
 typedef struct linked_list_s linked_list_t;
 typedef struct node_s node_t;
 
+
+typedef enum item_id_e {
+    I_WEAPON_TWO,
+    I_WEAPON_THREE,
+    I_WEAPON_FOUR,
+    I_HEALTH,
+    I_AMMO,
+    I_STAMINA,
+    I_FLASHLIGHT,
+    NB_ITEM,
+} item_id_t;
+
+typedef enum enemie_id_e {
+    E_NORMAL,
+    NB_ENEMIE,
+} enemie_id_t;
+
+typedef struct item_s {
+    item_id_t id;
+    sfVector2f pos;
+    int quantity;
+} item_t;
+
+typedef struct enemie_s {
+    enemie_id_t id;
+    sfVector2f pos;
+    int health;
+    float cooldown;
+} enemie_t;
+
 typedef struct player_info_s {
     sfVector2f start_pos;
     double start_angle;
     int health;
-    int armor;
+    float flashlight;
     int ammo;
     int stamina;
     int score;
@@ -49,7 +79,25 @@ typedef struct save_s {
     sfBool update;
     player_info_t *info;
     linked_list_t *doors;
+    linked_list_t *enemies;
+    linked_list_t *items;
 } save_t;
+
+typedef enum {
+    I_ID,
+    I_POS_X,
+    I_POS_Y,
+    I_QUANTITY,
+    NB_STR_ITEM,
+} str_item_t;
+
+typedef enum {
+    E_ID,
+    E_POS_X,
+    E_POS_Y,
+    E_HEALTH,
+    NB_STR_ENEMIE,
+} str_enemie_t;
 
 typedef enum {
     NAME,
@@ -59,7 +107,7 @@ typedef enum {
     START_Y,
     START_ANGLE,
     HEALTH,
-    ARMOR,
+    FLASHLIGHT_INFO,
     AMMO,
     STAMINA,
     CURRENT_SCORE,
@@ -67,6 +115,8 @@ typedef enum {
     WEAPONS,
     START_WEAPON,
     MUSIC,
+    ENEMIES,
+    ITEMS,
     COOR,
 } str_t;
 
@@ -133,7 +183,7 @@ static const check_t CHECK[] __maybe_unused = {
     [START_Y] = {&check_pos},
     [START_ANGLE] = {&check_angle},
     [HEALTH] = {&check_info},
-    [ARMOR] = {&check_info},
+    [FLASHLIGHT_INFO] = {&check_info},
     [AMMO] = {&check_info},
     [STAMINA] = {&check_info},
     [CURRENT_SCORE] = {&check_info},
@@ -157,6 +207,10 @@ void save_score(save_t *save, char *name);
 void save_map(save_t *save);
 void free_mini_map_color(sfColor **color, int y);
 int init_mini_map_color(save_t *save);
+int add_node_enemie(linked_list_t *enemies, char *line);
+int add_node_item(linked_list_t *items, char *line);
+int check_start(save_t *save);
+int check_save(save_t *save, char **tab, int *offset);
 
 void *init_maps(void);
 void draw_maps(system_t *sys, void *structure);

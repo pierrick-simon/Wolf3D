@@ -8,7 +8,7 @@
 #include "game.h"
 #include <stdlib.h>
 
-static int init_toolbar_sprite(sprite_t *sprite)
+static int init_toolbar_sprite_head(sprite_t *sprite)
 {
     double scale = TOOLBAR_HEIGHT / HEAD_SPRITE_Y + 0.4;
 
@@ -29,10 +29,31 @@ static int init_toolbar_sprite(sprite_t *sprite)
     return SUCCESS;
 }
 
+static int init_toolbar_sprite_light(sprite_t *sprite)
+{
+    sprite->sprite = sfSprite_create();
+    sprite->texture = sfTexture_createFromFile("asset/flashlight.png", NULL);
+    if (sprite->sprite == NULL || sprite->texture == NULL)
+        return ERROR;
+    sprite->rectangle =
+        (sfIntRect){0, 0, FLASHLIGHT_SPRITE_X, FLASHLIGHT_SPRITE_Y};
+    sprite->posf = (sfVector2f)
+        {(float)WIN_WIDTH * FLASHLIGHT_COEF, WIN_HEIGHT};
+    sfSprite_setPosition(sprite->sprite, sprite->posf);
+    sfSprite_setTexture(sprite->sprite, sprite->texture, sfTrue);
+    sfSprite_setTextureRect(sprite->sprite, sprite->rectangle);
+    sfSprite_setOrigin(sprite->sprite,
+        (sfVector2f){FLASHLIGHT_SPRITE_X / 2, FLASHLIGHT_SPRITE_Y});
+    return SUCCESS;
+}
+
 int init_toolbar(toolbar_t *tool)
 {
     tool->head = malloc(sizeof(sprite_t));
-    if (tool->head == NULL || init_toolbar_sprite(tool->head) == ERROR)
+    tool->flashlight = malloc(sizeof(sprite_t));
+    if (tool->head == NULL || init_toolbar_sprite_head(tool->head) == ERROR
+        || tool->flashlight == NULL
+        || init_toolbar_sprite_light(tool->flashlight) == ERROR)
         return ERROR;
     tool->rectangle = sfRectangleShape_create();
     tool->draw = init_from_conf("config_file/toolbar.conf");

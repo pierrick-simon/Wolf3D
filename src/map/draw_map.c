@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <string.h>
 
-static void check_save(char *name, select_map_t *map)
+static void check_save_map(char *name, select_map_t *map)
 {
     char *tmp = NULL;
     int fd = 0;
@@ -41,7 +41,7 @@ void draw_map(system_t *sys, void *structure)
     select_map_t *map = (select_map_t *)structure;
     sfSoundStatus music = sfMusic_getStatus(sys->music);
 
-    check_save(sys->save->name, map);
+    check_save_map(sys->save->name, map);
     sfRenderWindow_clear(sys->window, sfWhite);
     draw_background(sys, sys->background);
     sprintf(map->draw[MAP_TITLE].str, "%*s",

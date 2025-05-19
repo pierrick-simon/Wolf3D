@@ -11,6 +11,7 @@ SRC	= push_to_head.c \
 	initialize_linked_list.c \
 	get_list_len.c \
 	free_linked_list.c \
+	empty_linked_list.c \
 	print_linked_list.c \
 	get_list_node.c \
 	sort_linked_list.c \
