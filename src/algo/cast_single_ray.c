@@ -18,6 +18,9 @@ static sfBool is_end(sfVector2f *pos, intersection_t *type, save_t *save)
     if (casted_pos.x >= save->size.x || casted_pos.y >= save->size.x)
         return sfTrue;
     for (size_t i = 0; i < NB_WALL_TXT; ++i) {
+        if (i == DOOR && get_door_pourcentage(save, &casted_pos)
+            < get_pourcentage_wall(type->type, pos))
+                return sfFalse;
         if (save->map[casted_pos.y][casted_pos.x] == wall_textures[i].value) {
             type->wall = i;
             return sfTrue;

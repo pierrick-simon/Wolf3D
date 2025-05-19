@@ -16,7 +16,7 @@
     #define MOV_OFFSET_GUN 4
     #define MAX_WIDTH 30
 
-    #define FOV RAD(59)
+    #define FOV RAD(50)
     #define NUM_RAYS WIN_WIDTH
     #define RAY_LENGTH 2
 
@@ -192,6 +192,7 @@ typedef struct door_s {
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
     sfVertexArray *lines;
+    sfVertexArray *back_doors;
     sfRenderStates wall_states;
 } map_t;
 
@@ -289,6 +290,8 @@ void draw_game(system_t *sys, void *structure);
 void destroy_game(void *structure);
 void *init_game(void);
 
+float get_pourcentage_wall(intersection_type_t type, sfVector2f *intersection);
+float get_door_pourcentage(save_t *save, sfVector2i *pos);
 sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
 
 #endif

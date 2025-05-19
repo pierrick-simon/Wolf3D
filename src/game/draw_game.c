@@ -81,6 +81,8 @@ static void draw_lines(system_t *sys, game_t *game)
 {
     sfRenderWindow_drawVertexArray(sys->window,
         game->map->lines, &game->map->wall_states);
+    sfRenderWindow_drawVertexArray(sys->window,
+        game->map->back_doors, &game->map->wall_states);
 }
 
 static void smooth_night_day(system_t *sys, light_t *light)

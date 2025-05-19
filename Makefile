@@ -16,6 +16,7 @@ SRC =	$(addprefix src/,					\
 			\
 			$(addprefix algo/,				\
 				move_rect.c					\
+				get_pourcentage.c			\
 				cast_single_ray.c			\
 				cast_rays.c					\
 				cast_pos.c					\
