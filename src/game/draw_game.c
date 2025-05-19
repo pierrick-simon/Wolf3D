@@ -81,8 +81,17 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
 
 static void draw_lines(system_t *sys, game_t *game)
 {
-    sfRenderWindow_drawVertexArray(sys->window,
-        game->map->lines, &game->map->wall_states);
+    for (int i = 0; i < WIN_WIDTH; ++i) {
+        sfVertexArray_clear(game->map->line);
+        for (int j = 0; j < RAY_LENGTH; ++j) {
+            sfVertexArray_append(game->map->line, game->map->rays[i].down);
+            sfVertexArray_append(game->map->line, game->map->rays[i].up);
+            ++game->map->rays[i].down.position.x;
+            ++game->map->rays[i].up.position.x;
+        }
+        sfRenderWindow_drawVertexArray(sys->window,
+            game->map->line, &game->map->wall_states);
+    }
 }
 
 static void smooth_night_day(system_t *sys, light_t *light)

@@ -17,8 +17,8 @@
     #define MAX_WIDTH 30
 
     #define FOV RAD(50)
-    #define NUM_RAYS WIN_WIDTH
     #define RAY_LENGTH 2
+    #define NB_RAYS WIN_WIDTH / RAY_LENGTH
 
     #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
     #define FLOOR_COLOR sfColor_fromRGB(139, 139, 139)
@@ -193,9 +193,16 @@ typedef struct door_s {
     sfBool activated;
 } door_t;
 
+typedef struct ray_s {
+    float len;
+    sfVertex up;
+    sfVertex down;
+} ray_t;
+
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
-    sfVertexArray *lines;
+    sfVertexArray *line;
+    ray_t rays[WIN_WIDTH];
     sfRenderStates wall_states;
 } map_t;
 
