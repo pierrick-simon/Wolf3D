@@ -133,6 +133,7 @@ typedef enum intersection_type {
 typedef struct intersection_s {
     intersection_type_t type;
     wall_type_t wall;
+    int id;
 } intersection_t;
 
 typedef enum {
@@ -197,6 +198,7 @@ typedef struct ray_s {
     float len;
     sfVertex up;
     sfVertex down;
+    int id;
 } ray_t;
 
 typedef struct map_s {
