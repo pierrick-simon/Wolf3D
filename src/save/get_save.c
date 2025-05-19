@@ -77,7 +77,7 @@ static int initiate_struct(char **tab, save_t *save)
         (sfVector2f){atof(tab[START_X]), atof(tab[START_Y])};
     save->info->start_angle = atof(tab[START_ANGLE]);
     save->info->health = atoi(tab[HEALTH]);
-    save->info->armor = atoi(tab[ARMOR]);
+    save->info->flashlight = atoi(tab[FLASHLIGHT_INFO]);
     save->info->ammo = atoi(tab[AMMO]);
     save->info->stamina = atoi(tab[STAMINA]);
     save->info->score = atoi(tab[CURRENT_SCORE]);
@@ -161,8 +161,8 @@ static int check_start(save_t *save)
             return ERROR;
     if (save->info->health > MAX_HEALTH)
         save->info->health = MAX_HEALTH;
-    if (save->info->armor > MAX_HEALTH)
-        save->info->armor = MAX_HEALTH;
+    if (save->info->flashlight > MAX_HEALTH)
+        save->info->flashlight = MAX_HEALTH;
     return SUCCESS;
 }
 

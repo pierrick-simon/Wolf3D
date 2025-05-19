@@ -47,7 +47,22 @@ static void update_toolbar_percent(draw_textbox_t *draw, int nb)
         draw->color = sfRed;
 }
 
-static void update_toolbar(system_t *sys, toolbar_t *tool, double delta)
+static void update_flashlight(
+    system_t *sys, toolbar_t *tool, double delta, sfBool *light)
+{
+    if (*light == sfTrue) {
+        sys->save->info->flashlight -= delta * 2;
+        if (sys->save->info->flashlight <= 0.0) {
+            sys->save->info->flashlight = 0;
+            *light = sfFalse;
+            move_rect(tool->flashlight->sprite, &tool->flashlight->rectangle,
+                FLASHLIGHT_SPRITE_X, FLASHLIGHT_SPRITE_STATUS);
+        }
+    }
+}
+
+static void update_toolbar(
+    system_t *sys, toolbar_t *tool, double delta, sfBool *light)
 {
     int gap = MAX_HEALTH / HEAD_SPRITE_STATUS;
     int count = 0;
@@ -59,10 +74,12 @@ static void update_toolbar(system_t *sys, toolbar_t *tool, double delta)
         }
         count++;
     }
+    update_flashlight(sys, tool, delta, light);
     update_toolbar_percent(&tool->draw[TOOL_AMMO_NB], sys->save->info->ammo);
     update_toolbar_percent(
         &tool->draw[TOOL_HEALTH_NB], sys->save->info->health);
-    update_toolbar_percent(&tool->draw[TOOL_ARMOR_NB], sys->save->info->armor);
+    update_toolbar_percent(
+        &tool->draw[TOOL_FLASH_NB], sys->save->info->flashlight);
     update_toolbar_percent(
         &tool->draw[TOOL_STAM_NB], sys->save->info->stamina);
     sprintf(tool->draw[TOOL_FPS].str, "%3.0f", 1.0 / delta);
@@ -150,7 +167,8 @@ void update_all(system_t *sys, game_t *game)
     update_time(sys->save, sys->save->info->time, game->time_info, game);
     update_sprint(game->tool, sys->save, game->player->is_sprinting,
         game->time_info->delta);
-    update_toolbar(sys, game->tool, game->time_info->delta);
+    update_toolbar(sys, game->tool, game->time_info->delta,
+        &game->light->flash_on);
     update_interact(game->tool, game->player, sys->save->map);
     update_music_volume(sys, game->weapon, game->music);
     shot_gun_anim(game->weapon, game->time_info,
