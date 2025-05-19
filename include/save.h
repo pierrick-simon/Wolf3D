@@ -43,13 +43,15 @@ typedef enum enemie_id_e {
 } enemie_id_t;
 
 typedef struct item_s {
-    item_id_t id;
+    int id;
+    item_id_t type;
     sfVector2f pos;
     int quantity;
 } item_t;
 
 typedef struct enemie_s {
-    enemie_id_t id;
+    int id;
+    enemie_id_t type;
     sfVector2f pos;
     int health;
     float cooldown;
@@ -84,7 +86,7 @@ typedef struct save_s {
 } save_t;
 
 typedef enum {
-    I_ID,
+    I_TYPE,
     I_POS_X,
     I_POS_Y,
     I_QUANTITY,
@@ -92,7 +94,7 @@ typedef enum {
 } str_item_t;
 
 typedef enum {
-    E_ID,
+    E_TYPE,
     E_POS_X,
     E_POS_Y,
     E_HEALTH,

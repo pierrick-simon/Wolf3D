@@ -11,7 +11,7 @@
 
 static int check_enemie(char **tab)
 {
-    if (is_int_float(tab[E_ID]) != NATURAL || atoi(tab[E_ID]) >= NB_ENEMIE)
+    if (is_int_float(tab[E_TYPE]) != NATURAL || atoi(tab[E_TYPE]) >= NB_ENEMIE)
         return ERROR;
     if (is_int_float(tab[E_POS_X]) == MY_NAN
         || is_int_float(tab[E_POS_Y]) == MY_NAN)
@@ -24,11 +24,15 @@ static int check_enemie(char **tab)
 static void fill_node_enemie(
     linked_list_t *enemies, enemie_t *enemie, char **tab)
 {
-    enemie->id = atoi(tab[E_ID]);
+    static int id = 0;
+
+    enemie->id = id;
+    enemie->type = atoi(tab[E_TYPE]);
     enemie->pos = (sfVector2f){atof(tab[E_POS_X]), atof(tab[E_POS_Y])};
     enemie->health = atoi(tab[E_HEALTH]);
     enemie->cooldown = 0;
     push_to_tail(enemies, enemie);
+    id++;
 }
 
 int add_node_enemie(linked_list_t *enemies, char *line)
