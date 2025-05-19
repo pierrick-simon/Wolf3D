@@ -217,7 +217,6 @@ typedef struct player_s {
     center_ray_t center_ray;
     sfVector2f pos;
     float angle;
-    intersection_type_t type;
     float fov;
     sfBool is_sprinting;
     sfCircleShape *crossair;

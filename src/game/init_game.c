@@ -57,7 +57,6 @@ static int init_player(player_t *player)
     player->angle = 0;
     player->pos.x = -1;
     player->pos.y = -1;
-    player->type = NONE;
     player->center_ray.v.x = 0;
     player->center_ray.v.y = 0;
     player->center_ray.distance = 0.0;
