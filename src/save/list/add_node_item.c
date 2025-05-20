@@ -7,6 +7,7 @@
 
 #include "linked_list.h"
 #include "save.h"
+#include "element.h"
 #include "my.h"
 
 static int check_item(char **tab)

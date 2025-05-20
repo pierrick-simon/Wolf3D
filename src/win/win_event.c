@@ -84,7 +84,7 @@ static void switch_str(sfEvent event, win_t *win)
         win->str++;
     if (win->str == NB_WIN)
         win->str = WIN_ENTER;
-    if (win->str == WIN_SCORE)
+    if (win->str == WIN_BONUS_SCORE)
         win->str = WIN_MENU;
     win->draw[win->str].color = sfRed;
 }

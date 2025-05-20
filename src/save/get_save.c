@@ -8,6 +8,7 @@
 #include "save.h"
 #include "game.h"
 #include "my.h"
+#include "element.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -75,10 +76,10 @@ static int initiate_struct(char **tab, save_t *save, int offset)
     save->info->start_pos =
         (sfVector2f){atof(tab[START_X]), atof(tab[START_Y])};
     save->info->start_angle = atof(tab[START_ANGLE]);
-    save->info->health = atoi(tab[HEALTH]);
-    save->info->flashlight = atoi(tab[FLASHLIGHT_INFO]);
-    save->info->ammo = atoi(tab[AMMO]);
-    save->info->stamina = atoi(tab[STAMINA]);
+    save->info->item_info[I_HEALTH] = atoi(tab[HEALTH]);
+    save->info->item_info[I_FLASHLIGHT] = atoi(tab[FLASHLIGHT_INFO]);
+    save->info->item_info[I_AMMO] = atoi(tab[AMMO]);
+    save->info->item_info[I_STAMINA] = atoi(tab[STAMINA]);
     save->info->score = atoi(tab[CURRENT_SCORE]);
     save->info->time = atoi(tab[TIME]) * SEC_IN_MICRO;
     save->info->weapons = atoi(tab[WEAPONS]);

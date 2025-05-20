@@ -7,6 +7,7 @@
 
 #include "game.h"
 #include "save.h"
+#include "element.h"
 #include <stdio.h>
 #include <math.h>
 
@@ -51,14 +52,16 @@ static void update_flashlight(
     system_t *sys, toolbar_t *tool, double delta, sfBool *light)
 {
     if (*light == sfTrue) {
-        sys->save->info->flashlight -= delta * 2;
-        if (sys->save->info->flashlight <= 0.0) {
-            sys->save->info->flashlight = 0;
+        sys->save->info->item_info[I_FLASHLIGHT] -= delta * 2;
+        if (sys->save->info->item_info[I_FLASHLIGHT] <= 0.0) {
+            sys->save->info->item_info[I_FLASHLIGHT] = 0;
             *light = sfFalse;
             move_rect(tool->flashlight->sprite, &tool->flashlight->rectangle,
                 FLASHLIGHT_SPRITE_X, FLASHLIGHT_SPRITE_STATUS);
         }
     }
+    update_toolbar_percent(
+        &tool->draw[TOOL_FLASH_NB], sys->save->info->item_info[I_FLASHLIGHT]);
 }
 
 static void update_toolbar(
@@ -68,20 +71,19 @@ static void update_toolbar(
     int count = 0;
 
     for (int i = MAX_HEALTH - gap; i >= 0; i -= gap) {
-        if (sys->save->info->health > i) {
+        if (sys->save->info->item_info[I_HEALTH] > i) {
             tool->head->rectangle.top = HEAD_SPRITE_Y * count;
             break;
         }
         count++;
     }
     update_flashlight(sys, tool, delta, light);
-    update_toolbar_percent(&tool->draw[TOOL_AMMO_NB], sys->save->info->ammo);
+    update_toolbar_percent(&tool->draw[TOOL_AMMO_NB],
+        sys->save->info->item_info[I_AMMO]);
     update_toolbar_percent(
-        &tool->draw[TOOL_HEALTH_NB], sys->save->info->health);
+        &tool->draw[TOOL_HEALTH_NB], sys->save->info->item_info[I_HEALTH]);
     update_toolbar_percent(
-        &tool->draw[TOOL_FLASH_NB], sys->save->info->flashlight);
-    update_toolbar_percent(
-        &tool->draw[TOOL_STAM_NB], sys->save->info->stamina);
+        &tool->draw[TOOL_STAM_NB], sys->save->info->item_info[I_STAMINA]);
     sprintf(tool->draw[TOOL_FPS].str, "%3.0f", 1.0 / delta);
     sprintf(tool->draw[TOOL_SCORE_NB].str, "%09d", sys->save->info->score);
 }
@@ -112,15 +114,15 @@ static void update_saving(system_t *sys, toolbar_t *tool, float delta)
 static void update_sprint(
     toolbar_t *tool, save_t *save, sfBool sprint, double delta)
 {
-    if (save->info->stamina != 100 && sprint == sfFalse
+    if (save->info->item_info[I_STAMINA] != 100 && sprint == sfFalse
         && tool->no_sprint > SEC_IN_MICRO) {
-        save->info->stamina++;
+        save->info->item_info[I_STAMINA]++;
         tool->no_sprint = 0;
     }
-    if (save->info->stamina == 0)
+    if (save->info->item_info[I_STAMINA] == 0)
         sprint = sfFalse;
     if (tool->sprint > SEC_IN_MICRO / 10 && tool->sprint != 0) {
-        save->info->stamina--;
+        save->info->item_info[I_STAMINA]--;
         tool->sprint = 0;
     }
     if (sprint == sfFalse)
@@ -174,6 +176,7 @@ void update_all(system_t *sys, game_t *game)
     shot_gun_anim(game->weapon, game->time_info,
         game->tool, sys->save->info->weapons);
     cast_all_rays(game);
-    if (sys->save->info->health == 0)
+    handle_items(sys->save);
+    if (sys->save->info->item_info[I_HEALTH] == 0)
         sys->state->scene = LOSE;
 }

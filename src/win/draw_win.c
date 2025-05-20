@@ -73,6 +73,22 @@ static void update_win(save_t *save, win_t *win)
         win->score_update - win->prev_score);
 }
 
+static void show_info(system_t *sys, win_t *win)
+{
+    sfRenderWindow_drawSprite(sys->window, sys->background->wallpaper_s, NULL);
+    for (int i = 0; i < NB_WIN; i++) {
+        if (i == WIN_BONUS_SCORE
+            && win->score_update == sys->save->info->score)
+            continue;
+        draw_string(sys, sys->textbox, &win->draw[i]);
+    }
+    draw_info(sys, &win->draw[WIN_NAME], win->name_tmp);
+    draw_info(sys, &win->draw[WIN_TIME], win->time);
+    draw_info(sys, &win->draw[WIN_SCORE], win->score);
+    draw_danse(sys, win->danse, win->clock);
+    sfMusic_stop(sys->save->music);
+}
+
 void draw_win(system_t *sys, void *structure)
 {
     win_t *win = (win_t *)structure;
@@ -82,14 +98,7 @@ void draw_win(system_t *sys, void *structure)
     update_win(sys->save, win);
     win_events(sys, win);
     sfRenderWindow_clear(sys->window, sfWhite);
-    sfRenderWindow_drawSprite(sys->window, sys->background->wallpaper_s, NULL);
-    for (int i = 0; i < NB_WIN; i++)
-        draw_string(sys, sys->textbox, &win->draw[i]);
-    draw_info(sys, &win->draw[WIN_NAME], win->name_tmp);
-    draw_info(sys, &win->draw[WIN_TIME], win->time);
-    draw_info(sys, &win->draw[WIN_SCORE], win->score);
-    draw_danse(sys, win->danse, win->clock);
-    sfMusic_stop(sys->save->music);
+    show_info(sys, win);
     if (music == sfStopped || music == sfPaused)
         sfMusic_play(sys->music);
     sfRenderWindow_display(sys->window);

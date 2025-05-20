@@ -17,6 +17,7 @@ SRC =	$(addprefix src/,					\
 			$(addprefix algo/,				\
 				move_rect.c					\
 				sort_enemies.c				\
+				sort_items.c				\
 				center_ray.c				\
 				get_pourcentage.c			\
 				cast_single_ray.c			\
@@ -65,6 +66,7 @@ SRC =	$(addprefix src/,					\
 				draw_mini_map.c 			\
 				draw_minimap_elements.c		\
 				init_toolbar.c				\
+				handle_items.c  			\
 			)								\
 			$(addprefix save/,				\
 				$(addprefix list/,			\

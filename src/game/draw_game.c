@@ -8,6 +8,7 @@
 #include <math.h>
 #include "save.h"
 #include "game.h"
+#include "element.h"
 
 static void draw_coor(system_t *sys, game_t *game)
 {
@@ -24,7 +25,7 @@ static void draw_coor(system_t *sys, game_t *game)
         game->map->ceiling_floor, NULL);
 }
 
-static void draw_point_bar(system_t *sys, toolbar_t *tool, int ind, int nb)
+static void draw_point_bar(system_t *sys, toolbar_t *tool, int ind, float nb)
 {
     sfVector2f pos = (sfVector2f){tool->draw[ind].pos.x + tool->draw[ind].size
         + OFFSET_POINT_BAR, TOOLBAR_POS + OFFSET_POINT_BAR};
@@ -57,9 +58,12 @@ static void draw_tool_strings(system_t *sys, toolbar_t *tool)
             continue;
         draw_string(sys, sys->textbox, &tool->draw[i]);
     }
-    draw_point_bar(sys, tool, TOOL_FLASH_NB, sys->save->info->flashlight);
-    draw_point_bar(sys, tool, TOOL_HEALTH_NB, sys->save->info->health);
-    draw_point_bar(sys, tool, TOOL_STAM_NB, sys->save->info->stamina);
+    draw_point_bar(sys, tool, TOOL_FLASH_NB,
+        sys->save->info->item_info[I_FLASHLIGHT]);
+    draw_point_bar(sys, tool, TOOL_HEALTH_NB,
+        sys->save->info->item_info[I_HEALTH]);
+    draw_point_bar(sys, tool, TOOL_STAM_NB,
+        sys->save->info->item_info[I_STAMINA]);
 }
 
 static void draw_toolbar(system_t *sys, toolbar_t *tool)
@@ -80,7 +84,7 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
     draw_tool_strings(sys, tool);
 }
 
-static void draw_enemy(system_t *sys, enemie_t *enemy, player_t *player, ray_t rays[NB_RAYS])
+static void draw_enemy(system_t *sys, enemy_t *enemy, player_t *player, ray_t rays[NB_RAYS])
 {
     double spriteX = enemy->pos.x - player->pos.x;
     double spriteY = enemy->pos.y - player->pos.x;
@@ -147,7 +151,7 @@ static void draw_enemy(system_t *sys, enemie_t *enemy, player_t *player, ray_t r
 static void draw_lines(system_t *sys, game_t *game)
 {
     map_t *map = game->map;
-    node_t *node = game->player->save->enemys->head;
+    node_t *node = game->player->save->enemies->head;
 
     for (int i = 0; i < NB_RAYS; ++i) {
         sfVertexArray_clear(map->line);
