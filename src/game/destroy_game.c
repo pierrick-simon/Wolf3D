@@ -90,8 +90,8 @@ static void destroy_light(light_t *light)
     free(light);
 }
 
-static void destroy_music_rectangle(
-    sfMusic **music, sfRectangleShape *mini_map)
+static void destroy_music_rectangle(sfMusic **music,
+    sfRectangleShape *mini_map, sfCircleShape *cursor)
 {
     for (int i = 0; i < NB_MUSIC; i++) {
         if (music[i] != NULL)
@@ -99,13 +99,15 @@ static void destroy_music_rectangle(
     }
     if (mini_map != NULL)
         sfRectangleShape_destroy(mini_map);
+    if (cursor != NULL)
+        sfCircleShape_destroy(cursor);
 }
 
 void destroy_game(void *structure)
 {
     game_t *game = (game_t *)structure;
 
-    destroy_music_rectangle(game->music, game->mini_map);
+    destroy_music_rectangle(game->music, game->mini_map, game->cursor);
     if (game->weapon != NULL)
         destroy_weapon(game->weapon);
     if (game->player != NULL)

@@ -62,6 +62,7 @@ SRC =	$(addprefix src/,					\
 				update_weapon.c 			\
 				update_save.c 				\
 				draw_mini_map.c 			\
+				draw_minimap_elements.c		\
 				init_toolbar.c				\
 			)								\
 			$(addprefix save/,				\
@@ -70,7 +71,7 @@ SRC =	$(addprefix src/,					\
 					free_node_file.c		\
 					sort_node_file.c		\
 					add_node_item.c			\
-					add_node_enemie.c		\
+					add_node_enemy.c		\
 				)							\
 				check_save.c 				\
 				check.c			 			\
