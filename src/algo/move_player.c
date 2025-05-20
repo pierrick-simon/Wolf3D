@@ -16,7 +16,7 @@ static sfBool is_wall(float y, float x, save_t *save)
     return sfFalse;
 }
 
-static int sprint(player_t *player, save_t *save)
+static int sprint(player_t *player, save_t *save, sfVector2f *v)
 {
     int coef = 1;
 
@@ -29,75 +29,75 @@ static int sprint(player_t *player, save_t *save)
         }
     }
     if (is_wall(player->pos.y,
-        player->pos.x + (player->center_ray.v.x * coef * DISTANCE_COLISION),
+        player->pos.x + (v->x * coef * DISTANCE_COLISION),
         save) == sfFalse)
-        player->pos.x += player->center_ray.v.x * coef * FORWARD_COEF;
+        player->pos.x += v->x * coef * FORWARD_COEF;
     if (is_wall(player->pos.y +
-        (player->center_ray.v.y * coef * DISTANCE_COLISION),
+        (v->y * coef * DISTANCE_COLISION),
         player->pos.x, save) == sfFalse)
-        player->pos.y += player->center_ray.v.y * coef * FORWARD_COEF;
+        player->pos.y += v->y * coef * FORWARD_COEF;
     return coef;
 }
 
-static int move_forward(player_t *player, save_t *save)
+static int move_forward(player_t *player, save_t *save, sfVector2f *v)
 {
     if ((sfKeyboard_isKeyPressed(sfKeyUp))
         || sfKeyboard_isKeyPressed(sfKeyZ)
         || sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK) {
-        return sprint(player, save);
+        return sprint(player, save, v);
     }
     return SKIP;
 }
 
-static int move_backward(player_t *player, save_t *save)
+static int move_backward(player_t *player, save_t *save, sfVector2f *v)
 {
     if ((sfKeyboard_isKeyPressed(sfKeyDown))
         || sfKeyboard_isKeyPressed(sfKeyS)
         || sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK) {
         if (is_wall(player->pos.y,
-            player->pos.x - (player->center_ray.v.x * DISTANCE_COLISION),
+            player->pos.x - (v->x * DISTANCE_COLISION),
             save) == sfFalse)
-            player->pos.x -= player->center_ray.v.x;
+            player->pos.x -= v->x;
         if (is_wall(player->pos.y -
-            (player->center_ray.v.y * DISTANCE_COLISION),
+            (v->y * DISTANCE_COLISION),
             player->pos.x, save) == sfFalse)
-            player->pos.y -= player->center_ray.v.y;
+            player->pos.y -= v->y;
         return SUCCESS;
     }
     return SKIP;
 }
 
-static int move_left(player_t *player, save_t *save, int *head)
+static int move_left(player_t *player, save_t *save, int *head, sfVector2f *v)
 {
     if (sfKeyboard_isKeyPressed(sfKeyQ)
         || sfJoystick_getAxisPosition(0, sfJoystickPovX) == - MAX_JOYSTICK) {
         *head -= HEAD_SPRITE_X;
         if (is_wall(player->pos.y,
-            player->pos.x + (player->center_ray.v.y * DISTANCE_COLISION),
+            player->pos.x + (v->y * DISTANCE_COLISION),
             save) == sfFalse)
-            player->pos.x += player->center_ray.v.y;
+            player->pos.x += v->y;
         if (is_wall(player->pos.y -
-            (player->center_ray.v.x * DISTANCE_COLISION),
+            (v->x * DISTANCE_COLISION),
             player->pos.x, save) == sfFalse)
-            player->pos.y -= player->center_ray.v.x;
+            player->pos.y -= v->x;
         return SUCCESS;
     }
     return SKIP;
 }
 
-static int move_right(player_t *player, save_t *save, int *head)
+static int move_right(player_t *player, save_t *save, int *head, sfVector2f *v)
 {
     if (sfKeyboard_isKeyPressed(sfKeyD)
         || sfJoystick_getAxisPosition(0, sfJoystickPovX) == MAX_JOYSTICK) {
         *head += HEAD_SPRITE_X;
         if (is_wall(player->pos.y,
-            player->pos.x - (player->center_ray.v.y * DISTANCE_COLISION),
+            player->pos.x - (v->y * DISTANCE_COLISION),
             save) == sfFalse)
-            player->pos.x -= player->center_ray.v.y;
+            player->pos.x -= v->y;
         if (is_wall(player->pos.y +
-            (player->center_ray.v.x * DISTANCE_COLISION),
+            (v->x * DISTANCE_COLISION),
             player->pos.x, save) == sfFalse)
-            player->pos.y += player->center_ray.v.x;
+            player->pos.y += v->x;
         return SUCCESS;
     }
     return SKIP;
@@ -136,15 +136,16 @@ static void set_music_pitch(int forward, int backward, sfMusic *footstepp)
         sfMusic_setPitch(footstepp, 1.3);
 }
 
-static void handle_footstepp(player_t *player, int *head, sfMusic *footstepp)
+static void handle_footstepp(player_t *player,
+    int *head, sfMusic *footstepp, sfVector2f *v)
 {
     sfSoundStatus music = sfMusic_getStatus(footstepp);
-    int forward = move_forward(player, player->save);
-    int backward = move_backward(player, player->save);
+    int forward = move_forward(player, player->save, v);
+    int backward = move_backward(player, player->save, v);
 
     set_music_pitch(forward, backward, footstepp);
-    if (move_right(player, player->save, head)
-        != move_left(player, player->save, head)
+    if (move_right(player, player->save, head, v)
+        != move_left(player, player->save, head, v)
         || forward > SUCCESS || backward == SUCCESS) {
         if (music == sfStopped || music == sfPaused)
             sfMusic_play(footstepp);
@@ -154,13 +155,16 @@ static void handle_footstepp(player_t *player, int *head, sfMusic *footstepp)
 
 void move_player(player_t *player, double delta, int *head, sfMusic *footstepp)
 {
+    sfVector2f v = {0};
+
     center_ray(player);
+    v = player->center_ray.v;
     *head = HEAD_SPRITE_X;
     player->fov = FOV;
     player->is_sprinting = sfFalse;
-    player->center_ray.v.x *= delta;
-    player->center_ray.v.y *= delta;
-    handle_footstepp(player, head, footstepp);
+    v.x *= delta * PLAYER_SPEED;
+    v.y *= delta * PLAYER_SPEED;
+    handle_footstepp(player, head, footstepp, &v);
     rotate_player(player, delta, head);
     if (*head < 0)
         *head = 0;

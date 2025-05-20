@@ -17,7 +17,7 @@
     #define MAX_WIDTH 30
 
     #define FOV RAD(60)
-    #define RAY_LENGTH 2
+    #define RAY_LENGTH 1
     #define NB_RAYS WIN_WIDTH / RAY_LENGTH
 
     #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
@@ -91,6 +91,9 @@
 
     #define NO_ENEMY -1
 
+    #define ENEMY_TEXTURE_X 2550
+    #define ENEMY_TEXTURE_Y 3301
+
 typedef enum {
     LOAD_W_TEXTURE,
     LOAD_W_MUSIC,
@@ -135,7 +138,6 @@ typedef enum intersection_type {
 typedef struct intersection_s {
     intersection_type_t type;
     wall_type_t wall;
-    int id;
 } intersection_t;
 
 typedef enum {
@@ -200,10 +202,11 @@ typedef struct ray_s {
     float len;
     sfVertex up;
     sfVertex down;
-    int id;
 } ray_t;
 
 typedef struct map_s {
+    sfSprite *enemy;
+    sfTexture *enemy_texture;
     sfRectangleShape *ceiling_floor;
     sfVertexArray *line;
     ray_t rays[WIN_WIDTH];

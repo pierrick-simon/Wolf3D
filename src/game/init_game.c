@@ -49,6 +49,15 @@ static int init_map(map_t *map)
     if (map->line == NULL || init_states(map) == ERROR)
         return ERROR;
     sfVertexArray_setPrimitiveType(map->line, sfLines);
+    map->enemy_texture = sfTexture_createFromFile("asset/monster.png", NULL);
+    if (map->enemy_texture == NULL)
+        return ERROR;
+    map->enemy = sfSprite_create();
+    if (map->enemy == NULL)
+        return ERROR;
+    sfSprite_setTexture(map->enemy, map->enemy_texture, sfFalse);
+    sfSprite_setOrigin(map->enemy,
+        (sfVector2f){ENEMY_TEXTURE_X / 2, ENEMY_TEXTURE_Y / 2});
     return SUCCESS;
 }
 

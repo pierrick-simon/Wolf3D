@@ -5,6 +5,7 @@
 ** game_loop
 */
 
+#include <math.h>
 #include "save.h"
 #include "game.h"
 
@@ -79,18 +80,90 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
     draw_tool_strings(sys, tool);
 }
 
+static void draw_enemy(system_t *sys, enemie_t *enemy, player_t *player, ray_t rays[NB_RAYS])
+{
+    double spriteX = enemy->pos.x - player->pos.x;
+    double spriteY = enemy->pos.y - player->pos.x;
+    double dirY = player->center_ray.v.y;
+    double dirX = player->center_ray.v.x;
+    double planeX = 0.0;
+    double planeY = 0.66;
+    int h = WIN_HEIGHT;
+    int w = WIN_WIDTH;
+
+
+    double invDet = 1.0 / (planeX * dirY - dirX * planeY);
+
+    double transformX = invDet * (dirY * spriteX - dirX * spriteY);
+    double transformY = invDet * (-planeY * spriteX + planeX * spriteY);
+
+    int spriteScreenX = (int)((w / 2) * (1 + transformX / transformY));
+
+    int spriteHeight = abs((int)(h / (transformY)));
+
+    int drawStartY = -spriteHeight / 2 + h / 2;
+    int drawEndY = spriteHeight / 2 + h / 2;
+
+    //calculate width of the sprite
+    int spriteWidth = abs((int)(h / (transformY)));
+    int drawStartX = -spriteWidth / 2 + spriteScreenX;
+    if(drawStartX < 0)
+        drawStartX = 0;
+    int drawEndX = spriteWidth / 2 + spriteScreenX;
+    if(drawEndX >= w)
+        drawEndX = w - 1;
+
+    //printf("id:%d dist:%f x:%d\n%f %f\n", enemy->id, enemy->dist, spriteScreenX, player->center_ray.v.x, player->center_ray.v.y);
+    sfRectangleShape *r = sfRectangleShape_create();
+    sfRectangleShape_setFillColor(r, sfRed);
+    sfRectangleShape_setSize(r, (sfVector2f){spriteWidth, spriteHeight});
+    sfRectangleShape_setOrigin(r, (sfVector2f){spriteWidth / 2, spriteHeight / 2});
+    sfRectangleShape_setPosition(r, (sfVector2f){spriteScreenX, WIN_HEIGHT / 2});
+    //if(transformY > 0 && spriteScreenX > 0 && spriteScreenX < w && rays[spriteScreenX].len > transformY)
+        sfRenderWindow_drawRectangleShape(sys->window, r, NULL);
+    sfRectangleShape_destroy(r);
+
+
+    sfVertexArray *a = sfVertexArray_create();
+    sfVertexArray_setPrimitiveType(a, sfLines);
+    sfVertex tmp = {.color = sfBlue};
+    for (int stripe = drawStartX; stripe < drawEndX; stripe++) {
+        //the conditions in the if are:
+        //1) it's in front of camera plane so you don't see things behind you
+        //2) it's on the screen (left)
+        //3) it's on the screen (right)
+        //4) ZBuffer, with perpendicular distance
+        // if (transformY > 0 && stripe > 0 && stripe < w && transformY < rays[stripe].len) {
+            tmp.position = (sfVector2f){stripe, drawStartY};
+            sfVertexArray_append(a, tmp);
+            tmp.position = (sfVector2f){stripe, drawEndY};
+            sfVertexArray_append(a, tmp);
+            sfRenderWindow_drawVertexArray(sys->window, a, NULL);
+            sfVertexArray_clear(a);
+        //}
+    }
+}
+
 static void draw_lines(system_t *sys, game_t *game)
 {
+    map_t *map = game->map;
+    node_t *node = game->player->save->enemys->head;
+
     for (int i = 0; i < NB_RAYS; ++i) {
-        sfVertexArray_clear(game->map->line);
+        sfVertexArray_clear(map->line);
         for (int j = 0; j < RAY_LENGTH; ++j) {
-            sfVertexArray_append(game->map->line, game->map->rays[i].down);
-            sfVertexArray_append(game->map->line, game->map->rays[i].up);
-            ++game->map->rays[i].down.position.x;
-            ++game->map->rays[i].up.position.x;
+            sfVertexArray_append(map->line, map->rays[i].down);
+            sfVertexArray_append(map->line, map->rays[i].up);
+            ++map->rays[i].down.position.x;
+            ++map->rays[i].up.position.x;
         }
         sfRenderWindow_drawVertexArray(sys->window,
-            game->map->line, &game->map->wall_states);
+            map->line, &map->wall_states);
+    }
+    printf("-------------------\n");
+    while (node != NULL) {
+        draw_enemy(sys, node->data, game->player, game->map->rays);
+        node = node->next;
     }
 }
 

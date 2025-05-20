@@ -38,6 +38,8 @@ static void destroy_map(map_t *map)
     sfTexture_destroy((sfTexture *)map->wall_states.texture);
     if (map->ceiling_floor != NULL)
         sfRectangleShape_destroy(map->ceiling_floor);
+    sfSprite_destroy(map->enemy);
+    sfTexture_destroy(map->enemy_texture);
     free(map);
 }
 

@@ -31,11 +31,11 @@ static void add_line(float offset, float len_factor[2],
     sfVertex line = {.color = sfWhite};
     float a = ((1 - len_factor[FACTOR_INDEX]) * WALL_TEXTURE_X);
 
-    line.position = (sfVector2f){offset * 2, ((WIN_HEIGHT -
+    line.position = (sfVector2f){offset * RAY_LENGTH, ((WIN_HEIGHT -
         len_factor[LEN_INDEX]) / 2) + (len_factor[LEN_INDEX])};
     line.texCoords = (sfVector2f){pos[Y_INDEX] + a, pos[X_INDEX]};
     game->map->rays[(int)offset].down = line;
-    line.position = (sfVector2f){offset * 2,
+    line.position = (sfVector2f){offset * RAY_LENGTH,
         (WIN_HEIGHT - len_factor[LEN_INDEX]) / 2};
     line.texCoords = (sfVector2f){pos[Y_INDEX] + a, pos[X_INDEX] +
         (WALL_TEXTURE_X)};
@@ -50,8 +50,8 @@ static void set_line(int i, float len_factor[2],
 
 static void add_ray_to_vertex_array(game_t *game, int i)
 {
-    intersection_t type = {NONE, WALL, NO_ENEMY};
-    float angle_offset = ((i * 2 / (float)WIN_WIDTH) * game->player->fov) -
+    intersection_t type = {NONE, WALL};
+    float angle_offset = ((i * RAY_LENGTH / (float)WIN_WIDTH) * game->player->fov) -
         (game->player->fov / 2);
     sfVector2f pos = {0};
     float len = cast_single_ray(game->player, angle_offset, &type, &pos);

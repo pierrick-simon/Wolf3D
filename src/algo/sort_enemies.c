@@ -14,7 +14,7 @@ static bool cmp(void *first, void *second)
     enemie_t *data_first = first;
     enemie_t *data_second = second;
 
-    if (data_first->dist > data_second->dist)
+    if (data_first->dist < data_second->dist)
         return true;
     return false;
 }
@@ -34,17 +34,6 @@ static void init_distances(game_t *game, player_t *player)
     }
 }
 
-/*
-node_t *node = game->player->save->enemys->head;
-enemie_t *data = NULL;
-
-printf("-------------------------\n");
-while (node != NULL) {
-    data = node->data;
-    printf("%f\n", data->dist);
-    node = node->next;
-}
-*/
 void sort_enemies(game_t *game)
 {
     init_distances(game, game->player);
