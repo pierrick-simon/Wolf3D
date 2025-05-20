@@ -31,6 +31,7 @@ static void fill_node_enemie(
     enemie->pos = (sfVector2f){atof(tab[E_POS_X]), atof(tab[E_POS_Y])};
     enemie->health = atoi(tab[E_HEALTH]);
     enemie->cooldown = 0;
+    enemie->dist = 0;
     push_to_tail(enemies, enemie);
     id++;
 }

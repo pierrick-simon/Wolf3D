@@ -10,7 +10,7 @@
 
 void center_ray(player_t *player)
 {
-    intersection_t type = {NONE, WALL};
+    intersection_t type = {NONE, WALL, NO_ENEMY};
     sfVector2f pos = {0};
 
     player->center_ray.distance = cast_single_ray(player, 0, &type, &pos);

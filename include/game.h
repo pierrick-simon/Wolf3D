@@ -89,6 +89,8 @@
     #define LEN_INDEX 0
     #define FACTOR_INDEX 1
 
+    #define NO_ENEMY -1
+
 typedef enum {
     LOAD_W_TEXTURE,
     LOAD_W_MUSIC,
@@ -306,5 +308,6 @@ float get_pourcentage_wall(intersection_type_t type, sfVector2f *intersection);
 float get_door_pourcentage(save_t *save, sfVector2i *pos);
 sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
 void center_ray(player_t *player);
+void sort_enemies(game_t *game);
 
 #endif

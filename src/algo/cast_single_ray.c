@@ -9,6 +9,23 @@
 #include "game.h"
 #include <math.h>
 
+static int is_enemy(sfVector2f *v, player_t *player)
+{
+    node_t *node = player->save->enemies->head;
+    enemie_t *data = NULL;
+    sfVector2f w = {0};
+
+    while (node != NULL) {
+        data = node->data;
+        w.x = data->pos.x - player->pos.x;
+        w.y = data->pos.y - player->pos.y;
+        if (w.x * v->x - w.y * v->y < 0.01 && w.x * v->x - w.y * v->y > -0.01)
+            return data->id;
+        node = node->next;
+    }
+    return NO_ENEMY;
+}
+
 static sfBool is_end(sfVector2f *pos, intersection_t *type, save_t *save)
 {
     sfVector2i casted_pos = cast_pos(pos, type->type);
@@ -110,6 +127,7 @@ float cast_single_ray(player_t *player, float angle_offset,
         sin(player->angle + angle_offset)};
     float len = 0.0;
 
+    type->id = is_enemy(&v, player);
     while ((is_end(&pos, type, player->save) == sfFalse)) {
         len += jump_to_next_line(&pos, &v, &type->type);
         if (len > RENDER_DISTANCE) {

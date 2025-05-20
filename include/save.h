@@ -55,6 +55,7 @@ typedef struct enemie_s {
     sfVector2f pos;
     int health;
     float cooldown;
+    float dist;
 } enemie_t;
 
 typedef struct player_info_s {
