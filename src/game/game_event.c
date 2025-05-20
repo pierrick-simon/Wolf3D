@@ -85,12 +85,12 @@ static void click(system_t *sys, weapon_t *weapon, game_t *game)
     if (sfKeyboard_isKeyPressed(sfKeySpace) ||
         sfJoystick_getAxisPosition(0, sfJoystickR) > 0) {
         if (weapon->weapon != PUNCH
-            && sys->save->info->item_info[I_AMMO] == 0) {
+            && sys->save->info->item_info[ind] == 0) {
             sfMusic_play(weapon->empty);
             return;
         }
         if (weapon->weapon != PUNCH)
-            sys->save->info->item_info[I_AMMO]--;
+            sys->save->info->item_info[ind]--;
         weapon->shot = game->time_info->time;
         sfMusic_play(weapon->info[weapon->weapon].sound);
         destroy_wall(sys->save->map, game->player, game);

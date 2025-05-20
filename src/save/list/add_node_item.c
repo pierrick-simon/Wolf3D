@@ -17,8 +17,6 @@ static int check_item(char **tab)
     if (is_int_float(tab[I_POS_X]) == MY_NAN
         || is_int_float(tab[I_POS_Y]) == MY_NAN)
         return ERROR;
-    if (is_int_float(tab[I_QUANTITY]) != NATURAL)
-        return ERROR;
     return SUCCESS;
 }
 
@@ -30,7 +28,6 @@ static void fill_node_item(
     item->id = id;
     item->type = atoi(tab[E_TYPE]);
     item->pos = (sfVector2f){atof(tab[I_POS_X]), atof(tab[I_POS_Y])};
-    item->quantity = atoi(tab[I_QUANTITY]);
     push_to_tail(items, item);
     id++;
 }

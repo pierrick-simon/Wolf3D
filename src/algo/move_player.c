@@ -24,7 +24,7 @@ static int sprint(player_t *player, save_t *save)
     if (sfKeyboard_isKeyPressed(sfKeyLShift) ||
         sfJoystick_getAxisPosition(0, sfJoystickZ) > 0) {
         player->is_sprinting = sfTrue;
-        if (save->info->item_info[I_STAMINA] != 0) {
+        if (save->info->item_info[INFO_STAMINA] != 0) {
             coef = 2;
             player->fov = SPRINTING_FOV;
         }

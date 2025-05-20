@@ -25,10 +25,20 @@
 typedef struct linked_list_s linked_list_t;
 typedef struct node_s node_t;
 
+typedef enum item_info_e {
+    INFO_HEALTH,
+    INFO_AMMO_PISTOL,
+    INFO_AMMO_SHUTGUN,
+    INFO_AMMO_MINIGUN,
+    INFO_STAMINA,
+    INFO_FLASHLIGHT,
+    NB_INFO,
+} item_info_t;
+
 typedef struct player_info_s {
     sfVector2f start_pos;
     double start_angle;
-    float item_info[4];
+    float item_info[NB_INFO];
     int score;
     sfUint64 time;
     int weapons;
@@ -59,7 +69,9 @@ typedef enum {
     START_ANGLE,
     HEALTH,
     FLASHLIGHT_INFO,
-    AMMO,
+    AMMO_PISTOL,
+    AMMO_SHUTGUN,
+    AMMO_MINIGUN,
     STAMINA,
     CURRENT_SCORE,
     TIME,
@@ -135,7 +147,9 @@ static const check_t CHECK[] __maybe_unused = {
     [START_ANGLE] = {&check_angle},
     [HEALTH] = {&check_info},
     [FLASHLIGHT_INFO] = {&check_info},
-    [AMMO] = {&check_info},
+    [AMMO_PISTOL] = {&check_info},
+    [AMMO_SHUTGUN] = {&check_info},
+    [AMMO_MINIGUN] = {&check_info},
     [STAMINA] = {&check_info},
     [CURRENT_SCORE] = {&check_info},
     [TIME] = {&check_info},

@@ -37,10 +37,11 @@ void handle_items(save_t *save)
         tmp = head->data;
         if (tmp->dist > ITEM_RANGE)
             continue;
-        value = save->info->item_info[tmp->type];
         if (tmp->type < I_WEAPON_TWO) {
-            ITEM[tmp->type].func(tmp->quantity, &value, ITEM[tmp->type].max);
-            save->info->item_info[tmp->type] = value;
+            value = save->info->item_info[ITEM[tmp->type].info];
+            ITEM[tmp->type].func(ITEM[tmp->type].quantity,
+                &value, ITEM[tmp->type].max);
+            save->info->item_info[ITEM[tmp->type].info] = value;
         } else
             ITEM[tmp->type].func(tmp->type - I_FLASHLIGHT,
                 &save->info->weapons, 0);

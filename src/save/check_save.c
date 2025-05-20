@@ -147,6 +147,22 @@ static void pass_items(linked_list_t *list, save_t *save)
     }
 }
 
+static void check_item_info(save_t *save)
+{
+    if (save->info->item_info[INFO_HEALTH] > MAX_HEALTH)
+        save->info->item_info[INFO_HEALTH] = MAX_HEALTH;
+    if (save->info->item_info[INFO_STAMINA] > MAX_HEALTH)
+        save->info->item_info[INFO_STAMINA] = MAX_HEALTH;
+    if (save->info->item_info[INFO_FLASHLIGHT] > MAX_HEALTH)
+        save->info->item_info[INFO_FLASHLIGHT] = MAX_HEALTH;
+    if (save->info->item_info[INFO_AMMO_PISTOL] > MAX_AMMO)
+        save->info->item_info[INFO_AMMO_PISTOL] = MAX_AMMO;
+    if (save->info->item_info[INFO_AMMO_SHUTGUN] > MAX_AMMO)
+        save->info->item_info[INFO_AMMO_SHUTGUN] = MAX_AMMO;
+    if (save->info->item_info[INFO_AMMO_MINIGUN] > MAX_AMMO)
+        save->info->item_info[INFO_AMMO_MINIGUN] = MAX_AMMO;
+}
+
 int check_start(save_t *save)
 {
     int x = save->info->start_pos.x / TILE_SIZE;
@@ -156,14 +172,7 @@ int check_start(save_t *save)
         || save->size.y * TILE_SIZE < save->info->start_pos.y
         || save->map[y][x] != 0)
             return ERROR;
-    if (save->info->item_info[I_HEALTH] > MAX_HEALTH)
-        save->info->item_info[I_HEALTH] = MAX_HEALTH;
-    if (save->info->item_info[I_STAMINA] > MAX_HEALTH)
-        save->info->item_info[I_STAMINA] = MAX_HEALTH;
-    if (save->info->item_info[I_FLASHLIGHT] > MAX_HEALTH)
-        save->info->item_info[I_FLASHLIGHT] = MAX_HEALTH;
-    if (save->info->item_info[I_AMMO] > MAX_AMMO)
-        save->info->item_info[I_AMMO] = MAX_AMMO;
+    check_item_info(save);
     pass_enemies(save->enemies, save);
     pass_items(save->items, save);
     return SUCCESS;

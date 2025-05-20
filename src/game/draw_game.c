@@ -58,11 +58,11 @@ static void draw_tool_strings(system_t *sys, toolbar_t *tool)
         draw_string(sys, sys->textbox, &tool->draw[i]);
     }
     draw_point_bar(sys, tool, TOOL_FLASH_NB,
-        sys->save->info->item_info[I_FLASHLIGHT]);
+        sys->save->info->item_info[INFO_FLASHLIGHT]);
     draw_point_bar(sys, tool, TOOL_HEALTH_NB,
-        sys->save->info->item_info[I_HEALTH]);
+        sys->save->info->item_info[INFO_HEALTH]);
     draw_point_bar(sys, tool, TOOL_STAM_NB,
-        sys->save->info->item_info[I_STAMINA]);
+        sys->save->info->item_info[INFO_STAMINA]);
 }
 
 static void draw_toolbar(system_t *sys, toolbar_t *tool)
