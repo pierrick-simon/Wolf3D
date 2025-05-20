@@ -31,6 +31,7 @@ typedef struct item_s {
     item_id_t type;
     sfVector2f pos;
     int quantity;
+    int dist;
 } item_t;
 
 typedef struct enemy_s {
@@ -38,6 +39,7 @@ typedef struct enemy_s {
     enemy_id_t type;
     sfVector2f pos;
     int health;
+    int dist;
     float cooldown;
 } enemy_t;
 

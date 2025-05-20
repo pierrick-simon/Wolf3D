@@ -16,6 +16,8 @@ SRC =	$(addprefix src/,					\
 			\
 			$(addprefix algo/,				\
 				move_rect.c					\
+				sort_enemies.c				\
+				sort_items.c				\
 				center_ray.c				\
 				get_pourcentage.c			\
 				cast_single_ray.c			\

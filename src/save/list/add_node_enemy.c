@@ -23,7 +23,7 @@ static int check_enemy(char **tab)
 }
 
 static void fill_node_enemy(
-    linked_list_t *enemys, enemy_t *enemy, char **tab)
+    linked_list_t *enemies, enemy_t *enemy, char **tab)
 {
     static int id = 0;
 
@@ -32,11 +32,12 @@ static void fill_node_enemy(
     enemy->pos = (sfVector2f){atof(tab[E_POS_X]), atof(tab[E_POS_Y])};
     enemy->health = atoi(tab[E_HEALTH]);
     enemy->cooldown = 0;
-    push_to_tail(enemys, enemy);
+    enemy->dist = 0;
+    push_to_tail(enemies, enemy);
     id++;
 }
 
-int add_node_enemy(linked_list_t *enemys, char *line)
+int add_node_enemy(linked_list_t *enemies, char *line)
 {
     char **tab = my_str_to_word_array(line, ":", "");
     enemy_t *enemy = NULL;
@@ -52,7 +53,7 @@ int add_node_enemy(linked_list_t *enemys, char *line)
         free_array(tab);
         return ERROR;
     }
-    fill_node_enemy(enemys, enemy, tab);
+    fill_node_enemy(enemies, enemy, tab);
     free_array(tab);
     return SUCCESS;
 }

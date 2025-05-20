@@ -15,12 +15,12 @@
 #include <stdio.h>
 #include <string.h>
 
-static void write_enemys(save_t *save, int fd)
+static void write_enemies(save_t *save, int fd)
 {
-    node_t *head = save->enemys->head;
+    node_t *head = save->enemies->head;
     enemy_t *tmp = NULL;
 
-    dprintf(fd, "%d\n", get_list_len(save->enemys));
+    dprintf(fd, "%d\n", get_list_len(save->enemies));
     while (head != NULL) {
         tmp = head->data;
         dprintf(fd, "%d:%f:%f:%d\n",
@@ -77,7 +77,7 @@ void save_map(save_t *save)
     if (fd == -1)
         return;
     write_header(save, fd);
-    write_enemys(save, fd);
+    write_enemies(save, fd);
     write_items(save, fd);
     write_body(save, fd);
     close(fd);

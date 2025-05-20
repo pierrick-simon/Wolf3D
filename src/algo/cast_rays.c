@@ -50,7 +50,7 @@ static void set_line(int i, float len_factor[2],
 
 static void add_ray_to_vertex_array(game_t *game, int i)
 {
-    intersection_t type = {NONE, WALL};
+    intersection_t type = {NONE, WALL, NO_ENEMY};
     float angle_offset = ((i * 2 / (float)WIN_WIDTH) * game->player->fov) -
         (game->player->fov / 2);
     sfVector2f pos = {0};
@@ -67,6 +67,8 @@ static void add_ray_to_vertex_array(game_t *game, int i)
 
 void cast_all_rays(game_t *game)
 {
+    sort_enemies(game);
+    sort_items(game);
     for (int i = 0; i < NB_RAYS; ++i)
         add_ray_to_vertex_array(game, i);
 }

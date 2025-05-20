@@ -64,7 +64,7 @@ static int check_body(char **tab, int x, int y)
     return SUCCESS;
 }
 
-static int check_enemys(linked_list_t *list, char **tab, int *offset)
+static int check_enemies(linked_list_t *list, char **tab, int *offset)
 {
     int nb = 0;
 
@@ -100,14 +100,14 @@ int check_save(save_t *save, char **tab, int *offset)
     int y = 0;
 
     if (array_len(tab) < COOR || check_header(tab, &x, &y) == ERROR
-        || check_enemys(save->enemys, tab + ENEMYS, offset) == ERROR
+        || check_enemies(save->enemies, tab + ENEMIES, offset) == ERROR
         || check_items(save->items, tab + ITEMS + *offset, offset) == ERROR
         || check_body(tab + COOR + *offset, x, y) == ERROR)
         return ERROR;
     return SUCCESS;
 }
 
-static void pass_enemys(linked_list_t *list, save_t *save)
+static void pass_enemies(linked_list_t *list, save_t *save)
 {
     node_t *head = list->head;
     node_t *next = NULL;
@@ -164,7 +164,7 @@ int check_start(save_t *save)
         save->info->item_info[I_FLASHLIGHT] = MAX_HEALTH;
     if (save->info->item_info[I_AMMO] > MAX_AMMO)
         save->info->item_info[I_AMMO] = MAX_AMMO;
-    pass_enemys(save->enemys, save);
+    pass_enemies(save->enemies, save);
     pass_items(save->items, save);
     return SUCCESS;
 }

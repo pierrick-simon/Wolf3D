@@ -26,16 +26,6 @@ void item_potion(int quantity, int *item, int max)
         *item = max;
 }
 
-static sfBool is_arround(sfVector2f *player_pos, sfVector2f *item_pos)
-{
-    double dist = sqrt(pow((item_pos->x - player_pos->x), 2)
-        + pow((item_pos->y - player_pos->y), 2));
-
-    if (dist < 15.0)
-        return sfTrue;
-    return sfFalse;
-}
-
 void handle_items(save_t *save)
 {
     node_t *next = NULL;
@@ -45,7 +35,7 @@ void handle_items(save_t *save)
     for (node_t *head = save->items->head; head != NULL; head = next) {
         next = head->next;
         tmp = head->data;
-        if (is_arround(&save->info->start_pos, &tmp->pos) == sfFalse)
+        if (tmp->dist > 15.0)
             continue;
         value = save->info->item_info[tmp->type];
         if (tmp->type < I_WEAPON_TWO) {
