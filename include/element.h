@@ -8,7 +8,9 @@
 #ifndef ELEMENT_H_
     #define ELEMENT_H_
 
-    #include "wolf.h"
+    #include "game.h"
+
+    #define ITEM_RANGE 15.0
 
 typedef enum item_id_e {
     I_HEALTH,
@@ -76,6 +78,18 @@ static const get_item_t ITEM[] __maybe_unused = {
     [I_WEAPON_TWO] = {&item_weapon, 15},
     [I_WEAPON_THREE] = {&item_weapon, 15},
     [I_WEAPON_FOUR] = {&item_weapon, 15},
+};
+
+typedef struct enemy_info_s {
+    int detect_range;
+    int attack;
+    int attack_range;
+    int cooldown;
+    int speed;
+} enemy_info_t;
+
+static const enemy_info_t ENEMY[] __maybe_unused = {
+    [0] = {RENDER_DISTANCE, 10, 50, 3, 100}
 };
 
 void handle_items(save_t *save);

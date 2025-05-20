@@ -35,7 +35,7 @@ void handle_items(save_t *save)
     for (node_t *head = save->items->head; head != NULL; head = next) {
         next = head->next;
         tmp = head->data;
-        if (tmp->dist > 15.0)
+        if (tmp->dist > ITEM_RANGE)
             continue;
         value = save->info->item_info[tmp->type];
         if (tmp->type < I_WEAPON_TWO) {

@@ -67,6 +67,7 @@ static void add_ray_to_vertex_array(game_t *game, int i)
 
 void cast_all_rays(game_t *game)
 {
+    enemies_movement(game, game->player->save->enemies);
     sort_enemies(game);
     sort_items(game);
     for (int i = 0; i < NB_RAYS; ++i)
