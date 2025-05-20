@@ -7,6 +7,7 @@
 
 #include "game.h"
 #include "save.h"
+#include "element.h"
 #include <math.h>
 
 void draw_look(system_t *sys, sfRectangleShape *mini_map)

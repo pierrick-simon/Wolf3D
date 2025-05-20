@@ -7,6 +7,7 @@
 
 #include "save.h"
 #include "linked_list.h"
+#include "element.h"
 #include "my.h"
 
 static int check_enemy(char **tab)

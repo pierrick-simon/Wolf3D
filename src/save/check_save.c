@@ -8,6 +8,7 @@
 #include "save.h"
 #include "my.h"
 #include "linked_list.h"
+#include "element.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -155,10 +156,14 @@ int check_start(save_t *save)
         || save->size.y * TILE_SIZE < save->info->start_pos.y
         || save->map[y][x] != 0)
             return ERROR;
-    if (save->info->health > MAX_HEALTH)
-        save->info->health = MAX_HEALTH;
-    if (save->info->flashlight > MAX_HEALTH)
-        save->info->flashlight = MAX_HEALTH;
+    if (save->info->item_info[I_HEALTH] > MAX_HEALTH)
+        save->info->item_info[I_HEALTH] = MAX_HEALTH;
+    if (save->info->item_info[I_STAMINA] > MAX_HEALTH)
+        save->info->item_info[I_STAMINA] = MAX_HEALTH;
+    if (save->info->item_info[I_FLASHLIGHT] > MAX_HEALTH)
+        save->info->item_info[I_FLASHLIGHT] = MAX_HEALTH;
+    if (save->info->item_info[I_AMMO] > MAX_AMMO)
+        save->info->item_info[I_AMMO] = MAX_AMMO;
     pass_enemys(save->enemys, save);
     pass_items(save->items, save);
     return SUCCESS;

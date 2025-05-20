@@ -25,45 +25,10 @@
 typedef struct linked_list_s linked_list_t;
 typedef struct node_s node_t;
 
-
-typedef enum item_id_e {
-    I_WEAPON_TWO,
-    I_WEAPON_THREE,
-    I_WEAPON_FOUR,
-    I_HEALTH,
-    I_AMMO,
-    I_STAMINA,
-    I_FLASHLIGHT,
-    NB_ITEM,
-} item_id_t;
-
-typedef enum enemy_id_e {
-    E_NORMAL,
-    NB_ENEMY,
-} enemy_id_t;
-
-typedef struct item_s {
-    int id;
-    item_id_t type;
-    sfVector2f pos;
-    int quantity;
-} item_t;
-
-typedef struct enemy_s {
-    int id;
-    enemy_id_t type;
-    sfVector2f pos;
-    int health;
-    float cooldown;
-} enemy_t;
-
 typedef struct player_info_s {
     sfVector2f start_pos;
     double start_angle;
-    int health;
-    float flashlight;
-    int ammo;
-    int stamina;
+    float item_info[4];
     int score;
     sfUint64 time;
     int weapons;
@@ -84,22 +49,6 @@ typedef struct save_s {
     linked_list_t *enemys;
     linked_list_t *items;
 } save_t;
-
-typedef enum {
-    I_TYPE,
-    I_POS_X,
-    I_POS_Y,
-    I_QUANTITY,
-    NB_STR_ITEM,
-} str_item_t;
-
-typedef enum {
-    E_TYPE,
-    E_POS_X,
-    E_POS_Y,
-    E_HEALTH,
-    NB_STR_ENEMY,
-} str_enemy_t;
 
 typedef enum {
     NAME,

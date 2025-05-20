@@ -7,6 +7,7 @@
 
 #include "save.h"
 #include "game.h"
+#include "element.h"
 #include <math.h>
 
 static sfBool is_wall(float y, float x, save_t *save)
@@ -23,7 +24,7 @@ static int sprint(player_t *player, save_t *save)
     if (sfKeyboard_isKeyPressed(sfKeyLShift) ||
         sfJoystick_getAxisPosition(0, sfJoystickZ) > 0) {
         player->is_sprinting = sfTrue;
-        if (save->info->stamina != 0) {
+        if (save->info->item_info[I_STAMINA] != 0) {
             coef = 2;
             player->fov = SPRINTING_FOV;
         }

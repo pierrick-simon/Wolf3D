@@ -1,0 +1,59 @@
+/*
+** EPITECH PROJECT, 2025
+** Wolf3d
+** File description:
+** handle_items
+*/
+
+#include "element.h"
+#include "math.h"
+#include "save.h"
+#include "linked_list.h"
+
+void item_weapon(int quantity, int *item, __maybe_unused int max)
+{
+    int tmp = pow(2, quantity);
+
+    if (tmp & *item)
+        return;
+    *item += tmp;
+}
+
+void item_potion(int quantity, int *item, int max)
+{
+    *item += quantity;
+    if (*item > max)
+        *item = max;
+}
+
+static sfBool is_arround(sfVector2f *player_pos, sfVector2f *item_pos)
+{
+    double dist = sqrt(pow((item_pos->x - player_pos->x), 2)
+        + pow((item_pos->y - player_pos->y), 2));
+
+    if (dist < 15.0)
+        return sfTrue;
+    return sfFalse;
+}
+
+void handle_items(save_t *save)
+{
+    node_t *next = NULL;
+    item_t *tmp = NULL;
+    int value = 0;
+
+    for (node_t *head = save->items->head; head != NULL; head = next) {
+        next = head->next;
+        tmp = head->data;
+        if (is_arround(&save->info->start_pos, &tmp->pos) == sfFalse)
+            continue;
+        value = save->info->item_info[tmp->type];
+        if (tmp->type < I_WEAPON_TWO) {
+            ITEM[tmp->type].func(tmp->quantity, &value, ITEM[tmp->type].max);
+            save->info->item_info[tmp->type] = value;
+        } else
+            ITEM[tmp->type].func(tmp->type - I_FLASHLIGHT,
+                &save->info->weapons, 0);
+        delete_node(save->items, head, &free);
+    }
+}

@@ -64,6 +64,8 @@
 
     #define MAX_SCORE 999999999
 
+    #define MAX_AMMO 999
+
 typedef enum str_menu_e {
     MENU_TITLE,
     MENU_PLAY,

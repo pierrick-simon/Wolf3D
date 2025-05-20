@@ -7,6 +7,7 @@
 
 #include "save.h"
 #include "game.h"
+#include "element.h"
 
 static void draw_coor(system_t *sys, game_t *game)
 {
@@ -23,7 +24,7 @@ static void draw_coor(system_t *sys, game_t *game)
         game->map->ceiling_floor, NULL);
 }
 
-static void draw_point_bar(system_t *sys, toolbar_t *tool, int ind, int nb)
+static void draw_point_bar(system_t *sys, toolbar_t *tool, int ind, float nb)
 {
     sfVector2f pos = (sfVector2f){tool->draw[ind].pos.x + tool->draw[ind].size
         + OFFSET_POINT_BAR, TOOLBAR_POS + OFFSET_POINT_BAR};
@@ -56,9 +57,12 @@ static void draw_tool_strings(system_t *sys, toolbar_t *tool)
             continue;
         draw_string(sys, sys->textbox, &tool->draw[i]);
     }
-    draw_point_bar(sys, tool, TOOL_FLASH_NB, sys->save->info->flashlight);
-    draw_point_bar(sys, tool, TOOL_HEALTH_NB, sys->save->info->health);
-    draw_point_bar(sys, tool, TOOL_STAM_NB, sys->save->info->stamina);
+    draw_point_bar(sys, tool, TOOL_FLASH_NB,
+        sys->save->info->item_info[I_FLASHLIGHT]);
+    draw_point_bar(sys, tool, TOOL_HEALTH_NB,
+        sys->save->info->item_info[I_HEALTH]);
+    draw_point_bar(sys, tool, TOOL_STAM_NB,
+        sys->save->info->item_info[I_STAMINA]);
 }
 
 static void draw_toolbar(system_t *sys, toolbar_t *tool)

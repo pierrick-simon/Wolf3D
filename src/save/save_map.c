@@ -7,6 +7,7 @@
 
 #include "save.h"
 #include "linked_list.h"
+#include "element.h"
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -44,11 +45,12 @@ static void write_items(save_t *save, int fd)
 
 static void write_header(save_t *save, int fd)
 {
-    dprintf(fd, "%s\n%d\n%d\n%f\n%f\n%f\n%d\n"
-        "%.0f\n%d\n%d\n%d\n%d\n%d\n%d\n%s\n",
+    dprintf(fd, "%s\n%d\n%d\n%f\n%f\n%f\n%.0f\n"
+        "%.0f\n%.0f\n%.0f\n%d\n%d\n%d\n%d\n%s\n",
         save->name, save->size.x, save->size.y, save->info->start_pos.x,
-        save->info->start_pos.y, save->info->start_angle, save->info->health,
-        save->info->flashlight, save->info->ammo, save->info->stamina,
+        save->info->start_pos.y, save->info->start_angle,
+        save->info->item_info[I_HEALTH], save->info->item_info[I_FLASHLIGHT],
+        save->info->item_info[I_AMMO], save->info->item_info[I_STAMINA],
         save->info->score, (int)save->info->time / SEC_IN_MICRO,
         save->info->weapons, save->info->start_weapon, save->music_path);
 }

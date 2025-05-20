@@ -64,6 +64,7 @@ SRC =	$(addprefix src/,					\
 				draw_mini_map.c 			\
 				draw_minimap_elements.c		\
 				init_toolbar.c				\
+				handle_items.c  			\
 			)								\
 			$(addprefix save/,				\
 				$(addprefix list/,			\
