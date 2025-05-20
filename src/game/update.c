@@ -112,24 +112,24 @@ static void update_saving(system_t *sys, toolbar_t *tool, float delta)
         sprintf(tool->draw[TOOL_SAVE].str, "saving.");
 }
 
-static void update_sprint(
-    toolbar_t *tool, save_t *save, sfBool sprint, double delta)
+static void update_sprint(game_t *game, save_t *save)
 {
-    if (save->info->item_info[INFO_STAMINA] != 100 && sprint == sfFalse
-        && tool->no_sprint > SEC_IN_MICRO) {
+    if (save->info->item_info[INFO_STAMINA] != MAX_HEALTH
+        && game->player->is_sprinting == sfFalse
+        && game->tool->no_sprint > SEC_IN_MICRO) {
         save->info->item_info[INFO_STAMINA]++;
-        tool->no_sprint = 0;
+        game->tool->no_sprint = 0;
     }
     if (save->info->item_info[INFO_STAMINA] == 0)
-        sprint = sfFalse;
-    if (tool->sprint > SEC_IN_MICRO / 10 && tool->sprint != 0) {
+        game->player->is_sprinting = sfFalse;
+    if (game->tool->sprint > SEC_IN_MICRO / 10 && game->tool->sprint != 0) {
         save->info->item_info[INFO_STAMINA]--;
-        tool->sprint = 0;
+        game->tool->sprint = 0;
     }
-    if (sprint == sfFalse)
-        tool->no_sprint += delta * SEC_IN_MICRO;
+    if (game->player->is_sprinting == sfFalse)
+        game->tool->no_sprint += game->time_info->delta * SEC_IN_MICRO;
     else
-        tool->sprint += delta * SEC_IN_MICRO;
+        game->tool->sprint += game->time_info->delta * SEC_IN_MICRO;
 }
 
 static void update_interact(toolbar_t *tool, player_t *player, int **map)
@@ -168,8 +168,7 @@ void update_all(system_t *sys, game_t *game)
     update_save(sys, game);
     update_saving(sys, game->tool, game->time_info->delta);
     update_time(sys->save, sys->save->info->time, game->time_info, game);
-    update_sprint(game->tool, sys->save, game->player->is_sprinting,
-        game->time_info->delta);
+    update_sprint(game, sys->save);
     update_toolbar(sys, game);
     update_interact(game->tool, game->player, sys->save->map);
     update_music_volume(sys, game->weapon, game->music);

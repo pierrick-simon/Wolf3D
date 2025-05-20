@@ -1,3 +1,4 @@
-.o
-.a
+*.o
+*.a
 .vscode
+wolf3d

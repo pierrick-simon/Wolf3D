@@ -174,7 +174,7 @@ void game_events(system_t *sys, game_t *game)
     }
     click(sys, game->weapon, game);
     interact(sys->save->map, game->player, sys, game);
-    move_player(game->player, game->time_info->delta,
+    move_player(game, game->time_info->delta,
         &game->tool->head->rectangle.left, game->music[FOOTSTEPS]);
     sfSprite_setTextureRect(game->tool->head->sprite,
         game->tool->head->rectangle);

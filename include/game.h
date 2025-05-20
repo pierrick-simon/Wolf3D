@@ -288,8 +288,7 @@ typedef struct game_s {
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player, float angle_offset,
     intersection_t *type, sfVector2f *intersection_point);
-void move_player(
-    player_t *player, double delta, int *head, sfMusic *footstepp);
+void move_player(game_t *game, double delta, int *head, sfMusic *footstepp);
 int init_weapons(weapon_t *weapon);
 void update_all(system_t *sys, game_t *game);
 void update_time_end(time_info_t *time_info);
