@@ -63,12 +63,12 @@
 
     #define MINI_MAP_SIZE 308
     #define MINI_MAP_NB_TILE 14
-    #define MINI_MAP_TILE (MINI_MAP_SIZE / MINI_MAP_NB_TILE)
+    #define MINI_MAP_TILE (float)(MINI_MAP_SIZE / MINI_MAP_NB_TILE)
     #define MINI_MAP_OFFSET 7
     #define MINI_MAP_BORDER 25
     #define MINI_MAP_START ((MINI_MAP_TILE * -1) + MINI_MAP_BORDER)
-    #define MINI_MAP_FOV 20
-    #define MINI_MAP_CURSOR 5.0
+    #define MINI_MAP_FOV 3
+    #define MINI_MAP_CURSOR 3
     #define MINI_MAP_SHOW 4
     #define MINI_MAP_ROTATE 90
     #define MINI_MAP_RAY 3.0
@@ -276,6 +276,7 @@ typedef struct toolbar_s {
 typedef struct game_s {
     map_t *map;
     sfRectangleShape *mini_map;
+    sfCircleShape *cursor;
     player_t *player;
     weapon_t *weapon;
     time_info_t *time_info;
@@ -295,9 +296,17 @@ void update_time_end(time_info_t *time_info);
 void update_save(system_t *sys, game_t *game);
 void shot_gun_anim(
     weapon_t *weapon, time_info_t *time, toolbar_t *tool, int bag);
-void draw_minimap(
-    system_t *sys, sfRectangleShape *mini_map, sfTexture *texture);
+void draw_minimap(system_t *sys, sfRectangleShape *mini_map,
+    sfCircleShape *cursor, sfTexture *texture);
 int init_toolbar(toolbar_t *tool);
+void draw_minimap_item(system_t *sys, linked_list_t *list,
+    sfVector2i *player_tile, sfCircleShape *cursor);
+void draw_minimap_enemy(system_t *sys, linked_list_t *list,
+    sfVector2i *player_tile, sfCircleShape *cursor);
+void draw_square(
+    system_t *sys, sfRectangleShape *mini_map, sfVector2i *player_tile);
+void draw_center(system_t *sys, sfCircleShape *cursor);
+void draw_look(system_t *sys, sfRectangleShape *mini_map);
 
 void game_events(system_t *sys, game_t *game);
 void draw_game(system_t *sys, void *structure);

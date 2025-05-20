@@ -11,7 +11,7 @@
 
 static int is_enemy(sfVector2f *v, player_t *player)
 {
-    node_t *node = player->save->enemies->head;
+    node_t *node = player->save->enemys->head;
     enemie_t *data = NULL;
     sfVector2f w = {0};
 

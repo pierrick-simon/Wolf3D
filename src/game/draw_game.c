@@ -150,7 +150,7 @@ void draw_game(system_t *sys, void *structure)
         game->player->crossair, NULL);
     flash_light(sys, game->light);
     draw_toolbar(sys, game->tool);
-    draw_minimap(sys, game->mini_map, game->tool->background);
+    draw_minimap(sys, game->mini_map, game->cursor, game->tool->background);
     sfRenderWindow_display(sys->window);
     update_time_end(game->time_info);
 }

@@ -130,7 +130,7 @@ static int init_light(light_t *light)
 
 static int check_init(game_t *game)
 {
-    if (game->map == NULL
+    if (game->map == NULL || game->cursor == NULL
         || game->player == NULL || game->weapon == NULL
         || game->tool == NULL || game->mini_map == NULL
         || game->light == NULL || init_light(game->light) == ERROR
@@ -158,8 +158,12 @@ void *init_game(void)
     game->time_info = malloc(sizeof(time_info_t));
     game->light = malloc(sizeof(light_t));
     game->mini_map = sfRectangleShape_create();
+    game->cursor = sfCircleShape_create();
     if (check_init(game) == ERROR)
         return SUCCESS;
     game->player->save = NULL;
+    sfCircleShape_setRadius(game->cursor, MINI_MAP_CURSOR);
+    sfCircleShape_setOrigin(game->cursor,
+        (sfVector2f){MINI_MAP_CURSOR, MINI_MAP_CURSOR});
     return (void *)game;
 }

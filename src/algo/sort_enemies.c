@@ -21,7 +21,7 @@ static bool cmp(void *first, void *second)
 
 static void init_distances(game_t *game, player_t *player)
 {
-    node_t *node = game->player->save->enemies->head;
+    node_t *node = game->player->save->enemys->head;
     enemie_t *data = NULL;
     sfVector2f v = {0};
 
@@ -34,18 +34,19 @@ static void init_distances(game_t *game, player_t *player)
     }
 }
 
+/*
+node_t *node = game->player->save->enemys->head;
+enemie_t *data = NULL;
+
+printf("-------------------------\n");
+while (node != NULL) {
+    data = node->data;
+    printf("%f\n", data->dist);
+    node = node->next;
+}
+*/
 void sort_enemies(game_t *game)
 {
     init_distances(game, game->player);
-    sort_linked_list(game->player->save->enemies, cmp);
-
-    node_t *node = game->player->save->enemies->head;
-    enemie_t *data = NULL;
-
-    printf("-------------------------\n");
-    while (node != NULL) {
-        data = node->data;
-        printf("%f\n", data->dist);
-        node = node->next;
-    }
+    sort_linked_list(game->player->save->enemys, cmp);
 }

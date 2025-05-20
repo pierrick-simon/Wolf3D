@@ -37,10 +37,10 @@ typedef enum item_id_e {
     NB_ITEM,
 } item_id_t;
 
-typedef enum enemie_id_e {
+typedef enum enemy_id_e {
     E_NORMAL,
-    NB_ENEMIE,
-} enemie_id_t;
+    NB_ENEMY,
+} enemy_id_t;
 
 typedef struct item_s {
     int id;
@@ -49,9 +49,9 @@ typedef struct item_s {
     int quantity;
 } item_t;
 
-typedef struct enemie_s {
+typedef struct enemy_s {
     int id;
-    enemie_id_t type;
+    enemy_id_t type;
     sfVector2f pos;
     int health;
     float cooldown;
@@ -82,7 +82,7 @@ typedef struct save_s {
     sfBool update;
     player_info_t *info;
     linked_list_t *doors;
-    linked_list_t *enemies;
+    linked_list_t *enemys;
     linked_list_t *items;
 } save_t;
 
@@ -99,8 +99,8 @@ typedef enum {
     E_POS_X,
     E_POS_Y,
     E_HEALTH,
-    NB_STR_ENEMIE,
-} str_enemie_t;
+    NB_STR_ENEMY,
+} str_enemy_t;
 
 typedef enum {
     NAME,
@@ -118,7 +118,7 @@ typedef enum {
     WEAPONS,
     START_WEAPON,
     MUSIC,
-    ENEMIES,
+    ENEMYS,
     ITEMS,
     COOR,
 } str_t;
@@ -210,7 +210,7 @@ void save_score(save_t *save, char *name);
 void save_map(save_t *save);
 void free_mini_map_color(sfColor **color, int y);
 int init_mini_map_color(save_t *save);
-int add_node_enemie(linked_list_t *enemies, char *line);
+int add_node_enemy(linked_list_t *enemys, char *line);
 int add_node_item(linked_list_t *items, char *line);
 int check_start(save_t *save);
 int check_save(save_t *save, char **tab, int *offset);

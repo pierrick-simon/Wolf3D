@@ -44,6 +44,7 @@
 
     #define DEG(rad) (180 / M_PI) * rad
     #define RAD(deg) (M_PI / 180) * deg
+    #define RIGHT_ANGLE 90
 
     #define SWITCH 170
     #define PAD sfColor_fromRGB(255, 230, 200)

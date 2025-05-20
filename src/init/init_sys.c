@@ -54,9 +54,9 @@ static int init_save(save_t *save)
 {
     save->info = malloc(sizeof(player_info_t));
     save->doors = initialize_linked_list();
-    save->enemies = initialize_linked_list();
+    save->enemys = initialize_linked_list();
     save->items = initialize_linked_list();
-    if (save->info == NULL || save->enemies == NULL
+    if (save->info == NULL || save->enemys == NULL
         || save->doors == NULL || save->items == NULL)
         return ERROR;
     save->init = sfFalse;
