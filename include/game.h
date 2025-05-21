@@ -330,5 +330,6 @@ void center_ray(player_t *player);
 void sort_enemies(game_t *game);
 void sort_items(game_t *game);
 void enemies_movement(game_t *game, linked_list_t *enemies, float dificulty);
+void draw_enemies(game_t *game, system_t *sys);
 
 #endif

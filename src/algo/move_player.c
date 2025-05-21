@@ -12,6 +12,8 @@
 
 static sfBool is_wall(float y, float x, save_t *save)
 {
+    if ((int)x / TILE_SIZE > save->size.x || (int)y / TILE_SIZE > save->size.y)
+        return sfFalse;
     if (save->map[(int)y / TILE_SIZE][(int)x / TILE_SIZE] != 0)
         return sfTrue;
     return sfFalse;
@@ -32,8 +34,7 @@ static int sprint(player_t *player,
         }
     }
     if (is_wall(player->pos.y,
-        player->pos.x + (v->x * coef * DISTANCE_COLISION),
-        save) == sfFalse)
+        player->pos.x + (v->x * coef * DISTANCE_COLISION), save) == sfFalse)
         player->pos.x += v->x * coef * FORWARD_COEF;
     if (is_wall(player->pos.y +
         (v->y * coef * DISTANCE_COLISION),

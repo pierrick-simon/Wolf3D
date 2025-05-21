@@ -97,11 +97,22 @@ typedef struct enemy_info_s {
 } enemy_info_t;
 
 static const enemy_info_t ENEMY[] __maybe_unused = {
-    [E_SWORD] = {RENDER_DISTANCE, 25, 15, 3, 150, "asset/soldier.png"},
+    [E_SWORD] = {RENDER_DISTANCE, 25, 15, 3, 150, "asset/monster.png"},
     [E_GUN] = {RENDER_DISTANCE, 10, 128, 2, 50, "asset/soldier.png"}
 };
 
     #define NB_ENEMIES ARRAY_LENGTH(ENEMY)
+
+typedef struct draw_enemy_s {
+    sfVector2f diff;
+    float inv;
+    sfVector2f dist;
+    int x;
+    int size;
+    sfVector2i start;
+    sfVector2i end;
+    enemy_id_t type;
+} draw_enemy_t;
 
 void handle_items(save_t *save);
 
