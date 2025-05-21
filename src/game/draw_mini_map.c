@@ -74,18 +74,8 @@ static void draw_border(
     sfRectangleShape_setFillColor(mini_map, sfWhite);
     sfRectangleShape_setTexture(mini_map, texture, false);
     sfRectangleShape_setPosition(mini_map, (sfVector2f){0, 0});
-    sfRectangleShape_setSize(mini_map, (sfVector2f){MINI_MAP_SIZE
-        + MINI_MAP_BORDER * 2, MINI_MAP_BORDER});
-    sfRenderWindow_drawRectangleShape(sys->window, mini_map, NULL);
-    sfRectangleShape_setPosition(mini_map, (sfVector2f){0, MINI_MAP_SIZE
-        + MINI_MAP_BORDER});
-    sfRenderWindow_drawRectangleShape(sys->window, mini_map, NULL);
-    sfRectangleShape_setPosition(mini_map, (sfVector2f){0, 0});
-    sfRectangleShape_setSize(mini_map, (sfVector2f){MINI_MAP_BORDER,
-        MINI_MAP_SIZE + MINI_MAP_BORDER * 2});
-    sfRenderWindow_drawRectangleShape(sys->window, mini_map, NULL);
-    sfRectangleShape_setPosition(mini_map, (sfVector2f){MINI_MAP_SIZE
-        + MINI_MAP_BORDER, 0});
+    sfRectangleShape_setSize(mini_map, (sfVector2f){MINI_MAP_SIZE +
+        MINI_MAP_BORDER * 2, MINI_MAP_SIZE + MINI_MAP_BORDER * 2});
     sfRenderWindow_drawRectangleShape(sys->window, mini_map, NULL);
 }
 

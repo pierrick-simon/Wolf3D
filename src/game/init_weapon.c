@@ -19,6 +19,7 @@ static void set_weapon_info(char **tab, weapon_info_t *weapon)
     weapon->speed = atof(tab[LOAD_W_SPEED]);
     weapon->range = atof(tab[LOAD_W_RANGE]);
     weapon->key = atoi(tab[LOAD_W_KEY]);
+    weapon->damage = atoi(tab[LOAD_W_DAMAGE]);
     weapon->size.x /= weapon->nb_tile;
     weapon->rectangle = (sfIntRect){0, 0, weapon->size.x, weapon->size.y};
     weapon->current_tile = 0;

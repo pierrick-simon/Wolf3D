@@ -106,6 +106,7 @@ typedef enum {
     LOAD_W_SPEED,
     LOAD_W_RANGE,
     LOAD_W_KEY,
+    LOAD_W_DAMAGE,
     NB_W_LOAD,
 } load_weapon_info_t;
 
@@ -242,6 +243,7 @@ typedef struct weapon_info_s {
     double speed;
     float range;
     sfBool bag;
+    int damage;
     int key;
 } weapon_info_t;
 
@@ -268,6 +270,7 @@ typedef struct toolbar_s {
     draw_textbox_t *draw;
     sfRectangleShape *rectangle;
     sfTexture *background;
+    sfTexture *border;
     sfBool fps;
     sfInt64 save;
     sfInt64 sprint;
