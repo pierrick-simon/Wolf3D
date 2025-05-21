@@ -26,7 +26,7 @@
 
     #define MAX_DISTANCE 100.0
 
-    #define RENDER_DISTANCE 1200
+    #define RENDER_DISTANCE 2000
 
     #define PLAYER_SPEED 100
     #define ROTATION_SPEED RAD(100)
@@ -93,9 +93,6 @@
 
     #define ENEMY_TEXTURE_X 2550
     #define ENEMY_TEXTURE_Y 3301
-
-    #define SOLDIER_X 42
-    #define SOLDIER_Y 55
 
 typedef enum {
     LOAD_W_TEXTURE,
@@ -281,7 +278,7 @@ typedef struct toolbar_s {
 } toolbar_t;
 
 
-    #define NB_ENEMIE 2
+    #define NB_ENEMIE 3
 
 typedef struct game_s {
     map_t *map;

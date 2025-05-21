@@ -12,18 +12,18 @@ static void disp_enemy(draw_enemy_t *info, system_t *sys,
     game_t *game, ray_t rays[NB_RAYS])
 {
     sfVertex tmp = {.color = sfWhite};
-    float factor = 0.0;
 
     for (int stripe = info->start.x; stripe < info->end.x; stripe++) {
-        if (info->dist.y > 0 && stripe > 0 && stripe < WIN_WIDTH
-            && info->dist.y < rays[stripe].len / (float)TILE_SIZE) {
-            factor = ((float)(stripe - info->start.x) /
-                (float)(info->end.x - info->start.x)) * SOLDIER_X;
+        if (info->dist.y > 0 && stripe > 0 && stripe < NB_RAYS &&
+            (info->dist.y < rays[stripe].len / (float)TILE_SIZE ||
+            rays[stripe].len == 0.0)) {
             tmp.position = (sfVector2f){stripe, info->start.y};
-            tmp.texCoords = (sfVector2f){factor, 0};
+            tmp.texCoords = (sfVector2f)
+                {((float)(stripe - info->start.x) / (float)(info->end.x -
+                info->start.x)) * ENEMY[info->type].text_size.x, 0};
             sfVertexArray_append(game->map->line, tmp);
-            tmp.position = (sfVector2f){stripe, info->end.y};
-            tmp.texCoords = (sfVector2f){factor, SOLDIER_Y};
+            tmp.position.y = info->end.y;
+            tmp.texCoords.y = ENEMY[info->type].text_size.y;
             sfVertexArray_append(game->map->line, tmp);
         }
     }
@@ -47,7 +47,7 @@ static void draw_enemy(system_t *sys,
     info.dist = (sfVector2f)
         {info.inv * ((v.x * info.diff.y) - (v.y * info.diff.x)),
         info.inv * ((n.x * info.diff.y) - (n.y * info.diff.x))};
-    info.x = (int)((WIN_WIDTH / 2) * (1 + (info.dist.x / info.dist.y)));
+    info.x = (int)((NB_RAYS / 2) * (1 + (info.dist.x / info.dist.y)));
     info.size = abs((int)(WIN_HEIGHT / (info.dist.y)));
     info.start = (sfVector2i){- info.size / 2 + info.x,
         -info.size / 2 + WIN_HEIGHT / 2};

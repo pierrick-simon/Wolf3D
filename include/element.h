@@ -30,6 +30,7 @@ typedef enum item_id_e {
 typedef enum enemy_id_e {
     E_SWORD,
     E_GUN,
+    E_SHEET,
     NB_ENEMY,
 } enemy_id_t;
 
@@ -94,11 +95,13 @@ typedef struct enemy_info_s {
     int cooldown;
     int speed;
     char const *path;
+    sfVector2f text_size;
 } enemy_info_t;
 
 static const enemy_info_t ENEMY[] __maybe_unused = {
-    [E_SWORD] = {RENDER_DISTANCE, 25, 15, 3, 150, "asset/monster.png"},
-    [E_GUN] = {RENDER_DISTANCE, 10, 128, 2, 50, "asset/soldier.png"}
+    [E_SWORD] = {RENDER_DISTANCE, 25, 15, 3, 150, "asset/sword.png", {48, 67}},
+    [E_GUN] = {RENDER_DISTANCE, 10, 128, 2, 50, "asset/soldier.png", {42, 55}},
+    [E_SHEET] = {RENDER_DISTANCE, 1, 15, 3, 150, "asset/sheet.png", {640, 670}}
 };
 
     #define NB_ENEMIES ARRAY_LENGTH(ENEMY)
