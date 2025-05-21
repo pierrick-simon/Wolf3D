@@ -17,7 +17,8 @@ static sfBool is_wall(float y, float x, save_t *save)
     return sfFalse;
 }
 
-static int sprint(player_t *player, save_t *save, weapon_id_t id)
+static int sprint(player_t *player,
+    save_t *save, sfVector2f *v, weapon_id_t id)
 {
     int coef = 1;
 
@@ -41,12 +42,12 @@ static int sprint(player_t *player, save_t *save, weapon_id_t id)
     return coef;
 }
 
-static int move_forward(game_t *game, save_t *save)
+static int move_forward(save_t *save, sfVector2f *v, game_t *game)
 {
     if ((sfKeyboard_isKeyPressed(sfKeyUp))
         || sfKeyboard_isKeyPressed(sfKeyZ)
         || sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK) {
-        return sprint(game->player, save, game->weapon->weapon);
+        return sprint(game->player, save, v, game->weapon->weapon);
     }
     return SKIP;
 }
@@ -139,15 +140,15 @@ static void set_music_pitch(int forward, int backward, sfMusic *footstepp)
 }
 
 static void handle_footstepp(
-    game_t *game, int *head, sfMusic *footstepp, player_t *player)
+    game_t *game, int *head, sfMusic *footstepp, sfVector2f *v)
 {
     sfSoundStatus music = sfMusic_getStatus(footstepp);
-    int forward = move_forward(game, player->save);
-    int backward = move_backward(player, player->save);
+    int forward = move_forward(game->player->save, v, game);
+    int backward = move_backward(game->player, game->player->save, v);
 
     set_music_pitch(forward, backward, footstepp);
-    if (move_right(player, player->save, head, v)
-        != move_left(player, player->save, head, v)
+    if (move_right(game->player, game->player->save, head, v)
+        != move_left(game->player, game->player->save, head, v)
         || forward > SUCCESS || backward == SUCCESS) {
         if (music == sfStopped || music == sfPaused)
             sfMusic_play(footstepp);
@@ -157,13 +158,16 @@ static void handle_footstepp(
 
 void move_player(game_t *game, double delta, int *head, sfMusic *footstepp)
 {
+    sfVector2f v = {0};
+
     center_ray(game->player);
+    v = game->player->center_ray.v;
     *head = HEAD_SPRITE_X;
     game->player->fov = FOV;
     game->player->is_sprinting = sfFalse;
-    game->player->center_ray.v.x *= delta;
-    game->player->center_ray.v.y *= delta;
-    handle_footstepp(game, head, footstepp, game->player);
+    v.x *= delta * PLAYER_SPEED;
+    v.y *= delta * PLAYER_SPEED;
+    handle_footstepp(game, head, footstepp, &v);
     rotate_player(game->player, delta, head);
     if (*head < 0)
         *head = 0;

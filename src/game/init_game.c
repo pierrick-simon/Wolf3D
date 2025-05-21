@@ -7,6 +7,7 @@
 
 #include "game.h"
 #include "linked_list.h"
+#include "element.h"
 #include <stdlib.h>
 #include <string.h>
 #include "my.h"
@@ -36,7 +37,7 @@ static int init_states(map_t *map)
     return SUCCESS;
 }
 
-static int init_map(map_t *map)
+static int init_map_info(map_t *map)
 {
     sfVector2f pos = {WIN_WIDTH, WIN_HEIGHT / 2};
 
@@ -49,15 +50,6 @@ static int init_map(map_t *map)
     if (map->line == NULL || init_states(map) == ERROR)
         return ERROR;
     sfVertexArray_setPrimitiveType(map->line, sfLines);
-    map->enemy_texture = sfTexture_createFromFile("asset/monster.png", NULL);
-    if (map->enemy_texture == NULL)
-        return ERROR;
-    map->enemy = sfSprite_create();
-    if (map->enemy == NULL)
-        return ERROR;
-    sfSprite_setTexture(map->enemy, map->enemy_texture, sfFalse);
-    sfSprite_setOrigin(map->enemy,
-        (sfVector2f){ENEMY_TEXTURE_X / 2, ENEMY_TEXTURE_Y / 2});
     return SUCCESS;
 }
 
@@ -146,7 +138,7 @@ static int check_init(game_t *game)
         || init_toolbar(game->tool) == ERROR
         || init_weapons(game->weapon) == ERROR
         || init_player(game->player) == ERROR
-        || init_map(game->map) == ERROR
+        || init_map_info(game->map) == ERROR
         || init_time_info(game->time_info) == ERROR
         || init_music(game->music) == ERROR)
         return ERROR;
@@ -168,7 +160,7 @@ void *init_game(void)
     game->light = malloc(sizeof(light_t));
     game->mini_map = sfRectangleShape_create();
     game->cursor = sfCircleShape_create();
-    if (check_init(game) == ERROR)
+    if (check_init(game) == ERROR || init_render_state(game) == ERROR)
         return SUCCESS;
     game->player->save = NULL;
     sfCircleShape_setRadius(game->cursor, MINI_MAP_CURSOR);

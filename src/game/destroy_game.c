@@ -7,6 +7,7 @@
 
 #include "game.h"
 #include "linked_list.h"
+#include "element.h"
 #include <stdlib.h>
 
 static void destroy_player(player_t *player)
@@ -33,13 +34,11 @@ static void destroy_weapon(weapon_t *weapon)
     free(weapon);
 }
 
-static void destroy_map(map_t *map)
+static void destroy_map_info(map_t *map)
 {
     sfTexture_destroy((sfTexture *)map->wall_states.texture);
     if (map->ceiling_floor != NULL)
         sfRectangleShape_destroy(map->ceiling_floor);
-    sfSprite_destroy(map->enemy);
-    sfTexture_destroy(map->enemy_texture);
     free(map);
 }
 
@@ -115,12 +114,14 @@ void destroy_game(void *structure)
     if (game->player != NULL)
         destroy_player(game->player);
     if (game->map != NULL)
-        destroy_map(game->map);
+        destroy_map_info(game->map);
     if (game->time_info != NULL)
         destroy_time_info(game->time_info);
     if (game->tool != NULL)
         destroy_tool(game->tool);
     if (game->light != NULL)
         destroy_light(game->light);
+    for (size_t i = 0; i < NB_ENEMIES; ++i)
+        sfTexture_destroy((sfTexture *)game->state_enemies[i].texture);
     free(game);
 }

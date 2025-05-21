@@ -38,5 +38,5 @@ static void init_distances(game_t *game, player_t *player)
 void sort_enemies(game_t *game)
 {
     init_distances(game, game->player);
-    sort_linked_list(game->player->save->enemys, cmp);
+    sort_linked_list(game->player->save->enemies, cmp);
 }

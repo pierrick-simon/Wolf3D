@@ -16,7 +16,7 @@
     #define MOV_OFFSET_GUN 4
     #define MAX_WIDTH 30
 
-    #define FOV RAD(60)
+    #define FOV RAD(66)
     #define RAY_LENGTH 1
     #define NB_RAYS WIN_WIDTH / RAY_LENGTH
 
@@ -93,6 +93,9 @@
 
     #define ENEMY_TEXTURE_X 2550
     #define ENEMY_TEXTURE_Y 3301
+
+    #define SOLDIER_X 42
+    #define SOLDIER_Y 55
 
 typedef enum {
     LOAD_W_TEXTURE,
@@ -205,8 +208,6 @@ typedef struct ray_s {
 } ray_t;
 
 typedef struct map_s {
-    sfSprite *enemy;
-    sfTexture *enemy_texture;
     sfRectangleShape *ceiling_floor;
     sfVertexArray *line;
     ray_t rays[WIN_WIDTH];
@@ -276,6 +277,9 @@ typedef struct toolbar_s {
     sfBool interact;
 } toolbar_t;
 
+
+    #define NB_ENEMIE 2
+
 typedef struct game_s {
     map_t *map;
     sfRectangleShape *mini_map;
@@ -286,6 +290,7 @@ typedef struct game_s {
     toolbar_t *tool;
     light_t *light;
     sfMusic *music[NB_MUSIC];
+    sfRenderStates state_enemies[NB_ENEMIE];
 } game_t;
 
 void cast_all_rays(game_t *game, save_t *save);
@@ -303,6 +308,7 @@ void shot_gun_anim(
 void draw_minimap(system_t *sys, sfRectangleShape *mini_map,
     sfCircleShape *cursor, sfTexture *texture);
 int init_toolbar(toolbar_t *tool);
+int init_render_state(game_t *game);
 void draw_minimap_item(system_t *sys, linked_list_t *list,
     sfVector2i *player_tile, sfCircleShape *cursor);
 void draw_minimap_enemy(system_t *sys, linked_list_t *list,

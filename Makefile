@@ -66,6 +66,7 @@ SRC =	$(addprefix src/,					\
 				draw_game.c					\
 				destroy_game.c 				\
 				init_game.c 				\
+				init_render_state.c			\
 				init_weapon.c 				\
 				update.c 					\
 				update_weapon.c 			\

@@ -49,7 +49,6 @@ typedef struct enemy_s {
     float cooldown;
 } enemy_t;
 
-
 typedef enum {
     I_TYPE,
     I_POS_X,
@@ -89,17 +88,20 @@ static const get_item_t ITEM[] __maybe_unused = {
 };
 
 typedef struct enemy_info_s {
-    float detect_range;
-    float attack;
-    float attack_range;
-    float cooldown;
-    float speed;
+    int detect_range;
+    int attack;
+    int attack_range;
+    int cooldown;
+    int speed;
+    char const *path;
 } enemy_info_t;
 
 static const enemy_info_t ENEMY[] __maybe_unused = {
-    [E_SWORD] = {RENDER_DISTANCE, 25, 15, 3, 100},
-    [E_GUN] = {RENDER_DISTANCE, 10, 128, 2, 50}
+    [E_SWORD] = {RENDER_DISTANCE, 25, 15, 3, 150, "asset/soldier.png"},
+    [E_GUN] = {RENDER_DISTANCE, 10, 128, 2, 50, "asset/soldier.png"}
 };
+
+    #define NB_ENEMIES ARRAY_LENGTH(ENEMY)
 
 void handle_items(save_t *save);
 
