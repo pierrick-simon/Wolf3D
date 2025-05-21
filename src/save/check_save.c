@@ -8,7 +8,7 @@
 #include "save.h"
 #include "my.h"
 #include "linked_list.h"
-#include "element.h"
+#include "entities.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -64,7 +64,7 @@ static int check_body(char **tab, int x, int y)
     return SUCCESS;
 }
 
-static int check_enemies(linked_list_t *list, char **tab, int *offset)
+static int check_entities(linked_list_t *list, char **tab, int *offset)
 {
     int nb = 0;
 
@@ -72,22 +72,7 @@ static int check_enemies(linked_list_t *list, char **tab, int *offset)
         return ERROR;
     nb = atoi(*tab);
     for (int i = 1; i <= nb; i++) {
-        if (tab[i] == NULL || add_node_enemy(list, tab[i]) == ERROR)
-            return ERROR;
-    }
-    *offset += nb;
-    return SUCCESS;
-}
-
-static int check_items(linked_list_t *list, char **tab, int *offset)
-{
-    int nb = 0;
-
-    if (is_int_float(*tab) != NATURAL)
-        return ERROR;
-    nb = atoi(*tab);
-    for (int i = 1; i <= nb; i++) {
-        if (tab[i] == NULL || add_node_item(list, tab[i]) == ERROR)
+        if (tab[i] == NULL || add_node_entity(list, tab[i]) == ERROR)
             return ERROR;
     }
     *offset += nb;
@@ -100,38 +85,17 @@ int check_save(save_t *save, char **tab, int *offset)
     int y = 0;
 
     if (array_len(tab) < COOR || check_header(tab, &x, &y) == ERROR
-        || check_enemies(save->enemies, tab + ENEMIES, offset) == ERROR
-        || check_items(save->items, tab + ITEMS + *offset, offset) == ERROR
+        || check_entities(save->entities, tab + ENTITIES, offset) == ERROR
         || check_body(tab + COOR + *offset, x, y) == ERROR)
         return ERROR;
     return SUCCESS;
 }
 
-static void pass_enemies(linked_list_t *list, save_t *save)
+static void pass_entities(linked_list_t *list, save_t *save)
 {
     node_t *head = list->head;
     node_t *next = NULL;
-    enemy_t *tmp = NULL;
-    int tile_x = 0;
-    int tile_y = 0;
-
-    while (head != NULL) {
-        tmp = head->data;
-        next = head->next;
-        tile_x = tmp->pos.x / TILE_SIZE;
-        tile_y = tmp->pos.y / TILE_SIZE;
-        if (tile_x >= save->size.x || tile_y >= save->size.y
-            || save->map[tile_y][tile_x] != 0)
-            delete_node(list, head, &free);
-        head = next;
-    }
-}
-
-static void pass_items(linked_list_t *list, save_t *save)
-{
-    node_t *head = list->head;
-    node_t *next = NULL;
-    item_t *tmp = NULL;
+    entity_t *tmp = NULL;
     int tile_x = 0;
     int tile_y = 0;
 
@@ -173,7 +137,6 @@ int check_start(save_t *save)
         || save->map[y][x] != 0)
             return ERROR;
     check_item_info(save);
-    pass_enemies(save->enemies, save);
-    pass_items(save->items, save);
+    pass_entities(save->entities, save);
     return SUCCESS;
 }

@@ -57,8 +57,7 @@ typedef struct save_s {
     sfBool update;
     player_info_t *info;
     linked_list_t *doors;
-    linked_list_t *enemies;
-    linked_list_t *items;
+    linked_list_t *entities;
 } save_t;
 
 typedef enum {
@@ -80,8 +79,7 @@ typedef enum {
     START_WEAPON,
     DIFFICULTY_INFO,
     MUSIC,
-    ENEMIES,
-    ITEMS,
+    ENTITIES,
     COOR,
 } str_t;
 
@@ -175,8 +173,7 @@ void save_score(save_t *save, char *name);
 void save_map(save_t *save);
 void free_mini_map_color(sfColor **color, int y);
 int init_mini_map_color(save_t *save);
-int add_node_enemy(linked_list_t *enemies, char *line);
-int add_node_item(linked_list_t *items, char *line);
+int add_node_entity(linked_list_t *enemies, char *line);
 int check_start(save_t *save);
 int check_save(save_t *save, char **tab, int *offset);
 

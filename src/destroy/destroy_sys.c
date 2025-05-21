@@ -45,10 +45,8 @@ void destroy_save(save_t *save)
                 save->size.y + MINI_MAP_OFFSET * 2);
         if (save->doors != NULL)
             empty_linked_list(save->doors, free);
-        if (save->enemies != NULL)
-            empty_linked_list(save->enemies, free);
-        if (save->items != NULL)
-            empty_linked_list(save->items, free);
+        if (save->entities != NULL)
+            empty_linked_list(save->entities, free);
     }
 }
 
@@ -59,10 +57,8 @@ static void destroy_all_save(save_t *save)
         free(save->info);
     if (save->doors != NULL)
         free_linked_list(save->doors, free);
-    if (save->enemies != NULL)
-        free_linked_list(save->enemies, free);
-    if (save->items != NULL)
-        free_linked_list(save->items, free);
+    if (save->entities != NULL)
+        free_linked_list(save->entities, free);
     free(save);
 }
 

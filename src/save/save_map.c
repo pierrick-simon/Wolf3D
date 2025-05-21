@@ -7,7 +7,7 @@
 
 #include "save.h"
 #include "linked_list.h"
-#include "element.h"
+#include "entities.h"
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -15,30 +15,16 @@
 #include <stdio.h>
 #include <string.h>
 
-static void write_enemies(save_t *save, int fd)
+static void write_entities(save_t *save, int fd)
 {
-    node_t *head = save->enemies->head;
-    enemy_t *tmp = NULL;
+    node_t *head = save->entities->head;
+    entity_t *tmp = NULL;
 
-    dprintf(fd, "%d\n", get_list_len(save->enemies));
+    dprintf(fd, "%d\n", get_list_len(save->entities));
     while (head != NULL) {
         tmp = head->data;
         dprintf(fd, "%d:%f:%f:%d\n",
-            tmp->type, tmp->pos.x, tmp->pos.y, tmp->health);
-        head = head->next;
-    }
-}
-
-static void write_items(save_t *save, int fd)
-{
-    node_t *head = save->items->head;
-    item_t *tmp = NULL;
-
-    dprintf(fd, "%d\n", get_list_len(save->items));
-    while (head != NULL) {
-        tmp = head->data;
-        dprintf(fd, "%d:%f:%f\n",
-            tmp->type, tmp->pos.x, tmp->pos.y);
+            tmp->id, tmp->pos.x, tmp->pos.y, tmp->health);
         head = head->next;
     }
 }
@@ -82,8 +68,7 @@ void save_map(save_t *save)
     if (fd == -1)
         return;
     write_header(save, fd);
-    write_enemies(save, fd);
-    write_items(save, fd);
+    write_entities(save, fd);
     write_body(save, fd);
     close(fd);
 }

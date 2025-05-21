@@ -16,10 +16,9 @@ SRC =	$(addprefix src/,					\
 			\
 			$(addprefix algo/,				\
 				move_rect.c					\
-				draw_enemies.c				\
-				sort_enemies.c				\
 				move_y.c					\
-				sort_items.c				\
+				draw_entities.c				\
+				sort_entities.c				\
 				center_ray.c				\
 				get_pourcentage.c			\
 				cast_single_ray.c			\
@@ -83,8 +82,7 @@ SRC =	$(addprefix src/,					\
 					add_node_file.c			\
 					free_node_file.c		\
 					sort_node_file.c		\
-					add_node_item.c			\
-					add_node_enemy.c		\
+					add_node_entity.c		\
 				)							\
 				check_save.c 				\
 				check.c			 			\

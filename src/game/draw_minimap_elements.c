@@ -7,7 +7,7 @@
 
 #include "game.h"
 #include "save.h"
-#include "element.h"
+#include "entities.h"
 #include <math.h>
 
 void draw_look(system_t *sys, sfRectangleShape *mini_map)
@@ -87,42 +87,25 @@ static void distance_to_player(
         / TILE_SIZE + center.y;
 }
 
-void draw_minimap_enemy(system_t *sys, linked_list_t *list,
+void draw_minimap_entities(system_t *sys, linked_list_t *list,
     sfVector2i *player_tile, sfCircleShape *cursor)
 {
-    sfVector2i enemy_tile = {0};
-    enemy_t *tmp = NULL;
+    sfVector2i entity_tile = {0};
+    entity_t *tmp = NULL;
     sfVector2f pos = {0};
 
-    sfCircleShape_setFillColor(cursor, sfRed);
     for (node_t *head = list->head; head != NULL; head = head->next) {
         tmp = head->data;
-        enemy_tile = (sfVector2i){floor(tmp->pos.x / TILE_SIZE),
+        entity_tile = (sfVector2i){floor(tmp->pos.x / TILE_SIZE),
             floor(tmp->pos.y / TILE_SIZE)};
-        if (is_in_minimap(player_tile, &enemy_tile) == sfFalse)
+        if (is_in_minimap(player_tile, &entity_tile) == sfFalse)
             continue;
         distance_to_player(&sys->save->info->start_pos, &tmp->pos, &pos);
         sfCircleShape_setPosition(cursor, pos);
-        sfRenderWindow_drawCircleShape(sys->window, cursor, NULL);
-    }
-}
-
-void draw_minimap_item(system_t *sys, linked_list_t *list,
-    sfVector2i *player_tile, sfCircleShape *cursor)
-{
-    sfVector2i item_tile = {0};
-    item_t *tmp = NULL;
-    sfVector2f pos = {0};
-
-    sfCircleShape_setFillColor(cursor, sfBlue);
-    for (node_t *head = list->head; head != NULL; head = head->next) {
-        tmp = head->data;
-        item_tile = (sfVector2i){floor(tmp->pos.x / TILE_SIZE),
-            floor(tmp->pos.y / TILE_SIZE)};
-        if (is_in_minimap(player_tile, &item_tile) == sfFalse)
-            continue;
-        distance_to_player(&sys->save->info->start_pos, &tmp->pos, &pos);
-        sfCircleShape_setPosition(cursor, pos);
+        if (tmp->id < NB_ITEM)
+            sfCircleShape_setFillColor(cursor, sfBlue);
+        else
+            sfCircleShape_setFillColor(cursor, sfRed);
         sfRenderWindow_drawCircleShape(sys->window, cursor, NULL);
     }
 }

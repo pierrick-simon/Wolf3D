@@ -70,9 +70,8 @@ static void add_ray_to_vertex_array(game_t *game, int i)
 void cast_all_rays(game_t *game, save_t *save)
 {
     enemies_movement(game,
-        game->player->save->enemies, save);
-    sort_enemies(game);
-    sort_items(game);
+        game->player->save->entities, save);
+    sort_entities(game);
     for (int i = 0; i < NB_RAYS; ++i)
         add_ray_to_vertex_array(game, i);
 }

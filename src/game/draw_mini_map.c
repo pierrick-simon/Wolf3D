@@ -92,8 +92,7 @@ void draw_minimap(system_t *sys, sfRectangleShape *mini_map,
     sfRectangleShape_setPosition(mini_map, (sfVector2f){0, 0});
     sfRenderWindow_drawRectangleShape(sys->window, mini_map, NULL);
     draw_look(sys, mini_map);
-    draw_minimap_enemy(sys, sys->save->enemies, &player_tile, cursor);
-    draw_minimap_item(sys, sys->save->items, &player_tile, cursor);
+    draw_minimap_entities(sys, sys->save->entities, &player_tile, cursor);
     draw_center(sys, cursor);
     for (int i = MINI_MAP_SHOW * -1; i <= MINI_MAP_SHOW; i++)
         update_around(sys->save, &player_tile, i);

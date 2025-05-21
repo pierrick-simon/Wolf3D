@@ -7,7 +7,6 @@
 
 #include "game.h"
 #include "linked_list.h"
-#include "element.h"
 #include <stdlib.h>
 
 static void destroy_player(player_t *player)
@@ -123,7 +122,7 @@ void destroy_game(void *structure)
         destroy_tool(game->tool);
     if (game->light != NULL)
         destroy_light(game->light);
-    for (size_t i = 0; i < NB_ENEMIES; ++i)
-        sfTexture_destroy((sfTexture *)game->state_enemies[i].texture);
+    for (size_t i = 0; i < NB_ENTITIES; ++i)
+        sfTexture_destroy((sfTexture *)game->state_entities[i].texture);
     free(game);
 }
