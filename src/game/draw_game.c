@@ -12,15 +12,18 @@
 
 static void draw_coor(system_t *sys, game_t *game)
 {
-    sfVector2f pos = {0, WIN_HEIGHT / 2};
+    sfVector2f pos = {0, (WIN_HEIGHT / 2) + game->player->jump_value};
 
     sfRectangleShape_setSize(game->map->ceiling_floor,
-        (sfVector2f){WIN_WIDTH, WIN_HEIGHT / 2});
+        (sfVector2f){WIN_WIDTH, (WIN_HEIGHT / 2) - game->player->jump_value});
     sfRectangleShape_setPosition(game->map->ceiling_floor, pos);
     sfRectangleShape_setFillColor(game->map->ceiling_floor, FLOOR_COLOR);
     sfRenderWindow_drawRectangleShape(sys->window,
         game->map->ceiling_floor, NULL);
     pos = (sfVector2f){0, 0};
+    if (game->player->jump_value != 0)
+        sfRectangleShape_setSize(game->map->ceiling_floor, (sfVector2f)
+        {WIN_WIDTH, (WIN_HEIGHT / 2) + game->player->jump_value});
     sfRectangleShape_setPosition(game->map->ceiling_floor, pos);
     sfRectangleShape_setFillColor(game->map->ceiling_floor, CEILING_COLOR);
     sfRenderWindow_drawRectangleShape(sys->window,

@@ -17,12 +17,13 @@ static void disp_enemy(draw_enemy_t *info, system_t *sys,
         if (info->dist.y > 0 && stripe > 0 && stripe < NB_RAYS &&
             (info->dist.y < rays[stripe].len / (float)TILE_SIZE ||
             rays[stripe].len == 0.0)) {
-            tmp.position = (sfVector2f){stripe, info->start.y};
+            tmp.position = (sfVector2f){stripe, info->start.y
+                + game->player->jump_value};
             tmp.texCoords = (sfVector2f)
                 {((float)(stripe - info->start.x) / (float)(info->end.x -
                 info->start.x)) * ENEMY[info->type].text_size.x, 0};
             sfVertexArray_append(game->map->line, tmp);
-            tmp.position.y = info->end.y;
+            tmp.position.y = info->end.y + game->player->jump_value;
             tmp.texCoords.y = ENEMY[info->type].text_size.y;
             sfVertexArray_append(game->map->line, tmp);
         }

@@ -45,8 +45,7 @@ static int sprint(player_t *player,
 
 static int move_forward(save_t *save, sfVector2f *v, game_t *game)
 {
-    if ((sfKeyboard_isKeyPressed(sfKeyUp))
-        || sfKeyboard_isKeyPressed(sfKeyZ)
+    if (sfKeyboard_isKeyPressed(sfKeyZ)
         || sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK) {
         return sprint(game->player, save, v, game->weapon->weapon);
     }
@@ -55,8 +54,7 @@ static int move_forward(save_t *save, sfVector2f *v, game_t *game)
 
 static int move_backward(player_t *player, save_t *save, sfVector2f *v)
 {
-    if ((sfKeyboard_isKeyPressed(sfKeyDown))
-        || sfKeyboard_isKeyPressed(sfKeyS)
+    if (sfKeyboard_isKeyPressed(sfKeyS)
         || sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK) {
         if (is_wall(player->pos.y,
             player->pos.x - (v->x * DISTANCE_COLISION),

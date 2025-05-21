@@ -18,6 +18,7 @@ SRC =	$(addprefix src/,					\
 				move_rect.c					\
 				draw_enemies.c				\
 				sort_enemies.c				\
+				move_y.c					\
 				sort_items.c				\
 				center_ray.c				\
 				get_pourcentage.c			\

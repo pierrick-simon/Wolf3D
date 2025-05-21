@@ -30,13 +30,14 @@ static void add_line(int i, float len_factor[2],
 {
     sfVertex line = {.color = sfWhite};
     float a = ((1 - len_factor[FACTOR_INDEX]) * WALL_TEXTURE_X);
+    float offset_y = game->player->jump_value;
 
     line.position = (sfVector2f){i * RAY_LENGTH, ((WIN_HEIGHT -
-        len_factor[LEN_INDEX]) / 2) + (len_factor[LEN_INDEX])};
+        len_factor[LEN_INDEX]) / 2) + (len_factor[LEN_INDEX]) + offset_y};
     line.texCoords = (sfVector2f){pos[Y_INDEX] + a, pos[X_INDEX]};
     game->map->rays[i].down = line;
     line.position = (sfVector2f){i * RAY_LENGTH,
-        (WIN_HEIGHT - len_factor[LEN_INDEX]) / 2};
+        ((WIN_HEIGHT - len_factor[LEN_INDEX]) / 2) + offset_y};
     line.texCoords = (sfVector2f){pos[Y_INDEX] + a, pos[X_INDEX] +
         (WALL_TEXTURE_X)};
     game->map->rays[i].up = line;
@@ -68,8 +69,8 @@ static void add_ray_to_vertex_array(game_t *game, int i)
 
 void cast_all_rays(game_t *game, save_t *save)
 {
-    enemies_movement(
-        game, game->player->save->enemies, save);
+    enemies_movement(game,
+        game->player->save->enemies, save);
     sort_enemies(game);
     sort_items(game);
     for (int i = 0; i < NB_RAYS; ++i)

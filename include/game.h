@@ -18,7 +18,7 @@
 
     #define FOV RAD(66)
     #define RAY_LENGTH 1
-    #define NB_RAYS WIN_WIDTH / RAY_LENGTH
+    #define NB_RAYS (WIN_WIDTH / RAY_LENGTH) + 1
 
     #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
     #define FLOOR_COLOR sfColor_fromRGB(139, 139, 139)
@@ -96,8 +96,9 @@
 
     #define NO_ENEMY -1
 
-    #define ENEMY_TEXTURE_X 2550
-    #define ENEMY_TEXTURE_Y 3301
+    #define JUMP_SPEED 500
+    #define JUMP_MAX 500
+    #define JUMP_MIN -JUMP_MAX
 
 typedef enum {
     LOAD_W_TEXTURE,
@@ -188,6 +189,12 @@ typedef enum {
     NB_MUSIC,
 } music_id_t;
 
+typedef enum status {
+    S_NONE,
+    UP,
+    DOWN
+} status_t;
+
 typedef struct light_s {
     sfRenderTexture *night_render;
     const sfTexture *night_texture;
@@ -215,7 +222,7 @@ typedef struct ray_s {
 typedef struct map_s {
     sfRectangleShape *ceiling_floor;
     sfVertexArray *line;
-    ray_t rays[WIN_WIDTH];
+    ray_t rays[NB_RAYS];
     sfRenderStates wall_states;
 } map_t;
 
@@ -234,6 +241,8 @@ typedef struct player_s {
     sfBool is_sprinting;
     sfCircleShape *crossair;
     save_t *save;
+    float jump_value;
+    status_t status;
 } player_t;
 
 typedef struct weapon_info_s {
@@ -338,5 +347,6 @@ void sort_enemies(game_t *game);
 void sort_items(game_t *game);
 void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save);
 void draw_enemies(game_t *game, system_t *sys);
+void move_y(player_t *player, double delta);
 
 #endif
