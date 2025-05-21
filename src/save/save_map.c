@@ -7,6 +7,7 @@
 
 #include "save.h"
 #include "linked_list.h"
+#include "element.h"
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -14,12 +15,12 @@
 #include <stdio.h>
 #include <string.h>
 
-static void write_enemys(save_t *save, int fd)
+static void write_enemies(save_t *save, int fd)
 {
-    node_t *head = save->enemys->head;
-    enemie_t *tmp = NULL;
+    node_t *head = save->enemies->head;
+    enemy_t *tmp = NULL;
 
-    dprintf(fd, "%d\n", get_list_len(save->enemys));
+    dprintf(fd, "%d\n", get_list_len(save->enemies));
     while (head != NULL) {
         tmp = head->data;
         dprintf(fd, "%d:%f:%f:%d\n",
@@ -36,21 +37,27 @@ static void write_items(save_t *save, int fd)
     dprintf(fd, "%d\n", get_list_len(save->items));
     while (head != NULL) {
         tmp = head->data;
-        dprintf(fd, "%d:%f:%f:%d\n",
-            tmp->type, tmp->pos.x, tmp->pos.y, tmp->quantity);
+        dprintf(fd, "%d:%f:%f\n",
+            tmp->type, tmp->pos.x, tmp->pos.y);
         head = head->next;
     }
 }
 
 static void write_header(save_t *save, int fd)
 {
-    dprintf(fd, "%s\n%d\n%d\n%f\n%f\n%f\n%d\n"
-        "%.0f\n%d\n%d\n%d\n%d\n%d\n%d\n%s\n",
+    dprintf(fd, "%s\n%d\n%d\n%f\n%f\n%f\n%.0f\n"
+        "%.0f\n%.0f\n%.0f\n%.0f\n%.0f\n%d\n%d\n%d\n%d\n%f\n%s\n",
         save->name, save->size.x, save->size.y, save->info->start_pos.x,
-        save->info->start_pos.y, save->info->start_angle, save->info->health,
-        save->info->flashlight, save->info->ammo, save->info->stamina,
+        save->info->start_pos.y, save->info->start_angle,
+        save->info->item_info[INFO_HEALTH],
+        save->info->item_info[INFO_FLASHLIGHT],
+        save->info->item_info[INFO_AMMO_PISTOL],
+        save->info->item_info[INFO_AMMO_SHUTGUN],
+        save->info->item_info[INFO_AMMO_MINIGUN],
+        save->info->item_info[INFO_STAMINA],
         save->info->score, (int)save->info->time / SEC_IN_MICRO,
-        save->info->weapons, save->info->start_weapon, save->music_path);
+        save->info->weapons, save->info->start_weapon,
+        save->info->difficulty, save->music_path);
 }
 
 static void write_body(save_t *save, int fd)
@@ -75,7 +82,7 @@ void save_map(save_t *save)
     if (fd == -1)
         return;
     write_header(save, fd);
-    write_enemys(save, fd);
+    write_enemies(save, fd);
     write_items(save, fd);
     write_body(save, fd);
     close(fd);

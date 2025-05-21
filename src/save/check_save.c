@@ -8,6 +8,7 @@
 #include "save.h"
 #include "my.h"
 #include "linked_list.h"
+#include "element.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -63,7 +64,7 @@ static int check_body(char **tab, int x, int y)
     return SUCCESS;
 }
 
-static int check_enemys(linked_list_t *list, char **tab, int *offset)
+static int check_enemies(linked_list_t *list, char **tab, int *offset)
 {
     int nb = 0;
 
@@ -99,18 +100,18 @@ int check_save(save_t *save, char **tab, int *offset)
     int y = 0;
 
     if (array_len(tab) < COOR || check_header(tab, &x, &y) == ERROR
-        || check_enemys(save->enemys, tab + ENEMYS, offset) == ERROR
+        || check_enemies(save->enemies, tab + ENEMIES, offset) == ERROR
         || check_items(save->items, tab + ITEMS + *offset, offset) == ERROR
         || check_body(tab + COOR + *offset, x, y) == ERROR)
         return ERROR;
     return SUCCESS;
 }
 
-static void pass_enemys(linked_list_t *list, save_t *save)
+static void pass_enemies(linked_list_t *list, save_t *save)
 {
     node_t *head = list->head;
     node_t *next = NULL;
-    enemie_t *tmp = NULL;
+    enemy_t *tmp = NULL;
     int tile_x = 0;
     int tile_y = 0;
 
@@ -146,6 +147,22 @@ static void pass_items(linked_list_t *list, save_t *save)
     }
 }
 
+static void check_item_info(save_t *save)
+{
+    if (save->info->item_info[INFO_HEALTH] > MAX_HEALTH)
+        save->info->item_info[INFO_HEALTH] = MAX_HEALTH;
+    if (save->info->item_info[INFO_STAMINA] > MAX_HEALTH)
+        save->info->item_info[INFO_STAMINA] = MAX_HEALTH;
+    if (save->info->item_info[INFO_FLASHLIGHT] > MAX_HEALTH)
+        save->info->item_info[INFO_FLASHLIGHT] = MAX_HEALTH;
+    if (save->info->item_info[INFO_AMMO_PISTOL] > MAX_AMMO)
+        save->info->item_info[INFO_AMMO_PISTOL] = MAX_AMMO;
+    if (save->info->item_info[INFO_AMMO_SHUTGUN] > MAX_AMMO)
+        save->info->item_info[INFO_AMMO_SHUTGUN] = MAX_AMMO;
+    if (save->info->item_info[INFO_AMMO_MINIGUN] > MAX_AMMO)
+        save->info->item_info[INFO_AMMO_MINIGUN] = MAX_AMMO;
+}
+
 int check_start(save_t *save)
 {
     int x = save->info->start_pos.x / TILE_SIZE;
@@ -155,11 +172,8 @@ int check_start(save_t *save)
         || save->size.y * TILE_SIZE < save->info->start_pos.y
         || save->map[y][x] != 0)
             return ERROR;
-    if (save->info->health > MAX_HEALTH)
-        save->info->health = MAX_HEALTH;
-    if (save->info->flashlight > MAX_HEALTH)
-        save->info->flashlight = MAX_HEALTH;
-    pass_enemys(save->enemys, save);
+    check_item_info(save);
+    pass_enemies(save->enemies, save);
     pass_items(save->items, save);
     return SUCCESS;
 }

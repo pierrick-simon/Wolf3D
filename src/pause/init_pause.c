@@ -5,7 +5,7 @@
 ** init_pause
 */
 
-#include "wolf.h"
+#include "game_menu.h"
 #include <stdlib.h>
 
 void *init_pause(void)
@@ -14,7 +14,7 @@ void *init_pause(void)
 
     if (pause == NULL)
         return NULL;
-    pause->str = MENU_PLAY;
+    pause->str = PAUSE_RESUME;
     pause->draw = init_from_conf("config_file/pause.conf");
     if (pause->draw == NULL)
         return NULL;

@@ -5,7 +5,7 @@
 ** init_menu
 */
 
-#include "wolf.h"
+#include "game_menu.h"
 #include <stdlib.h>
 
 void *init_menu(void)

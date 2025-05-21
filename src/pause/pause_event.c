@@ -6,11 +6,13 @@
 */
 
 #include "save.h"
+#include "game_menu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-static int load_restart(pause_t *pause, system_t *sys, char *name)
+static int load_restart(pause_t *pause, system_t *sys,
+    char *name, float difficulty)
 {
     char *tmp = NULL;
     int exit = SUCCESS;
@@ -22,6 +24,7 @@ static int load_restart(pause_t *pause, system_t *sys, char *name)
         return ERROR;
     sprintf(tmp, "maps/%s.legend", name);
     exit = get_save(tmp, sys->save);
+    sys->save->info->difficulty = difficulty;
     free(tmp);
     return exit;
 }
@@ -31,7 +34,8 @@ static void switch_scene(
 {
     if (is_input(event, sfKeyEnter, sfTrue, 0)) {
         state->old_scene = state->scene;
-        if (load_restart(pause, sys, sys->save->name) == ERROR)
+        if (load_restart(pause, sys, sys->save->name,
+            sys->save->info->difficulty) == ERROR)
             state->scene = MAPS;
         else
             state->scene = pause->draw[pause->str].scene;

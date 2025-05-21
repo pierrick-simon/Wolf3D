@@ -5,7 +5,7 @@
 ** draw_pause
 */
 
-#include "wolf.h"
+#include "game_menu.h"
 #include "save.h"
 
 void draw_pause(system_t *sys, void *structure)

@@ -5,7 +5,30 @@
 ** draw_settings
 */
 
-#include "wolf.h"
+#include "game_menu.h"
+
+static void draw_fps(system_t *sys, setting_t *setting)
+{
+    double x = setting->draw[SETTING_FIVE].pos.x + SETTING_OFFSET * 1.5;
+    double y = setting->draw[SETTING_FIVE].pos.y + SETTING_OFFSET / 2;
+    double size_x = SETTING_FILL;
+    double size_y = setting->draw[SETTING_FIVE].size / 3;
+    double fill = size_x * (sys->state->fps - FPS_MIN) / (FPS_MAX - FPS_MIN);
+
+    sfRectangleShape_setPosition(setting->rect, (sfVector2f){x, y});
+    sfRectangleShape_setFillColor(setting->rect, sfTransparent);
+    sfRectangleShape_setSize(setting->rect, (sfVector2f){size_x, size_y});
+    sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
+    sfRectangleShape_setFillColor(setting->rect, sfMagenta);
+    sfRectangleShape_setSize(setting->rect, (sfVector2f){fill, size_y});
+    sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
+    sfRectangleShape_setPosition(setting->rect,
+        (sfVector2f){x + fill - VOL_GAP, y - size_y / 2});
+    sfRectangleShape_setFillColor(setting->rect, sfWhite);
+    sfRectangleShape_setSize(setting->rect,
+        (sfVector2f){VOL_GAP * 2, size_y * 2});
+    sfRenderWindow_drawRectangleShape(sys->window, setting->rect, NULL);
+}
 
 static void draw_sound(system_t *sys, setting_t *setting)
 {
@@ -66,6 +89,7 @@ void draw_settings(system_t *sys, void *structure)
     }
     draw_fullscreen(sys, setting);
     draw_sound(sys, setting);
+    draw_fps(sys, setting);
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);
     sfRenderWindow_display(sys->window);

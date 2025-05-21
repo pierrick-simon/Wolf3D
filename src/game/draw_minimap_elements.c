@@ -7,6 +7,7 @@
 
 #include "game.h"
 #include "save.h"
+#include "element.h"
 #include <math.h>
 
 void draw_look(system_t *sys, sfRectangleShape *mini_map)
@@ -90,7 +91,7 @@ void draw_minimap_enemy(system_t *sys, linked_list_t *list,
     sfVector2i *player_tile, sfCircleShape *cursor)
 {
     sfVector2i enemy_tile = {0};
-    enemie_t *tmp = NULL;
+    enemy_t *tmp = NULL;
     sfVector2f pos = {0};
 
     sfCircleShape_setFillColor(cursor, sfRed);

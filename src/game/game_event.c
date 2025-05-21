@@ -8,6 +8,7 @@
 #include <math.h>
 #include "save.h"
 #include "game.h"
+#include "element.h"
 
 static void scroll_weapon(sfEvent event, weapon_t *weapon)
 {
@@ -83,12 +84,13 @@ static void click(system_t *sys, weapon_t *weapon, game_t *game)
         return;
     if (sfKeyboard_isKeyPressed(sfKeySpace) ||
         sfJoystick_getAxisPosition(0, sfJoystickR) > 0) {
-        if (weapon->weapon != PUNCH && sys->save->info->ammo == 0) {
+        if (weapon->weapon != PUNCH
+            && sys->save->info->item_info[ind] == 0) {
             sfMusic_play(weapon->empty);
             return;
         }
         if (weapon->weapon != PUNCH)
-            sys->save->info->ammo--;
+            sys->save->info->item_info[ind]--;
         weapon->shot = game->time_info->time;
         sfMusic_play(weapon->info[weapon->weapon].sound);
         destroy_wall(sys->save->map, game->player, game);
@@ -172,7 +174,7 @@ void game_events(system_t *sys, game_t *game)
     }
     click(sys, game->weapon, game);
     interact(sys->save->map, game->player, sys, game);
-    move_player(game->player, game->time_info->delta,
+    move_player(game, game->time_info->delta,
         &game->tool->head->rectangle.left, game->music[FOOTSTEPS]);
     sfSprite_setTextureRect(game->tool->head->sprite,
         game->tool->head->rectangle);

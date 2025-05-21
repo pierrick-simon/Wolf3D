@@ -6,6 +6,7 @@
 */
 
 #include "save.h"
+#include "game_menu.h"
 #include <stdlib.h>
 
 static void init_info_save(info_save_t *info)

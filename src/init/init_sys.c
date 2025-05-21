@@ -7,6 +7,7 @@
 
 #include "load_screen.h"
 #include "save.h"
+#include "game_menu.h"
 #include "linked_list.h"
 #include <stdlib.h>
 
@@ -47,6 +48,7 @@ static void init_state(state_info_t *state, load_screen_t *start)
     state->scene = MENU;
     state->old_scene = MENU;
     state->volume = VOL_MAX;
+    state->fps = WIN_FRAME;
     draw_load_screen(start, NB_SCENE - 0.4);
 }
 
@@ -54,9 +56,9 @@ static int init_save(save_t *save)
 {
     save->info = malloc(sizeof(player_info_t));
     save->doors = initialize_linked_list();
-    save->enemys = initialize_linked_list();
+    save->enemies = initialize_linked_list();
     save->items = initialize_linked_list();
-    if (save->info == NULL || save->enemys == NULL
+    if (save->info == NULL || save->enemies == NULL
         || save->doors == NULL || save->items == NULL)
         return ERROR;
     save->init = sfFalse;

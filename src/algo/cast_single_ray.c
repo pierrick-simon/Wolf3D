@@ -7,6 +7,7 @@
 
 #include "save.h"
 #include "game.h"
+#include "element.h"
 #include <math.h>
 
 static sfBool is_end(sfVector2f *pos, intersection_t *type, save_t *save)

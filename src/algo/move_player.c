@@ -7,6 +7,7 @@
 
 #include "save.h"
 #include "game.h"
+#include "element.h"
 #include <math.h>
 
 static sfBool is_wall(float y, float x, save_t *save)
@@ -16,14 +17,15 @@ static sfBool is_wall(float y, float x, save_t *save)
     return sfFalse;
 }
 
-static int sprint(player_t *player, save_t *save, sfVector2f *v)
+static int sprint(player_t *player, save_t *save, weapon_id_t id)
 {
     int coef = 1;
 
-    if (sfKeyboard_isKeyPressed(sfKeyLShift) ||
-        sfJoystick_getAxisPosition(0, sfJoystickZ) > 0) {
+    if ((sfKeyboard_isKeyPressed(sfKeyLShift) ||
+        sfJoystick_getAxisPosition(0, sfJoystickZ) > 0)
+        && id != MINIGUN) {
         player->is_sprinting = sfTrue;
-        if (save->info->stamina != 0) {
+        if (save->info->item_info[INFO_STAMINA] != 0) {
             coef = 2;
             player->fov = SPRINTING_FOV;
         }
@@ -39,12 +41,12 @@ static int sprint(player_t *player, save_t *save, sfVector2f *v)
     return coef;
 }
 
-static int move_forward(player_t *player, save_t *save, sfVector2f *v)
+static int move_forward(game_t *game, save_t *save)
 {
     if ((sfKeyboard_isKeyPressed(sfKeyUp))
         || sfKeyboard_isKeyPressed(sfKeyZ)
         || sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK) {
-        return sprint(player, save, v);
+        return sprint(game->player, save, game->weapon->weapon);
     }
     return SKIP;
 }
@@ -136,12 +138,12 @@ static void set_music_pitch(int forward, int backward, sfMusic *footstepp)
         sfMusic_setPitch(footstepp, 1.3);
 }
 
-static void handle_footstepp(player_t *player,
-    int *head, sfMusic *footstepp, sfVector2f *v)
+static void handle_footstepp(
+    game_t *game, int *head, sfMusic *footstepp, player_t *player)
 {
     sfSoundStatus music = sfMusic_getStatus(footstepp);
-    int forward = move_forward(player, player->save, v);
-    int backward = move_backward(player, player->save, v);
+    int forward = move_forward(game, player->save);
+    int backward = move_backward(player, player->save);
 
     set_music_pitch(forward, backward, footstepp);
     if (move_right(player, player->save, head, v)
@@ -153,19 +155,16 @@ static void handle_footstepp(player_t *player,
         sfMusic_pause(footstepp);
 }
 
-void move_player(player_t *player, double delta, int *head, sfMusic *footstepp)
+void move_player(game_t *game, double delta, int *head, sfMusic *footstepp)
 {
-    sfVector2f v = {0};
-
-    center_ray(player);
-    v = player->center_ray.v;
+    center_ray(game->player);
     *head = HEAD_SPRITE_X;
-    player->fov = FOV;
-    player->is_sprinting = sfFalse;
-    v.x *= delta * PLAYER_SPEED;
-    v.y *= delta * PLAYER_SPEED;
-    handle_footstepp(player, head, footstepp, &v);
-    rotate_player(player, delta, head);
+    game->player->fov = FOV;
+    game->player->is_sprinting = sfFalse;
+    game->player->center_ray.v.x *= delta;
+    game->player->center_ray.v.y *= delta;
+    handle_footstepp(game, head, footstepp, game->player);
+    rotate_player(game->player, delta, head);
     if (*head < 0)
         *head = 0;
     if (*head > HEAD_SPRITE_X * 2)

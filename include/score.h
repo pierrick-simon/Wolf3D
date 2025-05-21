@@ -60,9 +60,6 @@ linked_list_t *get_score(char *name);
 bool sort_by_score(void *data1, void *data2);
 bool sort_by_time(void *data1, void *data2);
 
-void *init_score(void);
-void draw_score(system_t *sys, void *structure);
 void score_events(system_t *sys, score_t *score);
-void destroy_score(void *structure);
 
 #endif /* !SCORE_H_ */

@@ -25,50 +25,25 @@
 typedef struct linked_list_s linked_list_t;
 typedef struct node_s node_t;
 
-
-typedef enum item_id_e {
-    I_WEAPON_TWO,
-    I_WEAPON_THREE,
-    I_WEAPON_FOUR,
-    I_HEALTH,
-    I_AMMO,
-    I_STAMINA,
-    I_FLASHLIGHT,
-    NB_ITEM,
-} item_id_t;
-
-typedef enum enemy_id_e {
-    E_NORMAL,
-    NB_ENEMY,
-} enemy_id_t;
-
-typedef struct item_s {
-    int id;
-    item_id_t type;
-    sfVector2f pos;
-    int quantity;
-} item_t;
-
-typedef struct enemy_s {
-    int id;
-    enemy_id_t type;
-    sfVector2f pos;
-    int health;
-    float cooldown;
-    float dist;
-} enemie_t;
+typedef enum item_info_e {
+    INFO_HEALTH,
+    INFO_AMMO_PISTOL,
+    INFO_AMMO_SHUTGUN,
+    INFO_AMMO_MINIGUN,
+    INFO_STAMINA,
+    INFO_FLASHLIGHT,
+    NB_INFO,
+} item_info_t;
 
 typedef struct player_info_s {
     sfVector2f start_pos;
     double start_angle;
-    int health;
-    float flashlight;
-    int ammo;
-    int stamina;
+    float item_info[NB_INFO];
     int score;
     sfUint64 time;
     int weapons;
     int start_weapon;
+    float difficulty;
 } player_info_t;
 
 typedef struct save_s {
@@ -82,25 +57,9 @@ typedef struct save_s {
     sfBool update;
     player_info_t *info;
     linked_list_t *doors;
-    linked_list_t *enemys;
+    linked_list_t *enemies;
     linked_list_t *items;
 } save_t;
-
-typedef enum {
-    I_TYPE,
-    I_POS_X,
-    I_POS_Y,
-    I_QUANTITY,
-    NB_STR_ITEM,
-} str_item_t;
-
-typedef enum {
-    E_TYPE,
-    E_POS_X,
-    E_POS_Y,
-    E_HEALTH,
-    NB_STR_ENEMY,
-} str_enemy_t;
 
 typedef enum {
     NAME,
@@ -111,14 +70,17 @@ typedef enum {
     START_ANGLE,
     HEALTH,
     FLASHLIGHT_INFO,
-    AMMO,
+    AMMO_PISTOL,
+    AMMO_SHUTGUN,
+    AMMO_MINIGUN,
     STAMINA,
     CURRENT_SCORE,
     TIME,
     WEAPONS,
     START_WEAPON,
+    DIFFICULTY_INFO,
     MUSIC,
-    ENEMYS,
+    ENEMIES,
     ITEMS,
     COOR,
 } str_t;
@@ -187,12 +149,15 @@ static const check_t CHECK[] __maybe_unused = {
     [START_ANGLE] = {&check_angle},
     [HEALTH] = {&check_info},
     [FLASHLIGHT_INFO] = {&check_info},
-    [AMMO] = {&check_info},
+    [AMMO_PISTOL] = {&check_info},
+    [AMMO_SHUTGUN] = {&check_info},
+    [AMMO_MINIGUN] = {&check_info},
     [STAMINA] = {&check_info},
     [CURRENT_SCORE] = {&check_info},
     [TIME] = {&check_info},
     [WEAPONS] = {&check_info},
     [START_WEAPON] = {&check_info},
+    [DIFFICULTY_INFO] = {&check_angle},
     [COOR] = {NULL}
 };
 
@@ -210,19 +175,12 @@ void save_score(save_t *save, char *name);
 void save_map(save_t *save);
 void free_mini_map_color(sfColor **color, int y);
 int init_mini_map_color(save_t *save);
-int add_node_enemy(linked_list_t *enemys, char *line);
+int add_node_enemy(linked_list_t *enemies, char *line);
 int add_node_item(linked_list_t *items, char *line);
 int check_start(save_t *save);
 int check_save(save_t *save, char **tab, int *offset);
 
-void *init_maps(void);
-void draw_maps(system_t *sys, void *structure);
 void maps_events(system_t *sys, maps_t *maps);
-void destroy_maps(void *structure);
-
-void *init_map(void);
-void draw_map(system_t *sys, void *structure);
 void map_events(system_t *sys, select_map_t *map);
-void destroy_map(void *structure);
 
 #endif

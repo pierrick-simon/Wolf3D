@@ -7,6 +7,7 @@
 
 #include "save.h"
 #include "linked_list.h"
+#include "element.h"
 #include "my.h"
 
 static int check_enemy(char **tab)
@@ -22,7 +23,7 @@ static int check_enemy(char **tab)
 }
 
 static void fill_node_enemy(
-    linked_list_t *enemys, enemie_t *enemy, char **tab)
+    linked_list_t *enemies, enemy_t *enemy, char **tab)
 {
     static int id = 0;
 
@@ -32,14 +33,14 @@ static void fill_node_enemy(
     enemy->health = atoi(tab[E_HEALTH]);
     enemy->cooldown = 0;
     enemy->dist = 0;
-    push_to_tail(enemys, enemy);
+    push_to_tail(enemies, enemy);
     id++;
 }
 
-int add_node_enemy(linked_list_t *enemys, char *line)
+int add_node_enemy(linked_list_t *enemies, char *line)
 {
     char **tab = my_str_to_word_array(line, ":", "");
-    enemie_t *enemy = NULL;
+    enemy_t *enemy = NULL;
 
     if (tab == NULL)
         return ERROR;
@@ -47,12 +48,12 @@ int add_node_enemy(linked_list_t *enemys, char *line)
         free_array(tab);
         return ERROR;
     }
-    enemy = malloc(sizeof(enemie_t));
+    enemy = malloc(sizeof(enemy_t));
     if (enemy == NULL) {
         free_array(tab);
         return ERROR;
     }
-    fill_node_enemy(enemys, enemy, tab);
+    fill_node_enemy(enemies, enemy, tab);
     free_array(tab);
     return SUCCESS;
 }

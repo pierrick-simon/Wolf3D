@@ -5,7 +5,22 @@
 ** event
 */
 
-#include "wolf.h"
+#include "game_menu.h"
+
+static void change_fps(
+    sfEvent event, state_info_t *state, setting_t *setting)
+{
+    if (setting->str == SETTING_FPS) {
+        if ((is_input(event, sfKeyRight, sfFalse, 0) ||
+            sfJoystick_getAxisPosition(0, sfJoystickPovX) == - MAX_JOYSTICK)
+            && state->fps < FPS_MAX)
+            state->fps += FPS_GAP;
+        if ((is_input(event, sfKeyLeft, sfFalse, 0) ||
+            sfJoystick_getAxisPosition(0, sfJoystickPovX) == MAX_JOYSTICK)
+            && state->fps > FPS_MIN)
+            state->fps -= FPS_GAP;
+    }
+}
 
 static void change_volume(
     sfEvent event, state_info_t *state, setting_t *setting)
@@ -79,7 +94,7 @@ static void switch_str(sfEvent event, setting_t *setting)
         sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK)
         setting->str++;
     if (setting->str == NB_SETTINGS)
-        setting->str = SETTING_FULL;
+        setting->str = SETTING_FPS;
     if (setting->str == SETTING_TITLE)
         setting->str = SETTING_BACK;
     setting->draw[setting->str].color = sfRed;
@@ -95,5 +110,6 @@ void setting_events(system_t *sys, setting_t *settings)
         switch_scene(event, sys->state, settings);
         switch_screen(event, sys, settings, sys->state);
         change_volume(event, sys->state, settings);
+        change_fps(event, sys->state, settings);
     }
 }

@@ -288,15 +288,16 @@ typedef struct game_s {
     sfMusic *music[NB_MUSIC];
 } game_t;
 
-void cast_all_rays(game_t *game);
+void cast_all_rays(game_t *game, save_t *save);
 float cast_single_ray(player_t *player, float angle_offset,
     intersection_t *type, sfVector2f *intersection_point);
-void move_player(
-    player_t *player, double delta, int *head, sfMusic *footstepp);
+void move_player(game_t *game, double delta, int *head, sfMusic *footstepp);
 int init_weapons(weapon_t *weapon);
 void update_all(system_t *sys, game_t *game);
 void update_time_end(time_info_t *time_info);
 void update_save(system_t *sys, game_t *game);
+void update_toolbar_percent(draw_textbox_t *draw, int nb);
+void update_ammo(system_t *sys, game_t *game);
 void shot_gun_anim(
     weapon_t *weapon, time_info_t *time, toolbar_t *tool, int bag);
 void draw_minimap(system_t *sys, sfRectangleShape *mini_map,
@@ -312,14 +313,13 @@ void draw_center(system_t *sys, sfCircleShape *cursor);
 void draw_look(system_t *sys, sfRectangleShape *mini_map);
 
 void game_events(system_t *sys, game_t *game);
-void draw_game(system_t *sys, void *structure);
-void destroy_game(void *structure);
-void *init_game(void);
 
 float get_pourcentage_wall(intersection_type_t type, sfVector2f *intersection);
 float get_door_pourcentage(save_t *save, sfVector2i *pos);
 sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
 void center_ray(player_t *player);
 void sort_enemies(game_t *game);
+void sort_items(game_t *game);
+void enemies_movement(game_t *game, linked_list_t *enemies, float dificulty);
 
 #endif

@@ -65,9 +65,12 @@ static void add_ray_to_vertex_array(game_t *game, int i)
         get_texture_x(type.type, &pos)}, game);
 }
 
-void cast_all_rays(game_t *game)
+void cast_all_rays(game_t *game, save_t *save)
 {
+    enemies_movement(
+        game, game->player->save->enemies, save->info->difficulty);
     sort_enemies(game);
+    sort_items(game);
     for (int i = 0; i < NB_RAYS; ++i)
         add_ray_to_vertex_array(game, i);
 }

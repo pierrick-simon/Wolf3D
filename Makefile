@@ -17,12 +17,14 @@ SRC =	$(addprefix src/,					\
 			$(addprefix algo/,				\
 				move_rect.c					\
 				sort_enemies.c				\
+				sort_items.c				\
 				center_ray.c				\
 				get_pourcentage.c			\
 				cast_single_ray.c			\
 				cast_rays.c					\
 				cast_pos.c					\
 				move_player.c				\
+				enemies_movement.c			\
 			)								\
 			$(addprefix init/,				\
 				create_window.c				\
@@ -40,6 +42,12 @@ SRC =	$(addprefix src/,					\
 				destroy_menu.c 				\
 				menu_event.c				\
 				draw_menu.c					\
+			)								\
+			$(addprefix difficulty/,				\
+				init_difficulty.c 				\
+				destroy_difficulty.c 				\
+				difficulty_event.c				\
+				draw_difficulty.c					\
 			)								\
 			$(addprefix pause/,				\
 				init_pause.c 				\
@@ -65,6 +73,7 @@ SRC =	$(addprefix src/,					\
 				draw_mini_map.c 			\
 				draw_minimap_elements.c		\
 				init_toolbar.c				\
+				handle_items.c  			\
 			)								\
 			$(addprefix save/,				\
 				$(addprefix list/,			\
