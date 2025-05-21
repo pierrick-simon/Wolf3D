@@ -81,3 +81,13 @@ void shot_gun_anim(
     update_guns(weapon, tool, bag);
     update_guns_movement(weapon, tool, time);
 }
+
+void update_ammo(system_t *sys, game_t *game)
+{
+    if (game->weapon->weapon == PUNCH) {
+        game->tool->draw[TOOL_AMMO_NB].color = sfWhite;
+        sprintf(game->tool->draw[TOOL_AMMO_NB].str, " INF");
+    } else
+        update_toolbar_percent(&game->tool->draw[TOOL_AMMO_NB],
+            sys->save->info->item_info[game->weapon->weapon]);
+}

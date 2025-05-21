@@ -23,10 +23,14 @@
     #define VOL_MIN 0.0
     #define VOL_GAP 5.0
 
+    #define FPS_MAX 200
+    #define FPS_MIN 50
+    #define FPS_GAP 10
+
     #define WIN_HEIGHT 1080
     #define WIN_WIDTH 1920
     #define WIN_BITS 144
-    #define WIN_FRAME 60
+    #define WIN_FRAME 120
     #define WINDOW_NAME "Wolf3D"
 
     #define GUY_SPRITE_X 612
@@ -88,9 +92,12 @@ typedef enum str_setting_e {
     SETTING_OFF,
     SETTING_ZERO,
     SETTING_HUNDRED,
+    SETTING_FIVE,
+    SETTING_TWO,
     SETTING_TITLE,
     SETTING_FULL,
     SETTING_SOUND,
+    SETTING_FPS,
     SETTING_BACK,
     NB_SETTINGS,
 } str_setting_t;
@@ -158,6 +165,7 @@ typedef struct textbox_s {
 
 typedef struct state_info_s {
     double volume;
+    unsigned int fps;
     sfBool fullscreen;
     scene_t scene;
     scene_t old_scene;

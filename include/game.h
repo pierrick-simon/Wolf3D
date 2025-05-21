@@ -277,6 +277,9 @@ typedef struct toolbar_s {
     sfBool interact;
 } toolbar_t;
 
+
+    #define NB_ENEMIE 2
+
 typedef struct game_s {
     map_t *map;
     sfRectangleShape *mini_map;
@@ -287,23 +290,25 @@ typedef struct game_s {
     toolbar_t *tool;
     light_t *light;
     sfMusic *music[NB_MUSIC];
-    sfRenderStates state_enemies[1];
+    sfRenderStates state_enemies[NB_ENEMIE];
 } game_t;
 
 void cast_all_rays(game_t *game);
 float cast_single_ray(player_t *player, float angle_offset,
     intersection_t *type, sfVector2f *intersection_point);
-void move_player(
-    player_t *player, double delta, int *head, sfMusic *footstepp);
+void move_player(game_t *game, double delta, int *head, sfMusic *footstepp);
 int init_weapons(weapon_t *weapon);
 void update_all(system_t *sys, game_t *game);
 void update_time_end(time_info_t *time_info);
 void update_save(system_t *sys, game_t *game);
+void update_toolbar_percent(draw_textbox_t *draw, int nb);
+void update_ammo(system_t *sys, game_t *game);
 void shot_gun_anim(
     weapon_t *weapon, time_info_t *time, toolbar_t *tool, int bag);
 void draw_minimap(system_t *sys, sfRectangleShape *mini_map,
     sfCircleShape *cursor, sfTexture *texture);
 int init_toolbar(toolbar_t *tool);
+int init_render_state(game_t *game);
 void draw_minimap_item(system_t *sys, linked_list_t *list,
     sfVector2i *player_tile, sfCircleShape *cursor);
 void draw_minimap_enemy(system_t *sys, linked_list_t *list,
@@ -324,5 +329,6 @@ sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
 void center_ray(player_t *player);
 void sort_enemies(game_t *game);
 void sort_items(game_t *game);
+void enemies_movement(game_t *game, linked_list_t *enemies);
 
 #endif

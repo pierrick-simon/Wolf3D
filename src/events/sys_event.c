@@ -64,4 +64,5 @@ void sys_events(sfEvent event, system_t *sys)
     close_window(event, sys);
     resize_window(event, sys, sys->state);
     music_setvolume(event, sys, sys->state);
+    sfRenderWindow_setFramerateLimit(sys->window, sys->state->fps);
 }

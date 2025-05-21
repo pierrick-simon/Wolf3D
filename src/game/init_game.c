@@ -37,7 +37,7 @@ static int init_states(map_t *map)
     return SUCCESS;
 }
 
-static int init_map(map_t *map)
+static int init_map_info(map_t *map)
 {
     sfVector2f pos = {WIN_WIDTH, WIN_HEIGHT / 2};
 
@@ -138,24 +138,10 @@ static int check_init(game_t *game)
         || init_toolbar(game->tool) == ERROR
         || init_weapons(game->weapon) == ERROR
         || init_player(game->player) == ERROR
-        || init_map(game->map) == ERROR
+        || init_map_info(game->map) == ERROR
         || init_time_info(game->time_info) == ERROR
         || init_music(game->music) == ERROR)
         return ERROR;
-    return SUCCESS;
-}
-
-static int check_render_state(game_t *game)
-{
-    for (size_t i = 0; i < NB_ENEMIES; ++i) {
-        game->state_enemies[i] = (sfRenderStates){0};
-        game->state_enemies[i].texture =
-            sfTexture_createFromFile(enemy_path[i], NULL);
-        if (game->state_enemies[i].texture == NULL)
-            return ERROR;
-        game->state_enemies[i].transform = sfTransform_Identity;
-        game->state_enemies[i].blendMode = sfBlendAlpha;
-    }
     return SUCCESS;
 }
 
@@ -174,7 +160,7 @@ void *init_game(void)
     game->light = malloc(sizeof(light_t));
     game->mini_map = sfRectangleShape_create();
     game->cursor = sfCircleShape_create();
-    if (check_init(game) == ERROR || check_render_state(game) == ERROR)
+    if (check_init(game) == ERROR || init_render_state(game) == ERROR)
         return SUCCESS;
     game->player->save = NULL;
     sfCircleShape_setRadius(game->cursor, MINI_MAP_CURSOR);

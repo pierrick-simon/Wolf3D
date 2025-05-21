@@ -34,7 +34,7 @@ static void destroy_weapon(weapon_t *weapon)
     free(weapon);
 }
 
-static void destroy_map(map_t *map)
+static void destroy_map_info(map_t *map)
 {
     sfTexture_destroy((sfTexture *)map->wall_states.texture);
     if (map->ceiling_floor != NULL)
@@ -114,7 +114,7 @@ void destroy_game(void *structure)
     if (game->player != NULL)
         destroy_player(game->player);
     if (game->map != NULL)
-        destroy_map(game->map);
+        destroy_map_info(game->map);
     if (game->time_info != NULL)
         destroy_time_info(game->time_info);
     if (game->tool != NULL)
@@ -122,6 +122,6 @@ void destroy_game(void *structure)
     if (game->light != NULL)
         destroy_light(game->light);
     for (size_t i = 0; i < NB_ENEMIES; ++i)
-        sfTexture_destroy(game->state_enemies[i].texture);
+        sfTexture_destroy((sfTexture *)game->state_enemies[i].texture);
     free(game);
 }

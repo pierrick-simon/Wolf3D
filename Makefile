@@ -24,6 +24,7 @@ SRC =	$(addprefix src/,					\
 				cast_rays.c					\
 				cast_pos.c					\
 				move_player.c				\
+				enemies_movement.c			\
 			)								\
 			$(addprefix init/,				\
 				create_window.c				\
@@ -59,6 +60,7 @@ SRC =	$(addprefix src/,					\
 				draw_game.c					\
 				destroy_game.c 				\
 				init_game.c 				\
+				init_render_state.c			\
 				init_weapon.c 				\
 				update.c 					\
 				update_weapon.c 			\

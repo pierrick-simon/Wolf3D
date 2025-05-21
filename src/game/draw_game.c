@@ -59,11 +59,11 @@ static void draw_tool_strings(system_t *sys, toolbar_t *tool)
         draw_string(sys, sys->textbox, &tool->draw[i]);
     }
     draw_point_bar(sys, tool, TOOL_FLASH_NB,
-        sys->save->info->item_info[I_FLASHLIGHT]);
+        sys->save->info->item_info[INFO_FLASHLIGHT]);
     draw_point_bar(sys, tool, TOOL_HEALTH_NB,
-        sys->save->info->item_info[I_HEALTH]);
+        sys->save->info->item_info[INFO_HEALTH]);
     draw_point_bar(sys, tool, TOOL_STAM_NB,
-        sys->save->info->item_info[I_STAMINA]);
+        sys->save->info->item_info[INFO_STAMINA]);
 }
 
 static void draw_toolbar(system_t *sys, toolbar_t *tool)
@@ -84,22 +84,27 @@ static void draw_toolbar(system_t *sys, toolbar_t *tool)
     draw_tool_strings(sys, tool);
 }
 
-static void draw_enemy(system_t *sys, enemy_t *enemy, game_t *game, ray_t rays[NB_RAYS])
+/*
+static void draw_enemy(system_t *sys,
+    enemy_t *enemy, game_t *game, ray_t rays[NB_RAYS])
 {
     // player->angle = M_PI;
     // player->center_ray.v.x = cos(player->angle);
     // player->center_ray.v.y = sin(player->angle);
     player_t *player = game->player;
-    player->angle = M_PI;
-    
+    //player->angle = M_PI;
+
+    //position de l'enemie relatif au joueur
     double spriteX = enemy->pos.x - player->pos.x;
-    double spriteY = enemy->pos.y - player->pos.x; //position de l'enemie relatif au joueur
+    double spriteY = enemy->pos.y - player->pos.x;
 
     double dirY = player->center_ray.v.x;
     double dirX = player->center_ray.v.y; // vecteur directeur
 
-    double planeX = (-player->center_ray.v.y * (DEG(FOV) / 100)) + player->center_ray.v.x;
-    double planeY = (player->center_ray.v.x * (DEG(FOV) / 100)) + player->center_ray.v.y;
+    double planeX = (-player->center_ray.v.y * (DEG(FOV) / 100)) +
+        player->center_ray.v.x;
+    double planeY = (player->center_ray.v.x * (DEG(FOV) / 100)) +
+        player->center_ray.v.y;
     printf("%f %f\n", planeX, planeY); // vecteur joueur to end plane
     int h = WIN_HEIGHT;
     int w = WIN_WIDTH;
@@ -125,8 +130,10 @@ static void draw_enemy(system_t *sys, enemy_t *enemy, game_t *game, ray_t rays[N
 
     sfVertex tmp = {.color = sfWhite};
     for (int stripe = drawStartX; stripe < drawEndX; stripe++) {
-        if (transformY > 0 && stripe > 0 && stripe < w /*&& transformY < rays[stripe].len*/) {
-            float f = ((float)(stripe - drawStartX) / (float)(drawEndX - drawStartX)) * SOLDIER_X;
+        if (transformY > 0 && stripe > 0 &&
+            stripe < w /&& transformY < rays[stripe].len/) {
+            float f = ((float)(stripe - drawStartX) /
+                (float)(drawEndX - drawStartX)) * SOLDIER_X;
             tmp.position = (sfVector2f){stripe, drawStartY};
             tmp.texCoords = (sfVector2f){f, 0};
             sfVertexArray_append(game->map->line, tmp);
@@ -135,10 +142,11 @@ static void draw_enemy(system_t *sys, enemy_t *enemy, game_t *game, ray_t rays[N
             sfVertexArray_append(game->map->line, tmp);
         }
     }
-    sfRenderWindow_drawVertexArray(sys->window, game->map->line, &game->state_enemies[enemy->type]);
+    sfRenderWindow_drawVertexArray(sys->window,
+        game->map->line, &game->state_enemies[enemy->type]);
     sfVertexArray_clear(game->map->line);
 }
-
+*/
 static void draw_lines(system_t *sys, game_t *game)
 {
     map_t *map = game->map;
@@ -155,9 +163,7 @@ static void draw_lines(system_t *sys, game_t *game)
             map->line, &map->wall_states);
         sfVertexArray_clear(map->line);
     }
-    printf("-------------------\n");
     while (node != NULL) {
-        draw_enemy(sys, node->data, game, game->map->rays);
         node = node->prev;
     }
 }

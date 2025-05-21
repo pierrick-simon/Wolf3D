@@ -51,8 +51,8 @@ static void set_line(int i, float len_factor[2],
 static void add_ray_to_vertex_array(game_t *game, int i)
 {
     intersection_t type = {NONE, WALL};
-    float angle_offset = ((i * RAY_LENGTH / (float)WIN_WIDTH) * game->player->fov) -
-        (game->player->fov / 2);
+    float angle_offset = ((i * RAY_LENGTH / (float)WIN_WIDTH)
+        * game->player->fov) - (game->player->fov / 2);
     sfVector2f pos = {0};
     float len = cast_single_ray(game->player, angle_offset, &type, &pos);
     float factor = get_door_status(game, &type, &pos);
@@ -67,6 +67,7 @@ static void add_ray_to_vertex_array(game_t *game, int i)
 
 void cast_all_rays(game_t *game)
 {
+    enemies_movement(game, game->player->save->enemies);
     sort_enemies(game);
     sort_items(game);
     for (int i = 0; i < NB_RAYS; ++i)
