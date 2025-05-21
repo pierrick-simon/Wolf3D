@@ -16,6 +16,7 @@ SRC =	$(addprefix src/,					\
 			\
 			$(addprefix algo/,				\
 				move_rect.c					\
+				draw_enemies.c				\
 				sort_enemies.c				\
 				sort_items.c				\
 				center_ray.c				\
@@ -43,11 +44,11 @@ SRC =	$(addprefix src/,					\
 				menu_event.c				\
 				draw_menu.c					\
 			)								\
-			$(addprefix difficulty/,				\
-				init_difficulty.c 				\
-				destroy_difficulty.c 				\
-				difficulty_event.c				\
-				draw_difficulty.c					\
+			$(addprefix difficulty/,		\
+				init_difficulty.c 			\
+				destroy_difficulty.c 		\
+				difficulty_event.c			\
+				draw_difficulty.c			\
 			)								\
 			$(addprefix pause/,				\
 				init_pause.c 				\

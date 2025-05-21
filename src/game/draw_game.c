@@ -114,73 +114,9 @@ static void draw_toolbar(system_t *sys, game_t *game, toolbar_t *tool)
     draw_tool_strings(sys, tool);
 }
 
-/*
-static void draw_enemy(system_t *sys,
-    enemy_t *enemy, game_t *game, ray_t rays[NB_RAYS])
-{
-    // player->angle = M_PI;
-    // player->center_ray.v.x = cos(player->angle);
-    // player->center_ray.v.y = sin(player->angle);
-    player_t *player = game->player;
-    //player->angle = M_PI;
-
-    //position de l'enemie relatif au joueur
-    double spriteX = enemy->pos.x - player->pos.x;
-    double spriteY = enemy->pos.y - player->pos.x;
-
-    double dirY = player->center_ray.v.x;
-    double dirX = player->center_ray.v.y; // vecteur directeur
-
-    double planeX = (-player->center_ray.v.y * (DEG(FOV) / 100)) +
-        player->center_ray.v.x;
-    double planeY = (player->center_ray.v.x * (DEG(FOV) / 100)) +
-        player->center_ray.v.y;
-    printf("%f %f\n", planeX, planeY); // vecteur joueur to end plane
-    int h = WIN_HEIGHT;
-    int w = WIN_WIDTH;
-
-
-    double invDet = 1.0 / (planeX * dirY - dirX * planeY);
-
-    double transformX = invDet * (dirY * spriteX - dirX * spriteY);
-    double transformY = invDet * (-planeY * spriteX + planeX * spriteY);
-
-    // int spriteScreenX = w - (int)((w / 2) * (1 + transformX / transformY));
-    //before
-    int spriteScreenX = (int)((w / 2) * (1 + transformX / transformY));
-
-    int spriteHeight = abs((int)(h / (transformY)) * SOLDIER_Y);
-
-    int drawStartY = -spriteHeight / 2 + h / 2;
-    int drawEndY = spriteHeight / 2 + h / 2;
-
-    int spriteWidth = abs((int)(h / (transformY)) * SOLDIER_X);
-    int drawStartX = -spriteWidth / 2 + spriteScreenX;
-    int drawEndX = spriteWidth / 2 + spriteScreenX;
-
-    sfVertex tmp = {.color = sfWhite};
-    for (int stripe = drawStartX; stripe < drawEndX; stripe++) {
-        if (transformY > 0 && stripe > 0 &&
-            stripe < w /&& transformY < rays[stripe].len/) {
-            float f = ((float)(stripe - drawStartX) /
-                (float)(drawEndX - drawStartX)) * SOLDIER_X;
-            tmp.position = (sfVector2f){stripe, drawStartY};
-            tmp.texCoords = (sfVector2f){f, 0};
-            sfVertexArray_append(game->map->line, tmp);
-            tmp.position = (sfVector2f){stripe, drawEndY};
-            tmp.texCoords = (sfVector2f){f, SOLDIER_Y};
-            sfVertexArray_append(game->map->line, tmp);
-        }
-    }
-    sfRenderWindow_drawVertexArray(sys->window,
-        game->map->line, &game->state_enemies[enemy->type]);
-    sfVertexArray_clear(game->map->line);
-}
-*/
 static void draw_lines(system_t *sys, game_t *game)
 {
     map_t *map = game->map;
-    node_t *node = game->player->save->enemies->tail;
 
     for (int i = 0; i < NB_RAYS; ++i) {
         for (int j = 0; j < RAY_LENGTH; ++j) {
@@ -189,13 +125,11 @@ static void draw_lines(system_t *sys, game_t *game)
             ++map->rays[i].down.position.x;
             ++map->rays[i].up.position.x;
         }
-        sfRenderWindow_drawVertexArray(sys->window,
-            map->line, &map->wall_states);
-        sfVertexArray_clear(map->line);
     }
-    while (node != NULL) {
-        node = node->prev;
-    }
+    sfRenderWindow_drawVertexArray(sys->window,
+        map->line, &map->wall_states);
+    sfVertexArray_clear(map->line);
+    draw_enemies(game, sys);
 }
 
 static void smooth_night_day(system_t *sys, light_t *light)
