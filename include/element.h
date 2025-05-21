@@ -39,10 +39,15 @@ typedef struct enemy_s {
     enemy_id_t type;
     sfVector2f pos;
     int health;
-    int dist;
+    float dist;
     float cooldown;
 } enemy_t;
 
+static const __maybe_unused char *enemy_path[] = {
+    [E_NORMAL] = "asset/soldier.png",
+};
+
+    #define NB_ENEMIES ARRAY_LENGTH(enemy_path)
 
 typedef enum {
     I_TYPE,
@@ -80,4 +85,4 @@ static const get_item_t ITEM[] __maybe_unused = {
 
 void handle_items(save_t *save);
 
-#endif /* !ELEMENT_H_ */
+#endif

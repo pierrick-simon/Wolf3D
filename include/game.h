@@ -16,7 +16,7 @@
     #define MOV_OFFSET_GUN 4
     #define MAX_WIDTH 30
 
-    #define FOV RAD(60)
+    #define FOV RAD(66)
     #define RAY_LENGTH 1
     #define NB_RAYS WIN_WIDTH / RAY_LENGTH
 
@@ -93,6 +93,9 @@
 
     #define ENEMY_TEXTURE_X 2550
     #define ENEMY_TEXTURE_Y 3301
+
+    #define SOLDIER_X 42
+    #define SOLDIER_Y 55
 
 typedef enum {
     LOAD_W_TEXTURE,
@@ -205,8 +208,6 @@ typedef struct ray_s {
 } ray_t;
 
 typedef struct map_s {
-    sfSprite *enemy;
-    sfTexture *enemy_texture;
     sfRectangleShape *ceiling_floor;
     sfVertexArray *line;
     ray_t rays[WIN_WIDTH];
@@ -286,6 +287,7 @@ typedef struct game_s {
     toolbar_t *tool;
     light_t *light;
     sfMusic *music[NB_MUSIC];
+    sfRenderStates state_enemies[1];
 } game_t;
 
 void cast_all_rays(game_t *game);

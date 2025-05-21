@@ -108,7 +108,7 @@ float cast_single_ray(player_t *player, float angle_offset,
 {
     sfVector2f pos = player->pos;
     sfVector2f v = {cos(player->angle + angle_offset),
-        sinf(player->angle + angle_offset)};
+        sin(player->angle + angle_offset)};
     float len = 0.0;
 
     while ((is_end(&pos, type, player->save) == sfFalse)) {

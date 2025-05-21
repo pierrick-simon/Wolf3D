@@ -7,6 +7,7 @@
 
 #include "game.h"
 #include "linked_list.h"
+#include "element.h"
 #include <stdlib.h>
 #include <string.h>
 #include "my.h"
@@ -49,15 +50,6 @@ static int init_map(map_t *map)
     if (map->line == NULL || init_states(map) == ERROR)
         return ERROR;
     sfVertexArray_setPrimitiveType(map->line, sfLines);
-    map->enemy_texture = sfTexture_createFromFile("asset/monster.png", NULL);
-    if (map->enemy_texture == NULL)
-        return ERROR;
-    map->enemy = sfSprite_create();
-    if (map->enemy == NULL)
-        return ERROR;
-    sfSprite_setTexture(map->enemy, map->enemy_texture, sfFalse);
-    sfSprite_setOrigin(map->enemy,
-        (sfVector2f){ENEMY_TEXTURE_X / 2, ENEMY_TEXTURE_Y / 2});
     return SUCCESS;
 }
 
@@ -153,6 +145,20 @@ static int check_init(game_t *game)
     return SUCCESS;
 }
 
+static int check_render_state(game_t *game)
+{
+    for (size_t i = 0; i < NB_ENEMIES; ++i) {
+        game->state_enemies[i] = (sfRenderStates){0};
+        game->state_enemies[i].texture =
+            sfTexture_createFromFile(enemy_path[i], NULL);
+        if (game->state_enemies[i].texture == NULL)
+            return ERROR;
+        game->state_enemies[i].transform = sfTransform_Identity;
+        game->state_enemies[i].blendMode = sfBlendAlpha;
+    }
+    return SUCCESS;
+}
+
 void *init_game(void)
 {
     game_t *game = malloc(sizeof(game_t));
@@ -168,7 +174,7 @@ void *init_game(void)
     game->light = malloc(sizeof(light_t));
     game->mini_map = sfRectangleShape_create();
     game->cursor = sfCircleShape_create();
-    if (check_init(game) == ERROR)
+    if (check_init(game) == ERROR || check_render_state(game) == ERROR)
         return SUCCESS;
     game->player->save = NULL;
     sfCircleShape_setRadius(game->cursor, MINI_MAP_CURSOR);
