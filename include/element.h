@@ -97,7 +97,7 @@ typedef struct enemy_info_s {
 } enemy_info_t;
 
 static const enemy_info_t ENEMY[] __maybe_unused = {
-    [E_SWORD] = {RENDER_DISTANCE, 25, 10, 3, 150},
+    [E_SWORD] = {RENDER_DISTANCE, 25, 15, 3, 150},
     [E_GUN] = {RENDER_DISTANCE, 10, 128, 2, 50}
 };
 

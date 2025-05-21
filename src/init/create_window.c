@@ -20,7 +20,6 @@ sfRenderWindow *create_window(sfUint32 style, double coef)
     if (window == NULL)
         return NULL;
     sfRenderWindow_setMouseCursorVisible(window, sfFalse);
-    sfRenderWindow_setFramerateLimit(window, WIN_FRAME);
     sfRenderWindow_setSize(
         window, (sfVector2u){WIN_WIDTH * coef, WIN_HEIGHT *coef});
     return window;

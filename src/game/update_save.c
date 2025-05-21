@@ -47,6 +47,30 @@ static void update_doors(system_t *sys, game_t *game)
     }
 }
 
+static void update_save_light(system_t *sys, light_t *light)
+{
+    int cycle = ceil(sys->save->info->time / SEC_IN_MICRO / MIN_IN_SEC);
+    int sec = sys->save->info->time / (SEC_IN_MICRO / 2) % (MIN_IN_SEC * 2);
+    int tmp = sec - SMOOTH_OVERLAY;
+
+    if (cycle % 2 != 0) {
+        light->night_on = sfTrue;
+        if (tmp > 0)
+            sfRectangleShape_setFillColor(light->overlay,
+                sfColor_fromRGBA(0, 0, 0, OVERLAY_MAX - (tmp * OVERLAY_STEP)));
+        else
+            sfRectangleShape_setFillColor(light->overlay,
+                sfColor_fromRGBA(0, 0, 0, OVERLAY_MAX));
+    } else {
+        light->night_on = sfFalse;
+        if (tmp > 0)
+            sfRectangleShape_setFillColor(light->overlay,
+                    sfColor_fromRGBA(0, 0, 0, tmp * OVERLAY_STEP));
+        else
+            sfRectangleShape_setFillColor(light->overlay, sfTransparent);
+    }
+}
+
 void update_save(system_t *sys, game_t *game)
 {
     update_doors(sys, game);
@@ -59,7 +83,8 @@ void update_save(system_t *sys, game_t *game)
         game->tool->no_sprint = 0;
         game->tool->save = -1;
         game->tool->last_save = 0;
-        game->light->sec = 1;
+        game->light->flash_on = sfFalse;
+        update_save_light(sys, game->light);
         update_save_weapon(sys, game->weapon);
         sys->save->update = sfTrue;
     }

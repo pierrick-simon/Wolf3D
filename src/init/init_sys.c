@@ -47,6 +47,7 @@ static void init_state(state_info_t *state, load_screen_t *start)
     state->scene = MENU;
     state->old_scene = MENU;
     state->volume = VOL_MAX;
+    state->fps = WIN_FRAME;
     draw_load_screen(start, NB_SCENE - 0.4);
 }
 
