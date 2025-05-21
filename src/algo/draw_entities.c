@@ -8,24 +8,23 @@
 #include "game.h"
 #include "entities.h"
 
-static void disp_entity(draw_entity_t *info, system_t *sys,
+static void disp_entitie(draw_entity_t *info, system_t *sys,
     game_t *game, ray_t rays[NB_RAYS])
 {
     sfVertex tmp = {.color = sfWhite};
 
     for (int stripe = info->start.x; stripe < info->end.x; stripe++) {
-        if (info->dist.y > 0 && stripe > 0 && stripe < NB_RAYS &&
-            (info->dist.y < rays[stripe].len / (float)TILE_SIZE ||
-            rays[stripe].len == 0.0)) {
-            tmp.position = (sfVector2f){stripe, info->start.y
-                + game->player->jump_value};
-            tmp.texCoords = (sfVector2f)
-                {((float)(stripe - info->start.x) / (float)(info->end.x -
-                info->start.x)) * ENTITY[info->id].text_size.x, 0};
-            sfVertexArray_append(game->map->line, tmp);
-            tmp.position.y = info->end.y + game->player->jump_value;
-            tmp.texCoords.y = ENTITY[info->id].text_size.y;
-            sfVertexArray_append(game->map->line, tmp);
+        if (info->dist.y > 0 && stripe > 0 && stripe < WIN_WIDTH
+            && info->dist.y < rays[stripe].len / (float)TILE_SIZE) {
+                tmp.position = (sfVector2f){stripe, info->start.y
+                    + game->player->jump_value};
+                tmp.texCoords = (sfVector2f)
+                    {((float)(stripe - info->start.x) / (float)(info->end.x -
+                    info->start.x)) * ENTITY[info->id].text_size.x, 0};
+                sfVertexArray_append(game->map->line, tmp);
+                tmp.position.y = info->end.y + game->player->jump_value;
+                tmp.texCoords.y = ENTITY[info->id].text_size.y;
+                sfVertexArray_append(game->map->line, tmp);
         }
     }
     sfRenderWindow_drawVertexArray(sys->window,
@@ -33,8 +32,8 @@ static void disp_entity(draw_entity_t *info, system_t *sys,
     sfVertexArray_clear(game->map->line);
 }
 
-static void draw_entity(system_t *sys,
-    entity_t *entity, game_t *game, ray_t rays[NB_RAYS])
+static void draw_entitie(system_t *sys,
+    entity_t *enemy, game_t *game, ray_t rays[NB_RAYS])
 {
     draw_entity_t info = {0};
     sfVector2f v = game->player->center_ray.v;
@@ -42,20 +41,20 @@ static void draw_entity(system_t *sys,
         (-v.x * (DEG(FOV) / 100.0))};
 
     info.diff = (sfVector2f)
-        {(entity->pos.x - game->player->pos.x) / (float)TILE_SIZE,
-        (entity->pos.y - game->player->pos.y) / (float)TILE_SIZE};
+        {(enemy->pos.x - game->player->pos.x) / (float)TILE_SIZE,
+        (enemy->pos.y - game->player->pos.y) / (float)TILE_SIZE};
     info.inv = (1.0 / ((n.x * v.y) - (v.x * n.y)));
     info.dist = (sfVector2f)
         {info.inv * ((v.x * info.diff.y) - (v.y * info.diff.x)),
         info.inv * ((n.x * info.diff.y) - (n.y * info.diff.x))};
-    info.x = (int)((NB_RAYS / 2) * (1 + (info.dist.x / info.dist.y)));
+    info.x = (int)((WIN_WIDTH / 2) * (1 + (info.dist.x / info.dist.y)));
     info.size = abs((int)(WIN_HEIGHT / (info.dist.y)));
     info.start = (sfVector2i){- info.size / 2 + info.x,
         -info.size / 2 + WIN_HEIGHT / 2};
     info.end = (sfVector2i){info.size / 2 + info.x,
         info.size / 2 + WIN_HEIGHT / 2};
-    info.id = entity->id;
-    disp_entity(&info, sys, game, rays);
+    info.id = enemy->id;
+    disp_entitie(&info, sys, game, rays);
 }
 
 void draw_entities(game_t *game, system_t *sys)
@@ -63,7 +62,7 @@ void draw_entities(game_t *game, system_t *sys)
     node_t *node = game->player->save->entities->tail;
 
     while (node != NULL) {
-        draw_entity(sys, node->data, game, game->map->rays);
+        draw_entitie(sys, node->data, game, game->map->rays);
         node = node->prev;
     }
 }
