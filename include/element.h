@@ -117,4 +117,6 @@ typedef struct draw_enemy_s {
     enemy_id_t type;
 } draw_enemy_t;
 
+void handle_items(save_t *save, game_t *game);
+
 #endif /* !ELEMENT_H_ */
