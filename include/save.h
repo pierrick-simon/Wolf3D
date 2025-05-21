@@ -43,6 +43,7 @@ typedef struct player_info_s {
     sfUint64 time;
     int weapons;
     int start_weapon;
+    float difficulty;
 } player_info_t;
 
 typedef struct save_s {
@@ -77,6 +78,7 @@ typedef enum {
     TIME,
     WEAPONS,
     START_WEAPON,
+    DIFFICULTY_INFO,
     MUSIC,
     ENEMIES,
     ITEMS,
@@ -155,6 +157,7 @@ static const check_t CHECK[] __maybe_unused = {
     [TIME] = {&check_info},
     [WEAPONS] = {&check_info},
     [START_WEAPON] = {&check_info},
+    [DIFFICULTY_INFO] = {&check_angle},
     [COOR] = {NULL}
 };
 
@@ -177,14 +180,7 @@ int add_node_item(linked_list_t *items, char *line);
 int check_start(save_t *save);
 int check_save(save_t *save, char **tab, int *offset);
 
-void *init_maps(void);
-void draw_maps(system_t *sys, void *structure);
 void maps_events(system_t *sys, maps_t *maps);
-void destroy_maps(void *structure);
-
-void *init_map(void);
-void draw_map(system_t *sys, void *structure);
 void map_events(system_t *sys, select_map_t *map);
-void destroy_map(void *structure);
 
 #endif

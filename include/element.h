@@ -37,7 +37,7 @@ typedef struct item_s {
     int id;
     item_id_t type;
     sfVector2f pos;
-    int dist;
+    float dist;
 } item_t;
 
 typedef struct enemy_s {
@@ -45,7 +45,7 @@ typedef struct enemy_s {
     enemy_id_t type;
     sfVector2f pos;
     int health;
-    int dist;
+    float dist;
     float cooldown;
 } enemy_t;
 
@@ -89,15 +89,15 @@ static const get_item_t ITEM[] __maybe_unused = {
 };
 
 typedef struct enemy_info_s {
-    int detect_range;
-    int attack;
-    int attack_range;
-    int cooldown;
-    int speed;
+    float detect_range;
+    float attack;
+    float attack_range;
+    float cooldown;
+    float speed;
 } enemy_info_t;
 
 static const enemy_info_t ENEMY[] __maybe_unused = {
-    [E_SWORD] = {RENDER_DISTANCE, 25, 15, 3, 150},
+    [E_SWORD] = {RENDER_DISTANCE, 25, 15, 3, 100},
     [E_GUN] = {RENDER_DISTANCE, 10, 128, 2, 50}
 };
 

@@ -5,7 +5,7 @@
 ** draw_menu
 */
 
-#include "wolf.h"
+#include "game_menu.h"
 
 void draw_menu(system_t *sys, void *structure)
 {

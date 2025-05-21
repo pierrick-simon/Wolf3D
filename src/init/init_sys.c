@@ -7,6 +7,7 @@
 
 #include "load_screen.h"
 #include "save.h"
+#include "game_menu.h"
 #include "linked_list.h"
 #include <stdlib.h>
 

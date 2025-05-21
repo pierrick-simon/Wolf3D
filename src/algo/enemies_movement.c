@@ -36,9 +36,9 @@ static sfBool is_wall(
     return sfFalse;
 }
 
-static void get_new_position(enemy_t *enemy, game_t *game)
+static void get_new_position(enemy_t *enemy, game_t *game, float difficulty)
 {
-    float coef = ENEMY[enemy->type].speed
+    float coef = ENEMY[enemy->type].speed * difficulty
         * game->time_info->delta / enemy->dist;
     sfVector2f mov = {game->player->pos.x - enemy->pos.x,
         game->player->pos.y - enemy->pos.y};
@@ -53,15 +53,15 @@ static void get_new_position(enemy_t *enemy, game_t *game)
     enemy->pos.y += mov.y * coef;
 }
 
-void enemies_movement(game_t *game, linked_list_t *enemies)
+void enemies_movement(game_t *game, linked_list_t *enemies, float difficulty)
 {
     enemy_t *tmp = NULL;
 
     for (node_t *head = enemies->head; head != NULL; head = head->next) {
         tmp = head->data;
-        if (tmp->dist > ENEMY[tmp->type].detect_range
-            || tmp->dist < ENEMY[tmp->type].attack_range)
+        if (tmp->dist > ENEMY[tmp->type].detect_range * difficulty
+            || tmp->dist < ENEMY[tmp->type].attack_range * difficulty)
             continue;
-        get_new_position(tmp, game);
+        get_new_position(tmp, game, difficulty);
     }
 }

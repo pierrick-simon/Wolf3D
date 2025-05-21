@@ -43,6 +43,12 @@ SRC =	$(addprefix src/,					\
 				menu_event.c				\
 				draw_menu.c					\
 			)								\
+			$(addprefix difficulty/,				\
+				init_difficulty.c 				\
+				destroy_difficulty.c 				\
+				difficulty_event.c				\
+				draw_difficulty.c					\
+			)								\
 			$(addprefix pause/,				\
 				init_pause.c 				\
 				destroy_pause.c 			\

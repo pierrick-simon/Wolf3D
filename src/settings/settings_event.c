@@ -5,7 +5,7 @@
 ** event
 */
 
-#include "wolf.h"
+#include "game_menu.h"
 
 static void change_fps(
     sfEvent event, state_info_t *state, setting_t *setting)

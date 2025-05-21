@@ -5,7 +5,7 @@
 ** event
 */
 
-#include "wolf.h"
+#include "game_menu.h"
 
 static void switch_scene(
     sfEvent event, system_t *sys, menu_t *menu, state_info_t *state)

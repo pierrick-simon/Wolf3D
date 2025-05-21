@@ -5,7 +5,7 @@
 ** destroy_pause
 */
 
-#include "wolf.h"
+#include "game_menu.h"
 #include <stdlib.h>
 
 void destroy_pause(void *structure)

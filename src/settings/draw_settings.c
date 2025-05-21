@@ -5,7 +5,7 @@
 ** draw_settings
 */
 
-#include "wolf.h"
+#include "game_menu.h"
 
 static void draw_fps(system_t *sys, setting_t *setting)
 {

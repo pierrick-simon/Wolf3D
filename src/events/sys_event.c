@@ -5,7 +5,7 @@
 ** event
 */
 
-#include "wolf.h"
+#include "game_menu.h"
 
 static void music_setvolume(sfEvent event, system_t *sys, state_info_t *state)
 {

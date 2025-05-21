@@ -86,6 +86,7 @@ static int initiate_struct(char **tab, save_t *save, int offset)
     save->info->time = atoi(tab[TIME]) * SEC_IN_MICRO;
     save->info->weapons = atoi(tab[WEAPONS]);
     save->info->start_weapon = atoi(tab[START_WEAPON]);
+    save->info->difficulty = atof(tab[DIFFICULTY_INFO]);
     return get_dup_info(tab, save, offset);
 }
 

@@ -10,6 +10,22 @@
 
     #include "wolf.h"
 
+void *init_difficulty(void);
+void destroy_difficulty(void *structure);
+void draw_difficulty(system_t *sys, void *structure);
+
+void *init_menu(void);
+void destroy_menu(void *structure);
+void draw_menu(system_t *sys, void *structure);
+
+void *init_pause(void);
+void destroy_pause(void *structure);
+void draw_pause(system_t *sys, void *structure);
+
+void *init_settings(void);
+void draw_settings(system_t *sys, void *structure);
+void destroy_settings(void *structure);
+
 void *init_lose(void);
 void draw_lose(system_t *sys, void *structure);
 void destroy_lose(void *structure);
@@ -46,7 +62,7 @@ typedef struct scene_func_s {
     void (*draw)(system_t *sys, void *structure);
 } scene_func_t;
 
-static const scene_func_t SCENE[] = {
+static const scene_func_t SCENE[] __maybe_unused = {
     {GAME, &init_game, &destroy_game, &draw_game},
     {MENU, &init_menu, &destroy_menu, &draw_menu},
     {SETTINGS, &init_settings, &destroy_settings, &draw_settings},
@@ -56,7 +72,8 @@ static const scene_func_t SCENE[] = {
     {SCORE, &init_score, &destroy_score, &draw_score},
     {LEAVE, &init_leave, &destroy_leave, &draw_leave},
     {WIN, &init_win, &destroy_win, &draw_win},
-    {LOSE, &init_lose, &destroy_lose, &draw_lose}
+    {LOSE, &init_lose, &destroy_lose, &draw_lose},
+    {DIFFICULTY, &init_difficulty, &destroy_difficulty, &draw_difficulty}
 };
 
 #endif

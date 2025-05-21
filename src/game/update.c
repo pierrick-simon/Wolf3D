@@ -174,7 +174,7 @@ void update_all(system_t *sys, game_t *game)
     update_music_volume(sys, game->weapon, game->music);
     shot_gun_anim(game->weapon, game->time_info,
         game->tool, sys->save->info->weapons);
-    cast_all_rays(game);
+    cast_all_rays(game, sys->save);
     handle_items(sys->save);
     if (sys->save->info->item_info[INFO_HEALTH] == 0)
         sys->state->scene = LOSE;
