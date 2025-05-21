@@ -10,6 +10,7 @@
 
     #include "wolf.h"
     #include "linked_list.h"
+    #include "entities.h"
 
     #define HAND_POS WIN_WIDTH / 2 + 200
     #define PUNCH_POS WIN_WIDTH / 2 - 200
@@ -287,9 +288,6 @@ typedef struct toolbar_s {
     sfBool interact;
 } toolbar_t;
 
-
-    #define NB_ENEMIE 3
-
 typedef struct game_s {
     map_t *map;
     sfRectangleShape *mini_map;
@@ -300,7 +298,7 @@ typedef struct game_s {
     toolbar_t *tool;
     light_t *light;
     sfMusic *music[NB_MUSIC];
-    sfRenderStates state_enemies[NB_ENEMIE];
+    sfRenderStates state_entities[NB_ENTITIES];
 } game_t;
 
 void cast_all_rays(game_t *game, save_t *save);
@@ -319,9 +317,7 @@ void draw_minimap(system_t *sys, sfRectangleShape *mini_map,
     sfCircleShape *cursor, sfTexture *texture);
 int init_toolbar(toolbar_t *tool);
 int init_render_state(game_t *game);
-void draw_minimap_item(system_t *sys, linked_list_t *list,
-    sfVector2i *player_tile, sfCircleShape *cursor);
-void draw_minimap_enemy(system_t *sys, linked_list_t *list,
+void draw_minimap_entities(system_t *sys, linked_list_t *list,
     sfVector2i *player_tile, sfCircleShape *cursor);
 void draw_square(
     system_t *sys, sfRectangleShape *mini_map, sfVector2i *player_tile);
@@ -334,9 +330,8 @@ float get_pourcentage_wall(intersection_type_t type, sfVector2f *intersection);
 float get_door_pourcentage(save_t *save, sfVector2i *pos);
 sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
 void center_ray(player_t *player);
-void sort_enemies(game_t *game);
-void sort_items(game_t *game);
+void sort_entities(game_t *game);
 void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save);
-void draw_enemies(game_t *game, system_t *sys);
+void draw_entities(game_t *game, system_t *sys);
 
 #endif

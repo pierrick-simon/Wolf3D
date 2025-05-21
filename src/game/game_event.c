@@ -8,7 +8,7 @@
 #include <math.h>
 #include "save.h"
 #include "game.h"
-#include "element.h"
+#include "entities.h"
 
 static void scroll_weapon(sfEvent event, weapon_t *weapon)
 {

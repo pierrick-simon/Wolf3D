@@ -7,7 +7,7 @@
 
 #include "game.h"
 #include "linked_list.h"
-#include "element.h"
+#include "entities.h"
 #include <stdlib.h>
 #include <string.h>
 #include "my.h"

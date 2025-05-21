@@ -7,7 +7,7 @@
 
 #include "save.h"
 #include "game.h"
-#include "element.h"
+#include "entities.h"
 #include <math.h>
 
 static sfBool is_wall(float y, float x, save_t *save)

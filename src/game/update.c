@@ -7,7 +7,7 @@
 
 #include "game.h"
 #include "save.h"
-#include "element.h"
+#include "entities.h"
 #include <stdio.h>
 #include <math.h>
 

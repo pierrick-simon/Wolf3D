@@ -8,7 +8,7 @@
 #include "save.h"
 #include "game.h"
 #include "my.h"
-#include "element.h"
+#include "entities.h"
 #include <stdlib.h>
 #include <string.h>
 

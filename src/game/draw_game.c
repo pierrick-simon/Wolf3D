@@ -8,7 +8,6 @@
 #include <math.h>
 #include "save.h"
 #include "game.h"
-#include "element.h"
 
 static void draw_coor(system_t *sys, game_t *game)
 {
@@ -129,7 +128,7 @@ static void draw_lines(system_t *sys, game_t *game)
     sfRenderWindow_drawVertexArray(sys->window,
         map->line, &map->wall_states);
     sfVertexArray_clear(map->line);
-    draw_enemies(game, sys);
+    draw_entities(game, sys);
 }
 
 static void smooth_night_day(system_t *sys, light_t *light)
