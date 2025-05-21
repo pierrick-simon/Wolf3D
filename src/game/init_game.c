@@ -78,6 +78,9 @@ static int init_time_info(time_info_t *time_info)
     time_info->start_time = 0;
     time_info->end_time = 0;
     time_info->delta = 0.0;
+    time_info->shot = 0;
+    time_info->weapon = 0;
+    time_info->item = 0;
     return SUCCESS;
 }
 
@@ -87,6 +90,8 @@ static int init_music(sfMusic **music)
     music[DOOR_MU] = sfMusic_createFromFile("asset/door.ogg");
     music[END_LEVEL] = sfMusic_createFromFile("asset/end_level.ogg");
     music[FOOTSTEPS] = sfMusic_createFromFile("asset/footsteps.ogg");
+    music[HURT] = sfMusic_createFromFile("asset/hurt.ogg");
+    music[PICK_UP] = sfMusic_createFromFile("asset/pick_up.ogg");
     for (int i = 0; i < NB_MUSIC; i++)
         if (music[i] == NULL)
             return ERROR;

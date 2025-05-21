@@ -16,10 +16,10 @@
 typedef enum item_id_e {
     I_SMALL_HEALTH,
     I_BIG_HEALTH,
+    I_STAMINA,
     I_AMMO_PISTOL,
     I_AMMO_SHUTGUN,
     I_AMMO_MINIGUN,
-    I_STAMINA,
     I_FLASHLIGHT,
     I_WEAPON_TWO,
     I_WEAPON_THREE,
@@ -103,6 +103,6 @@ static const enemy_info_t ENEMY[] __maybe_unused = {
 
     #define NB_ENEMIES ARRAY_LENGTH(ENEMY)
 
-void handle_items(save_t *save);
+void handle_items(save_t *save, game_t *game);
 
 #endif /* !ELEMENT_H_ */

@@ -12,17 +12,43 @@
 
 static void draw_coor(system_t *sys, game_t *game)
 {
-    sfVector2f pos = {0, 0};
+    sfVector2f pos = {0, WIN_HEIGHT / 2};
 
-    sfRectangleShape_setPosition(game->map->ceiling_floor, pos);
-    sfRectangleShape_setFillColor(game->map->ceiling_floor, CEILING_COLOR);
-    sfRenderWindow_drawRectangleShape(sys->window,
-        game->map->ceiling_floor, NULL);
-    pos = (sfVector2f){0, WIN_HEIGHT / 2};
+    sfRectangleShape_setSize(game->map->ceiling_floor,
+        (sfVector2f){WIN_WIDTH, WIN_HEIGHT / 2});
     sfRectangleShape_setPosition(game->map->ceiling_floor, pos);
     sfRectangleShape_setFillColor(game->map->ceiling_floor, FLOOR_COLOR);
     sfRenderWindow_drawRectangleShape(sys->window,
         game->map->ceiling_floor, NULL);
+    pos = (sfVector2f){0, 0};
+    sfRectangleShape_setPosition(game->map->ceiling_floor, pos);
+    sfRectangleShape_setFillColor(game->map->ceiling_floor, CEILING_COLOR);
+    sfRenderWindow_drawRectangleShape(sys->window,
+        game->map->ceiling_floor, NULL);
+}
+
+static void draw_overlay(system_t *sys, game_t *game)
+{
+    sfRectangleShape_setSize(game->map->ceiling_floor,
+        (sfVector2f){WIN_WIDTH, WIN_HEIGHT});
+    if (game->time_info->shot > 0) {
+        sfRectangleShape_setFillColor(game->map->ceiling_floor, SHOT_OVERLAY);
+        sfRenderWindow_drawRectangleShape(sys->window,
+        game->map->ceiling_floor, NULL);
+        game->time_info->shot -= game->time_info->delta;
+    }
+    if (game->time_info->weapon > 0) {
+        sfRectangleShape_setFillColor(game->map->ceiling_floor, WEPON_OVERLAY);
+        sfRenderWindow_drawRectangleShape(sys->window,
+        game->map->ceiling_floor, NULL);
+        game->time_info->weapon -= game->time_info->delta;
+    }
+    if (game->time_info->item > 0) {
+        sfRectangleShape_setFillColor(game->map->ceiling_floor, ITEM_OVERLAY);
+        sfRenderWindow_drawRectangleShape(sys->window,
+        game->map->ceiling_floor, NULL);
+        game->time_info->item -= game->time_info->delta;
+    }
 }
 
 static void draw_point_bar(system_t *sys, toolbar_t *tool, int ind, float nb)
@@ -66,10 +92,14 @@ static void draw_tool_strings(system_t *sys, toolbar_t *tool)
         sys->save->info->item_info[INFO_STAMINA]);
 }
 
-static void draw_toolbar(system_t *sys, toolbar_t *tool)
+static void draw_toolbar(system_t *sys, game_t *game, toolbar_t *tool)
 {
     sfVector2f pos = (sfVector2f){0, TOOLBAR_POS};
 
+    sfRenderWindow_drawSprite(sys->window,
+        game->weapon->sprite, NULL);
+    sfRenderWindow_drawCircleShape(sys->window,
+        game->player->crossair, NULL);
     sfRectangleShape_setPosition(tool->rectangle, pos);
     sfRectangleShape_setSize(tool->rectangle,
         (sfVector2f){WIN_WIDTH, TOOLBAR_HEIGHT});
@@ -218,13 +248,10 @@ void draw_game(system_t *sys, void *structure)
     sfRenderWindow_clear(sys->window, sfWhite);
     draw_coor(sys, game);
     draw_lines(sys, game);
-    sfRenderWindow_drawSprite(sys->window,
-        game->weapon->sprite, NULL);
-    sfRenderWindow_drawCircleShape(sys->window,
-        game->player->crossair, NULL);
     flash_light(sys, game->light);
-    draw_toolbar(sys, game->tool);
+    draw_toolbar(sys, game, game->tool);
     draw_minimap(sys, game->mini_map, game->cursor, game->tool->border);
+    draw_overlay(sys, game);
     sfRenderWindow_display(sys->window);
     update_time_end(game->time_info);
 }

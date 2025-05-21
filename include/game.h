@@ -61,6 +61,11 @@
 
     #define AUTO_SAVE 30
 
+    #define TIME_OVERLAY 0.25
+    #define WEPON_OVERLAY sfColor_fromRGBA(255, 255, 0, 50)
+    #define ITEM_OVERLAY sfColor_fromRGBA(0, 255, 0, 50)
+    #define SHOT_OVERLAY sfColor_fromRGBA(255, 0, 0, 100)
+
     #define MINI_MAP_SIZE 308
     #define MINI_MAP_NB_TILE 14
     #define MINI_MAP_TILE (float)(MINI_MAP_SIZE / MINI_MAP_NB_TILE)
@@ -181,6 +186,8 @@ typedef enum {
     DOOR_MU,
     END_LEVEL,
     FOOTSTEPS,
+    PICK_UP,
+    HURT,
     NB_MUSIC,
 } music_id_t;
 
@@ -261,6 +268,9 @@ typedef struct time_info_s {
     sfInt64 start_time;
     sfInt64 end_time;
     sfInt64 time;
+    float shot;
+    float item;
+    float weapon;
     double delta;
 } time_info_t;
 
@@ -329,6 +339,6 @@ sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
 void center_ray(player_t *player);
 void sort_enemies(game_t *game);
 void sort_items(game_t *game);
-void enemies_movement(game_t *game, linked_list_t *enemies, float dificulty);
+void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save);
 
 #endif
