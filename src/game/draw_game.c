@@ -95,10 +95,10 @@ static void draw_lines(system_t *sys, game_t *game)
             ++map->rays[i].down.position.x;
             ++map->rays[i].up.position.x;
         }
-        sfRenderWindow_drawVertexArray(sys->window,
-            map->line, &map->wall_states);
-        sfVertexArray_clear(map->line);
     }
+    sfRenderWindow_drawVertexArray(sys->window,
+        map->line, &map->wall_states);
+    sfVertexArray_clear(map->line);
     draw_enemies(game, sys);
 }
 
