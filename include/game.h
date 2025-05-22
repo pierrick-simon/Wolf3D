@@ -219,6 +219,7 @@ typedef struct map_s {
     ray_t rays[NB_RAYS];
     sfRenderStates wall_states;
     int entity_center;
+    sfBool is_wall;
 } map_t;
 
 typedef struct center_ray_s {
@@ -331,7 +332,7 @@ void game_events(system_t *sys, game_t *game);
 float get_pourcentage_wall(intersection_type_t type, sfVector2f *intersection);
 float get_door_pourcentage(save_t *save, sfVector2i *pos);
 sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
-void center_ray(player_t *player);
+void center_ray(game_t *game);
 void sort_entities(game_t *game);
 void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save);
 void move_y(player_t *player, double delta);
