@@ -19,7 +19,7 @@
 
     #define FOV RAD(66)
     #define RAY_LENGTH 1
-    #define NB_RAYS (WIN_WIDTH / RAY_LENGTH) + 1
+    #define NB_RAYS ((WIN_WIDTH / RAY_LENGTH) + 1)
 
     #define CEILING_COLOR sfColor_fromRGB(239, 239, 239)
     #define FLOOR_COLOR sfColor_fromRGB(139, 139, 139)

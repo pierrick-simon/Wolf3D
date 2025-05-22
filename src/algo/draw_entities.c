@@ -8,17 +8,18 @@
 #include "game.h"
 #include "entities.h"
 
-static void set_center(game_t *game, draw_entity_t *info)
+static void set_center(game_t *game, draw_entity_t *info, ray_t center)
 {
     if (info->start.y + game->player->cam_angle <= WIN_HEIGHT / 2 &&
         info->end.y + game->player->cam_angle >= WIN_HEIGHT / 2 &&
         info->start.x <= WIN_WIDTH / 2 && info->end.x >= WIN_WIDTH / 2 &&
-        info->entity->type >= NB_ITEM && info->entity->is_alive)
+        info->entity->type >= NB_ITEM && info->entity->is_alive &&
+        info->dist.y < center.len / (float)TILE_SIZE)
         game->map->entity_center = info->entity->id;
 }
 
-static void change_color_sprite(
-    sfVertex *color, entity_t *entity, game_t *game)
+static void change_color_sprite(sfVertex *color,
+    entity_t *entity, game_t *game)
 {
     if (entity->damage >= 0) {
         *color = (sfVertex){.color = sfRed};
@@ -33,7 +34,7 @@ static void disp_entitie(draw_entity_t *info,
     sfVertex tmp = {0};
 
     change_color_sprite(&tmp, info->entity, game);
-    set_center(game, info);
+    set_center(game, info, rays[(int)((float)NB_RAYS / 2.0)]);
     for (int stripe = info->start.x; stripe < info->end.x; stripe++) {
         if (stripe > 0 && stripe < WIN_WIDTH
             && info->dist.y < rays[stripe].len / (float)TILE_SIZE) {
