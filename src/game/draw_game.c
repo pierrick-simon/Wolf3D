@@ -151,7 +151,7 @@ static void smooth_night_day(sfUint64 time, light_t *light)
             sfColor_fromRGBA(0, 0, 0, tmp * OVERLAY_STEP));
     else
         sfRectangleShape_setFillColor(light->overlay,
-            sfColor_fromRGBA(0, 0, 0, OVERLAY_MAX - (0 * OVERLAY_STEP)));
+            sfColor_fromRGBA(0, 0, 0, OVERLAY_MAX - (tmp * OVERLAY_STEP)));
 }
 
 static void flash_light(system_t *sys, light_t *light, game_t *game)

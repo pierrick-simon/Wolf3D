@@ -101,6 +101,9 @@
 
     #define NO_ENTITIE -1
 
+    #define WEAPON_SCORE 10
+    #define WALL_SCORE 5
+
 typedef enum {
     LOAD_W_TEXTURE,
     LOAD_W_MUSIC,

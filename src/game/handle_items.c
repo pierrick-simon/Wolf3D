@@ -35,9 +35,11 @@ static void handle_item(save_t *save, game_t *game, entity_t *item)
         ITEM[item->type].func(ITEM[item->type].quantity,
             &value, ITEM[item->type].max);
         save->info->item_info[ITEM[item->type].info] = value;
-    } else
+    } else {
         ITEM[item->type].func(item->type - E_FLASHLIGHT,
             &save->info->weapons, 0);
+        save->info->score += WEAPON_SCORE;
+    }
     if (item->type <= E_STAMINA)
         game->time_info->item = TIME_OVERLAY;
     else
