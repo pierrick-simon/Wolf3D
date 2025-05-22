@@ -94,9 +94,9 @@
     #define LEN_INDEX 0
     #define FACTOR_INDEX 1
 
-    #define JUMP_SPEED 500
-    #define JUMP_MAX 500
-    #define JUMP_MIN -JUMP_MAX
+    #define Y_SPEED 500
+    #define Y_MAX 500
+    #define Y_MIN -Y_MAX
 
     #define NO_ENTITIE -1
 
@@ -189,12 +189,6 @@ typedef enum {
     NB_MUSIC,
 } music_id_t;
 
-typedef enum status {
-    S_NONE,
-    UP,
-    DOWN
-} status_t;
-
 typedef struct light_s {
     sfRenderTexture *night_render;
     const sfTexture *night_texture;
@@ -241,7 +235,6 @@ typedef struct player_s {
     sfCircleShape *crossair;
     save_t *save;
     float jump_value;
-    status_t status;
     sfVector2f v;
     sfVector2f n;
 } player_t;

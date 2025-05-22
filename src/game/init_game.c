@@ -65,7 +65,6 @@ static int init_player(player_t *player)
     player->center_ray.type = NONE;
     player->is_sprinting = sfFalse;
     player->jump_value = 0;
-    player->status = S_NONE;
     if (init_crossair(player) == ERROR)
         return ERROR;
     return SUCCESS;
