@@ -130,9 +130,9 @@ static void draw_lines(system_t *sys, game_t *game)
     draw_entities(game, sys);
 }
 
-static void smooth_night_day(system_t *sys, light_t *light)
+static void smooth_night_day(sfUint64 time, light_t *light)
 {
-    int sec = sys->save->info->time / (SEC_IN_MICRO / NIGHT_NB) % (MIN_IN_SEC * NIGHT_NB);
+    int sec = time / (SEC_IN_MICRO / NIGHT_NB) % (MIN_IN_SEC * NIGHT_NB);
     int tmp = sec - SMOOTH_OVERLAY;
 
     if (sec > light->sec || (sec == 0 && light->sec != 1))
@@ -151,18 +151,23 @@ static void smooth_night_day(system_t *sys, light_t *light)
             sfColor_fromRGBA(0, 0, 0, tmp * OVERLAY_STEP));
     else
         sfRectangleShape_setFillColor(light->overlay,
-            sfColor_fromRGBA(0, 0, 0, OVERLAY_MAX - (tmp * OVERLAY_STEP)));
+            sfColor_fromRGBA(0, 0, 0, OVERLAY_MAX - (0 * OVERLAY_STEP)));
 }
 
-static void flash_light(system_t *sys, light_t *light)
+static void flash_light(system_t *sys, light_t *light, game_t *game)
 {
-    smooth_night_day(sys, light);
+    weapon_t *weapon = game->weapon;
+
+    smooth_night_day(sys->save->info->time, light);
     sfRenderTexture_clear(light->night_render, sfTransparent);
     sfRenderTexture_drawRectangleShape(
         light->night_render, light->overlay, NULL);
     if (light->flash_on == sfTrue) {
-        sfCircleShape_setPosition(light->flashlight,
-            (sfVector2f){(WIN_WIDTH / 2), (WIN_HEIGHT / 2)});
+        sfCircleShape_setPosition(light->flashlight, (sfVector2f)
+                {(WIN_WIDTH / 2) + (cos((double)(game->time_info->time /
+                (SEC_IN_MICRO / MOV_OFFSET_GUN))) * MOV_OFFSET_GUN) +
+                MOV_OFFSET_GUN, (WIN_HEIGHT / 2) + game->player->cam_angle / 10
+                + weapon->horizontal_offset});
         sfRenderTexture_drawCircleShape(light->night_render,
             light->flashlight, &light->state);
     }
@@ -178,7 +183,7 @@ static void show_game_environement(system_t *sys, game_t *game)
         game->weapon->sprite, NULL);
     sfRenderWindow_drawCircleShape(sys->window,
         game->player->crossair, NULL);
-    flash_light(sys, game->light);
+    flash_light(sys, game->light, game);
     draw_toolbar(sys, game->tool);
     draw_minimap(sys, game->mini_map, game->cursor, game->tool->border);
     draw_overlay(sys, game);

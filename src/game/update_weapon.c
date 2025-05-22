@@ -60,8 +60,8 @@ static void update_guns(weapon_t *weapon, toolbar_t *tool, int bag)
     }
 }
 
-void shot_gun_anim(
-    weapon_t *weapon, time_info_t *time, toolbar_t *tool, int bag)
+void shot_gun_anim(weapon_t *weapon,
+    time_info_t *time, toolbar_t *tool, int bag)
 {
     double diff = (double)(time->time - weapon->shot) / SEC_IN_MICRO;
     int ind = weapon->weapon;

@@ -49,10 +49,10 @@ static void update_doors(system_t *sys, game_t *game)
     }
 }
 
-static void update_save_light_continue(system_t *sys, light_t *light)
+static void update_save_light_continue(sfUint64 time, light_t *light)
 {
-    int cycle = ceil(sys->save->info->time / SEC_IN_MICRO / MIN_IN_SEC);
-    int sec = sys->save->info->time / (SEC_IN_MICRO / NIGHT_NB) % (MIN_IN_SEC * NIGHT_NB);
+    int cycle = ceil(time / SEC_IN_MICRO / MIN_IN_SEC);
+    int sec = time / (SEC_IN_MICRO / NIGHT_NB) % (MIN_IN_SEC * NIGHT_NB);
     int tmp = sec - SMOOTH_OVERLAY;
 
     if (cycle % 2 != 0) {
@@ -73,7 +73,8 @@ static void update_save_light_continue(system_t *sys, light_t *light)
     }
 }
 
-static void update_save_light(system_t *sys, light_t *light, sprite_t *flashlight)
+static void update_save_light(
+    system_t *sys, light_t *light, sprite_t *flashlight)
 {
     light->flash_on = sfFalse;
     light->sec = 1;
@@ -84,7 +85,7 @@ static void update_save_light(system_t *sys, light_t *light, sprite_t *flashligh
     if (sys->save->info->time == 0)
         light->night_on = sfFalse;
     else
-        update_save_light_continue(sys, light);
+        update_save_light_continue(sys->save->info->time, light);
 }
 
 static void update_health_enemi(linked_list_t *entities, float difficulty)

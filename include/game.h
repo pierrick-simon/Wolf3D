@@ -200,6 +200,7 @@ typedef struct light_s {
     sfBool flash_on;
     sfBool night_on;
     int sec;
+    sfVector2f posf;
 } light_t;
 
 typedef struct door_s {
