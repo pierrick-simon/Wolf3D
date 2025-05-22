@@ -61,7 +61,6 @@ typedef enum {
 
 typedef enum {
     LOSE_TITLE,
-    LOSE_NAME,
     LOSE_TIME,
     LOSE_SCORE,
     LOSE_RESTART,
