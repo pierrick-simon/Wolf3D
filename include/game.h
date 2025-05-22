@@ -104,6 +104,10 @@
     #define WEAPON_SCORE 10
     #define WALL_SCORE 5
 
+    #define START_BLACK 500.0
+    #define END_BLACK 1500.0
+    #define MAX_COLOR 255
+
 typedef enum {
     LOAD_W_TEXTURE,
     LOAD_W_MUSIC,
@@ -344,5 +348,6 @@ void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save);
 void move_y(player_t *player, double delta);
 void draw_entities(game_t *game, system_t *sys);
 void shot(system_t *sys, weapon_t *weapon, game_t *game);
+sfColor get_color(float len);
 
 #endif
