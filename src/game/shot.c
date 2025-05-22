@@ -24,6 +24,7 @@ static void destroy_wall(int **map, player_t *player, game_t *game)
             && game->weapon->info[i].range > player->center_ray.distance) {
             map[casted_pos.y][casted_pos.x] = 0;
             sfMusic_play(game->music[DESTROY_WALL]);
+            player->save->info->score += WALL_SCORE;
         }
     }
 }
