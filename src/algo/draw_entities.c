@@ -42,27 +42,35 @@ static void disp_entitie(draw_entity_t *info, system_t *sys,
     sfVertexArray_clear(game->map->line);
 }
 
+static void get_dist(entity_t *enemy, game_t *game, draw_entity_t *info)
+{
+    sfVector2f v = game->player->v;
+    sfVector2f n = game->player->n;
+
+    info->diff = (sfVector2f)
+        {(enemy->pos.x - game->player->pos.x) / (float)TILE_SIZE,
+        (enemy->pos.y - game->player->pos.y) / (float)TILE_SIZE};
+    info->inv = (1.0 / ((n.x * v.y) - (v.x * n.y)));
+    info->dist = (sfVector2f)
+        {info->inv * ((v.x * info->diff.y) - (v.y * info->diff.x)),
+        info->inv * ((n.x * info->diff.y) - (n.y * info->diff.x))};
+}
+
 static void draw_entitie(system_t *sys,
     entity_t *enemy, game_t *game, ray_t rays[NB_RAYS])
 {
     draw_entity_t info = {0};
-    sfVector2f v = game->player->center_ray.v;
-    sfVector2f n = (sfVector2f){(v.y * (DEG(FOV) / 100.0)),
-        (-v.x * (DEG(FOV) / 100.0))};
+    float ratio = ENTITY[enemy->type].text_size.y /
+        ENTITY[enemy->type].text_size.x;
 
-    info.diff = (sfVector2f)
-        {(enemy->pos.x - game->player->pos.x) / (float)TILE_SIZE,
-        (enemy->pos.y - game->player->pos.y) / (float)TILE_SIZE};
-    info.inv = (1.0 / ((n.x * v.y) - (v.x * n.y)));
-    info.dist = (sfVector2f)
-        {info.inv * ((v.x * info.diff.y) - (v.y * info.diff.x)),
-        info.inv * ((n.x * info.diff.y) - (n.y * info.diff.x))};
+    get_dist(enemy, game, &info);
     info.x = (int)((WIN_WIDTH / 2) * (1 + (info.dist.x / info.dist.y)));
-    info.size = abs((int)(WIN_HEIGHT / (info.dist.y)));
-    info.start = (sfVector2i){- info.size / 2 + info.x,
-        -info.size / 2 + WIN_HEIGHT / 2};
+    info.size = abs(((int)((WIN_HEIGHT / info.dist.y) *
+        ENTITY[enemy->type].factor)));
     info.end = (sfVector2i){info.size / 2 + info.x,
-        info.size / 2 + WIN_HEIGHT / 2};
+        (info.size * ratio) / 2 + WIN_HEIGHT / 2};
+    info.start = (sfVector2i){- info.size / 2 + info.x,
+        (-(info.size * ratio) / 2 + WIN_HEIGHT / 2)};
     info.enemy = enemy;
     disp_entitie(&info, sys, game, rays);
 }

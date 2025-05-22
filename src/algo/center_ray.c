@@ -16,6 +16,8 @@ void center_ray(player_t *player)
     player->center_ray.distance = cast_single_ray(player, 0, &type, &pos);
     player->center_ray.pos = pos;
     player->center_ray.type = type.type;
-    player->center_ray.v = (sfVector2f){cos(player->angle),
+    player->v = (sfVector2f){cos(player->angle),
         sin(player->angle)};
+    player->n = (sfVector2f){(player->v.y * (DEG(FOV) / 100.0)),
+        (-player->v.x * (DEG(FOV) / 100.0))};
 }

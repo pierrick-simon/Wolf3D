@@ -21,7 +21,7 @@
     #define RAY_LENGTH 1
     #define NB_RAYS (WIN_WIDTH / RAY_LENGTH) + 1
 
-    #define CEILING_COLOR sfColor_fromRGB(199, 199, 199)
+    #define CEILING_COLOR sfColor_fromRGB(239, 239, 239)
     #define FLOOR_COLOR sfColor_fromRGB(139, 139, 139)
     #define TOOLBAR_COLOR sfColor_fromRGB(49, 49, 49)
 
@@ -229,7 +229,6 @@ typedef struct map_s {
 } map_t;
 
 typedef struct center_ray_s {
-    sfVector2f v;
     sfVector2f pos;
     float distance;
     intersection_type_t type;
@@ -245,6 +244,8 @@ typedef struct player_s {
     save_t *save;
     float jump_value;
     status_t status;
+    sfVector2f v;
+    sfVector2f n;
 } player_t;
 
 typedef struct weapon_info_s {

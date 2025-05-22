@@ -160,7 +160,7 @@ void move_player(game_t *game, double delta, int *head, sfMusic *footstepp)
     sfVector2f v = {0};
 
     center_ray(game->player);
-    v = game->player->center_ray.v;
+    v = game->player->v;
     *head = HEAD_SPRITE_X;
     game->player->fov = FOV;
     game->player->is_sprinting = sfFalse;
