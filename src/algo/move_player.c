@@ -27,11 +27,8 @@ static int sprint(player_t *player,
     if ((sfKeyboard_isKeyPressed(sfKeyLShift) ||
         sfJoystick_getAxisPosition(0, sfJoystickZ) > 0)
         && id != MINIGUN) {
-        player->is_sprinting = sfTrue;
-        if (save->info->item_info[INFO_STAMINA] != 0) {
+        if (save->info->item_info[INFO_STAMINA] != 0)
             coef = 2;
-            player->fov = SPRINTING_FOV;
-        }
     }
     if (is_wall(player->pos.y,
         player->pos.x + (v->x * coef * DISTANCE_COLISION), save) == sfFalse)
@@ -162,8 +159,6 @@ void move_player(game_t *game, double delta, int *head, sfMusic *footstepp)
     center_ray(game->player);
     v = game->player->v;
     *head = HEAD_SPRITE_X;
-    game->player->fov = FOV;
-    game->player->is_sprinting = sfFalse;
     v.x *= delta * PLAYER_SPEED;
     v.y *= delta * PLAYER_SPEED;
     handle_footstepp(game, head, footstepp, &v);
@@ -172,6 +167,4 @@ void move_player(game_t *game, double delta, int *head, sfMusic *footstepp)
         *head = 0;
     if (*head > HEAD_SPRITE_X * 2)
         *head = HEAD_SPRITE_X * 2;
-    if (sfKeyboard_isKeyPressed(sfKeyLShift))
-        game->player->is_sprinting = sfTrue;
 }

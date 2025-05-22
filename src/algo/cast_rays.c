@@ -53,15 +53,13 @@ static void add_ray_to_vertex_array(game_t *game, int i)
 {
     intersection_t type = {NONE, WALL};
     float angle_offset = ((i * RAY_LENGTH / (float)WIN_WIDTH)
-        * game->player->fov) - (game->player->fov / 2);
+        * FOV) - (FOV / 2);
     sfVector2f pos = {0};
     float len = cast_single_ray(game->player, angle_offset, &type, &pos);
     float factor = get_door_status(game, &type, &pos);
 
     game->map->rays[i].len = len;
     len = (TILE_SIZE * WIN_HEIGHT) / (len * cos(angle_offset));
-    if (game->player->is_sprinting == sfTrue)
-        len /= SPRINT_COEF;
     set_line(i, (float[]){len, factor},
     (float[]){wall_textures[type.wall].text_offset_y,
         get_texture_x(type.type, &pos)}, game);

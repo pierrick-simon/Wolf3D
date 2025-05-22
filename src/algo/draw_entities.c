@@ -25,7 +25,7 @@ static void disp_entitie(draw_entity_t *info, system_t *sys,
     set_center(game, info);
     for (int stripe = info->start.x; stripe < info->end.x; stripe++) {
         if (stripe > 0 && stripe < WIN_WIDTH
-            && info->save_dist.y < rays[stripe].len / (float)TILE_SIZE) {
+            && info->dist.y < rays[stripe].len / (float)TILE_SIZE) {
             tmp.position = (sfVector2f){stripe, info->start.y
                 + game->player->jump_value};
             tmp.texCoords = (sfVector2f)
@@ -54,9 +54,6 @@ static void get_dist(entity_t *entity, game_t *game, draw_entity_t *info)
     info->dist = (sfVector2f)
         {info->inv * ((v.x * info->diff.y) - (v.y * info->diff.x)),
         info->inv * ((n.x * info->diff.y) - (n.y * info->diff.x))};
-    info->save_dist = info->dist;
-    if (game->player->is_sprinting == sfTrue)
-        info->dist.y *= SPRINT_COEF;
 }
 
 static void draw_entitie(system_t *sys,
@@ -68,7 +65,7 @@ static void draw_entitie(system_t *sys,
     float offset = (ENTITY[entity->type].y * DIST_OFFSET) / entity->dist;
 
     get_dist(entity, game, &info);
-    if (info.save_dist.y <= 0)
+    if (info.dist.y <= 0)
         return;
     info.x = (int)((WIN_WIDTH / 2) * (1 + (info.dist.x / info.dist.y)));
     info.size = abs(((int)((WIN_HEIGHT / info.dist.y) *

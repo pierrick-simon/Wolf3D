@@ -37,7 +37,6 @@
 
     #define NB_DECIMAL_FLOAT_CMP 6
 
-    #define SPRINT_COEF 1.1
     #define SPRINTING_FOV FOV * SPRINT_COEF
     #define TOOLBAR_HEIGHT 130
     #define TOOLBAR_POS (WIN_HEIGHT - TOOLBAR_HEIGHT)
@@ -238,7 +237,6 @@ typedef struct player_s {
     center_ray_t center_ray;
     sfVector2f pos;
     float angle;
-    float fov;
     sfBool is_sprinting;
     sfCircleShape *crossair;
     save_t *save;

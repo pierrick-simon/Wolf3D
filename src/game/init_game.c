@@ -63,7 +63,6 @@ static int init_player(player_t *player)
     player->v.y = 0;
     player->center_ray.distance = 0.0;
     player->center_ray.type = NONE;
-    player->fov = FOV;
     player->is_sprinting = sfFalse;
     player->jump_value = 0;
     player->status = S_NONE;

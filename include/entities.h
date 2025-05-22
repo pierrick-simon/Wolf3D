@@ -116,7 +116,6 @@ typedef struct draw_entity_s {
     sfVector2f diff;
     float inv;
     sfVector2f dist;
-    sfVector2f save_dist;
     int x;
     int size;
     sfVector2i start;
