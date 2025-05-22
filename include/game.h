@@ -235,7 +235,7 @@ typedef struct player_s {
     sfBool is_sprinting;
     sfCircleShape *crossair;
     save_t *save;
-    float jump_value;
+    float cam_angle;
     sfVector2f v;
     sfVector2f n;
 } player_t;

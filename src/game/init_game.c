@@ -65,7 +65,7 @@ static int init_player(player_t *player)
     player->center_ray.distance = 0.0;
     player->center_ray.type = NONE;
     player->is_sprinting = sfFalse;
-    player->jump_value = 0;
+    player->cam_angle = 0;
     if (init_crossair(player) == ERROR)
         return ERROR;
     return SUCCESS;

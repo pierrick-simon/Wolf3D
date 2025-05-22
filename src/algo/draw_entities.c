@@ -10,8 +10,8 @@
 
 static void set_center(game_t *game, draw_entity_t *info)
 {
-    if (info->start.y + game->player->jump_value <= WIN_HEIGHT / 2 &&
-        info->end.y + game->player->jump_value >= WIN_HEIGHT / 2 &&
+    if (info->start.y + game->player->cam_angle <= WIN_HEIGHT / 2 &&
+        info->end.y + game->player->cam_angle >= WIN_HEIGHT / 2 &&
         info->start.x <= WIN_WIDTH / 2 && info->end.x >= WIN_WIDTH / 2 &&
         info->entity->type >= NB_ITEM && info->entity->is_alive)
         game->map->entity_center = info->entity->id;
@@ -38,13 +38,13 @@ static void disp_entitie(draw_entity_t *info, system_t *sys,
         if (stripe > 0 && stripe < WIN_WIDTH
             && info->dist.y < rays[stripe].len / (float)TILE_SIZE) {
             tmp.position = (sfVector2f){stripe, info->start.y
-                + game->player->jump_value};
+                + game->player->cam_angle};
             tmp.texCoords = (sfVector2f)
                 {((float)((stripe - info->start.x) / (float)(info->end.x -
                 info->start.x)) * ENTITY[info->entity->type].text_size.x) +
                 info->entity->offset.x, info->entity->offset.y};
             sfVertexArray_append(game->map->line, tmp);
-            tmp.position.y = info->end.y + game->player->jump_value;
+            tmp.position.y = info->end.y + game->player->cam_angle;
             tmp.texCoords.y = ENTITY[info->entity->type].text_size.y +
                 info->entity->offset.y;
             sfVertexArray_append(game->map->line, tmp);

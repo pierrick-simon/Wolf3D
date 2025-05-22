@@ -9,16 +9,16 @@
 
 void move_y(player_t *player, double delta)
 {
-    if (player->jump_value != Y_MAX
+    if (player->cam_angle != Y_MAX
         && sfKeyboard_isKeyPressed(sfKeyUp)) {
-        player->jump_value += Y_SPEED * delta;
-        if (player->jump_value >= Y_MAX)
-            player->jump_value = Y_MAX;
+        player->cam_angle += Y_SPEED * delta;
+        if (player->cam_angle >= Y_MAX)
+            player->cam_angle = Y_MAX;
     }
-    if (player->jump_value != Y_MIN
+    if (player->cam_angle != Y_MIN
         && sfKeyboard_isKeyPressed(sfKeyDown)) {
-        player->jump_value -= Y_SPEED * delta;
-        if (player->jump_value <= Y_MIN)
-            player->jump_value = Y_MIN;
+        player->cam_angle -= Y_SPEED * delta;
+        if (player->cam_angle <= Y_MIN)
+            player->cam_angle = Y_MIN;
     }
 }

@@ -82,7 +82,6 @@ static void show_info(system_t *sys, win_t *win)
             continue;
         draw_string(sys, sys->textbox, &win->draw[i]);
     }
-    draw_info(sys, &win->draw[WIN_NAME], win->name_tmp);
     draw_info(sys, &win->draw[WIN_TIME], win->time);
     draw_info(sys, &win->draw[WIN_SCORE], win->score);
     draw_danse(sys, win->danse, win->clock);

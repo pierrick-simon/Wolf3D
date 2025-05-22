@@ -30,7 +30,7 @@ static void add_line(int i, float len_factor[2],
 {
     sfVertex line = {.color = sfWhite};
     float a = ((1 - len_factor[FACTOR_INDEX]) * WALL_TEXTURE_X);
-    float offset_y = game->player->jump_value;
+    float offset_y = game->player->cam_angle;
 
     line.position = (sfVector2f){i * RAY_LENGTH, ((WIN_HEIGHT -
         len_factor[LEN_INDEX]) / 2) + (len_factor[LEN_INDEX]) + offset_y};
