@@ -28,6 +28,7 @@
     #define MAX_DISTANCE 100.0
 
     #define RENDER_DISTANCE 2000
+    #define DISTANCE_ENEMY 1000
 
     #define PLAYER_SPEED 100
     #define ROTATION_SPEED RAD(100)
