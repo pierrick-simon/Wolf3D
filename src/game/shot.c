@@ -19,19 +19,21 @@ static void destroy_wall(int **map, player_t *player, game_t *game)
         if (game->weapon->weapon == i && map[casted_pos.y][casted_pos.x] == 3
             && game->weapon->info[i].range > player->center_ray.distance) {
             map[casted_pos.y][casted_pos.x] = 0;
-            player->save->info->score += 10;
             sfMusic_play(game->music[DESTROY_WALL]);
         }
     }
 }
+// score selon save
 
 static void damage_enemy(game_t *game, node_t *node, entity_t *data)
 {
     if (game->weapon->info[game->weapon->weapon].range < data->dist)
         return;
     data->health -= game->weapon->info[game->weapon->weapon].damage;
-    if (data->health <= 0)
+    if (data->health <= 0) {
+        game->player->save->info->score += 10;
         delete_node(game->player->save->entities, node, free);
+    }
 }
 
 static void delete_center(game_t *game)
