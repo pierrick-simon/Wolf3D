@@ -225,6 +225,7 @@ typedef struct map_s {
     sfRenderStates wall_states;
     int entity_center;
     sfBool is_wall;
+    sfBool is_weakness;
 } map_t;
 
 typedef struct center_ray_s {

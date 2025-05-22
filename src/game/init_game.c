@@ -52,6 +52,7 @@ static int init_map_info(map_t *map)
     sfVertexArray_setPrimitiveType(map->line, sfLines);
     map->entity_center = NO_ENTITIE;
     map->is_wall = sfFalse;
+    map->is_weakness = sfFalse;
     return SUCCESS;
 }
 

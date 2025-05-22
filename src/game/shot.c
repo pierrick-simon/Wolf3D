@@ -28,13 +28,15 @@ static void destroy_wall(int **map, player_t *player, game_t *game)
         }
     }
 }
-// score selon save
 
 static void damage_enemy(game_t *game, entity_t *data)
 {
     if (game->weapon->info[game->weapon->weapon].range < data->dist)
         return;
-    data->health -= game->weapon->info[game->weapon->weapon].damage;
+    if (game->map->is_weakness && game->weapon->weapon != PUNCH)
+        data->health -= game->weapon->info[game->weapon->weapon].damage * HEAD;
+    else
+        data->health -= game->weapon->info[game->weapon->weapon].damage;
     data->damage = TIME_OVERLAY;
     if (data->health <= 0 && data->is_alive != sfFalse) {
         game->player->save->info->score += ceil(ENEMY[data->type].score *
