@@ -101,7 +101,8 @@ static void attack_player(entity_t *enemy, save_t *save, game_t *game)
     change_attack_rect(enemy, game);
 }
 
-void change_death_rect(entity_t *enemy, save_t *save, game_t *game, node_t *node)
+void change_death_rect(
+    entity_t *enemy, save_t *save, game_t *game, node_t *node)
 {
     if (ENTITY[enemy->type].max_third == 0) {
         delete_node(save->entities, node, &free);
@@ -111,7 +112,8 @@ void change_death_rect(entity_t *enemy, save_t *save, game_t *game, node_t *node
     if (enemy->cooldown <= 0) {
         enemy->offset.x += ENTITY[enemy->type].text_size.x;
         enemy->cooldown = DEATH_RECT;
-        if (enemy->offset.x >= ENTITY[enemy->type].max_third * ENTITY[enemy->type].text_size.x)
+        if (enemy->offset.x >= ENTITY[enemy->type].max_third *
+            ENTITY[enemy->type].text_size.x)
             enemy->offset.x -= ENTITY[enemy->type].text_size.x;
     } else
         enemy->cooldown -= game->time_info->delta;

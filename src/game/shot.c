@@ -11,9 +11,12 @@
 
 static void destroy_wall(int **map, player_t *player, game_t *game)
 {
-    sfVector2i casted_pos = cast_pos(&player->center_ray.pos,
-        player->center_ray.type);
+    sfVector2i casted_pos = {0};
 
+    if (game->map->entity_center != NO_ENTITIE
+        || game->map->is_wall == sfFalse)
+        return;
+    casted_pos = cast_pos(&player->center_ray.pos, player->center_ray.type);
     if (casted_pos.x < 0 || casted_pos.y < 0)
         return;
     for (weapon_id_t i = 0; i < NB_WEAPON; ++i) {

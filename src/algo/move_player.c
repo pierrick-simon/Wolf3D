@@ -27,10 +27,9 @@ static int sprint(player_t *player,
     if ((sfKeyboard_isKeyPressed(sfKeyLShift) ||
         sfJoystick_getAxisPosition(0, sfJoystickZ) > 0)
         && id != MINIGUN) {
-        player->is_sprinting = sfTrue;
         if (save->info->item_info[INFO_STAMINA] != 0) {
+            player->is_sprinting = sfTrue;
             coef = 2;
-            player->fov = SPRINTING_FOV;
         }
     }
     if (is_wall(player->pos.y,
@@ -109,6 +108,7 @@ static void rotate_player(player_t *player, double delta, int *head)
 {
     float x_controler = sfJoystick_getAxisPosition(0, sfJoystickU);
 
+    move_y(player, delta);
     if (fabs(x_controler) > 30)
         player->angle += ROTATION_SPEED * delta * (x_controler / 75);
     if (sfKeyboard_isKeyPressed(sfKeyLeft)) {
@@ -138,8 +138,8 @@ static void set_music_pitch(int forward, int backward, sfMusic *footstepp)
         sfMusic_setPitch(footstepp, 1.3);
 }
 
-static void handle_footstepp(
-    game_t *game, int *head, sfMusic *footstepp, sfVector2f *v)
+static void handle_footstepp(game_t *game,
+    int *head, sfMusic *footstepp, sfVector2f *v)
 {
     sfSoundStatus music = sfMusic_getStatus(footstepp);
     int forward = move_forward(game->player->save, v, game);
@@ -159,11 +159,10 @@ void move_player(game_t *game, double delta, int *head, sfMusic *footstepp)
 {
     sfVector2f v = {0};
 
-    center_ray(game->player);
+    game->player->is_sprinting = sfFalse;
+    center_ray(game);
     v = game->player->v;
     *head = HEAD_SPRITE_X;
-    game->player->fov = FOV;
-    game->player->is_sprinting = sfFalse;
     v.x *= delta * PLAYER_SPEED;
     v.y *= delta * PLAYER_SPEED;
     handle_footstepp(game, head, footstepp, &v);

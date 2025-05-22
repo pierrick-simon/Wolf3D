@@ -89,20 +89,22 @@ typedef struct entity_info_s {
     int max_third;
 } entity_info_t;
 
+    #define DIST_OFFSET 5000
+
 static const entity_info_t ENTITY[] __maybe_unused = {
-    [E_SMALL_HEALTH] = {"asset/health1.png", {14, 15}, 0.2, 0},
-    [E_BIG_HEALTH] = {"asset/health2.png", {28, 19}, 0.2, 0},
-    [E_STAMINA] = {"asset/potion.png", {14, 18}, 0.2, 0},
-    [E_AMMO_PISTOL] = {"asset/pistol_ammo.png", {9, 11}, 0.2, 0},
-    [E_AMMO_SHUTGUN] = {"asset/shotgun_ammo.png", {32, 12}, 0.2, 0},
-    [E_AMMO_MINIGUN] = {"asset/minigun_ammo.png", {28, 16}, 0.2, 0},
-    [E_FLASHLIGHT] = {"asset/batterie.png", {7, 11}, 0.2, 0},
-    [E_WEAPON_TWO] = {"asset/floor_gun.png", {29, 14}, 0.2, 0},
-    [E_WEAPON_THREE] = {"asset/floor_shotgun.png", {63, 12}, 0.5, 0},
-    [E_WEAPON_FOUR] = {"asset/floor_minigun.png", {54, 16}, 0.3, 0},
-    [E_SWORD_ENEMY] = {"asset/sword.png", {48, 67}, 0.8, 0, 4, 3, 9},
-    [E_GUN_ENEMY] = {"asset/soldier.png", {42, 55}, 0.8, 0, 4, 2, 8},
-    [E_SHEET_ENEMY] = {"asset/sheet.png", {640, 670}, 0.8, 0, 1, 0, 0},
+    [E_SMALL_HEALTH] = {"asset/health1.png", {14, 15}, 0.2, 6},
+    [E_BIG_HEALTH] = {"asset/health2.png", {28, 19}, 0.2, 6},
+    [E_STAMINA] = {"asset/potion.png", {14, 18}, 0.2, 6},
+    [E_AMMO_PISTOL] = {"asset/pistol_ammo.png", {9, 11}, 0.2, 6},
+    [E_AMMO_SHUTGUN] = {"asset/shotgun_ammo.png", {32, 12}, 0.2, 6},
+    [E_AMMO_MINIGUN] = {"asset/minigun_ammo.png", {28, 16}, 0.2, 6},
+    [E_FLASHLIGHT] = {"asset/batterie.png", {7, 11}, 0.2, 6},
+    [E_WEAPON_TWO] = {"asset/floor_gun.png", {29, 14}, 0.2, 6},
+    [E_WEAPON_THREE] = {"asset/floor_shotgun.png", {63, 12}, 0.5, 6},
+    [E_WEAPON_FOUR] = {"asset/floor_minigun.png", {54, 16}, 0.3, 6},
+    [E_SWORD_ENEMY] = {"asset/sword.png", {48, 67}, 0.8, 1, 4, 3, 9},
+    [E_GUN_ENEMY] = {"asset/soldier.png", {42, 55}, 0.8, 1, 4, 2, 8},
+    [E_SHEET_ENEMY] = {"asset/sheet.png", {640, 670}, 0.8, 1, 1, 0, 0},
 };
 
 typedef struct enemy_info_s {

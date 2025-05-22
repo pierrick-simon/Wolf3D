@@ -51,6 +51,7 @@ static int init_map_info(map_t *map)
         return ERROR;
     sfVertexArray_setPrimitiveType(map->line, sfLines);
     map->entity_center = NO_ENTITIE;
+    map->is_wall = sfFalse;
     return SUCCESS;
 }
 
@@ -63,10 +64,8 @@ static int init_player(player_t *player)
     player->v.y = 0;
     player->center_ray.distance = 0.0;
     player->center_ray.type = NONE;
-    player->fov = FOV;
     player->is_sprinting = sfFalse;
     player->jump_value = 0;
-    player->status = S_NONE;
     if (init_crossair(player) == ERROR)
         return ERROR;
     return SUCCESS;

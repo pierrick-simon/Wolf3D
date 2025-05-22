@@ -37,7 +37,6 @@
 
     #define NB_DECIMAL_FLOAT_CMP 6
 
-    #define SPRINT_COEF 1.1
     #define SPRINTING_FOV FOV * SPRINT_COEF
     #define TOOLBAR_HEIGHT 130
     #define TOOLBAR_POS (WIN_HEIGHT - TOOLBAR_HEIGHT)
@@ -95,9 +94,9 @@
     #define LEN_INDEX 0
     #define FACTOR_INDEX 1
 
-    #define JUMP_SPEED 500
-    #define JUMP_MAX 500
-    #define JUMP_MIN -JUMP_MAX
+    #define Y_SPEED 500
+    #define Y_MAX 500
+    #define Y_MIN -Y_MAX
 
     #define NO_ENTITIE -1
 
@@ -190,12 +189,6 @@ typedef enum {
     NB_MUSIC,
 } music_id_t;
 
-typedef enum status {
-    S_NONE,
-    UP,
-    DOWN
-} status_t;
-
 typedef struct light_s {
     sfRenderTexture *night_render;
     const sfTexture *night_texture;
@@ -226,6 +219,7 @@ typedef struct map_s {
     ray_t rays[NB_RAYS];
     sfRenderStates wall_states;
     int entity_center;
+    sfBool is_wall;
 } map_t;
 
 typedef struct center_ray_s {
@@ -238,12 +232,10 @@ typedef struct player_s {
     center_ray_t center_ray;
     sfVector2f pos;
     float angle;
-    float fov;
     sfBool is_sprinting;
     sfCircleShape *crossair;
     save_t *save;
     float jump_value;
-    status_t status;
     sfVector2f v;
     sfVector2f n;
 } player_t;
@@ -340,7 +332,7 @@ void game_events(system_t *sys, game_t *game);
 float get_pourcentage_wall(intersection_type_t type, sfVector2f *intersection);
 float get_door_pourcentage(save_t *save, sfVector2i *pos);
 sfVector2i cast_pos(sfVector2f *pos, intersection_type_t type);
-void center_ray(player_t *player);
+void center_ray(game_t *game);
 void sort_entities(game_t *game);
 void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save);
 void move_y(player_t *player, double delta);
