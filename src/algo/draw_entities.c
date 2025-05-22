@@ -27,7 +27,7 @@ static void change_color_sprite(
         *color = (sfVertex){.color = sfWhite};
 }
 
-static void disp_entitie(draw_entity_t *info, system_t *sys,
+static void disp_entitie(draw_entity_t *info,
     game_t *game, ray_t rays[NB_RAYS])
 {
     sfVertex tmp = {0};
@@ -85,7 +85,7 @@ static void draw_entitie(system_t *sys,
     info.start = (sfVector2i){- info.size / 2 + info.x,
         (-(info.size * ratio) / 2 + WIN_HEIGHT / 2) + offset};
     info.entity = entity;
-    disp_entitie(&info, sys, game, rays);
+    disp_entitie(&info, game, rays);
     sfRenderWindow_drawVertexArray(sys->window,
         game->map->line, &game->state_entities[info.entity->type]);
     sfVertexArray_clear(game->map->line);

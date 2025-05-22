@@ -155,18 +155,23 @@ static void smooth_night_day(system_t *sys, light_t *light)
             sfColor_fromRGBA(0, 0, 0, tmp * OVERLAY_STEP));
     else
         sfRectangleShape_setFillColor(light->overlay,
-            sfColor_fromRGBA(0, 0, 0, OVERLAY_MAX - (tmp * OVERLAY_STEP)));
+            sfColor_fromRGBA(0, 0, 0, OVERLAY_MAX - (0 * OVERLAY_STEP)));
 }
 
-static void flash_light(system_t *sys, light_t *light)
+static void flash_light(system_t *sys, light_t *light, game_t *game)
 {
+    weapon_t *weapon = game->weapon;
+
     smooth_night_day(sys, light);
     sfRenderTexture_clear(light->night_render, sfTransparent);
     sfRenderTexture_drawRectangleShape(
         light->night_render, light->overlay, NULL);
     if (light->flash_on == sfTrue) {
-        sfCircleShape_setPosition(light->flashlight,
-            (sfVector2f){(WIN_WIDTH / 2), (WIN_HEIGHT / 2)});
+        sfCircleShape_setPosition(light->flashlight, (sfVector2f)
+                {(WIN_WIDTH / 2) + (cos((double)(game->time_info->time /
+                (SEC_IN_MICRO / MOV_OFFSET_GUN))) * MOV_OFFSET_GUN) +
+                MOV_OFFSET_GUN, (WIN_HEIGHT / 2) + game->player->cam_angle / 10
+                + weapon->horizontal_offset});
         sfRenderTexture_drawCircleShape(light->night_render,
             light->flashlight, &light->state);
     }
@@ -187,7 +192,7 @@ void draw_game(system_t *sys, void *structure)
     sfRenderWindow_clear(sys->window, sfWhite);
     draw_coor(sys, game);
     draw_lines(sys, game);
-    flash_light(sys, game->light);
+    flash_light(sys, game->light, game);
     draw_toolbar(sys, game, game->tool);
     draw_minimap(sys, game->mini_map, game->cursor, game->tool->border);
     draw_overlay(sys, game);
