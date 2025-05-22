@@ -7,7 +7,7 @@
 
 #include "save.h"
 #include "linked_list.h"
-#include "entities.h"
+#include "game.h"
 #include "my.h"
 
 static int check_entity(char **tab)
@@ -32,8 +32,11 @@ static void fill_node_entity(linked_list_t *enemies,
     entity->pos = (sfVector2f){atof(tab[E_POS_X]), atof(tab[E_POS_Y])};
     entity->health = atoi(tab[E_INFO]);
     entity->cooldown = 0;
-    entity->dist = ITEM_RANGE * 2;
+    entity->dist = RENDER_DISTANCE * 2;
     entity->id = id;
+    entity->offset = (sfVector2f){0, 0};
+    entity->is_alive = sfTrue;
+    entity->damage = 0;
     ++id;
     push_to_tail(enemies, entity);
 }

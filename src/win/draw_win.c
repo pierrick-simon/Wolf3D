@@ -43,8 +43,8 @@ static void set_win(save_t *save, win_t *win)
     if (win->update == sfFalse) {
         win->prev_score = save->info->score;
         win->score_update = save->info->score;
-        save->info->score *= pow(
-            MAX_BONUS / (save->info->time / SEC_IN_MICRO), BONUS_COEF);
+        save->info->score *= pow(MAX_BONUS / (save->info->time
+            / SEC_IN_MICRO), BONUS_COEF) * save->info->difficulty;
         win->score_step = (save->info->score - win->prev_score) / DRAW_BONUS;
         if (save->info->score > MAX_SCORE || save->info->score < 0)
             save->info->score = MAX_SCORE;

@@ -71,6 +71,17 @@ static void update_save_light(system_t *sys, light_t *light)
     }
 }
 
+static void update_health_enemi(linked_list_t *entities, float difficulty)
+{
+    entity_t *entity = NULL;
+
+    for (node_t *head = entities->head; head != NULL; head = head->next) {
+        entity = head->data;
+        if (entity->health == 0 && entity->type >= NB_ITEM)
+            entity->health = ENEMY[entity->type].health * difficulty;
+    }
+}
+
 void update_save(system_t *sys, game_t *game)
 {
     update_doors(sys, game);
@@ -86,6 +97,7 @@ void update_save(system_t *sys, game_t *game)
         game->light->flash_on = sfFalse;
         update_save_light(sys, game->light);
         update_save_weapon(sys, game->weapon);
+        update_health_enemi(sys->save->entities, sys->save->info->difficulty);
         sys->save->update = sfTrue;
     }
     sys->save->info->start_pos = game->player->pos;

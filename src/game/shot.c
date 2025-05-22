@@ -7,6 +7,7 @@
 
 #include "game.h"
 #include "entities.h"
+#include <math.h>
 
 static void destroy_wall(int **map, player_t *player, game_t *game)
 {
@@ -25,14 +26,18 @@ static void destroy_wall(int **map, player_t *player, game_t *game)
 }
 // score selon save
 
-static void damage_enemy(game_t *game, node_t *node, entity_t *data)
+static void damage_enemy(game_t *game, entity_t *data)
 {
     if (game->weapon->info[game->weapon->weapon].range < data->dist)
         return;
     data->health -= game->weapon->info[game->weapon->weapon].damage;
-    if (data->health <= 0) {
-        game->player->save->info->score += 10;
-        delete_node(game->player->save->entities, node, free);
+    data->damage = TIME_OVERLAY;
+    if (data->health <= 0 && data->is_alive != sfFalse) {
+        game->player->save->info->score += ceil(ENEMY[data->type].score *
+            game->player->save->info->difficulty);
+        data->is_alive = sfFalse;
+        data->cooldown = DEATH_RECT;
+        data->offset.x = 0;
     }
 }
 
@@ -46,7 +51,7 @@ static void delete_center(game_t *game)
     while (node != NULL) {
         data = node->data;
         if (data->id == game->map->entity_center)
-            return damage_enemy(game, node, data);
+            return damage_enemy(game, data);
         node = node->prev;
     }
 }

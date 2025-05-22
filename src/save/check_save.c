@@ -64,7 +64,8 @@ static int check_body(char **tab, int x, int y)
     return SUCCESS;
 }
 
-static int check_entities(linked_list_t *list, char **tab, int *offset)
+static int check_entities(
+    linked_list_t *list, char **tab, int *offset)
 {
     int nb = 0;
 
@@ -72,7 +73,8 @@ static int check_entities(linked_list_t *list, char **tab, int *offset)
         return ERROR;
     nb = atoi(*tab);
     for (int i = 1; i <= nb; i++) {
-        if (tab[i] == NULL || add_node_entity(list, tab[i]) == ERROR)
+        if (tab[i] == NULL
+            || add_node_entity(list, tab[i]) == ERROR)
             return ERROR;
     }
     *offset += nb;

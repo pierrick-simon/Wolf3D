@@ -36,6 +36,19 @@ static sfBool is_wall(
     return sfFalse;
 }
 
+static void change_movement_rect(entity_t *enemy, game_t *game, float speed)
+{
+    enemy->offset.y = 0;
+    if (enemy->change_rect <= 0) {
+        enemy->offset.x += ENTITY[enemy->type].text_size.x;
+        if (enemy->offset.x >= ENTITY[enemy->type].max_first *
+            ENTITY[enemy->type].text_size.x)
+            enemy->offset.x = 0;
+        enemy->change_rect = 10 / speed;
+    } else
+        enemy->change_rect -= game->time_info->delta;
+}
+
 static void get_new_position(entity_t *enemy, game_t *game, float difficulty)
 {
     float coef = ENEMY[enemy->type].speed * difficulty
@@ -51,6 +64,23 @@ static void get_new_position(entity_t *enemy, game_t *game, float difficulty)
         return;
     enemy->pos.x += mov.x * coef;
     enemy->pos.y += mov.y * coef;
+    change_movement_rect(enemy, game, ENEMY[enemy->type].speed * difficulty);
+}
+
+static void change_attack_rect(entity_t *enemy, game_t *game)
+{
+    if (ENTITY[enemy->type].max_second == 0)
+        return;
+    enemy->offset.y = ENTITY[enemy->type].text_size.y;
+    if (game->time_info->shot >= 0 && enemy->change_rect != SKIP) {
+        if (enemy->change_rect <= 0) {
+            enemy->offset.x += ENTITY[enemy->type].text_size.x;
+            enemy->change_rect = TIME_OVERLAY
+                / (ENTITY[enemy->type].max_second - 1);
+        } else
+            enemy->change_rect -= game->time_info->delta;
+    } else
+        enemy->offset.x = 0;
 }
 
 static void attack_player(entity_t *enemy, save_t *save, game_t *game)
@@ -61,6 +91,28 @@ static void attack_player(entity_t *enemy, save_t *save, game_t *game)
             (2 - save->info->difficulty);
         game->time_info->shot = TIME_OVERLAY;
         sfMusic_play(game->music[HURT]);
+        enemy->offset.x = 0;
+        if (ENTITY[enemy->type].max_second - 1 != 0)
+            enemy->change_rect = 0;
+        else
+            enemy->change_rect = SKIP;
+    } else
+        enemy->cooldown -= game->time_info->delta;
+    change_attack_rect(enemy, game);
+}
+
+void change_death_rect(entity_t *enemy, save_t *save, game_t *game, node_t *node)
+{
+    if (ENTITY[enemy->type].max_third == 0) {
+        delete_node(save->entities, node, &free);
+        return;
+    }
+    enemy->offset.y = ENTITY[enemy->type].text_size.y * 2;
+    if (enemy->cooldown <= 0) {
+        enemy->offset.x += ENTITY[enemy->type].text_size.x;
+        enemy->cooldown = DEATH_RECT;
+        if (enemy->offset.x >= ENTITY[enemy->type].max_third * ENTITY[enemy->type].text_size.x)
+            enemy->offset.x -= ENTITY[enemy->type].text_size.x;
     } else
         enemy->cooldown -= game->time_info->delta;
 }
@@ -68,9 +120,15 @@ static void attack_player(entity_t *enemy, save_t *save, game_t *game)
 void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save)
 {
     entity_t *tmp = NULL;
+    node_t *next = NULL;
 
-    for (node_t *head = enemies->head; head != NULL; head = head->next) {
+    for (node_t *head = enemies->head; head != NULL; head = next) {
+        next = head->next;
         tmp = head->data;
+        if (tmp->is_alive == sfFalse) {
+            change_death_rect(tmp, save, game, head);
+            continue;
+        }
         if (tmp->dist > RENDER_DISTANCE * save->info->difficulty
             || tmp->type < NB_ITEM)
             continue;

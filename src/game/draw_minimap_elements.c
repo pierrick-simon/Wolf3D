@@ -98,7 +98,8 @@ void draw_minimap_entities(system_t *sys, linked_list_t *list,
         tmp = head->data;
         entity_tile = (sfVector2i){floor(tmp->pos.x / TILE_SIZE),
             floor(tmp->pos.y / TILE_SIZE)};
-        if (is_in_minimap(player_tile, &entity_tile) == sfFalse)
+        if (is_in_minimap(player_tile, &entity_tile) == sfFalse
+            || tmp->is_alive == sfFalse)
             continue;
         distance_to_player(&sys->save->info->start_pos, &tmp->pos, &pos);
         sfCircleShape_setPosition(cursor, pos);

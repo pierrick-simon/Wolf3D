@@ -10,7 +10,8 @@
 
     #include "save.h"
 
-    #define ITEM_RANGE 15.0
+    #define ITEM_RANGE 30.0
+    #define DEATH_RECT 0.075
 
     #define NB_ITEM E_SWORD_ENEMY
 
@@ -44,9 +45,13 @@ typedef enum {
 typedef struct entity_s {
     entity_id_t type;
     sfVector2f pos;
+    sfVector2f offset;
+    sfBool is_alive;
     float dist;
     int health;
     float cooldown;
+    float change_rect;
+    float damage;
     int id;
 } entity_t;
 
@@ -79,6 +84,9 @@ typedef struct entity_info_s {
     sfVector2f text_size;
     float factor;
     float y;
+    int max_first;
+    int max_second;
+    int max_third;
 } entity_info_t;
 
 static const entity_info_t ENTITY[] __maybe_unused = {
@@ -92,22 +100,24 @@ static const entity_info_t ENTITY[] __maybe_unused = {
     [E_WEAPON_TWO] = {"asset/floor_gun.png", {29, 14}, 0.2, 0},
     [E_WEAPON_THREE] = {"asset/floor_shotgun.png", {63, 12}, 0.5, 0},
     [E_WEAPON_FOUR] = {"asset/floor_minigun.png", {54, 16}, 0.3, 0},
-    [E_SWORD_ENEMY] = {"asset/sword.png", {48, 67}, 0.8, 0},
-    [E_GUN_ENEMY] = {"asset/soldier.png", {42, 55}, 0.8, 0},
-    [E_SHEET_ENEMY] = {"asset/sheet.png", {640, 670}, 0.8, 0},
+    [E_SWORD_ENEMY] = {"asset/sword.png", {48, 67}, 0.8, 0, 4, 3, 9},
+    [E_GUN_ENEMY] = {"asset/soldier.png", {42, 55}, 0.8, 0, 4, 2, 8},
+    [E_SHEET_ENEMY] = {"asset/sheet.png", {640, 670}, 0.8, 0, 1, 0, 0},
 };
 
 typedef struct enemy_info_s {
-    int attack;
-    int attack_range;
-    int cooldown;
-    int speed;
+    float attack;
+    float attack_range;
+    float cooldown;
+    float speed;
+    float score;
+    float health;
 } enemy_info_t;
 
 static const enemy_info_t ENEMY[] __maybe_unused = {
-    [E_SWORD_ENEMY] = {25, 15, 3, 150},
-    [E_GUN_ENEMY] = {10, 128, 2, 50},
-    [E_SHEET_ENEMY] = {1, 15, 3, 150}
+    [E_SWORD_ENEMY] = {25, 50, 3, 150, 100, 200},
+    [E_GUN_ENEMY] = {10, 250, 2, 50, 250, 100},
+    [E_SHEET_ENEMY] = {1, 15, 3, 150, 1, 1}
 };
 
 typedef struct draw_entity_s {
@@ -118,7 +128,7 @@ typedef struct draw_entity_s {
     int size;
     sfVector2i start;
     sfVector2i end;
-    entity_t *enemy;
+    entity_t *entity;
 } draw_entity_t;
 
 void handle_items(save_t *save, game_t *game);
