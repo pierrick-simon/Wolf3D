@@ -41,7 +41,7 @@ static sfBool is_wall(game_t *game, entity_t *enemy)
     intersection_t type = {0};
     sfVector2f intersection_point = {0};
     float value = 0;
-    
+
     type.type = NONE;
     tmp.save = game->player->save;
     tmp.pos = enemy->pos;
