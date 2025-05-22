@@ -25,10 +25,24 @@ static float get_texture_x(intersection_type_t type, sfVector2f *intersection)
     return get_pourcentage_wall(type, intersection) * WALL_TEXTURE_X;
 }
 
+static sfColor get_color(float len)
+{
+    float a = 0;
+
+    if (len < 500.0)
+        a = 0;
+    else if (len > 1500.0)
+        a = 1;
+    else
+        a = (len - 500.0) / (1500.0 - 500.0);
+    a = 1 - a;
+    return sfColor_fromRGB(a * 255, a * 255, a * 255);
+}
+
 static void add_line(int i, float len_factor[2],
     float pos[2], game_t *game)
 {
-    sfVertex line = {.color = sfWhite};
+    sfVertex line = {.color = get_color(game->map->rays[i].len)};
     float a = ((1 - len_factor[FACTOR_INDEX]) * WALL_TEXTURE_X);
     float offset_y = game->player->cam_angle;
 
@@ -43,12 +57,6 @@ static void add_line(int i, float len_factor[2],
     game->map->rays[i].up = line;
 }
 
-static void set_line(int i, float len_factor[2],
-    float pos[2], game_t *game)
-{
-    add_line(i, len_factor, pos, game);
-}
-
 static void add_ray_to_vertex_array(game_t *game, int i)
 {
     intersection_t type = {NONE, WALL};
@@ -60,7 +68,7 @@ static void add_ray_to_vertex_array(game_t *game, int i)
 
     game->map->rays[i].len = len;
     len = (TILE_SIZE * WIN_HEIGHT) / (len * cos(angle_offset));
-    set_line(i, (float[]){len, factor},
+    add_line(i, (float[]){len, factor},
     (float[]){wall_textures[type.wall].text_offset_y,
         get_texture_x(type.type, &pos)}, game);
 }
