@@ -23,14 +23,18 @@ static int check_entity(char **tab)
     return SUCCESS;
 }
 
-static void fill_node_entity(
-    linked_list_t *enemies, entity_t *entity, char **tab)
+static void fill_node_entity(linked_list_t *enemies,
+    entity_t *entity, char **tab)
 {
-    entity->id = atoi(tab[E_TYPE]);
+    static int id = 0;
+
+    entity->type = atoi(tab[E_TYPE]);
     entity->pos = (sfVector2f){atof(tab[E_POS_X]), atof(tab[E_POS_Y])};
     entity->health = atoi(tab[E_INFO]);
     entity->cooldown = 0;
     entity->dist = ITEM_RANGE * 2;
+    entity->id = id;
+    ++id;
     push_to_tail(enemies, entity);
 }
 

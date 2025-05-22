@@ -95,11 +95,11 @@
     #define LEN_INDEX 0
     #define FACTOR_INDEX 1
 
-    #define NO_ENEMY -1
-
     #define JUMP_SPEED 500
     #define JUMP_MAX 500
     #define JUMP_MIN -JUMP_MAX
+
+    #define NO_ENTITIE -1
 
 typedef enum {
     LOAD_W_TEXTURE,
@@ -225,6 +225,7 @@ typedef struct map_s {
     sfVertexArray *line;
     ray_t rays[NB_RAYS];
     sfRenderStates wall_states;
+    int entity_center;
 } map_t;
 
 typedef struct center_ray_s {
@@ -320,8 +321,8 @@ void update_time_end(time_info_t *time_info);
 void update_save(system_t *sys, game_t *game);
 void update_toolbar_percent(draw_textbox_t *draw, int nb);
 void update_ammo(system_t *sys, game_t *game);
-void shot_gun_anim(
-    weapon_t *weapon, time_info_t *time, toolbar_t *tool, int bag);
+void shot_gun_anim(weapon_t *weapon,
+    time_info_t *time, toolbar_t *tool, int bag);
 void draw_minimap(system_t *sys, sfRectangleShape *mini_map,
     sfCircleShape *cursor, sfTexture *texture);
 int init_toolbar(toolbar_t *tool);
@@ -343,5 +344,6 @@ void sort_entities(game_t *game);
 void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save);
 void move_y(player_t *player, double delta);
 void draw_entities(game_t *game, system_t *sys);
+void shot(system_t *sys, weapon_t *weapon, game_t *game);
 
 #endif

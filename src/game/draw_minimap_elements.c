@@ -102,7 +102,7 @@ void draw_minimap_entities(system_t *sys, linked_list_t *list,
             continue;
         distance_to_player(&sys->save->info->start_pos, &tmp->pos, &pos);
         sfCircleShape_setPosition(cursor, pos);
-        if (tmp->id < NB_ITEM)
+        if (tmp->type < NB_ITEM)
             sfCircleShape_setFillColor(cursor, sfBlue);
         else
             sfCircleShape_setFillColor(cursor, sfRed);

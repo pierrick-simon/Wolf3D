@@ -42,11 +42,12 @@ typedef enum {
 } str_entity_t;
 
 typedef struct entity_s {
-    entity_id_t id;
+    entity_id_t type;
     sfVector2f pos;
     float dist;
     int health;
     float cooldown;
+    int id;
 } entity_t;
 
 
@@ -115,7 +116,7 @@ typedef struct draw_entity_s {
     int size;
     sfVector2i start;
     sfVector2i end;
-    entity_id_t id;
+    entity_t *enemy;
 } draw_entity_t;
 
 void handle_items(save_t *save, game_t *game);

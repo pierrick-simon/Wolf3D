@@ -50,6 +50,7 @@ static int init_map_info(map_t *map)
     if (map->line == NULL || init_states(map) == ERROR)
         return ERROR;
     sfVertexArray_setPrimitiveType(map->line, sfLines);
+    map->entity_center = NO_ENTITIE;
     return SUCCESS;
 }
 
