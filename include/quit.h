@@ -49,6 +49,7 @@ typedef struct leave_s {
 
 typedef enum {
     WIN_TITLE,
+    WIN_NAME,
     WIN_TIME,
     WIN_SCORE,
     WIN_BONUS_SCORE,
@@ -61,7 +62,6 @@ typedef enum {
 
 typedef enum {
     LOSE_TITLE,
-    LOSE_NAME,
     LOSE_TIME,
     LOSE_SCORE,
     LOSE_RESTART,

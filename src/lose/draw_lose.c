@@ -59,8 +59,8 @@ void draw_lose(system_t *sys, void *structure)
     sfRenderWindow_drawSprite(sys->window, sys->background->wallpaper_s, NULL);
     for (int i = 0; i < NB_LOSE; i++)
         draw_string(sys, sys->textbox, &lose->draw[i]);
-    draw_info(sys, &lose->draw[WIN_TIME], lose->time);
-    draw_info(sys, &lose->draw[WIN_SCORE], lose->score);
+    draw_info(sys, &lose->draw[LOSE_TIME], lose->time);
+    draw_info(sys, &lose->draw[LOSE_SCORE], lose->score);
     draw_danse(sys, lose->spin_chair, lose->clock);
     sfMusic_stop(sys->save->music);
     if (music == sfStopped || music == sfPaused)

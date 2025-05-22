@@ -94,14 +94,10 @@ static void draw_tool_strings(system_t *sys, toolbar_t *tool)
         sys->save->info->item_info[INFO_STAMINA]);
 }
 
-static void draw_toolbar(system_t *sys, game_t *game, toolbar_t *tool)
+static void draw_toolbar(system_t *sys, toolbar_t *tool)
 {
     sfVector2f pos = (sfVector2f){0, TOOLBAR_POS};
 
-    sfRenderWindow_drawSprite(sys->window,
-        game->weapon->sprite, NULL);
-    sfRenderWindow_drawCircleShape(sys->window,
-        game->player->crossair, NULL);
     sfRectangleShape_setPosition(tool->rectangle, pos);
     sfRectangleShape_setSize(tool->rectangle,
         (sfVector2f){WIN_WIDTH, TOOLBAR_HEIGHT});
@@ -136,7 +132,7 @@ static void draw_lines(system_t *sys, game_t *game)
 
 static void smooth_night_day(system_t *sys, light_t *light)
 {
-    int sec = sys->save->info->time / (SEC_IN_MICRO / 2) % (MIN_IN_SEC * 2);
+    int sec = sys->save->info->time / (SEC_IN_MICRO / NIGHT_NB) % (MIN_IN_SEC * NIGHT_NB);
     int tmp = sec - SMOOTH_OVERLAY;
 
     if (sec > light->sec || (sec == 0 && light->sec != 1))
@@ -174,6 +170,20 @@ static void flash_light(system_t *sys, light_t *light)
     sfRenderWindow_drawSprite(sys->window, light->night, NULL);
 }
 
+static void show_game_environement(system_t *sys, game_t *game)
+{
+    draw_coor(sys, game);
+    draw_lines(sys, game);
+    sfRenderWindow_drawSprite(sys->window,
+        game->weapon->sprite, NULL);
+    sfRenderWindow_drawCircleShape(sys->window,
+        game->player->crossair, NULL);
+    flash_light(sys, game->light);
+    draw_toolbar(sys, game->tool);
+    draw_minimap(sys, game->mini_map, game->cursor, game->tool->border);
+    draw_overlay(sys, game);
+}
+
 void draw_game(system_t *sys, void *structure)
 {
     game_t *game = (game_t *)structure;
@@ -185,12 +195,7 @@ void draw_game(system_t *sys, void *structure)
         sfMusic_play(sys->save->music);
     game_events(sys, game);
     sfRenderWindow_clear(sys->window, sfWhite);
-    draw_coor(sys, game);
-    draw_lines(sys, game);
-    flash_light(sys, game->light);
-    draw_toolbar(sys, game, game->tool);
-    draw_minimap(sys, game->mini_map, game->cursor, game->tool->border);
-    draw_overlay(sys, game);
+    show_game_environement(sys, game);
     sfRenderWindow_display(sys->window);
     update_time_end(game->time_info);
 }

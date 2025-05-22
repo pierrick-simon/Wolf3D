@@ -11,6 +11,8 @@
 
 static void update_save_weapon(system_t *sys, weapon_t *weapon)
 {
+    weapon->info[weapon->weapon].rectangle.left = 0;
+    weapon->info[weapon->weapon].current_tile = 0;
     weapon->horizontal_offset = 0;
     weapon->shot = -1;
     weapon->weapon = (int)log2(sys->save->info->start_weapon);
@@ -47,10 +49,10 @@ static void update_doors(system_t *sys, game_t *game)
     }
 }
 
-static void update_save_light(system_t *sys, light_t *light)
+static void update_save_light_continue(system_t *sys, light_t *light)
 {
     int cycle = ceil(sys->save->info->time / SEC_IN_MICRO / MIN_IN_SEC);
-    int sec = sys->save->info->time / (SEC_IN_MICRO / 2) % (MIN_IN_SEC * 2);
+    int sec = sys->save->info->time / (SEC_IN_MICRO / NIGHT_NB) % (MIN_IN_SEC * NIGHT_NB);
     int tmp = sec - SMOOTH_OVERLAY;
 
     if (cycle % 2 != 0) {
@@ -69,6 +71,20 @@ static void update_save_light(system_t *sys, light_t *light)
         else
             sfRectangleShape_setFillColor(light->overlay, sfTransparent);
     }
+}
+
+static void update_save_light(system_t *sys, light_t *light, sprite_t *flashlight)
+{
+    light->flash_on = sfFalse;
+    light->sec = 1;
+    flashlight->rectangle.left = 0;
+    sfSprite_setTextureRect(flashlight->sprite, flashlight->rectangle);
+    sfRectangleShape_setFillColor(light->overlay,
+                sfColor_fromRGBA(0, 0, 0, 0));
+    if (sys->save->info->time == 0)
+        light->night_on = sfFalse;
+    else
+        update_save_light_continue(sys, light);
 }
 
 static void update_health_enemi(linked_list_t *entities, float difficulty)
@@ -94,8 +110,7 @@ void update_save(system_t *sys, game_t *game)
         game->tool->no_sprint = 0;
         game->tool->save = -1;
         game->tool->last_save = 0;
-        game->light->flash_on = sfFalse;
-        update_save_light(sys, game->light);
+        update_save_light(sys, game->light, game->tool->flashlight);
         update_save_weapon(sys, game->weapon);
         update_health_enemi(sys->save->entities, sys->save->info->difficulty);
         sys->save->update = sfTrue;

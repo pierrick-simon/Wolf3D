@@ -52,6 +52,7 @@ typedef struct entity_s {
     float cooldown;
     float change_rect;
     float damage;
+    float change_pos;
     int id;
 } entity_t;
 

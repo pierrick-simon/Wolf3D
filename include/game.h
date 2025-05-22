@@ -81,9 +81,10 @@
 
     #define OVERLAY_COLOR sfColor_fromRGBA(0, 0, 0, 200)
     #define FLASHLIGHT 300
-    #define OVERLAY_STEP 10
+    #define NIGHT_NB 10
+    #define OVERLAY_STEP (20 / NIGHT_NB)
     #define OVERLAY_MAX 200
-    #define SMOOTH_OVERLAY 99
+    #define SMOOTH_OVERLAY (((MIN_IN_SEC - 10) * NIGHT_NB) - 1)
 
     #define WALL_TEXTURE_X 128.0
     #define WALL_TEXTURE_Y 128.0

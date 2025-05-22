@@ -11,7 +11,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-static sfBool is_wall(
+static sfBool check_wall(
     int **map, sfVector2i *player_tile, sfVector2f *enemy_tile)
 {
     int dx = ceil(fabs(enemy_tile->x - player_tile->x));
@@ -36,6 +36,16 @@ static sfBool is_wall(
     return sfFalse;
 }
 
+static sfBool is_wall(game_t *game, entity_t *enemy)
+{
+    sfVector2i player_tile = {floor(game->player->pos.x / TILE_SIZE),
+        floor(game->player->pos.y / TILE_SIZE)};
+    sfVector2f enemy_tile = {floor(enemy->pos.x / TILE_SIZE),
+        floor(enemy->pos.y / TILE_SIZE)};
+
+    return check_wall(game->player->save->map, &player_tile, &enemy_tile);
+}
+
 static void change_movement_rect(entity_t *enemy, game_t *game, float speed)
 {
     enemy->offset.y = 0;
@@ -55,13 +65,10 @@ static void get_new_position(entity_t *enemy, game_t *game, float difficulty)
         * game->time_info->delta / enemy->dist;
     sfVector2f mov = {game->player->pos.x - enemy->pos.x,
         game->player->pos.y - enemy->pos.y};
-    sfVector2i player_tile = {floor(game->player->pos.x / TILE_SIZE),
-        floor(game->player->pos.y / TILE_SIZE)};
-    sfVector2f enemy_tile = {floor(enemy->pos.x / TILE_SIZE),
-        floor(enemy->pos.y / TILE_SIZE)};
 
-    if (is_wall(game->player->save->map, &player_tile, &enemy_tile) == sfTrue)
+    if (is_wall(game, enemy) == sfTrue)
         return;
+    enemy->change_pos = SKIP;
     enemy->pos.x += mov.x * coef;
     enemy->pos.y += mov.y * coef;
     change_movement_rect(enemy, game, ENEMY[enemy->type].speed * difficulty);
@@ -69,6 +76,10 @@ static void get_new_position(entity_t *enemy, game_t *game, float difficulty)
 
 static void change_attack_rect(entity_t *enemy, game_t *game)
 {
+    if (enemy->change_pos == SKIP)
+        enemy->change_pos = TIME_OVERLAY;
+    if (enemy->change_pos > 0)
+        enemy->change_pos -= game->time_info->delta;
     if (ENTITY[enemy->type].max_second == 0)
         return;
     enemy->offset.y = ENTITY[enemy->type].text_size.y;
@@ -85,7 +96,7 @@ static void change_attack_rect(entity_t *enemy, game_t *game)
 
 static void attack_player(entity_t *enemy, save_t *save, game_t *game)
 {
-    if (enemy->cooldown <= 0) {
+    if (enemy->cooldown <= 0 && is_wall(game, enemy) == sfFalse) {
         save->info->item_info[INFO_HEALTH] -= ENEMY[enemy->type].attack;
         enemy->cooldown = ENEMY[enemy->type].cooldown *
             (2 - save->info->difficulty);
@@ -114,7 +125,7 @@ void change_death_rect(
         enemy->cooldown = DEATH_RECT;
         if (enemy->offset.x >= ENTITY[enemy->type].max_third *
             ENTITY[enemy->type].text_size.x)
-            enemy->offset.x -= ENTITY[enemy->type].text_size.x;
+            delete_node(save->entities, node, &free);
     } else
         enemy->cooldown -= game->time_info->delta;
 }
@@ -127,14 +138,15 @@ void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save)
     for (node_t *head = enemies->head; head != NULL; head = next) {
         next = head->next;
         tmp = head->data;
+        if (tmp->dist > RENDER_DISTANCE * save->info->difficulty
+            || tmp->type < NB_ITEM)
+            continue;
         if (tmp->is_alive == sfFalse) {
             change_death_rect(tmp, save, game, head);
             continue;
         }
-        if (tmp->dist > RENDER_DISTANCE * save->info->difficulty
-            || tmp->type < NB_ITEM)
-            continue;
-        if (tmp->dist < ENEMY[tmp->type].attack_range * save->info->difficulty)
+        if (tmp->dist < ENEMY[tmp->type].attack_range * save->info->difficulty
+            || tmp->change_pos > 0)
             attack_player(tmp, save, game);
         else
             get_new_position(tmp, game, save->info->difficulty);

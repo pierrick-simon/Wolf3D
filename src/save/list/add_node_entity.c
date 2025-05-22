@@ -36,7 +36,9 @@ static void fill_node_entity(linked_list_t *enemies,
     entity->id = id;
     entity->offset = (sfVector2f){0, 0};
     entity->is_alive = sfTrue;
-    entity->damage = 0;
+    entity->damage = SKIP;
+    entity->change_pos = SKIP;
+    entity->change_rect = 0;
     ++id;
     push_to_tail(enemies, entity);
 }
