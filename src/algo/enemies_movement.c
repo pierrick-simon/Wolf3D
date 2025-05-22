@@ -11,39 +11,47 @@
 #include <math.h>
 #include <stdlib.h>
 
-static sfBool check_wall(
-    int **map, sfVector2i *player_tile, sfVector2f *enemy_tile)
+static void get_angle(player_t *tmp, game_t *game, entity_t *enemy)
 {
-    int dx = ceil(fabs(enemy_tile->x - player_tile->x));
-    int dy = ceil(fabs(enemy_tile->y - player_tile->y));
-    int next = dx - dy;
-    int tmp = 0;
+    float dist = fabs(game->player->pos.x - enemy->pos.x) / enemy->dist;
+    float diff_x = game->player->pos.x - enemy->pos.x;
+    float diff_y = game->player->pos.y - enemy->pos.y;
 
-    while (player_tile->x != enemy_tile->x
-        || player_tile->y != enemy_tile->y) {
-        if (map[player_tile->y][player_tile->x] != 0)
-            return sfTrue;
-        tmp = 2 * next;
-        if (tmp > dy * -1) {
-            next -= dy;
-            player_tile->x += player_tile->x < enemy_tile->x ? 1 : -1;
-        }
-        if (tmp < dx) {
-            next += dx;
-            player_tile->y += player_tile->y < enemy_tile->y ? 1 : -1;
-        }
+    if (dist > 1)
+        dist = 1;
+    if (dist < -1)
+        dist = -1;
+    tmp->angle = asin(dist);
+    if (diff_y > 0) {
+        if (diff_x > 0)
+            tmp->angle = M_PI / 2 - tmp->angle;
+        else
+            tmp->angle += M_PI / 2;
+    } else {
+        if (diff_x > 0)
+            tmp->angle = (M_PI / 2 - tmp->angle) * -1;
+        else
+            tmp->angle = (M_PI / 2 + tmp->angle) * -1;
     }
-    return sfFalse;
 }
 
 static sfBool is_wall(game_t *game, entity_t *enemy)
 {
-    sfVector2i player_tile = {floor(game->player->pos.x / TILE_SIZE),
-        floor(game->player->pos.y / TILE_SIZE)};
-    sfVector2f enemy_tile = {floor(enemy->pos.x / TILE_SIZE),
-        floor(enemy->pos.y / TILE_SIZE)};
+    player_t tmp = {0};
+    intersection_t type = {0};
+    sfVector2f intersection_point = {0};
+    float value = 0;
 
-    return check_wall(game->player->save->map, &player_tile, &enemy_tile);
+    type.type = NONE;
+    tmp.save = game->player->save;
+    tmp.pos = enemy->pos;
+    if (enemy->dist < 1)
+        return sfFalse;
+    get_angle(&tmp, game, enemy);
+    value = cast_single_ray(&tmp, 0, &type, &intersection_point);
+    if (value < enemy->dist)
+        return sfTrue;
+    return sfFalse;
 }
 
 static void change_movement_rect(entity_t *enemy, game_t *game, float speed)
@@ -138,8 +146,7 @@ void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save)
     for (node_t *head = enemies->head; head != NULL; head = next) {
         next = head->next;
         tmp = head->data;
-        if (tmp->dist > RENDER_DISTANCE * save->info->difficulty
-            || tmp->type < NB_ITEM)
+        if (tmp->dist > RENDER_DISTANCE || tmp->type < NB_ITEM)
             continue;
         if (tmp->is_alive == sfFalse) {
             change_death_rect(tmp, save, game, head);
