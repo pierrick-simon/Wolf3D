@@ -172,4 +172,6 @@ void move_player(game_t *game, double delta, int *head, sfMusic *footstepp)
         *head = 0;
     if (*head > HEAD_SPRITE_X * 2)
         *head = HEAD_SPRITE_X * 2;
+    if (sfKeyboard_isKeyPressed(sfKeyLShift))
+        game->player->is_sprinting = sfTrue;
 }

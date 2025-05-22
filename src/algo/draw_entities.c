@@ -13,8 +13,8 @@ static void set_center(game_t *game, draw_entity_t *info)
     if (info->start.y + game->player->jump_value <= WIN_HEIGHT / 2 &&
         info->end.y + game->player->jump_value >= WIN_HEIGHT / 2 &&
         info->start.x <= WIN_WIDTH / 2 && info->end.x >= WIN_WIDTH / 2 &&
-        info->enemy->type >= NB_ITEM)
-        game->map->entity_center = info->enemy->id;
+        info->entity->type >= NB_ITEM)
+        game->map->entity_center = info->entity->id;
 }
 
 static void disp_entitie(draw_entity_t *info, system_t *sys,
@@ -24,54 +24,60 @@ static void disp_entitie(draw_entity_t *info, system_t *sys,
 
     set_center(game, info);
     for (int stripe = info->start.x; stripe < info->end.x; stripe++) {
-        if (info->dist.y > 0 && stripe > 0 && stripe < WIN_WIDTH
-            && info->dist.y < rays[stripe].len / (float)TILE_SIZE) {
+        if (stripe > 0 && stripe < WIN_WIDTH
+            && info->save_dist.y < rays[stripe].len / (float)TILE_SIZE) {
             tmp.position = (sfVector2f){stripe, info->start.y
                 + game->player->jump_value};
             tmp.texCoords = (sfVector2f)
                 {((float)(stripe - info->start.x) / (float)(info->end.x -
-                info->start.x)) * ENTITY[info->enemy->type].text_size.x, 0};
+                info->start.x)) * ENTITY[info->entity->type].text_size.x, 0};
             sfVertexArray_append(game->map->line, tmp);
             tmp.position.y = info->end.y + game->player->jump_value;
-            tmp.texCoords.y = ENTITY[info->enemy->type].text_size.y;
+            tmp.texCoords.y = ENTITY[info->entity->type].text_size.y;
             sfVertexArray_append(game->map->line, tmp);
         }
     }
     sfRenderWindow_drawVertexArray(sys->window,
-        game->map->line, &game->state_entities[info->enemy->type]);
+        game->map->line, &game->state_entities[info->entity->type]);
     sfVertexArray_clear(game->map->line);
 }
 
-static void get_dist(entity_t *enemy, game_t *game, draw_entity_t *info)
+static void get_dist(entity_t *entity, game_t *game, draw_entity_t *info)
 {
     sfVector2f v = game->player->v;
     sfVector2f n = game->player->n;
 
     info->diff = (sfVector2f)
-        {(enemy->pos.x - game->player->pos.x) / (float)TILE_SIZE,
-        (enemy->pos.y - game->player->pos.y) / (float)TILE_SIZE};
+        {(entity->pos.x - game->player->pos.x) / (float)TILE_SIZE,
+        (entity->pos.y - game->player->pos.y) / (float)TILE_SIZE};
     info->inv = (1.0 / ((n.x * v.y) - (v.x * n.y)));
     info->dist = (sfVector2f)
         {info->inv * ((v.x * info->diff.y) - (v.y * info->diff.x)),
         info->inv * ((n.x * info->diff.y) - (n.y * info->diff.x))};
+    info->save_dist = info->dist;
+    if (game->player->is_sprinting == sfTrue)
+        info->dist.y *= SPRINT_COEF;
 }
 
 static void draw_entitie(system_t *sys,
-    entity_t *enemy, game_t *game, ray_t rays[NB_RAYS])
+    entity_t *entity, game_t *game, ray_t rays[NB_RAYS])
 {
     draw_entity_t info = {0};
-    float ratio = ENTITY[enemy->type].text_size.y /
-        ENTITY[enemy->type].text_size.x;
+    float ratio = ENTITY[entity->type].text_size.y /
+        ENTITY[entity->type].text_size.x;
+    float offset = (ENTITY[entity->type].y * DIST_OFFSET) / entity->dist;
 
-    get_dist(enemy, game, &info);
+    get_dist(entity, game, &info);
+    if (info.save_dist.y <= 0)
+        return;
     info.x = (int)((WIN_WIDTH / 2) * (1 + (info.dist.x / info.dist.y)));
     info.size = abs(((int)((WIN_HEIGHT / info.dist.y) *
-        ENTITY[enemy->type].factor)));
+        ENTITY[entity->type].factor)));
     info.end = (sfVector2i){info.size / 2 + info.x,
-        (info.size * ratio) / 2 + WIN_HEIGHT / 2};
+        ((info.size * ratio) / 2 + WIN_HEIGHT / 2) + offset};
     info.start = (sfVector2i){- info.size / 2 + info.x,
-        (-(info.size * ratio) / 2 + WIN_HEIGHT / 2)};
-    info.enemy = enemy;
+        (-(info.size * ratio) / 2 + WIN_HEIGHT / 2) + offset};
+    info.entity = entity;
     disp_entitie(&info, sys, game, rays);
 }
 
