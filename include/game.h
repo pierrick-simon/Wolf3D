@@ -344,5 +344,7 @@ void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save);
 void move_y(player_t *player, double delta);
 void draw_entities(game_t *game, system_t *sys);
 void shot(system_t *sys, weapon_t *weapon, game_t *game);
+sfBool get_next_pos(entity_t *enemy, game_t *game);
+sfBool is_wall_between(game_t *game, entity_t *enemy);
 
 #endif

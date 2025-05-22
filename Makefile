@@ -26,6 +26,7 @@ SRC =	$(addprefix src/,					\
 				cast_pos.c					\
 				move_player.c				\
 				enemies_movement.c			\
+				enemies_algo.c				\
 			)								\
 			$(addprefix init/,				\
 				create_window.c				\

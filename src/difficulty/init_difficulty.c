@@ -14,7 +14,7 @@ void *init_difficulty(void)
 
     if (difficulty == NULL)
         return NULL;
-    difficulty->str = DIFF_ONE;
+    difficulty->str = DIFF_THREE;
     difficulty->draw = init_from_conf("config_file/difficulty.conf");
     if (difficulty->draw == NULL)
         return NULL;
