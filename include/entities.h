@@ -15,7 +15,7 @@
 
     #define NB_ITEM E_SWORD_ENEMY
 
-    #define HEAD 1.5
+    #define HEAD 2.0
 
 typedef struct game_s game_t;
 
