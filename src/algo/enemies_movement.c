@@ -11,49 +11,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-static void get_angle(player_t *tmp, game_t *game, entity_t *enemy)
-{
-    float dist = fabs(game->player->pos.x - enemy->pos.x) / enemy->dist;
-    float diff_x = game->player->pos.x - enemy->pos.x;
-    float diff_y = game->player->pos.y - enemy->pos.y;
-
-    if (dist > 1)
-        dist = 1;
-    if (dist < -1)
-        dist = -1;
-    tmp->angle = asin(dist);
-    if (diff_y > 0) {
-        if (diff_x > 0)
-            tmp->angle = M_PI / 2 - tmp->angle;
-        else
-            tmp->angle += M_PI / 2;
-    } else {
-        if (diff_x > 0)
-            tmp->angle = (M_PI / 2 - tmp->angle) * -1;
-        else
-            tmp->angle = (M_PI / 2 + tmp->angle) * -1;
-    }
-}
-
-static sfBool is_wall(game_t *game, entity_t *enemy)
-{
-    player_t tmp = {0};
-    intersection_t type = {0};
-    sfVector2f intersection_point = {0};
-    float value = 0;
-
-    type.type = NONE;
-    tmp.save = game->player->save;
-    tmp.pos = enemy->pos;
-    if (enemy->dist < 1)
-        return sfFalse;
-    get_angle(&tmp, game, enemy);
-    value = cast_single_ray(&tmp, 0, &type, &intersection_point);
-    if (value < enemy->dist)
-        return sfTrue;
-    return sfFalse;
-}
-
 static void change_movement_rect(entity_t *enemy, game_t *game, float speed)
 {
     enemy->offset.y = 0;
@@ -67,6 +24,40 @@ static void change_movement_rect(entity_t *enemy, game_t *game, float speed)
         enemy->change_rect -= game->time_info->delta;
 }
 
+static sfBool is_arrived(entity_t *enemy)
+{
+    if (enemy->pos.x > enemy->next_pos.x - 5
+        && enemy->pos.x < enemy->next_pos.x + 5
+        && enemy->pos.y > enemy->next_pos.y - 5
+        && enemy->pos.y < enemy->next_pos.y + 5)
+        return sfTrue;
+    return sfFalse;
+}
+
+static sfBool move_closer(entity_t *enemy, game_t *game, float difficulty)
+{
+    float dist = 0;
+    float coef = 0;
+    sfVector2f mov = {0};
+
+    if (is_wall_between(game, enemy) == sfFalse)
+        return sfFalse;
+    if (enemy->next_pos.x == SKIP || enemy->next_pos.y == SKIP
+        || is_arrived(enemy) == sfTrue)
+        if (get_next_pos(enemy, game) == sfFalse)
+            return sfTrue;
+    dist = sqrt(pow(enemy->pos.x - enemy->next_pos.x, 2) +
+        pow(enemy->pos.y - enemy->next_pos.y, 2));
+    coef = ENEMY[enemy->type].speed * difficulty
+        * game->time_info->delta / dist;
+    mov = (sfVector2f){enemy->next_pos.x - enemy->pos.x,
+        enemy->next_pos.y - enemy->pos.y};
+    enemy->pos.x += mov.x * coef;
+    enemy->pos.y += mov.y * coef;
+    change_movement_rect(enemy, game, ENEMY[enemy->type].speed * difficulty);
+    return sfTrue;
+}
+
 static void get_new_position(entity_t *enemy, game_t *game, float difficulty)
 {
     float coef = ENEMY[enemy->type].speed * difficulty
@@ -74,8 +65,7 @@ static void get_new_position(entity_t *enemy, game_t *game, float difficulty)
     sfVector2f mov = {game->player->pos.x - enemy->pos.x,
         game->player->pos.y - enemy->pos.y};
 
-    if (is_wall(game, enemy) == sfTrue)
-        return;
+    enemy->next_pos = (sfVector2f){SKIP, SKIP};
     enemy->change_pos = SKIP;
     enemy->pos.x += mov.x * coef;
     enemy->pos.y += mov.y * coef;
@@ -104,7 +94,7 @@ static void change_attack_rect(entity_t *enemy, game_t *game)
 
 static void attack_player(entity_t *enemy, save_t *save, game_t *game)
 {
-    if (enemy->cooldown <= 0 && is_wall(game, enemy) == sfFalse) {
+    if (enemy->cooldown <= 0) {
         save->info->item_info[INFO_HEALTH] -= ENEMY[enemy->type].attack;
         enemy->cooldown = ENEMY[enemy->type].cooldown *
             (2 - save->info->difficulty);
@@ -152,6 +142,8 @@ void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save)
             change_death_rect(tmp, save, game, head);
             continue;
         }
+        if (move_closer(tmp, game, save->info->difficulty) == sfTrue)
+            continue;
         if (tmp->dist < ENEMY[tmp->type].attack_range * save->info->difficulty
             || tmp->change_pos > 0)
             attack_player(tmp, save, game);

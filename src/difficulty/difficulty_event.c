@@ -28,7 +28,7 @@ static void switch_scene(sfEvent event, system_t *sys,
         state->old_scene = state->scene;
         state->scene = difficulty->draw[difficulty->str].scene;
         difficulty->draw[difficulty->str].color = sfWhite;
-        difficulty->str = DIFF_ONE;
+        difficulty->str = DIFF_THREE;
     }
 }
 

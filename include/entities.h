@@ -47,6 +47,8 @@ typedef enum {
 typedef struct entity_s {
     entity_id_t type;
     sfVector2f pos;
+    sfVector2f next_pos;
+    sfVector2i prev_tile;
     sfVector2f offset;
     sfBool is_alive;
     float dist;
@@ -138,6 +140,13 @@ static const enemy_info_t ENEMY[] __maybe_unused = {
     [E_GUN_ENEMY] = {10, 250, 2, 50, 250, 100},
     [E_SHEET_ENEMY] = {1, 15, 3, 150, 1, 1}
 };
+
+typedef struct closer_tile_s {
+    sfVector2i *next;
+    sfVector2i *cmp;
+    sfVector2i prev;
+    float *dist;
+} closer_tile_t;
 
 typedef struct draw_entity_s {
     sfVector2f diff;
