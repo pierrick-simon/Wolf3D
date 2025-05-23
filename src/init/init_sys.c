@@ -86,5 +86,6 @@ int init_system(system_t *sys, load_screen_t *start)
     sys->music = sfMusic_createFromFile("asset/menu_music.ogg");
     if (sys->window == NULL || sys->music == NULL)
         return ERROR;
+    sys->controler = sfJoystick_isConnected(0);
     return SUCCESS;
 }

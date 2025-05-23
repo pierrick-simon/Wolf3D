@@ -129,6 +129,7 @@ typedef struct state_info_s {
 
 typedef struct system_s {
     sfRenderWindow *window;
+    sfBool controler;
     sfMusic *music;
     background_t *background;
     textbox_t *textbox;
