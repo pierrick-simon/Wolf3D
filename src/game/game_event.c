@@ -116,7 +116,8 @@ static void interact(player_t *player,
             sfMusic_play(game->music[DOOR_MU]);
         }
         if (player->center_ray.distance < FINISH_DISTANCE && sys->save->map
-            [casted_pos.y][casted_pos.x] == wall_textures[FINAL].value) {
+            [casted_pos.y][casted_pos.x] == wall_textures[FINAL].value
+            && game->tool->finish == sfTrue) {
             sys->state->scene = WIN;
             sfMusic_play(game->music[END_LEVEL]);
         }

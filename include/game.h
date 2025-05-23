@@ -311,6 +311,7 @@ typedef struct toolbar_s {
     float last_save;
     sfBool saving;
     sfBool interact;
+    sfBool finish;
 } toolbar_t;
 
 typedef struct game_s {
@@ -363,5 +364,6 @@ void shot(system_t *sys, weapon_t *weapon, game_t *game);
 sfBool get_next_pos(entity_t *enemy, game_t *game);
 sfBool is_wall_between(game_t *game, entity_t *enemy);
 sfColor get_color(float len);
+void update_interact(toolbar_t *tool, player_t *player, int **map);
 
 #endif
