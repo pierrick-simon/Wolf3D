@@ -32,22 +32,21 @@ static void set_center(game_t *game, draw_entity_t *info, ray_t center)
     }
 }
 
-static void change_color_sprite(sfVertex *color,
-    entity_t *entity, game_t *game)
+static sfColor change_color_sprite(entity_t *entity, game_t *game, float len)
 {
     if (entity->damage >= 0) {
-        *color = (sfVertex){.color = sfRed};
         entity->damage -= game->time_info->delta;
-    } else
-        *color = (sfVertex){.color = sfWhite};
+        return sfRed;
+    }
+    return get_color(len * TILE_SIZE);
 }
 
 static void disp_entitie(draw_entity_t *info,
     game_t *game, ray_t rays[NB_RAYS])
 {
-    sfVertex tmp = {0};
+    sfVertex tmp = {.color =
+        change_color_sprite(info->entity, game, info->dist.y)};
 
-    change_color_sprite(&tmp, info->entity, game);
     set_center(game, info, rays[(int)((float)NB_RAYS / 2.0)]);
     for (int stripe = info->start.x; stripe < info->end.x; stripe++) {
         if (stripe > 0 && stripe < WIN_WIDTH
@@ -89,7 +88,7 @@ static void draw_entitie(system_t *sys,
     float offset = (ENTITY[entity->type].y * DIST_OFFSET) / entity->dist;
 
     get_dist(entity, game, &info);
-    if (info.dist.y <= 0)
+    if (info.dist.y <= 0 || info.dist.y > RENDER_DISTANCE)
         return;
     info.x = (int)((WIN_WIDTH / 2) * (1 + (info.dist.x / info.dist.y)));
     info.size = abs(((int)((WIN_HEIGHT / info.dist.y) *

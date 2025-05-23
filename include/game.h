@@ -28,6 +28,7 @@
     #define MAX_DISTANCE 100.0
 
     #define RENDER_DISTANCE 2000
+    #define DISTANCE_ENEMY 1000
 
     #define PLAYER_SPEED 100
     #define ROTATION_SPEED RAD(100)
@@ -103,6 +104,10 @@
 
     #define WEAPON_SCORE 10
     #define WALL_SCORE 5
+
+    #define START_BLACK 500.0
+    #define END_BLACK 1500.0
+    #define MAX_COLOR 255
 
 typedef enum {
     LOAD_W_TEXTURE,
@@ -346,5 +351,6 @@ void draw_entities(game_t *game, system_t *sys);
 void shot(system_t *sys, weapon_t *weapon, game_t *game);
 sfBool get_next_pos(entity_t *enemy, game_t *game);
 sfBool is_wall_between(game_t *game, entity_t *enemy);
+sfColor get_color(float len);
 
 #endif

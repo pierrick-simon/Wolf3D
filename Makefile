@@ -17,6 +17,7 @@ SRC =	$(addprefix src/,					\
 			$(addprefix algo/,				\
 				move_rect.c					\
 				move_y.c					\
+				get_color.c					\
 				draw_entities.c				\
 				sort_entities.c				\
 				center_ray.c				\

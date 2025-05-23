@@ -25,20 +25,6 @@ static float get_texture_x(intersection_type_t type, sfVector2f *intersection)
     return get_pourcentage_wall(type, intersection) * WALL_TEXTURE_X;
 }
 
-static sfColor get_color(float len)
-{
-    float a = 0;
-
-    if (len < 500.0)
-        a = 0;
-    else if (len > 1500.0)
-        a = 1;
-    else
-        a = (len - 500.0) / (1500.0 - 500.0);
-    a = 1 - a;
-    return sfColor_fromRGB(a * 255, a * 255, a * 255);
-}
-
 static void add_line(int i, float len_factor[2],
     float pos[2], game_t *game)
 {

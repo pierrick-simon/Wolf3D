@@ -136,7 +136,7 @@ void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save)
     for (node_t *head = enemies->head; head != NULL; head = next) {
         next = head->next;
         tmp = head->data;
-        if (tmp->dist > RENDER_DISTANCE || tmp->type < NB_ITEM)
+        if (tmp->dist > DISTANCE_ENEMY || tmp->type < NB_ITEM)
             continue;
         if (tmp->is_alive == sfFalse) {
             change_death_rect(tmp, save, game, head);
