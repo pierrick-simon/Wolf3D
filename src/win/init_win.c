@@ -11,7 +11,7 @@
 static int init_danse(sprite_t *danse)
 {
     danse->sprite = sfSprite_create();
-    danse->texture = sfTexture_createFromFile("asset/danse.png", NULL);
+    danse->texture = sfTexture_createFromFile(str_asset[DANSE_ASSET], NULL);
     if (danse->sprite == NULL || danse->texture == NULL)
         return ERROR;
     danse->rectangle = (sfIntRect){0, 0, DANSE_WIDTH, DANSE_HEIGHT};
@@ -36,7 +36,7 @@ void *init_win(void)
     if (win->danse == NULL || init_danse(win->danse) == ERROR)
         return NULL;
     win->str = WIN_ENTER;
-    win->draw = init_from_conf("config_file/win.conf");
+    win->draw = init_from_conf(str_conf[CONF_WIN]);
     win->clock = sfClock_create();
     win->name = malloc(sizeof(char) * (MAX_NAME_SCORE + 1));
     if (win->draw == NULL || win->clock == NULL || win->name == NULL)

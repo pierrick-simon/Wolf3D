@@ -15,7 +15,7 @@ void *init_pause(void)
     if (pause == NULL)
         return NULL;
     pause->str = PAUSE_RESUME;
-    pause->draw = init_from_conf("config_file/pause.conf");
+    pause->draw = init_from_conf(str_conf[CONF_PAUSE]);
     if (pause->draw == NULL)
         return NULL;
     return (void *)pause;

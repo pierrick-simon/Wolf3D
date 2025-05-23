@@ -33,7 +33,7 @@ char *open_file(const char *file)
     return buffer;
 }
 
-char **get_tab(char *file)
+char **get_tab(char const *file)
 {
     char *fd = open_file(file);
     char **tab = NULL;

@@ -15,7 +15,7 @@ void *init_settings(void)
     if (setting == NULL)
         return NULL;
     setting->str = SETTING_FULL;
-    setting->draw = init_from_conf("config_file/setting.conf");
+    setting->draw = init_from_conf(str_conf[CONF_SETTINGS]);
     setting->rect = sfRectangleShape_create();
     if (setting->draw == NULL || setting->rect == NULL)
         return NULL;

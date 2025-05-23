@@ -12,7 +12,7 @@ static int init_spin_chair(sprite_t *spin_chair)
 {
     spin_chair->sprite = sfSprite_create();
     spin_chair->texture = sfTexture_createFromFile(
-        "asset/spin_chair.png", NULL);
+        str_asset[SPIN_ASSET], NULL);
     if (spin_chair->sprite == NULL || spin_chair->texture == NULL)
         return ERROR;
     spin_chair->rectangle = (sfIntRect){0, 0, CHAIR_WIDTH, CHAIR_HEIGHT};
@@ -38,7 +38,7 @@ void *init_lose(void)
     if (lose->spin_chair == NULL || init_spin_chair(lose->spin_chair) == ERROR)
         return NULL;
     lose->str = LOSE_RESTART;
-    lose->draw = init_from_conf("config_file/lose.conf");
+    lose->draw = init_from_conf(str_conf[CONF_LOSE]);
     lose->clock = sfClock_create();
     lose->name = malloc(sizeof(char) * (MAX_NAME_SCORE + 1));
     if (lose->draw == NULL || lose->clock == NULL || lose->name == NULL)

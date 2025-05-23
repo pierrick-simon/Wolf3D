@@ -20,7 +20,7 @@ void *init_score(void)
     score->nb_page = 0;
     score->update = sfFalse;
     score->sort = sfTrue;
-    score->draw = init_from_conf("config_file/score.conf");
+    score->draw = init_from_conf(str_conf[CONF_SCORE]);
     if (score->draw == NULL)
         return NULL;
     return (void *)score;

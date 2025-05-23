@@ -15,7 +15,7 @@ void *init_leave(void)
     if (leave == NULL)
         return NULL;
     leave->str = LEAVE_SAVE;
-    leave->draw = init_from_conf("config_file/leave.conf");
+    leave->draw = init_from_conf(str_conf[CONF_LEAVE]);
     if (leave->draw == NULL)
         return NULL;
     return (void *)leave;

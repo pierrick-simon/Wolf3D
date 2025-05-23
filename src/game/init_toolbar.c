@@ -13,7 +13,7 @@ static int init_toolbar_sprite_head(sprite_t *sprite)
     double scale = TOOLBAR_HEIGHT / HEAD_SPRITE_Y + 0.4;
 
     sprite->sprite = sfSprite_create();
-    sprite->texture = sfTexture_createFromFile("asset/head.png", NULL);
+    sprite->texture = sfTexture_createFromFile(str_asset[HEAD_ASSET], NULL);
     if (sprite->sprite == NULL || sprite->texture == NULL)
         return ERROR;
     sprite->rectangle =
@@ -32,7 +32,8 @@ static int init_toolbar_sprite_head(sprite_t *sprite)
 static int init_toolbar_sprite_light(sprite_t *sprite)
 {
     sprite->sprite = sfSprite_create();
-    sprite->texture = sfTexture_createFromFile("asset/flashlight.png", NULL);
+    sprite->texture = sfTexture_createFromFile(
+        str_asset[FLASHLIGHT_ASSET], NULL);
     if (sprite->sprite == NULL || sprite->texture == NULL)
         return ERROR;
     sprite->rectangle =
@@ -56,9 +57,10 @@ int init_toolbar(toolbar_t *tool)
         || init_toolbar_sprite_light(tool->flashlight) == ERROR)
         return ERROR;
     tool->rectangle = sfRectangleShape_create();
-    tool->draw = init_from_conf("config_file/toolbar.conf");
-    tool->background = sfTexture_createFromFile("asset/toolbar.png", NULL);
-    tool->border = sfTexture_createFromFile("asset/minimap_border.png", NULL);
+    tool->draw = init_from_conf(str_conf[CONF_TOOLBAR]);
+    tool->background = sfTexture_createFromFile(
+        str_asset[TOOLBAR_ASSET], NULL);
+    tool->border = sfTexture_createFromFile(str_asset[BORDER_ASSET], NULL);
     if (tool->draw == NULL || tool->rectangle == NULL || tool->border == NULL)
         return ERROR;
     sfRectangleShape_setOutlineThickness(tool->rectangle, 2);
