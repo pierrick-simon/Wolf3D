@@ -59,24 +59,24 @@ static void change_weapons(sfEvent event, game_t *game, weapon_t *weapon)
 
 static void switch_scene(sfEvent event, state_info_t *state)
 {
-    if (is_input(event, sfKeyEscape, sfTrue, 3)) {
+    if (is_input(event, sfKeyEscape, sfTrue, 7)) {
         state->old_scene = state->scene;
         state->scene = PAUSE;
     }
 }
 
-static void tool_interact(
-    sfEvent event, save_t *save, toolbar_t *tool, light_t *light)
+static void tool_interact(sfEvent event, save_t *save,
+    toolbar_t *tool, light_t *light)
 {
-    if (is_input(event, sfKeyF5, sfFalse, 0))
+    if (is_input(event, sfKeyF5, sfTrue, 6))
         tool->save = save->info->time;
-    if (is_input(event, sfKeyF4, sfTrue, 0)) {
+    if (is_input(event, sfKeyF4, sfFalse, 0)) {
         if (tool->fps == sfTrue)
             tool->fps = sfFalse;
         else
             tool->fps = sfTrue;
     }
-    if (is_input(event, sfKeyV, sfFalse, 0)) {
+    if (is_input(event, sfKeyV, sfTrue, 3)) {
         if (light->flash_on == sfTrue)
             light->flash_on = sfFalse;
         else
@@ -101,21 +101,22 @@ static void open_door(system_t *sys, sfVector2i *pos)
     }
 }
 
-static void interact(int **map, player_t *player, system_t *sys, game_t *game)
+static void interact(player_t *player,
+    system_t *sys, game_t *game, sfEvent event)
 {
     sfVector2i casted_pos = cast_pos(&player->center_ray.pos,
         player->center_ray.type);
 
     if (casted_pos.x < 0 || casted_pos.y < 0)
         return;
-    if (sfKeyboard_isKeyPressed(sfKeyF)) {
-        if (player->center_ray.distance < OPEN_DISTANCE &&
-            map[casted_pos.y][casted_pos.x] == wall_textures[DOOR].value) {
+    if (is_input(event, sfKeyF, sfTrue, 0)) {
+        if (player->center_ray.distance < OPEN_DISTANCE && sys->save->map
+            [casted_pos.y][casted_pos.x] == wall_textures[DOOR].value) {
             open_door(sys, &casted_pos);
             sfMusic_play(game->music[DOOR_MU]);
         }
-        if (player->center_ray.distance < FINISH_DISTANCE &&
-            map[casted_pos.y][casted_pos.x] == wall_textures[FINAL].value) {
+        if (player->center_ray.distance < FINISH_DISTANCE && sys->save->map
+            [casted_pos.y][casted_pos.x] == wall_textures[FINAL].value) {
             sys->state->scene = WIN;
             sfMusic_play(game->music[END_LEVEL]);
         }
@@ -131,9 +132,9 @@ void game_events(system_t *sys, game_t *game)
         change_weapons(event, game, game->weapon);
         switch_scene(event, sys->state);
         tool_interact(event, sys->save, game->tool, game->light);
+        interact(game->player, sys, game, event);
     }
     shot(sys, game->weapon, game);
-    interact(sys->save->map, game->player, sys, game);
     move_player(game, game->time_info->delta,
         &game->tool->head->rectangle.left, game->music[FOOTSTEPS]);
     sfSprite_setTextureRect(game->tool->head->sprite,

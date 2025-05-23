@@ -57,9 +57,12 @@ static node_t *find_switch_node(
 void sort_linked_list(
     linked_list_t *list, bool (*sort_data)(void *first, void *second))
 {
-    node_t *current = list->head;
+    node_t *current = NULL;
     node_t *node = NULL;
 
+    if (list == NULL)
+        return;
+    current = list->head;
     if (current == NULL)
         return;
     while (current->next != NULL) {

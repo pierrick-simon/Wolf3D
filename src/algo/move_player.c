@@ -110,7 +110,7 @@ static void rotate_player(player_t *player, double delta, int *head)
 
     move_y(player, delta);
     if (fabs(x_controler) > 30)
-        player->angle += ROTATION_SPEED * delta * (x_controler / 75);
+        player->angle += ROTATION_SPEED * delta * (x_controler / UV_VALUE);
     if (sfKeyboard_isKeyPressed(sfKeyLeft)) {
         *head -= HEAD_SPRITE_X;
         player->angle -= ROTATION_SPEED * delta;

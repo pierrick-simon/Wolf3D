@@ -40,7 +40,7 @@ static void switch_scene(sfEvent event, maps_t *maps,
         maps->draw[maps->str].color = sfWhite;
         maps->str = MAPS_SUB;
     }
-    if (is_input(event, sfKeyEscape, sfFalse, 0)) {
+    if (is_input(event, sfKeyEscape, sfTrue, 7)) {
         state->old_scene = state->scene;
         state->scene = maps->draw[MAPS_BACK].scene;
         free_linked_list(maps->info->list, &free_node_file);
@@ -105,25 +105,32 @@ static sfBool move_right(info_save_t *info)
     return false;
 }
 
+static void move_map(sfEvent event, maps_t *maps)
+{
+    float x = sfJoystick_getAxisPosition(0, sfJoystickPovX);
+
+    if ((is_input(event, sfKeyRight, sfTrue, 5) || x == MAX_JOYSTICK)
+        && move_right(maps->info) == sfTrue) {
+        maps->info->file += NB_SHOW_SAVE;
+        maps->info->current_file =
+            maps->info->current_file->next->next->next;
+        maps->draw[maps->str].color = sfWhite;
+        maps->str = MAPS_SUB;
+    }
+    if ((is_input(event, sfKeyLeft, sfTrue, 6) || x == - MAX_JOYSTICK)
+        && maps->info->file > 0) {
+        maps->info->file -= NB_SHOW_SAVE;
+        maps->info->current_file =
+            maps->info->current_file->prev->prev->prev;
+        maps->draw[maps->str].color = sfWhite;
+        maps->str = MAPS_SUB;
+    }
+}
+
 static void change_map(sfEvent event, maps_t *maps)
 {
     if (maps->str >= MAPS_SUB && maps->str <= MAPS_SAVE3) {
-        if (is_input(event, sfKeyRight, sfFalse, 0)
-            && move_right(maps->info) == sfTrue) {
-            maps->info->file += NB_SHOW_SAVE;
-            maps->info->current_file =
-                maps->info->current_file->next->next->next;
-            maps->draw[maps->str].color = sfWhite;
-            maps->str = MAPS_SUB;
-        }
-        if (is_input(event, sfKeyLeft, sfFalse, 0)
-            && maps->info->file > 0) {
-            maps->info->file -= NB_SHOW_SAVE;
-            maps->info->current_file =
-                maps->info->current_file->prev->prev->prev;
-            maps->draw[maps->str].color = sfWhite;
-            maps->str = MAPS_SUB;
-        }
+        move_map(event, maps);
         maps->draw[maps->str].color = sfRed;
     }
 }

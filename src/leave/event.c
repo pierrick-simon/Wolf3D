@@ -14,8 +14,8 @@ static void switch_scene(
     int tmp = state->old_scene;
 
     if (is_input(event, sfKeyEnter, sfTrue, 0)
-        || is_input(event, sfKeyEscape, sfFalse, 0)) {
-        if (is_input(event, sfKeyEscape, sfFalse, 0))
+        || is_input(event, sfKeyEscape, sfTrue, 7)) {
+        if (is_input(event, sfKeyEscape, sfTrue, 7))
             leave->str = LEAVE_SAVE;
         if (leave->str == LEAVE_CANCEL) {
             state->old_scene = state->scene;

@@ -42,8 +42,8 @@ static void switch_scene(
     sfEvent event, system_t *sys, win_t *win, state_info_t *state)
 {
     if (is_input(event, sfKeyEnter, sfTrue, 0)
-        || is_input(event, sfKeyEscape, sfFalse, 0)) {
-        if (is_input(event, sfKeyEscape, sfFalse, 0))
+        || is_input(event, sfKeyEscape, sfTrue, 7)) {
+        if (is_input(event, sfKeyEscape, sfTrue, 7))
             win->str = WIN_MENU;
         update_score(sys, win->name);
         state->old_scene = state->scene;

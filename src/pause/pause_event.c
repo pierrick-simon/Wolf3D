@@ -42,7 +42,7 @@ static void switch_scene(
         pause->draw[pause->str].color = sfWhite;
         pause->str = PAUSE_RESUME;
     }
-    if (is_input(event, sfKeyEscape, sfTrue, 3)) {
+    if (is_input(event, sfKeyEscape, sfTrue, 7)) {
         state->old_scene = state->scene;
         state->scene = GAME;
         pause->draw[pause->str].color = sfWhite;

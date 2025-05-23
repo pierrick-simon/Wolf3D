@@ -109,6 +109,8 @@
     #define END_BLACK 1500.0
     #define MAX_COLOR 255
 
+    #define UV_VALUE 75
+
 typedef enum {
     LOAD_W_TEXTURE,
     LOAD_W_MUSIC,

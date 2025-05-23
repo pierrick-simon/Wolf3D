@@ -12,7 +12,7 @@ static void switch_scene(
     sfEvent event, score_t *score, state_info_t *state)
 {
     if ((is_input(event, sfKeyEnter, sfTrue, 0) && score->str == SCORE_BACK)
-        || is_input(event, sfKeyEscape, sfFalse, 0)) {
+        || is_input(event, sfKeyEscape, sfTrue, 7)) {
         state->old_scene = state->scene;
         state->scene = score->draw[SCORE_BACK].scene;
         free_linked_list(score->list, &free_info_score);
@@ -60,16 +60,16 @@ static void move_left(score_t *score)
 static void change_page(sfEvent event, score_t *score)
 {
     if (score->str == SCORE_SUB) {
-        if (is_input(event, sfKeyRight, sfFalse, 0))
+        if (is_input(event, sfKeyRight, sfTrue, 5))
             move_right(score);
-        if (is_input(event, sfKeyLeft, sfFalse, 0))
+        if (is_input(event, sfKeyLeft, sfTrue, 4))
             move_left(score);
     }
 }
 
 static void change_sort(sfEvent event, score_t *score)
 {
-    if (is_input(event, sfKeyE, sfFalse, 0)) {
+    if (is_input(event, sfKeyE, sfTrue, 0)) {
         if (score->sort == sfTrue) {
             score->sort = sfFalse;
             sort_linked_list(score->list, &sort_by_time);
@@ -77,8 +77,10 @@ static void change_sort(sfEvent event, score_t *score)
             score->sort = sfTrue;
             sort_linked_list(score->list, &sort_by_score);
         }
-        score->current_score = score->list->head;
         score->current = 1;
+        if (score->list == NULL)
+            return;
+        score->current_score = score->list->head;
     }
 }
 

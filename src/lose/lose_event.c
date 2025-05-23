@@ -31,8 +31,8 @@ static void switch_scene(
     sfEvent event, system_t *sys, lose_t *lose, state_info_t *state)
 {
     if (is_input(event, sfKeyEnter, sfTrue, 0)
-        || is_input(event, sfKeyEscape, sfFalse, 0)) {
-        if (is_input(event, sfKeyEscape, sfFalse, 0))
+        || is_input(event, sfKeyEscape, sfTrue, 7)) {
+        if (is_input(event, sfKeyEscape, sfTrue, 7))
             lose->str = LOSE_MENU;
         state->old_scene = state->scene;
         if (load_restart(lose, sys, sys->save->name) == ERROR)

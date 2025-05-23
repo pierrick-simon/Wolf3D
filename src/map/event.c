@@ -60,7 +60,7 @@ static void switch_scene(
             free(tmp);
         reset_str(map, state, map->str);
     }
-    if (is_input(event, sfKeyEscape, sfFalse, 0))
+    if (is_input(event, sfKeyEscape, sfTrue, 7))
         reset_str(map, state, MAP_BACK);
 }
 

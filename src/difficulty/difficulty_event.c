@@ -21,8 +21,8 @@ static void switch_scene(sfEvent event, system_t *sys,
     difficulty_t *difficulty, state_info_t *state)
 {
     if (is_input(event, sfKeyEnter, sfTrue, 0)
-        || is_input(event, sfKeyEscape, sfFalse, 0)) {
-        if (is_input(event, sfKeyEscape, sfFalse, 0))
+        || is_input(event, sfKeyEscape, sfTrue, 7)) {
+        if (is_input(event, sfKeyEscape, sfTrue, 7))
             difficulty->str = DIFF_BACK;
         change_difficulty(sys, difficulty->str);
         state->old_scene = state->scene;
