@@ -33,6 +33,10 @@ typedef enum entity_id_e {
     E_SWORD_ENEMY,
     E_GUN_ENEMY,
     E_SHEET_ENEMY,
+    E_CYBORG,
+    E_GROWLER,
+    E_PHANTOM,
+    E_BOSS,
     NB_ENTITIES,
 } entity_id_t;
 
@@ -119,11 +123,19 @@ static const entity_info_t ENTITY[] __maybe_unused = {
     [E_WEAPON_FOUR] = {"asset/floor_minigun.png",
         {54, 16}, 0.3, 6},
     [E_SWORD_ENEMY] = {"asset/sword.png",
-        {48, 67}, 0.8, 1, 4, 3, 9, {0, 0, 1, 0.3}},
+        {79, 83}, 1, 1, 4, 3, 9, {0, 0, 1, 0.3}},
     [E_GUN_ENEMY] = {"asset/soldier.png",
         {42, 55}, 0.8, 1, 4, 2, 8, {0, 0, 1, 0.3}},
     [E_SHEET_ENEMY] = {"asset/sheet.png",
         {640, 670}, 0.8, 1, 1, 0, 0, {0, 0, 1, 0.3}},
+    [E_CYBORG] = {"asset/cyborg.png",
+        {67, 59}, 0.8, 1, 4, 2, 5, {0, 0, 1, 0.3}},
+    [E_GROWLER] = {"asset/growler.png",
+        {80, 91}, 0.8, 1, 3, 2, 6, {0, 0, 1, 0.3}},
+    [E_PHANTOM] = {"asset/phantom.png",
+        {65, 60}, 0.8, 1, 3, 3, 6, {0, 0, 1, 0.3}},
+    [E_BOSS] = {"asset/boss.png",
+        {161, 85}, 1, 1, 5, 2, 11, {0, 0, 1, 0.3}},
 };
 
 typedef struct enemy_info_s {
@@ -138,7 +150,11 @@ typedef struct enemy_info_s {
 static const enemy_info_t ENEMY[] __maybe_unused = {
     [E_SWORD_ENEMY] = {25, 50, 3, 150, 100, 200},
     [E_GUN_ENEMY] = {10, 250, 2, 50, 250, 100},
-    [E_SHEET_ENEMY] = {1, 15, 3, 150, 1, 1}
+    [E_SHEET_ENEMY] = {1, 15, 3, 150, 1, 1},
+    [E_CYBORG] = {10, 250, 2, 50, 250, 100},
+    [E_GROWLER] = {10, 250, 2, 50, 250, 100},
+    [E_PHANTOM] = {10, 250, 2, 50, 250, 100},
+    [E_BOSS] = {20, 400, 3, 10, 1000, 1000},
 };
 
 typedef struct closer_tile_s {
