@@ -99,6 +99,13 @@ static void update_health_enemi(linked_list_t *entities, float difficulty)
     }
 }
 
+static void update_str(system_t *sys, draw_textbox_t *draw)
+{
+    if (sys->controler == sfTrue) {
+        sprintf(draw[TOOL_INTERACT].str, "press (a) to interact");
+    }
+}
+
 void update_save(system_t *sys, game_t *game)
 {
     update_doors(sys, game);
@@ -111,6 +118,7 @@ void update_save(system_t *sys, game_t *game)
         game->tool->no_sprint = 0;
         game->tool->save = -1;
         game->tool->last_save = 0;
+        update_str(sys, game->tool->draw);
         update_save_light(sys, game->light, game->tool->flashlight);
         update_save_weapon(sys, game->weapon);
         update_health_enemi(sys->save->entities, sys->save->info->difficulty);
