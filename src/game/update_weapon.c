@@ -91,3 +91,36 @@ void update_ammo(system_t *sys, game_t *game)
         update_toolbar_percent(&game->tool->draw[TOOL_AMMO_NB],
             sys->save->info->item_info[game->weapon->weapon]);
 }
+
+static sfBool is_boss(linked_list_t *entities)
+{
+    for (node_t *head = entities->head; head != NULL; head = head->next) {
+        if (((entity_t *)head->data)->type == E_BOSS)
+            return sfTrue;
+    }
+    return sfFalse;
+}
+
+void update_interact(toolbar_t *tool, player_t *player, int **map)
+{
+    sfVector2i casted_pos = cast_pos(&player->center_ray.pos,
+        player->center_ray.type);
+
+    tool->interact = sfFalse;
+    tool->finish = sfTrue;
+    if (casted_pos.x < 0 || casted_pos.y < 0)
+        return;
+    if (player->center_ray.distance < OPEN_DISTANCE &&
+        map[casted_pos.y][casted_pos.x] == wall_textures[DOOR].value)
+        tool->interact = sfTrue;
+    if ((player->center_ray.distance < FINISH_DISTANCE &&
+        map[casted_pos.y][casted_pos.x] == wall_textures[FINAL].value)) {
+        tool->interact = sfTrue;
+        if (is_boss(player->save->entities) == sfTrue)
+            tool->finish = sfFalse;
+    }
+    if (tool->finish == sfFalse)
+        tool->draw[TOOL_INTERACT].color = GREY;
+    else
+        tool->draw[TOOL_INTERACT].color = sfWhite;
+}
