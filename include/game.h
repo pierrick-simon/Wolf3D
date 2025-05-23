@@ -96,7 +96,7 @@
     #define LEN_INDEX 0
     #define FACTOR_INDEX 1
 
-    #define Y_SPEED 500
+    #define Y_SPEED 750
     #define Y_MAX 500
     #define Y_MIN -Y_MAX
 

@@ -8,6 +8,19 @@
 #include "game.h"
 #include "entities.h"
 
+static void set_weakness(game_t *game, draw_entity_t *info, sfVector2f *ratio)
+{
+    entity_id_t type = info->entity->type;
+
+    if (ratio->x > ENTITY[type].weak_start.x &&
+        ratio->x < ENTITY[type].weak_end.x
+        && ratio->y > ENTITY[type].weak_start.y &&
+        ratio->y < ENTITY[type].weak_end.y)
+        game->map->is_weakness = sfTrue;
+    else
+        game->map->is_weakness = sfFalse;
+}
+
 static void set_center(game_t *game, draw_entity_t *info, ray_t center)
 {
     sfVector2f ratio = {0};
@@ -17,18 +30,14 @@ static void set_center(game_t *game, draw_entity_t *info, ray_t center)
         info->dist.y >= center.len / (float)TILE_SIZE)
         return;
     type = info->entity->type;
-    ratio = (sfVector2f){(info->end.x - ((float)WIN_WIDTH / 2.0)) /
-        (info->end.x - info->start.x), 1 - (((info->end.y) -
+    ratio = (sfVector2f){1 - ((info->end.x - ((float)WIN_WIDTH / 2.0)) /
+        (info->end.x - info->start.x)), 1 - (((info->end.y) -
         ((float)WIN_HEIGHT / 2.0)) / ((info->end.y) - (info->start.y)))};
-    if (ratio.x > 0 && ratio.x < 1 && ratio.y > 0 && ratio.y < 1) {
+    if (ratio.x > ENTITY[type].hit_start.x && ratio.x < ENTITY[type].hit_end.x
+        && ratio.y > ENTITY[type].hit_start.y &&
+        ratio.y < ENTITY[type].hit_end.y) {
         game->map->entity_center = info->entity->id;
-        if (ratio.x > ENTITY[type].weakness.left &&
-            ratio.x < ENTITY[type].weakness.left + ENTITY[type].weakness.width
-            && ratio.y > ENTITY[type].weakness.top &&
-            ratio.y < ENTITY[type].weakness.top + ENTITY[type].weakness.height)
-            game->map->is_weakness = sfTrue;
-        else
-            game->map->is_weakness = sfFalse;
+        set_weakness(game, info, &ratio);
     }
 }
 

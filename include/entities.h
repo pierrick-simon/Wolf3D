@@ -96,7 +96,10 @@ typedef struct entity_info_s {
     int max_first;
     int max_second;
     int max_third;
-    sfFloatRect weakness;
+    sfVector2f hit_start;
+    sfVector2f hit_end;
+    sfVector2f weak_start;
+    sfVector2f weak_end;
 } entity_info_t;
 
     #define DIST_OFFSET 5000
@@ -123,19 +126,26 @@ static const entity_info_t ENTITY[] __maybe_unused = {
     [E_WEAPON_FOUR] = {"asset/floor_minigun.png",
         {54, 16}, 0.4, 6},
     [E_SWORD_ENEMY] = {"asset/sword.png",
-        {79, 83}, 1, 1, 4, 3, 9, {0, 0, 1, 0.3}},
+        {79, 83}, 1, 1, 4, 3, 9,
+        {0.15, 0.15}, {0.85, 1}, {0.15, 0.15}, {0.85, 0.4}},
     [E_GUN_ENEMY] = {"asset/soldier.png",
-        {42, 55}, 0.8, 1, 4, 2, 8, {0, 0, 1, 0.3}},
+        {42, 55}, 0.6, 1, 4, 2, 8,
+        {0, 0}, {0.85, 1}, {0, 0}, {0.85, 0.3}},
     [E_SHEET_ENEMY] = {"asset/sheet.png",
-        {640, 670}, 0.8, 1, 1, 0, 0, {0, 0, 1, 0.3}},
+        {640, 670}, 0.8, 1, 1, 0, 0,
+        {0, 0}, {1, 1}, {0, 0}, {0, 0}},
     [E_CYBORG] = {"asset/cyborg.png",
-        {67, 59}, 0.8, 1, 4, 2, 5, {0, 0, 1, 0.3}},
+        {67, 59}, 0.8, 1, 4, 2, 5,
+        {0.15, 0}, {0.85, 1}, {0.15, 0}, {0.85, 0.3}},
     [E_GROWLER] = {"asset/growler.png",
-        {80, 91}, 0.8, 1, 3, 2, 6, {0, 0, 1, 0.3}},
+        {80, 91}, 0.8, 1, 3, 2, 6,
+        {0.15, 0}, {0.70, 1}, {0.15, 0}, {0.70, 0.3}},
     [E_PHANTOM] = {"asset/phantom.png",
-        {65, 60}, 0.8, 1, 3, 3, 6, {0, 0, 1, 0.3}},
+        {65, 60}, 0.8, 1, 3, 3, 6,
+        {0.15, 0}, {0.85, 1}, {0.15, 0.4}, {0.85, 0.6}},
     [E_BOSS] = {"asset/boss.png",
-        {161, 85}, 1, 1, 5, 2, 11, {0, 0, 1, 0.3}},
+        {161, 85}, 2.5, -2, 5, 2, 11,
+        {0.2, 0}, {0.8, 0.7}, {0.3, 0}, {0.7, 0.5}},
 };
 
 typedef struct enemy_info_s {
@@ -154,7 +164,7 @@ static const enemy_info_t ENEMY[] __maybe_unused = {
     [E_CYBORG] = {17, 450, 5, 30, 250, 100},
     [E_GROWLER] = {2, 250, 0.5, 50, 25, 25},
     [E_PHANTOM] = {17, 32, 4, 30, 250, 250},
-    [E_BOSS] = {23, 350, 4, 10, 10000, 1000},
+    [E_BOSS] = {15, 350, 4, 10, 10000, 1000},
 };
 
 typedef struct closer_tile_s {
