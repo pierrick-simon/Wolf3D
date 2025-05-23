@@ -72,6 +72,36 @@ typedef enum scene_s {
     QUIT,
 } scene_t;
 
+typedef enum config_e {
+    CONF_DIFFICULTY,
+    CONF_LEAVE,
+    CONF_LOSE,
+    CONF_MAP,
+    CONF_MAPS,
+    CONF_MENU,
+    CONF_PAUSE,
+    CONF_SCORE,
+    CONF_SETTINGS,
+    CONF_TOOLBAR,
+    CONF_WIN,
+    CONF_WEAPON,
+} config_t;
+
+typedef enum asset_e {
+    WALLS_ASSET,
+    HEAD_ASSET,
+    FLASHLIGHT_ASSET,
+    TOOLBAR_ASSET,
+    BORDER_ASSET,
+    EMPTY_ASSET,
+    FONT_ASSET,
+    GUY_ASSET,
+    WALLPAPER_ASSET,
+    MENU_MUSIC_ASSET,
+    SPIN_ASSET,
+    DANSE_ASSET,
+} asset_t;
+
 static const char *str_scene[] __maybe_unused = {
     [GAME] = "game",
     [MENU] = "menu",
@@ -86,6 +116,36 @@ static const char *str_scene[] __maybe_unused = {
     [DIFFICULTY] = "difficulty",
     [NB_SCENE] = "",
     [QUIT] = "quit",
+};
+
+static const char *str_conf[] __maybe_unused = {
+    [CONF_DIFFICULTY] = "config_file/difficulty.conf",
+    [CONF_LEAVE] = "config_file/leave.conf",
+    [CONF_LOSE] = "config_file/lose.conf",
+    [CONF_MAP] = "config_file/map.conf",
+    [CONF_MAPS] = "config_file/maps.conf",
+    [CONF_MENU] = "config_file/menu.conf",
+    [CONF_PAUSE] = "config_file/pause.conf",
+    [CONF_SCORE] = "config_file/score.conf",
+    [CONF_SETTINGS] = "config_file/setting.conf",
+    [CONF_TOOLBAR] = "config_file/toolbar.conf",
+    [CONF_WIN] = "config_file/win.conf",
+    [CONF_WEAPON] = "config_file/weapon.conf",
+};
+
+static const char *str_asset[] __maybe_unused = {
+    [WALLS_ASSET] = "asset/walls.png",
+    [HEAD_ASSET] = "asset/head.png",
+    [FLASHLIGHT_ASSET] = "asset/flashlight.png",
+    [TOOLBAR_ASSET] = "asset/toolbar.png",
+    [BORDER_ASSET] = "asset/minimap_border.png",
+    [EMPTY_ASSET] = "asset/empty.ogg",
+    [FONT_ASSET] = "asset/font.ttf",
+    [GUY_ASSET] = "asset/doom_guy.png",
+    [WALLPAPER_ASSET] = "asset/wallpaper.png",
+    [MENU_MUSIC_ASSET] = "asset/menu_music.ogg",
+    [SPIN_ASSET] = "asset/spin_chair.png",
+    [DANSE_ASSET] = "asset/danse.png",
 };
 
 typedef struct save_s save_t;
@@ -142,7 +202,7 @@ int check_env(char **env);
 // init
 
 sfRenderWindow *create_window(sfUint32 style, double coeff);
-draw_textbox_t *init_from_conf(char *path);
+draw_textbox_t *init_from_conf(const char *path);
 
 // event
 

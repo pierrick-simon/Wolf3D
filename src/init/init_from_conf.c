@@ -55,7 +55,7 @@ static int fill_draw(draw_textbox_t *draw, char **tab, int len)
     return SUCCESS;
 }
 
-draw_textbox_t *init_from_conf(char *path)
+draw_textbox_t *init_from_conf(char const *path)
 {
     char **tab = get_tab(path);
     int len = 0;

@@ -200,6 +200,15 @@ typedef enum {
     NB_MUSIC,
 } music_id_t;
 
+static const char *str_sound[] __maybe_unused = {
+    [DESTROY_WALL] = "asset/destroy_wall.ogg",
+    [DOOR_MU] = "asset/door.ogg",
+    [END_LEVEL] = "asset/end_level.ogg",
+    [FOOTSTEPS] = "asset/footsteps.ogg",
+    [HURT] = "asset/hurt.ogg",
+    [PICK_UP] = "asset/pick_up.ogg",
+};
+
 typedef struct light_s {
     sfRenderTexture *night_render;
     const sfTexture *night_texture;

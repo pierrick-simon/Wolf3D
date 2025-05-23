@@ -15,7 +15,7 @@ void *init_menu(void)
     if (menu == NULL)
         return NULL;
     menu->str = MENU_PLAY;
-    menu->draw = init_from_conf("config_file/menu.conf");
+    menu->draw = init_from_conf(str_conf[CONF_MENU]);
     if (menu->draw == NULL)
         return NULL;
     return (void *)menu;

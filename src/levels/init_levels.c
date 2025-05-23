@@ -25,7 +25,7 @@ void *init_maps(void)
     if (maps == NULL)
         return NULL;
     maps->str = MENU_PLAY;
-    maps->draw = init_from_conf("config_file/maps.conf");
+    maps->draw = init_from_conf(str_conf[CONF_MAPS]);
     if (maps->draw == NULL)
         return NULL;
     maps->info = malloc(sizeof(info_save_t));

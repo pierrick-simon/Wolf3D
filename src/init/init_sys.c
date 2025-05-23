@@ -14,7 +14,7 @@
 static int init_textbox(textbox_t *textbox, load_screen_t *start)
 {
     textbox->text = sfText_create();
-    textbox->font = sfFont_createFromFile("asset/font.ttf");
+    textbox->font = sfFont_createFromFile(str_asset[FONT_ASSET]);
     if (textbox->text == NULL || textbox->font == NULL)
         return ERROR;
     sfText_setFont(textbox->text, textbox->font);
@@ -27,10 +27,10 @@ static int init_background(background_t *background, load_screen_t *start)
     double scale = (double)WIN_HEIGHT / GUY_SPRITE_Y;
 
     background->guy_s = sfSprite_create();
-    background->guy_t = sfTexture_createFromFile("asset/doom_guy.png", NULL);
+    background->guy_t = sfTexture_createFromFile(str_asset[GUY_ASSET], NULL);
     background->wallpaper_s = sfSprite_create();
     background->wallpaper_t =
-        sfTexture_createFromFile("asset/wallpaper.png", NULL);
+        sfTexture_createFromFile(str_asset[WALLPAPER_ASSET], NULL);
     if (background->guy_s == NULL || background->guy_t == NULL
         || background->wallpaper_s == NULL || background->wallpaper_t == NULL)
         return ERROR;
@@ -83,7 +83,7 @@ int init_system(system_t *sys, load_screen_t *start)
     if (sys->save == NULL || init_save(sys->save) == ERROR)
         return ERROR;
     sys->window = create_window(sfFullscreen, 1);
-    sys->music = sfMusic_createFromFile("asset/menu_music.ogg");
+    sys->music = sfMusic_createFromFile(str_asset[MENU_MUSIC_ASSET]);
     if (sys->window == NULL || sys->music == NULL)
         return ERROR;
     sys->controler = sfJoystick_isConnected(0);

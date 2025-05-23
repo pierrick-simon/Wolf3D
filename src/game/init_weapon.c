@@ -45,7 +45,7 @@ static int init_weapon(char *info, weapon_info_t *weapon)
 
 static int get_weapon_info(weapon_info_t *info)
 {
-    char **tab = get_tab("config_file/weapon.conf");
+    char **tab = get_tab(str_conf[CONF_WEAPON]);
     int return_value = SUCCESS;
 
     if (tab == NULL)
@@ -65,7 +65,7 @@ int init_weapons(weapon_t *weapon)
     weapon->weapon = 0;
     weapon->sprite = sfSprite_create();
     weapon->info = malloc(sizeof(weapon_info_t) * NB_WEAPON);
-    weapon->empty = sfMusic_createFromFile("asset/empty.ogg");
+    weapon->empty = sfMusic_createFromFile(str_asset[EMPTY_ASSET]);
     if (weapon->sprite == NULL || weapon->info == NULL
         || get_weapon_info(weapon->info) == ERROR)
         return ERROR;

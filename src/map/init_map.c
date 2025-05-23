@@ -17,7 +17,7 @@ void *init_map(void)
     map->str = MAP_PLAY;
     map->save = sfFalse;
     map->check = sfFalse;
-    map->draw = init_from_conf("config_file/map.conf");
+    map->draw = init_from_conf(str_conf[CONF_MAP]);
     if (map->draw == NULL)
         return NULL;
     return (void *)map;

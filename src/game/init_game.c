@@ -29,7 +29,7 @@ static int init_crossair(player_t *player)
 static int init_states(map_t *map)
 {
     map->wall_states.texture =
-        sfTexture_createFromFile("asset/walls.png", NULL);
+        sfTexture_createFromFile(str_asset[WALLS_ASSET], NULL);
     if (map->wall_states.texture == NULL)
         return ERROR;
     map->wall_states.transform = sfTransform_Identity;
@@ -89,12 +89,8 @@ static int init_time_info(time_info_t *time_info)
 
 static int init_music(sfMusic **music)
 {
-    music[DESTROY_WALL] = sfMusic_createFromFile("asset/destroy_wall.ogg");
-    music[DOOR_MU] = sfMusic_createFromFile("asset/door.ogg");
-    music[END_LEVEL] = sfMusic_createFromFile("asset/end_level.ogg");
-    music[FOOTSTEPS] = sfMusic_createFromFile("asset/footsteps.ogg");
-    music[HURT] = sfMusic_createFromFile("asset/hurt.ogg");
-    music[PICK_UP] = sfMusic_createFromFile("asset/pick_up.ogg");
+    for (int i = 0; i < NB_MUSIC; i++)
+        music[i] = sfMusic_createFromFile(str_sound[i]);
     for (int i = 0; i < NB_MUSIC; i++)
         if (music[i] == NULL)
             return ERROR;
