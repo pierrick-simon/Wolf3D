@@ -160,7 +160,7 @@ typedef struct enemy_info_s {
 static const enemy_info_t ENEMY[] __maybe_unused = {
     [E_SWORD_ENEMY] = {8, 32, 1, 100, 100, 150},
     [E_GUN_ENEMY] = {7, 300, 2, 50, 175, 100},
-    [E_SHEET_ENEMY] = {1, 15, 3, 150, 1, 10},
+    [E_SHEET_ENEMY] = {20, 15, 3, 150, 1, 1000000},
     [E_CYBORG] = {17, 450, 5, 30, 250, 150},
     [E_GROWLER] = {2, 250, 0.5, 50, 25, 25},
     [E_PHANTOM] = {17, 32, 4, 30, 250, 250},
