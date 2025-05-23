@@ -61,19 +61,16 @@ static void draw_fullscreen(system_t *sys, setting_t *set)
     double fill = 0;
 
     if (sys->state->fullscreen == sfFalse)
-        fill = SETTING_FILL;
+        fill = ON_OFF_CURSOR;
     sfRectangleShape_setPosition(set->rect, (sfVector2f){x, y});
     sfRectangleShape_setFillColor(set->rect, sfTransparent);
-    sfRectangleShape_setSize(set->rect, (sfVector2f){SETTING_FILL, size_y});
-    sfRenderWindow_drawRectangleShape(sys->window, set->rect, NULL);
-    sfRectangleShape_setFillColor(set->rect, sfMagenta);
-    sfRectangleShape_setSize(set->rect, (sfVector2f){fill, size_y});
+    sfRectangleShape_setSize(set->rect, (sfVector2f){ON_OFF_CURSOR, size_y});
     sfRenderWindow_drawRectangleShape(sys->window, set->rect, NULL);
     sfRectangleShape_setPosition(set->rect,
         (sfVector2f){x + fill - VOL_GAP, y - size_y / 2});
     sfRectangleShape_setFillColor(set->rect, sfWhite);
     sfRectangleShape_setSize(set->rect,
-        (sfVector2f){VOL_GAP * 2, size_y * 2});
+        (sfVector2f){VOL_GAP * 3, size_y * 2});
     sfRenderWindow_drawRectangleShape(sys->window, set->rect, NULL);
 }
 
