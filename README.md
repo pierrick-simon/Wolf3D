@@ -35,3 +35,7 @@ Ton objectif est de t’échapper du complexe nucléaire délabré **H.N.P.P** (
 * **Se déplacer** → Flèches directionnelles
 * **Interagir** → A
 * **Pause / Retour** → (Menu)
+
+**Crédits :**
+**Assets -> https://www.spriters-resource.com/ms_dos/doomdoomii/ & https://www.realm667.com/**
+**Développeurs -> Pierrick Simon & Ariel Amriou**
