@@ -25,6 +25,7 @@
     #define PAD sfColor_fromRGB(255, 230, 200)
 
     #define SETTING_FILL 400
+    #define ON_OFF_CURSOR 50
     #define SETTING_OFFSET 30
 
 typedef enum str_menu_e {

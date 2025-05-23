@@ -106,15 +106,15 @@ typedef struct entity_info_s {
 
 static const entity_info_t ENTITY[] __maybe_unused = {
     [E_SMALL_HEALTH] = {"asset/health1.png",
-        {14, 15}, 0.2, 6},
+        {14, 15}, 0.15, 6, 3},
     [E_BIG_HEALTH] = {"asset/health2.png",
-        {28, 19}, 0.2, 6},
+        {28, 19}, 0.3, 6, 3},
     [E_STAMINA] = {"asset/potion.png",
         {14, 18}, 0.2, 6},
     [E_AMMO_PISTOL] = {"asset/pistol_ammo.png",
-        {9, 11}, 0.2, 6},
+        {9, 11}, 0.15, 6},
     [E_AMMO_SHUTGUN] = {"asset/shotgun_ammo.png",
-        {32, 12}, 0.2, 6},
+        {32, 12}, 0.3, 6},
     [E_AMMO_MINIGUN] = {"asset/minigun_ammo.png",
         {28, 16}, 0.3, 6},
     [E_FLASHLIGHT] = {"asset/batterie.png",
@@ -124,7 +124,7 @@ static const entity_info_t ENTITY[] __maybe_unused = {
     [E_WEAPON_THREE] = {"asset/floor_shotgun.png",
         {63, 12}, 0.5, 6},
     [E_WEAPON_FOUR] = {"asset/floor_minigun.png",
-        {54, 16}, 0.3, 6},
+        {54, 16}, 0.4, 6},
     [E_SWORD_ENEMY] = {"asset/sword.png",
         {79, 83}, 1, 1, 4, 3, 9,
         {0.15, 0.15}, {0.85, 1}, {0.15, 0.15}, {0.85, 0.4}},
@@ -145,7 +145,7 @@ static const entity_info_t ENTITY[] __maybe_unused = {
         {0.15, 0}, {0.85, 1}, {0.15, 0.4}, {0.85, 0.6}},
     [E_BOSS] = {"asset/boss.png",
         {161, 85}, 1.8, 1, 5, 2, 11,
-        {0.2, 0}, {0.8, 0.6}, {0.3, 0}, {0.7, 0.4}},
+        {0.2, 0}, {0.8, 0.7}, {0.3, 0}, {0.7, 0.5}},
 };
 
 typedef struct enemy_info_s {
@@ -158,13 +158,13 @@ typedef struct enemy_info_s {
 } enemy_info_t;
 
 static const enemy_info_t ENEMY[] __maybe_unused = {
-    [E_SWORD_ENEMY] = {25, 50, 3, 150, 100, 200},
-    [E_GUN_ENEMY] = {10, 250, 2, 50, 250, 100},
+    [E_SWORD_ENEMY] = {8, 32, 1, 100, 100, 150},
+    [E_GUN_ENEMY] = {7, 300, 2, 50, 175, 100},
     [E_SHEET_ENEMY] = {1, 15, 3, 150, 1, 1},
-    [E_CYBORG] = {10, 250, 2, 50, 250, 100},
-    [E_GROWLER] = {10, 250, 2, 50, 250, 100},
-    [E_PHANTOM] = {10, 250, 2, 50, 250, 100},
-    [E_BOSS] = {10, 400, 2, 10, 1000, 1000},
+    [E_CYBORG] = {17, 450, 5, 30, 250, 100},
+    [E_GROWLER] = {2, 250, 0.5, 50, 25, 25},
+    [E_PHANTOM] = {17, 32, 4, 30, 250, 250},
+    [E_BOSS] = {15, 350, 4, 10, 10000, 1000},
 };
 
 typedef struct closer_tile_s {
