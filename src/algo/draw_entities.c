@@ -59,7 +59,8 @@ static void disp_entitie(draw_entity_t *info,
     set_center(game, info, rays[(int)((float)NB_RAYS / 2.0)]);
     for (int stripe = info->start.x; stripe < info->end.x; stripe++) {
         if (stripe > 0 && stripe < WIN_WIDTH
-            && info->dist.y < rays[stripe].len / (float)TILE_SIZE) {
+            && (info->dist.y < rays[stripe].len / (float)TILE_SIZE
+            || rays[stripe].len == 0)) {
             tmp.position = (sfVector2f){stripe, info->start.y};
             tmp.texCoords = (sfVector2f)
                 {((float)((stripe - info->start.x) / (float)(info->end.x -
