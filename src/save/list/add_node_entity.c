@@ -23,6 +23,17 @@ static int check_entity(char **tab)
     return SUCCESS;
 }
 
+static void handle_heal(entity_t *entity)
+{
+    int value = 0;
+
+    if (entity->type == E_SMALL_HEALTH || entity->type == E_BIG_HEALTH) {
+        srand(entity->id);
+        value = rand() % ENTITY[entity->type].max_first;
+        entity->offset.x = ENTITY[entity->type].text_size.x * value;
+    }
+}
+
 static void fill_node_entity(linked_list_t *enemies,
     entity_t *entity, char **tab)
 {
@@ -41,6 +52,7 @@ static void fill_node_entity(linked_list_t *enemies,
     entity->change_rect = 0;
     entity->next_pos = (sfVector2f){SKIP, SKIP};
     entity->prev_tile = (sfVector2i){0, 0};
+    handle_heal(entity);
     ++id;
     push_to_tail(enemies, entity);
 }

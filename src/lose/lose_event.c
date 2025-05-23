@@ -43,6 +43,7 @@ static void switch_scene(
         lose->draw[lose->str].color = sfWhite;
         lose->str = LOSE_RESTART;
         lose->draw[lose->str].color = sfRed;
+        lose->update = sfFalse;
     }
 }
 
