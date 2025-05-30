@@ -43,9 +43,9 @@ void *init_map(void);
 void draw_map(system_t *sys, void *structure);
 void destroy_map(void *structure);
 
-void *init_maps(void);
-void draw_maps(system_t *sys, void *structure);
-void destroy_maps(void *structure);
+void *init_levels(void);
+void draw_levels(system_t *sys, void *structure);
+void destroy_levels(void *structure);
 
 void draw_game(system_t *sys, void *structure);
 void destroy_game(void *structure);
@@ -67,7 +67,7 @@ static const scene_func_t SCENE[] __maybe_unused = {
     {MENU, &init_menu, &destroy_menu, &draw_menu},
     {SETTINGS, &init_settings, &destroy_settings, &draw_settings},
     {PAUSE, &init_pause, &destroy_pause, &draw_pause},
-    {MAPS, &init_maps, &destroy_maps, &draw_maps},
+    {LEVELS, &init_levels, &destroy_levels, &draw_levels},
     {MAP, &init_map, &destroy_map, &draw_map},
     {SCORE, &init_score, &destroy_score, &draw_score},
     {LEAVE, &init_leave, &destroy_leave, &draw_leave},

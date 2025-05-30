@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** Wolf3d
 ** File description:
-** init_levels
+** init_maps
 */
 
 #include "save.h"
@@ -18,19 +18,19 @@ static void init_info_save(info_save_t *info)
     info->nb_page = 0;
 }
 
-void *init_levels(void)
+void *init_maps(void)
 {
-    levels_t *levels = malloc(sizeof(levels_t));
+    maps_t *maps = malloc(sizeof(maps_t));
 
-    if (levels == NULL)
+    if (maps == NULL)
         return NULL;
-    levels->str = MENU_PLAY;
-    levels->draw = init_from_conf(str_conf[CONF_LEVELS]);
-    if (levels->draw == NULL)
+    maps->str = MENU_PLAY;
+    maps->draw = init_from_conf(str_conf[CONF_LEVELS]);
+    if (maps->draw == NULL)
         return NULL;
-    levels->info = malloc(sizeof(info_save_t));
-    if (levels->info == NULL)
+    maps->info = malloc(sizeof(info_save_t));
+    if (maps->info == NULL)
         return NULL;
-    init_info_save(levels->info);
-    return (void *)levels;
+    init_info_save(maps->info);
+    return (void *)maps;
 }

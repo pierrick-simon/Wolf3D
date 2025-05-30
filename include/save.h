@@ -88,15 +88,15 @@ typedef struct file_s {
     char *name;
 } file_t;
 
-typedef enum str_maps_e {
-    MAPS_TITLE,
-    MAPS_SUB,
-    MAPS_SAVE1,
-    MAPS_SAVE2,
-    MAPS_SAVE3,
-    MAPS_BACK,
-    NB_MAPS,
-} str_maps_t;
+typedef enum str_levels_e {
+    LEVELS_TITLE,
+    LEVELS_SUB,
+    LEVELS_SAVE1,
+    LEVELS_SAVE2,
+    LEVELS_SAVE3,
+    LEVELS_BACK,
+    NB_LEVELS,
+} str_levels_t;
 
 typedef enum str_map_e {
     MAP_TITLE,
@@ -115,11 +115,11 @@ typedef struct info_save_s {
     sfBool update;
 } info_save_t;
 
-typedef struct maps_s {
+typedef struct levels_s {
     int str;
     draw_textbox_t *draw;
     info_save_t *info;
-} maps_t;
+} levels_t;
 
 typedef struct select_map_s {
     int str;
@@ -177,7 +177,7 @@ int add_node_entity(linked_list_t *enemies, char *line);
 int check_start(save_t *save);
 int check_save(save_t *save, char **tab, int *offset);
 
-void maps_events(system_t *sys, maps_t *maps);
+void levels_events(system_t *sys, levels_t *levels);
 void map_events(system_t *sys, select_map_t *map);
 
 #endif

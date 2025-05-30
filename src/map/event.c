@@ -21,7 +21,7 @@ static int load_map(select_map_t *map, system_t *sys, char *name)
     if (tmp == NULL)
         return ERROR;
     if (map->str == MAP_PLAY)
-        sprintf(tmp, "maps/%s.legend", name);
+        sprintf(tmp, "%s/%s.legend", sys->dir, name);
     if (map->str == MAP_CONTINUE)
         sprintf(tmp, "save/%s.legend", name);
     exit = get_save(tmp, sys->save);

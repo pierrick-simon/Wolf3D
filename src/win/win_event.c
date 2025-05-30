@@ -48,7 +48,7 @@ static void switch_scene(
         update_score(sys, win->name);
         state->old_scene = state->scene;
         if (load_restart(win, sys, sys->save->name) == ERROR)
-            state->scene = MAPS;
+            state->scene = LEVELS;
         else
             state->scene = win->draw[win->str].scene;
         state->scene = win->draw[win->str].scene;
