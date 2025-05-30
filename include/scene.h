@@ -10,6 +10,10 @@
 
     #include "wolf.h"
 
+void *init_choose(void);
+void destroy_choose(void *structure);
+void draw_choose(system_t *sys, void *structure);
+
 void *init_difficulty(void);
 void destroy_difficulty(void *structure);
 void draw_difficulty(system_t *sys, void *structure);
@@ -43,6 +47,10 @@ void *init_map(void);
 void draw_map(system_t *sys, void *structure);
 void destroy_map(void *structure);
 
+void *init_your_maps(void);
+void draw_your_maps(system_t *sys, void *structure);
+void destroy_your_maps(void *structure);
+
 void *init_levels(void);
 void draw_levels(system_t *sys, void *structure);
 void destroy_levels(void *structure);
@@ -73,7 +81,9 @@ static const scene_func_t SCENE[] __maybe_unused = {
     {LEAVE, &init_leave, &destroy_leave, &draw_leave},
     {WIN, &init_win, &destroy_win, &draw_win},
     {LOSE, &init_lose, &destroy_lose, &draw_lose},
-    {DIFFICULTY, &init_difficulty, &destroy_difficulty, &draw_difficulty}
+    {DIFFICULTY, &init_difficulty, &destroy_difficulty, &draw_difficulty},
+    {YOUR_MAPS, &init_your_maps, &destroy_your_maps, &draw_your_maps},
+    {CHOOSE, &init_choose, &destroy_choose, &draw_choose}
 };
 
 #endif

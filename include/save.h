@@ -178,6 +178,7 @@ int check_start(save_t *save);
 int check_save(save_t *save, char **tab, int *offset);
 
 void levels_events(system_t *sys, levels_t *levels);
+void your_maps_events(system_t *sys, levels_t *levels);
 void map_events(system_t *sys, select_map_t *map);
 
 #endif

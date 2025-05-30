@@ -92,7 +92,21 @@ typedef struct difficulty_s {
     draw_textbox_t *draw;
 } difficulty_t;
 
+typedef enum str_choose_e {
+    CHOOSE_TITLE,
+    CHOOSE_LEVELS,
+    CHOOSE_YOURS_MAPS,
+    CHOOSE_BACK,
+    NB_CHOOSE,
+} str_choose_t;
+
+typedef struct choose_s {
+    str_choose_t str;
+    draw_textbox_t *draw;
+} choose_t;
+
 void menu_events(system_t *sys, menu_t *menu);
+void choose_events(system_t *sys, choose_t *choose);
 void pause_events(system_t *sys, pause_t *pause);
 void setting_events(system_t *sys, setting_t *setting);
 void difficulty_events(system_t *sys, difficulty_t *difficulty);

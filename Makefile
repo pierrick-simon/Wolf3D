@@ -105,6 +105,18 @@ SRC =	$(addprefix src/,					\
 				destroy_levels.c			\
 				init_levels.c				\
 			)								\
+			$(addprefix choose/,			\
+				choose_event.c				\
+				draw_choose.c				\
+				destroy_choose.c			\
+				init_choose.c				\
+			)								\
+			$(addprefix your_maps/,			\
+				your_maps_event.c			\
+				draw_your_maps.c			\
+				destroy_your_maps.c			\
+				init_your_maps.c			\
+			)								\
 			$(addprefix events/,			\
 				is_input.c					\
 				sys_event.c					\
