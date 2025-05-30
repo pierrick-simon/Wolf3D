@@ -61,7 +61,7 @@ typedef enum scene_s {
     MENU,
     SETTINGS,
     PAUSE,
-    MAPS,
+    LEVELS,
     MAP,
     SCORE,
     LEAVE,
@@ -77,7 +77,7 @@ typedef enum config_e {
     CONF_LEAVE,
     CONF_LOSE,
     CONF_MAP,
-    CONF_MAPS,
+    CONF_LEVELS,
     CONF_MENU,
     CONF_PAUSE,
     CONF_SCORE,
@@ -107,7 +107,7 @@ static const char *str_scene[] __maybe_unused = {
     [MENU] = "menu",
     [SETTINGS] = "setting",
     [PAUSE] = "pause",
-    [MAPS] = "maps",
+    [LEVELS] = "maps",
     [MAP] = "map",
     [SCORE] = "score",
     [LEAVE] = "leave",
@@ -123,7 +123,7 @@ static const char *str_conf[] __maybe_unused = {
     [CONF_LEAVE] = "config_file/leave.conf",
     [CONF_LOSE] = "config_file/lose.conf",
     [CONF_MAP] = "config_file/map.conf",
-    [CONF_MAPS] = "config_file/maps.conf",
+    [CONF_LEVELS] = "config_file/maps.conf",
     [CONF_MENU] = "config_file/menu.conf",
     [CONF_PAUSE] = "config_file/pause.conf",
     [CONF_SCORE] = "config_file/score.conf",
@@ -195,6 +195,7 @@ typedef struct system_s {
     textbox_t *textbox;
     state_info_t *state;
     save_t *save;
+    char *dir;
 } system_t;
 
 int check_env(char **env);

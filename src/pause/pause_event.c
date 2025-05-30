@@ -36,7 +36,7 @@ static void switch_scene(
         state->old_scene = state->scene;
         if (load_restart(pause, sys, sys->save->name,
             sys->save->info->difficulty) == ERROR)
-            state->scene = MAPS;
+            state->scene = LEVELS;
         else
             state->scene = pause->draw[pause->str].scene;
         pause->draw[pause->str].color = sfWhite;

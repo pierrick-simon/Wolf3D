@@ -36,7 +36,7 @@ static void switch_scene(
             lose->str = LOSE_MENU;
         state->old_scene = state->scene;
         if (load_restart(lose, sys, sys->save->name) == ERROR)
-            state->scene = MAPS;
+            state->scene = LEVELS;
         else
             state->scene = lose->draw[lose->str].scene;
         state->scene = lose->draw[lose->str].scene;

@@ -9,93 +9,93 @@
 #include "linked_list.h"
 #include <string.h>
 
-static int get_map_name(maps_t *maps, system_t *sys)
+static int get_map_name(levels_t *levels, system_t *sys)
 {
-    node_t *head = maps->info->current_file;
+    node_t *head = levels->info->current_file;
 
-    if (maps->str < MAPS_SAVE1 || maps->str > MAPS_SAVE3)
+    if (levels->str < LEVELS_SAVE1 || levels->str > LEVELS_SAVE3)
         return SUCCESS;
-    if (maps->str == MAPS_SAVE1)
+    if (levels->str == LEVELS_SAVE1)
         sys->save->name = strdup(((file_t *)head->data)->name);
-    if (maps->str == MAPS_SAVE2)
+    if (levels->str == LEVELS_SAVE2)
         sys->save->name = strdup(((file_t *)head->next->data)->name);
-    if (maps->str == MAPS_SAVE3)
+    if (levels->str == LEVELS_SAVE3)
         sys->save->name = strdup(((file_t *)head->next->next->data)->name);
     if (sys->save->name == NULL)
         return ERROR;
     return SUCCESS;
 }
 
-static void switch_scene(sfEvent event, maps_t *maps,
+static void switch_scene(sfEvent event, levels_t *levels,
     system_t *sys, state_info_t *state)
 {
     if (is_input(event, sfKeyEnter, sfTrue, 0)) {
-        if (get_map_name(maps, sys) == ERROR)
+        if (get_map_name(levels, sys) == ERROR)
             return;
         state->old_scene = state->scene;
-        state->scene = maps->draw[maps->str].scene;
-        free_linked_list(maps->info->list, &free_node_file);
-        maps->info->list = NULL;
-        maps->info->update = sfFalse;
-        maps->draw[maps->str].color = sfWhite;
-        maps->str = MAPS_SUB;
+        state->scene = levels->draw[levels->str].scene;
+        free_linked_list(levels->info->list, &free_node_file);
+        levels->info->list = NULL;
+        levels->info->update = sfFalse;
+        levels->draw[levels->str].color = sfWhite;
+        levels->str = LEVELS_SUB;
     }
     if (is_input(event, sfKeyEscape, sfTrue, 7)) {
         state->old_scene = state->scene;
-        state->scene = maps->draw[MAPS_BACK].scene;
-        free_linked_list(maps->info->list, &free_node_file);
-        maps->info->list = NULL;
-        maps->info->update = sfFalse;
-        maps->draw[maps->str].color = sfWhite;
-        maps->str = MAPS_SUB;
+        state->scene = levels->draw[LEVELS_BACK].scene;
+        free_linked_list(levels->info->list, &free_node_file);
+        levels->info->list = NULL;
+        levels->info->update = sfFalse;
+        levels->draw[levels->str].color = sfWhite;
+        levels->str = LEVELS_SUB;
     }
 }
 
-static void check_save_minus(maps_t *maps)
+static void check_save_minus(levels_t *levels)
 {
-    node_t *head = maps->info->current_file;
-    int tmp = MAPS_SUB;
+    node_t *head = levels->info->current_file;
+    int tmp = LEVELS_SUB;
 
-    if (tmp == MAPS_SUB && head != NULL)
+    if (tmp == LEVELS_SUB && head != NULL)
         tmp++;
-    if (tmp == MAPS_SAVE1 && head->next != NULL)
+    if (tmp == LEVELS_SAVE1 && head->next != NULL)
         tmp++;
-    if (tmp == MAPS_SAVE2 && head->next->next != NULL)
+    if (tmp == LEVELS_SAVE2 && head->next->next != NULL)
         tmp++;
-    if (maps->str > tmp && maps->str < MAPS_BACK)
-        maps->str = tmp;
+    if (levels->str > tmp && levels->str < LEVELS_BACK)
+        levels->str = tmp;
 }
 
-static void check_save_plus(maps_t *maps)
+static void check_save_plus(levels_t *levels)
 {
-    node_t *head = maps->info->current_file;
+    node_t *head = levels->info->current_file;
 
-    if (maps->str == MAPS_SAVE1 && head == NULL)
-        maps->str = MAPS_BACK;
-    if (maps->str == MAPS_SAVE2 && head->next == NULL)
-        maps->str = MAPS_BACK;
-    if (maps->str == MAPS_SAVE3 && head->next->next == NULL)
-        maps->str = MAPS_BACK;
+    if (levels->str == LEVELS_SAVE1 && head == NULL)
+        levels->str = LEVELS_BACK;
+    if (levels->str == LEVELS_SAVE2 && head->next == NULL)
+        levels->str = LEVELS_BACK;
+    if (levels->str == LEVELS_SAVE3 && head->next->next == NULL)
+        levels->str = LEVELS_BACK;
 }
 
-static void switch_str(sfEvent event, maps_t *maps)
+static void switch_str(sfEvent event, levels_t *levels)
 {
-    maps->draw[maps->str].color = sfWhite;
+    levels->draw[levels->str].color = sfWhite;
     if (is_input(event, sfKeyUp, sfFalse, 0) ||
         sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK) {
-        maps->str--;
-        check_save_minus(maps);
+        levels->str--;
+        check_save_minus(levels);
     }
     if (is_input(event, sfKeyDown, sfFalse, 0) ||
         sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK) {
-        maps->str++;
-        check_save_plus(maps);
+        levels->str++;
+        check_save_plus(levels);
     }
-    if (maps->str == NB_MAPS)
-        maps->str = MAPS_SUB;
-    if (maps->str == MAPS_TITLE)
-        maps->str = MAPS_BACK;
-    maps->draw[maps->str].color = sfRed;
+    if (levels->str == NB_LEVELS)
+        levels->str = LEVELS_SUB;
+    if (levels->str == LEVELS_TITLE)
+        levels->str = LEVELS_BACK;
+    levels->draw[levels->str].color = sfRed;
 }
 
 static sfBool move_right(info_save_t *info)
@@ -105,44 +105,44 @@ static sfBool move_right(info_save_t *info)
     return false;
 }
 
-static void move_map(sfEvent event, maps_t *maps)
+static void move_map(sfEvent event, levels_t *levels)
 {
     float x = sfJoystick_getAxisPosition(0, sfJoystickPovX);
 
     if ((is_input(event, sfKeyRight, sfTrue, 5) || x == MAX_JOYSTICK)
-        && move_right(maps->info) == sfTrue) {
-        maps->info->file += NB_SHOW_SAVE;
-        maps->info->current_file =
-            maps->info->current_file->next->next->next;
-        maps->draw[maps->str].color = sfWhite;
-        maps->str = MAPS_SUB;
+        && move_right(levels->info) == sfTrue) {
+        levels->info->file += NB_SHOW_SAVE;
+        levels->info->current_file =
+            levels->info->current_file->next->next->next;
+        levels->draw[levels->str].color = sfWhite;
+        levels->str = LEVELS_SUB;
     }
     if ((is_input(event, sfKeyLeft, sfTrue, 6) || x == - MAX_JOYSTICK)
-        && maps->info->file > 0) {
-        maps->info->file -= NB_SHOW_SAVE;
-        maps->info->current_file =
-            maps->info->current_file->prev->prev->prev;
-        maps->draw[maps->str].color = sfWhite;
-        maps->str = MAPS_SUB;
+        && levels->info->file > 0) {
+        levels->info->file -= NB_SHOW_SAVE;
+        levels->info->current_file =
+            levels->info->current_file->prev->prev->prev;
+        levels->draw[levels->str].color = sfWhite;
+        levels->str = LEVELS_SUB;
     }
 }
 
-static void change_map(sfEvent event, maps_t *maps)
+static void change_map(sfEvent event, levels_t *levels)
 {
-    if (maps->str >= MAPS_SUB && maps->str <= MAPS_SAVE3) {
-        move_map(event, maps);
-        maps->draw[maps->str].color = sfRed;
+    if (levels->str >= LEVELS_SUB && levels->str <= LEVELS_SAVE3) {
+        move_map(event, levels);
+        levels->draw[levels->str].color = sfRed;
     }
 }
 
-void maps_events(system_t *sys, maps_t *maps)
+void levels_events(system_t *sys, levels_t *levels)
 {
     sfEvent event = {0};
 
     while (sfRenderWindow_pollEvent(sys->window, &event)) {
         sys_events(event, sys);
-        switch_str(event, maps);
-        switch_scene(event, maps, sys, sys->state);
-        change_map(event, maps);
+        switch_str(event, levels);
+        switch_scene(event, levels, sys, sys->state);
+        change_map(event, levels);
     }
 }
