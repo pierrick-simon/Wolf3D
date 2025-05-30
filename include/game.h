@@ -36,8 +36,6 @@
 
     #define DISTANCE_COLISION 5.0
 
-    #define NB_DECIMAL_FLOAT_CMP 6
-
     #define SPRINTING_FOV FOV * SPRINT_COEF
     #define TOOLBAR_HEIGHT 130
     #define TOOLBAR_POS (WIN_HEIGHT - TOOLBAR_HEIGHT)
@@ -110,6 +108,9 @@
     #define MAX_COLOR 255
 
     #define UV_VALUE 75
+
+    #define CROSS_HEAD_SIZE 5
+    #define CROSS_HEAD_WIDTH 1.5
 
 typedef enum {
     LOAD_W_TEXTURE,
@@ -256,6 +257,7 @@ typedef struct player_s {
     float angle;
     sfBool is_sprinting;
     sfCircleShape *crossair;
+    sfConvexShape *headshot;
     save_t *save;
     float cam_angle;
     sfVector2f v;
@@ -365,5 +367,6 @@ sfBool get_next_pos(entity_t *enemy, game_t *game);
 sfBool is_wall_between(game_t *game, entity_t *enemy);
 sfColor get_color(float len);
 void update_interact(toolbar_t *tool, player_t *player, int **map);
+void show_game_environement(system_t *sys, game_t *game);
 
 #endif
