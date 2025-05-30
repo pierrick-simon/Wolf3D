@@ -23,6 +23,12 @@ static int init_crossair(player_t *player)
     sfCircleShape_setRadius(player->crossair, CROSSAIR_RADIUS);
     sfCircleShape_setPosition(player->crossair, (sfVector2f){(WIN_WIDTH / 2) -
         CROSSAIR_RADIUS, (WIN_HEIGHT / 2) - CROSSAIR_RADIUS});
+    player->headshot = sfConvexShape_create();
+    if (player->headshot == NULL)
+        return ERROR;
+    sfConvexShape_setOutlineColor(player->headshot, sfWhite);
+    sfConvexShape_setPointCount(player->headshot, 4);
+    sfConvexShape_setOutlineThickness(player->headshot, CROSS_HEAD_WIDTH);
     return SUCCESS;
 }
 

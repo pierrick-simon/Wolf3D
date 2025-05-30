@@ -65,6 +65,7 @@ SRC =	$(addprefix src/,					\
 				draw_settings.c				\
 			)								\
 			$(addprefix game/,				\
+				show_game_environement.c	\
 				game_event.c				\
 				draw_game.c					\
 				destroy_game.c 				\
