@@ -11,7 +11,7 @@
     #include "wolf.h"
     #include <stdbool.h>
 
-    #define MAX_STRLEN 9
+    #define MAX_STRLEN 4
     #define MAX_NAME 15
 
     #define LEN_SAVE 13

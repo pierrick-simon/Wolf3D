@@ -31,6 +31,7 @@
 typedef enum str_menu_e {
     MENU_TITLE,
     MENU_PLAY,
+    MENU_EDIT,
     MENU_SETTINGS,
     MENU_QUIT,
     NB_MENU,
