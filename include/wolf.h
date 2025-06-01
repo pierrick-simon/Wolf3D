@@ -71,6 +71,7 @@ typedef enum scene_s {
     YOUR_MAPS,
     CHOOSE,
     EDIT_INF,
+    EDIT_MAP,
     NB_SCENE,
     QUIT,
 } scene_t;
@@ -90,6 +91,7 @@ typedef enum config_e {
     CONF_WEAPON,
     CONF_CHOOSE,
     CONF_EDIT_INF,
+    CONF_EDIT_MAP,
 } config_t;
 
 typedef enum asset_e {
@@ -122,6 +124,7 @@ static const char *str_scene[] __maybe_unused = {
     [YOUR_MAPS] = "your_maps",
     [CHOOSE] = "choose",
     [EDIT_INF] = "edit_inf",
+    [EDIT_MAP] = "edit_map",
     [NB_SCENE] = "",
     [QUIT] = "quit",
 };
@@ -141,6 +144,7 @@ static const char *str_conf[] __maybe_unused = {
     [CONF_WEAPON] = "config_file/weapon.conf",
     [CONF_CHOOSE] = "config_file/choose.conf",
     [CONF_EDIT_INF] = "config_file/edit_inf.conf",
+    [CONF_EDIT_MAP] = "config_file/edit_map.conf",
 };
 
 static const char *str_asset[] __maybe_unused = {

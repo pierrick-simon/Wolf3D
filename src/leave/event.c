@@ -25,7 +25,7 @@ static void switch_scene(
             return;
         }
         if (leave->str == LEAVE_SAVE)
-            save_map(sys->save);
+            save_map(sys->save, "save");
         state->old_scene = state->scene;
         state->scene = leave->draw[leave->str].scene;
         leave->draw[leave->str].color = sfWhite;

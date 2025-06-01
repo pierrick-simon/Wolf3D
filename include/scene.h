@@ -10,6 +10,10 @@
 
     #include "wolf.h"
 
+void *init_edit_map(void);
+void destroy_edit_map(void *structure);
+void draw_edit_map(system_t *sys, void *structure);
+
 void *init_edit_info(void);
 void destroy_edit_info(void *structure);
 void draw_edit_info(system_t *sys, void *structure);
@@ -88,7 +92,8 @@ static const scene_func_t SCENE[] __maybe_unused = {
     {DIFFICULTY, &init_difficulty, &destroy_difficulty, &draw_difficulty},
     {YOUR_MAPS, &init_your_maps, &destroy_your_maps, &draw_your_maps},
     {CHOOSE, &init_choose, &destroy_choose, &draw_choose},
-    {EDIT_INF, &init_edit_info, &destroy_edit_info, &draw_edit_info}
+    {EDIT_INF, &init_edit_info, &destroy_edit_info, &draw_edit_info},
+    {EDIT_MAP, &init_edit_map, &destroy_edit_map, &draw_edit_map}
 };
 
 #endif

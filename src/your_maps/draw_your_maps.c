@@ -13,6 +13,7 @@ void draw_your_maps(system_t *sys, void *structure)
     levels_t *your_maps = (levels_t *)structure;
 
     your_maps_events(sys, your_maps);
+    sys->dir = "your_maps";
     update_list(your_maps->info, "your_maps");
     sfRenderWindow_clear(sys->window, sfWhite);
     draw_background(sys, sys->background);

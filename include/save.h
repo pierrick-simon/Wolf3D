@@ -170,7 +170,7 @@ void draw_save(
     system_t *sys, info_save_t *info, draw_textbox_t *draw, int start);
 bool sort_node_file(void *data_first, void *data_second);
 void save_score(save_t *save, char *name);
-void save_map(save_t *save);
+void save_map(save_t *save, char *dir);
 void free_mini_map_color(sfColor **color, int y);
 int init_mini_map_color(save_t *save);
 int add_node_entity(linked_list_t *enemies, char *line);

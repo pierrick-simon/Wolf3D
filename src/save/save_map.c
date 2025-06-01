@@ -55,14 +55,14 @@ static void write_body(save_t *save, int fd)
     }
 }
 
-void save_map(save_t *save)
+void save_map(save_t *save, char *dir)
 {
     char *tmp = malloc(sizeof(char) * (strlen(save->name) + LEN_SAVE));
     int fd = 0;
 
     if (tmp == NULL)
         return;
-    sprintf(tmp, "save/%s.legend", save->name);
+    sprintf(tmp, "%s/%s.legend", dir, save->name);
     fd = open(tmp, O_CREAT | O_WRONLY | O_TRUNC, 0744);
     free(tmp);
     if (fd == -1)

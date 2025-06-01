@@ -118,6 +118,13 @@ SRC =	$(addprefix src/,					\
 				destroy_edit_info.c			\
 				init_edit_info.c			\
 			)								\
+			$(addprefix edit_map/,			\
+				edit_map_event.c			\
+				draw_edit_map.c				\
+				destroy_edit_map.c			\
+				init_edit_map.c				\
+				iso.c 						\
+			)								\
 			$(addprefix your_maps/,			\
 				your_maps_event.c			\
 				draw_your_maps.c			\
