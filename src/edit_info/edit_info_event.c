@@ -55,7 +55,7 @@ static void fill_map(save_t *save, int i)
 
 static void init_save_info(save_t *save)
 {
-    save->music_path = "asset/music.ogg";
+    save->music_path = strdup("asset/music.ogg");
     save->info->difficulty = 1;
     save->info->start_weapon = 1;
     save->info->weapons = 1;
@@ -71,20 +71,33 @@ static void init_save_info(save_t *save)
     save->info->start_pos = (sfVector2f){70, 70};
 }
 
+static void update_edit(edit_info_t *edit_info)
+{
+    if (edit_info->str != EDIT_INF_BACK)
+        return;
+    for (int i = EDIT_INF_NAME; i < EDIT_INF_BACK; i++) {
+        for (int j = 0; j <= MAX_NAME; j++) {
+            edit_info->string[i][j] = '\0';
+            edit_info->str_tmp[i][j] = '\0';
+        }
+    }
+}
+
 static void update_save(system_t *sys, edit_info_t *edit_info)
 {
+    update_edit(edit_info);
     if (edit_info->str != EDIT_INF_Y)
         return;
     destroy_save(sys->save);
     if (*edit_info->string[EDIT_INF_NAME] == '\0')
-        sys->save->name = strdup("no name");
+        sys->save->name = strdup("nameless");
     else
         sys->save->name = strdup(edit_info->string[EDIT_INF_NAME]);
     sys->save->size.x = atoi(edit_info->string[EDIT_INF_X]) + 2;
     sys->save->size.y = atoi(edit_info->string[EDIT_INF_Y]) + 2;
-    if (sys->save->size.x > 200 || sys->save->size.x < 1)
+    if (sys->save->size.x > 200 || sys->save->size.x < 3)
         sys->save->size.x = 100;
-    if (sys->save->size.y > 200 || sys->save->size.y < 1)
+    if (sys->save->size.y > 200 || sys->save->size.y < 3)
         sys->save->size.y = 100;
     sys->save->map = malloc(sizeof(int *) * sys->save->size.y);
     for (int i = 0; i < sys->save->size.y; i++) {

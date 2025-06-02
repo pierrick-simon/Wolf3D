@@ -6,6 +6,7 @@
 */
 
 #include "editor.h"
+#include "linked_list.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -28,6 +29,8 @@ static void init_color(sfColor *color)
         offset = 100 * i / 7;
         color[EDIT_WEAPON_FOUR + i] = sfColor_fromRGB(255 - offset, 0, 0);
     }
+    for (int i = EDIT_BOSS + 1; i < NB_EDIT; i++)
+        color[i] = sfMagenta;
 }
 
 static int init_draw_map(draw_map_t *draw_map)
@@ -37,6 +40,7 @@ static int init_draw_map(draw_map_t *draw_map)
         return ERROR;
     sfConvexShape_setOutlineColor(draw_map->shape, sfBlack);
     sfConvexShape_setOutlineThickness(draw_map->shape, 1);
+    draw_map->map = NULL;
     return SUCCESS;
 }
 
@@ -82,7 +86,8 @@ void *init_edit_map(void)
         return NULL;
     edit_map->str = EDIT_MAP_SAVE;
     edit_map->draw = init_from_conf(str_conf[CONF_EDIT_MAP]);
-    if (edit_map->draw == NULL)
+    edit_map->history = initialize_linked_list();
+    if (edit_map->draw == NULL || edit_map->history == NULL)
         return NULL;
     init_edit(edit_map);
     return (void *)edit_map;

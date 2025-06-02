@@ -127,6 +127,8 @@ SRC =	$(addprefix src/,					\
 				find_tile.c 				\
 				draw_button.c				\
 				map_event.c 				\
+				click_buttons.c				\
+				add_node_history.c 			\
 			)								\
 			$(addprefix your_maps/,			\
 				your_maps_event.c			\

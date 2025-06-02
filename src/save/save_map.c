@@ -57,7 +57,8 @@ static void write_body(save_t *save, int fd)
 
 void save_map(save_t *save, char *dir)
 {
-    char *tmp = malloc(sizeof(char) * (strlen(save->name) + LEN_SAVE));
+    char *tmp = malloc(sizeof(char) *
+        (strlen(save->name) + LEN_SAVE + strlen(dir)));
     int fd = 0;
 
     if (tmp == NULL)

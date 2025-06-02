@@ -6,6 +6,7 @@
 */
 
 #include "editor.h"
+#include "linked_list.h"
 
 static void set_orientation(sfEvent event, edit_map_t *edit)
 {
@@ -74,4 +75,42 @@ void map_event(sfEvent event, edit_map_t *edit_map)
     set_zoom(event, edit_map);
     set_orientation(event, edit_map);
     reset_pos(event, edit_map);
+}
+
+static sfBool find_edit(int **map, int edit, sfVector2i size, int i)
+{
+    for (int j = 0; j < size.x; j++) {
+        if (map[i][j] == edit) {
+            map[i][j] = EDIT_NONE;
+            return sfTrue;
+        }
+    }
+    return sfFalse;
+}
+
+static void only_one(int **map, int edit, sfVector2i size)
+{
+    if (edit != EDIT_END && edit != EDIT_START)
+        return;
+    for (int i = 0; i < size.y; i++) {
+        if (find_edit(map, edit, size, i))
+            break;
+    }
+}
+
+void mouse_click(system_t *sys, edit_map_t *edit, sfVector2f **map)
+{
+    sfVector2i tile = {0, 0};
+
+    if (sfMouse_isButtonPressed(sfMouseLeft)) {
+        tile = which_tile(sys, edit->draw_map, map);
+        if (tile.x != -1 && tile.y != -1
+            && edit->buttons->press == sfTrue) {
+            del_head_history(edit);
+            add_node_history(edit);
+            edit->current = edit->history->head;
+            only_one(edit->draw_map->map, edit->edit, sys->save->size);
+            edit->draw_map->map[tile.y][tile.x] = edit->edit;
+        }
+    }
 }

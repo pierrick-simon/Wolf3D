@@ -28,11 +28,22 @@ static void check_save_map(char *name, select_map_t *map)
     sprintf(tmp, "save/%s.legend", name);
     fd = open(tmp, O_RDONLY);
     free(tmp);
-    if (fd == -1)
+    if (fd == -1) {
         map->save = sfFalse;
-    else {
+        map->draw[MAP_CONTINUE].color = GREY;
+    } else {
         map->save = sfTrue;
         close(fd);
+    }
+}
+
+void check_edit(system_t *sys, select_map_t *map)
+{
+    if (strcmp(sys->dir, "levels") == 0) {
+        map->edit = sfFalse;
+        map->draw[MAP_EDIT].color = GREY;
+    } else {
+        map->edit = sfTrue;
     }
 }
 
@@ -42,6 +53,7 @@ void draw_map(system_t *sys, void *structure)
     sfSoundStatus music = sfMusic_getStatus(sys->music);
 
     check_save_map(sys->save->name, map);
+    check_edit(sys, map);
     sfRenderWindow_clear(sys->window, sfWhite);
     draw_background(sys, sys->background);
     sprintf(map->draw[MAP_TITLE].str, "%*s",
