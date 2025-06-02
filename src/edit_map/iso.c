@@ -24,7 +24,7 @@ static sfVector2f rotate_point(
 }
 
 static sfVector2f get_projection(
-    sfVector2i pos, float coef, edit_map_t *edit)
+    sfVector2i pos, float coef, draw_map_t *edit)
 {
     int x = pos.x * coef * edit->zoom;
     int y = pos.y * coef * edit->zoom;
@@ -45,7 +45,7 @@ static void find_bounds(
         max->y = map[ind.y][ind.x].y;
 }
 
-static void rotate_map(sfVector2f **map, edit_map_t *edit,
+static void rotate_map(sfVector2f **map, draw_map_t *edit,
     sfVector2f center, sfVector2f bound[2])
 {
     for (int y = 0; y < edit->size.y; y++) {
@@ -57,7 +57,7 @@ static void rotate_map(sfVector2f **map, edit_map_t *edit,
 }
 
 static void apply_offset(
-    sfVector2f **map, edit_map_t *edit, sfVector2f offset)
+    sfVector2f **map, draw_map_t *edit, sfVector2f offset)
 {
     for (int y = 0; y < edit->size.y; y++) {
         for (int x = 0; x < edit->size.x; x++) {
@@ -82,7 +82,7 @@ static sfVector2f **allocate_2d_map(sfVector2i size)
 }
 
 static void center_map(
-    sfVector2f **map, edit_map_t *edit, sfVector2f bound[2])
+    sfVector2f **map, draw_map_t *edit, sfVector2f bound[2])
 {
     sfVector2f offset = {0, 0};
     sfVector2f center = {0, 0};
@@ -95,7 +95,7 @@ static void center_map(
     apply_offset(map, edit, offset);
 }
 
-sfVector2f **create_2d_map(edit_map_t *edit)
+sfVector2f **create_2d_map(draw_map_t *edit)
 {
     sfVector2f **map = allocate_2d_map(edit->size);
     sfVector2f min = {INFINITY, INFINITY};

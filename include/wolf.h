@@ -45,6 +45,7 @@
     #define ORANGE sfColor_fromRGB(255, 128, 0)
     #define GREY sfColor_fromRGB(93, 93, 93)
     #define LIGHT_GREY sfColor_fromRGB(125, 125, 125)
+    #define DARK_GREY sfColor_fromRGB(50, 50, 50)
 
     #define MAX_HEALTH 100
 

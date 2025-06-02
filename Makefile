@@ -124,6 +124,9 @@ SRC =	$(addprefix src/,					\
 				destroy_edit_map.c			\
 				init_edit_map.c				\
 				iso.c 						\
+				find_tile.c 				\
+				draw_button.c				\
+				map_event.c 				\
 			)								\
 			$(addprefix your_maps/,			\
 				your_maps_event.c			\

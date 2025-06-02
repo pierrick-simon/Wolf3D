@@ -46,7 +46,7 @@ static void fill_map(save_t *save, int i)
 {
     for (int j = 0; j < save->size.x; j++) {
         if (i == 0 || i == save->size.y - 1
-            || j == 0 || j == save->size.y - 1)
+            || j == 0 || j == save->size.x - 1)
             save->map[i][j] = 1;
         else
             save->map[i][j] = 0;
@@ -76,9 +76,16 @@ static void update_save(system_t *sys, edit_info_t *edit_info)
     if (edit_info->str != EDIT_INF_Y)
         return;
     destroy_save(sys->save);
-    sys->save->name = strdup(edit_info->string[EDIT_INF_NAME]);
-    sys->save->size.x = atoi(edit_info->string[EDIT_INF_X]) + 1;
-    sys->save->size.y = atoi(edit_info->string[EDIT_INF_Y]) + 1;
+    if (*edit_info->string[EDIT_INF_NAME] == '\0')
+        sys->save->name = strdup("no name");
+    else
+        sys->save->name = strdup(edit_info->string[EDIT_INF_NAME]);
+    sys->save->size.x = atoi(edit_info->string[EDIT_INF_X]) + 2;
+    sys->save->size.y = atoi(edit_info->string[EDIT_INF_Y]) + 2;
+    if (sys->save->size.x > 200 || sys->save->size.x < 1)
+        sys->save->size.x = 100;
+    if (sys->save->size.y > 200 || sys->save->size.y < 1)
+        sys->save->size.y = 100;
     sys->save->map = malloc(sizeof(int *) * sys->save->size.y);
     for (int i = 0; i < sys->save->size.y; i++) {
         sys->save->map[i] = malloc(sizeof(int) * sys->save->size.x);

@@ -8,66 +8,103 @@
 #include "editor.h"
 #include "save.h"
 #include <string.h>
+#include <stdio.h>
 
-static void set_orientation(sfEvent event, edit_map_t *edit)
+static sfBool find_edit(int **map, int edit, sfVector2i size, int i)
 {
-    if (is_input(event, sfKeyLeft, sfFalse, 0)) {
-        edit->rotate -= RAD(1);
+    for (int j = 0; j < size.x; j++) {
+        if (map[i][j] == edit) {
+            map[i][j] = EDIT_NONE;
+            return sfTrue;
+        }
     }
-    if (is_input(event, sfKeyRight, sfFalse, 0)) {
-        edit->rotate += RAD(1);
+    return sfFalse;
+}
+
+static void only_one(int **map, int edit, sfVector2i size)
+{
+    if (edit != EDIT_END && edit != EDIT_START)
+        return;
+    for (int i = 0; i < size.y; i++) {
+        if (find_edit(map, edit, size, i))
+            break;
     }
 }
 
-static void set_zoom(sfEvent event, edit_map_t *edit)
+static void check_press_button(
+    system_t *sys, buttons_t *buttons, edit_map_t *edit, edit_t i)
 {
-    float zoom = 0;
+    sfBool change = sfFalse;
+    sfVector2i mouse_pos = sfMouse_getPositionRenderWindow(sys->window);
 
-    if (event.type == sfEvtMouseWheelScrolled) {
-        zoom = event.mouseWheelScroll.delta;
-        if (zoom > 0)
-            zoom = ZOOM * -1;
-        else
-            zoom = ZOOM;
-        edit->zoom += zoom;
-        if (edit->zoom > MAX_ZOOM)
-            edit->zoom = MAX_ZOOM;
-        if (edit->zoom < MIN_ZOOM)
-            edit->zoom = MIN_ZOOM;
+    if (sfFloatRect_contains(&edit->buttons->bounds[i],
+        mouse_pos.x, mouse_pos.y) == sfFalse)
+        return;
+    if (buttons->press == sfTrue && edit->edit != i) {
+        edit->edit = i;
+        change = sfTrue;
+    }
+    if (buttons->press == sfTrue && edit->edit == i
+        && change == sfFalse) {
+        buttons->press = sfFalse;
+        change = sfTrue;
+    }
+    if (buttons->press == sfFalse && change == sfFalse) {
+        buttons->press = sfTrue;
+        edit->edit = i;
     }
 }
 
-static void move_map(sfEvent event, edit_map_t *edit)
+static void is_on_button(
+    sfEvent event, system_t *sys, buttons_t *buttons, edit_map_t *edit)
 {
-    if (is_input(event, sfKeyZ, sfFalse, 0)) {
-        edit->pos.y -= MOVE;
-        if (edit->pos.y < -1 * (WIN_HEIGHT / 2))
-            edit->pos.y = -1 * (WIN_HEIGHT / 2);
-    }
-    if (is_input(event, sfKeyS, sfFalse, 0)) {
-        edit->pos.y += MOVE;
-        if (edit->pos.y > WIN_HEIGHT / 2)
-            edit->pos.y = WIN_HEIGHT / 2;
-    }
-    if (is_input(event, sfKeyQ, sfFalse, 0)) {
-        edit->pos.x -= MOVE;
-        if (edit->pos.x < -1 * (WIN_WIDTH / 2))
-            edit->pos.x = -1 * (WIN_WIDTH / 2);
-    }
-    if (is_input(event, sfKeyD, sfFalse, 0)) {
-        edit->pos.x += MOVE;
-        if (edit->pos.x > WIN_WIDTH / 2)
-            edit->pos.x = WIN_WIDTH / 2;
+    if (event.type == sfEvtMouseButtonPressed &&
+        event.mouseButton.button == sfMouseLeft){
+        for (edit_t i = 0; i < NB_EDIT; i++) {
+            check_press_button(sys, buttons, edit, i);
+        }
     }
 }
 
-static void reset_pos(sfEvent event, edit_map_t *edit)
+static void mouse_click(system_t *sys, edit_map_t *edit, sfVector2f **map)
 {
-    if (is_input(event, sfKeyA, sfFalse, 0)) {
-        edit->pos = (sfVector2f){0, 0};
-        edit->rotate = 0;
-        edit->zoom = 1;
+    sfVector2i tile = {0, 0};
+
+    if (sfMouse_isButtonPressed(sfMouseLeft)) {
+        tile = which_tile(sys, edit->draw_map, map);
+        if (tile.x != -1 && tile.y != -1
+            && edit->buttons->press == sfTrue) {
+            only_one(sys->save->map, edit->edit, sys->save->size);
+            sys->save->map[tile.y][tile.x] = edit->edit;
+        }
     }
+}
+
+static void dispatch_info(save_t *save, int i, int j)
+{
+    char tmp[2048];
+
+    if (save->map[i][j] == EDIT_START) {
+        save->info->start_pos = (sfVector2f){j * TILE_SIZE + TILE_SIZE / 2,
+            i * TILE_SIZE + TILE_SIZE / 2};
+        save->map[i][j] = 0;
+    }
+    if (save->map[i][j] > EDIT_START) {
+        sprintf(tmp, "%d:%d:%d:0", save->map[i][j] - (EDIT_START + 1), j *
+            TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
+        add_node_entity(save->entities, tmp);
+        save->map[i][j] = 0;
+    }
+}
+
+static void get_info_save(save_t *save)
+{
+    for (int i = 0; i < save->size.y; i++) {
+        for (int j = 0; j < save->size.x; j++) {
+            dispatch_info(save, i, j);
+        }
+    }
+    save_map(save, "your_maps");
 }
 
 static void switch_scene(sfEvent event, system_t *sys,
@@ -78,7 +115,7 @@ static void switch_scene(sfEvent event, system_t *sys,
         if (is_input(event, sfKeyEscape, sfTrue, 7))
             edit_map->str = EDIT_MAP_BACK;
         if (edit_map->str == EDIT_MAP_SAVE)
-            save_map(sys->save, "your_maps");
+            get_info_save(sys->save);
         state->old_scene = state->scene;
         state->scene = edit_map->draw[edit_map->str].scene;
         edit_map->draw[edit_map->str].color = sfBlack;
@@ -112,9 +149,8 @@ void edit_map_events(system_t *sys, edit_map_t *edit_map)
         sys_events(event, sys);
         switch_str(event, edit_map);
         switch_scene(event, sys, edit_map, sys->state);
-        move_map(event, edit_map);
-        set_zoom(event, edit_map);
-        set_orientation(event, edit_map);
-        reset_pos(event, edit_map);
+        map_event(event, edit_map);
+        is_on_button(event, sys, edit_map->buttons, edit_map);
     }
+    mouse_click(sys, edit_map, edit_map->draw_map->map);
 }

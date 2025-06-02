@@ -24,6 +24,37 @@
 
     #define MOVE 5
 
+    #define SIZE_X_BUTTON 125.00
+    #define SIZE_Y_BUTTON 80.00
+    #define SIZE_TEXT_BUTTON 30
+
+typedef enum {
+    EDIT_NONE,
+    EDIT_WALL,
+    EDIT_DOOR,
+    EDIT_DESTRUCTIBLE,
+    EDIT_END,
+    EDIT_START,
+    EDIT_SMALL_HEALTH,
+    EDIT_BIG_HEALTH,
+    EDIT_STAMINA,
+    EDIT_AMMO_PISTOL,
+    EDIT_AMMO_SHUTGUN,
+    EDIT_AMMO_MINIGUN,
+    EDIT_FLASHLIGHT,
+    EDIT_WEAPON_TWO,
+    EDIT_WEAPON_THREE,
+    EDIT_WEAPON_FOUR,
+    EDIT_SWORD_ENEMY,
+    EDIT_GUN_ENEMY,
+    EDIT_SHEET_ENEMY,
+    EDIT_CYBORG,
+    EDIT_GROWLER,
+    EDIT_PHANTOM,
+    EDIT_BOSS,
+    NB_EDIT,
+} edit_t;
+
 typedef enum str_edit_info_e {
     EDIT_INF_TITLE,
     EDIT_INF_NAME,
@@ -47,23 +78,71 @@ typedef struct edit_info_s {
     char str_tmp[NB_EDIT_INF][MAX_NAME + 1];
 } edit_info_t;
 
-typedef struct edit_map_s {
-    draw_textbox_t *draw;
-    str_edit_map_t str;
+typedef struct button_s {
+    sfVector2f pos;
+    char *text;
+} button_t;
+
+typedef struct buttons_s {
+    sfFloatRect bounds[NB_EDIT];
+    sfBool hover[NB_EDIT];
+    sfRectangleShape *rectangle;
+    sfBool press;
+} buttons_t;
+
+static const button_t BUTTON[] __maybe_unused = {
+    [EDIT_NONE] = {(sfVector2f){20, 50}, "none"},
+    [EDIT_WALL] = {(sfVector2f){20, 200}, "wall"},
+    [EDIT_DESTRUCTIBLE] = {(sfVector2f){20, 350}, "destrucitble"},
+    [EDIT_DOOR] = {(sfVector2f){20, 500}, "door"},
+    [EDIT_END] = {(sfVector2f){20, 650}, "end"},
+    [EDIT_START] = {(sfVector2f){20, 800}, "start"},
+    [EDIT_SMALL_HEALTH] = {(sfVector2f){1550, 14}, "small health"},
+    [EDIT_BIG_HEALTH] = {(sfVector2f){1550, 122}, "big health"},
+    [EDIT_STAMINA] = {(sfVector2f){1550, 230}, "staminat"},
+    [EDIT_AMMO_PISTOL] = {(sfVector2f){1550, 338}, "ammo pistol"},
+    [EDIT_AMMO_SHUTGUN] = {(sfVector2f){1550, 446}, "ammo shutgun"},
+    [EDIT_AMMO_MINIGUN] = {(sfVector2f){1550, 554}, "ammo minigun"},
+    [EDIT_FLASHLIGHT] = {(sfVector2f){1550, 662}, "flashlight"},
+    [EDIT_WEAPON_TWO] = {(sfVector2f){1550, 770}, "pistol"},
+    [EDIT_WEAPON_THREE] = {(sfVector2f){1550, 878}, "shutgun"},
+    [EDIT_WEAPON_FOUR] = {(sfVector2f){1550, 986}, "minigun"},
+    [EDIT_SWORD_ENEMY] = {(sfVector2f){1750, 37}, "sword"},
+    [EDIT_GUN_ENEMY] = {(sfVector2f){1750, 191}, "gun"},
+    [EDIT_SHEET_ENEMY] = {(sfVector2f){1750, 345}, "sheet"},
+    [EDIT_CYBORG] = {(sfVector2f){1750, 499}, "cyborg"},
+    [EDIT_GROWLER] = {(sfVector2f){1750, 653}, "growler"},
+    [EDIT_PHANTOM] = {(sfVector2f){1750, 807}, "phantom"},
+    [EDIT_BOSS] = {(sfVector2f){1750, 961}, "boss"},
+};
+
+typedef struct draw_map_s {
     sfVector2f **map;
     sfVector2i size;
     sfVector2f pos;
     float rotate;
     float zoom;
     float coef;
-    sfBool update;
     sfConvexShape *shape;
+} draw_map_t;
+
+typedef struct edit_map_s {
+    draw_textbox_t *draw;
+    str_edit_map_t str;
+    edit_t edit;
+    sfColor color[NB_EDIT];
+    buttons_t *buttons;
+    draw_map_t *draw_map;
+    sfBool update;
 } edit_map_t;
 
 void edit_info_events(system_t *sys, edit_info_t *edit_info);
 void edit_map_events(system_t *sys, edit_map_t *edit_map);
+void map_event(sfEvent event, edit_map_t *edit_map);
 
 void free_2d_map(sfVector2i size, sfVector2f **map);
-sfVector2f **create_2d_map(edit_map_t *edit);
+sfVector2f **create_2d_map(draw_map_t *edit);
+sfVector2i which_tile(system_t *sys, draw_map_t *edit, sfVector2f **map);
+void draw_button(system_t *sys, buttons_t *buttons, edit_map_t *edit);
 
 #endif /* !EDITOR_H_ */
