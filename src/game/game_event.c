@@ -57,11 +57,13 @@ static void change_weapons(sfEvent event, game_t *game, weapon_t *weapon)
     game->tool->draw[weapon->weapon + TOOL_ONE].color = sfRed;
 }
 
-static void switch_scene(sfEvent event, state_info_t *state)
+static void switch_scene(
+    sfEvent event, state_info_t *state, game_t *game)
 {
     if (is_input(event, sfKeyEscape, sfTrue, 7)) {
         state->old_scene = state->scene;
         state->scene = PAUSE;
+        sfMusic_pause(game->music[BOSS_MUSIC]);
     }
 }
 
@@ -131,7 +133,7 @@ void game_events(system_t *sys, game_t *game)
     while (sfRenderWindow_pollEvent(sys->window, &event)) {
         sys_events(event, sys);
         change_weapons(event, game, game->weapon);
-        switch_scene(event, sys->state);
+        switch_scene(event, sys->state, game);
         tool_interact(event, sys->save, game->tool, game->light);
         interact(game->player, sys, game, event);
     }

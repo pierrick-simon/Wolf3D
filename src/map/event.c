@@ -32,8 +32,11 @@ static int load_map(select_map_t *map, system_t *sys, char *name)
 
 static void reset_str(select_map_t *map, state_info_t *state, str_map_t id)
 {
-    state->old_scene = state->scene;
-    state->scene = map->draw[id].scene;
+    if (id == MAP_BACK && state->old_scene != LEAVE)
+        state->scene = state->old_scene;
+    else
+        state->scene = map->draw[id].scene;
+    state->old_scene = MAP;
     map->draw[map->str].color = sfWhite;
     map->str = MAP_PLAY;
     map->save = sfFalse;

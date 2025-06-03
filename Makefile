@@ -80,6 +80,7 @@ SRC =	$(addprefix src/,					\
 				draw_minimap_elements.c		\
 				init_toolbar.c				\
 				handle_items.c  			\
+				handle_boss.c  				\
 			)								\
 			$(addprefix save/,				\
 				$(addprefix list/,			\

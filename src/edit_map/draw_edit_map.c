@@ -70,6 +70,7 @@ static void update_edit(
         tmp_map(sys, draw_map, size);
         edit->current = NULL;
         edit->update = sfTrue;
+        empty_linked_list(sys->save->entities, &free);
     }
     draw_map->coor = create_2d_map(draw_map);
 }

@@ -78,13 +78,13 @@ static void dispatch_info(save_t *save, int i, int j, edit_map_t *edit)
 
 static void get_info_save(save_t *save, edit_map_t *edit)
 {
+    empty_linked_list(save->entities, &free);
     for (int i = 0; i < save->size.y; i++) {
         for (int j = 0; j < save->size.x; j++) {
             dispatch_info(save, i, j, edit);
         }
     }
     save_map(save, "your_maps");
-    empty_linked_list(save->entities, &free);
 }
 
 static void switch_scene(sfEvent event, system_t *sys,
@@ -96,8 +96,11 @@ static void switch_scene(sfEvent event, system_t *sys,
             edit_map->str = EDIT_MAP_BACK;
         if (edit_map->str == EDIT_MAP_SAVE)
             return get_info_save(sys->save, edit_map);
-        state->old_scene = state->scene;
-        state->scene = edit_map->draw[edit_map->str].scene;
+        if (edit_map->str == EDIT_MAP_BACK)
+            state->scene = state->old_scene;
+        else
+            state->scene = edit_map->draw[edit_map->str].scene;
+        state->old_scene = EDIT_MAP;
         edit_map->draw[edit_map->str].color = sfBlack;
         edit_map->str = EDIT_MAP_SAVE;
         edit_map->update = sfFalse;
@@ -136,4 +139,8 @@ void edit_map_events(system_t *sys, edit_map_t *edit_map)
         is_on_button(event, sys, edit_map->buttons, edit_map);
     }
     mouse_click(sys, edit_map, edit_map->draw_map->coor);
+    if (sys->state->fullscreen == sfFalse)
+        sfConvexShape_setOutlineThickness(edit_map->draw_map->shape, 2);
+    else
+        sfConvexShape_setOutlineThickness(edit_map->draw_map->shape, 1);
 }

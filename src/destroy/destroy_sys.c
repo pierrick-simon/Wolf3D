@@ -47,6 +47,8 @@ void destroy_save(save_t *save)
             empty_linked_list(save->doors, free);
         if (save->entities != NULL)
             empty_linked_list(save->entities, free);
+        if (save->boss != NULL)
+            empty_linked_list(save->boss, free);
     }
 }
 
@@ -59,6 +61,8 @@ static void destroy_all_save(save_t *save)
         free_linked_list(save->doors, free);
     if (save->entities != NULL)
         free_linked_list(save->entities, free);
+    if (save->boss != NULL)
+        free_linked_list(save->boss, free);
     free(save);
 }
 

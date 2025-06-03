@@ -105,7 +105,7 @@ static void draw_tool_strings(system_t *sys, toolbar_t *tool)
         if ((tool->fps == sfFalse && i == TOOL_FPS)
             || (tool->saving == sfFalse && i == TOOL_SAVE)
             || (tool->interact == sfFalse && i == TOOL_INTERACT)
-            || i == TOOL_FLASH_NB)
+            || i == TOOL_FLASH_NB || i == TOOL_BOSS)
             continue;
         draw_string(sys, sys->textbox, &tool->draw[i]);
     }
@@ -210,6 +210,8 @@ void show_game_environement(system_t *sys, game_t *game)
         NO_ENTITIE && game->weapon->weapon != PUNCH)
         draw_head_shot(sys, game->player);
     flash_light(sys, game->light, game);
+    draw_boss_health(sys, sys->save->boss,
+        game->tool->rectangle, game->tool->draw);
     draw_toolbar(sys, game->tool);
     draw_minimap(sys, game->mini_map, game->cursor, game->tool->border);
     draw_overlay(sys, game);

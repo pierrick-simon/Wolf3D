@@ -48,7 +48,7 @@ sfBool is_wall_between(game_t *game, entity_t *enemy)
     if (enemy->dist < 1)
         return sfFalse;
     get_angle(&tmp, game, enemy);
-    value = cast_single_ray(&tmp, 0, &type, &intersection_point);
+    value = cast_single_ray_enemy(&tmp, 0, &type, &intersection_point);
     if (value < enemy->dist)
         return sfTrue;
     return sfFalse;

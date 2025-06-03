@@ -57,8 +57,9 @@ static int init_save(save_t *save)
     save->info = malloc(sizeof(player_info_t));
     save->doors = initialize_linked_list();
     save->entities = initialize_linked_list();
+    save->boss = initialize_linked_list();
     if (save->info == NULL || save->entities == NULL
-        || save->doors == NULL)
+        || save->doors == NULL || save->boss == NULL)
         return ERROR;
     save->init = sfFalse;
     save->music = NULL;
