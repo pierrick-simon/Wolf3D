@@ -33,9 +33,10 @@ static void damage_enemy(game_t *game, entity_t *data)
 {
     if (game->weapon->info[game->weapon->weapon].range < data->dist)
         return;
-    if (game->map->is_weakness && game->weapon->weapon != PUNCH)
+    if (game->map->is_weakness && game->weapon->weapon != PUNCH) {
         data->health -= game->weapon->info[game->weapon->weapon].damage * HEAD;
-    else
+        game->map->timer_weakness = 0.2;
+    } else
         data->health -= game->weapon->info[game->weapon->weapon].damage;
     data->damage = TIME_OVERLAY;
     if (data->health <= 0 && data->is_alive != sfFalse) {

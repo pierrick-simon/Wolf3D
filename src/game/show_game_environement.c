@@ -206,8 +206,7 @@ void show_game_environement(system_t *sys, game_t *game)
         game->weapon->sprite, NULL);
     sfRenderWindow_drawCircleShape(sys->window,
         game->player->crossair, NULL);
-    if (game->map->is_weakness && game->map->entity_center !=
-        NO_ENTITIE && game->weapon->weapon != PUNCH)
+    if (game->map->timer_weakness > 0)
         draw_head_shot(sys, game->player);
     flash_light(sys, game->light, game);
     draw_toolbar(sys, game->tool);

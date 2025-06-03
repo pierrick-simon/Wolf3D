@@ -243,6 +243,7 @@ typedef struct map_s {
     int entity_center;
     sfBool is_wall;
     sfBool is_weakness;
+    float timer_weakness;
 } map_t;
 
 typedef struct center_ray_s {
