@@ -61,6 +61,7 @@ typedef struct entity_s {
     float change_rect;
     float damage;
     float change_pos;
+    sfBool see;
     int id;
 } entity_t;
 

@@ -19,10 +19,10 @@ static int load_restart(pause_t *pause, system_t *sys,
 
     if (pause->str != PAUSE_RESTART)
         return SUCCESS;
-    tmp = malloc(sizeof(char) * (strlen(name) + LEN_SAVE));
+    tmp = malloc(sizeof(char) * (strlen(name) + LEN_SAVE + strlen(sys->dir)));
     if (tmp == NULL)
         return ERROR;
-    sprintf(tmp, "maps/%s.legend", name);
+    sprintf(tmp, "%s/%s.legend", sys->dir, name);
     exit = get_save(tmp, sys->save);
     sys->save->info->difficulty = difficulty;
     free(tmp);

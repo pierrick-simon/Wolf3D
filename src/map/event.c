@@ -15,12 +15,13 @@ static int load_map(select_map_t *map, system_t *sys, char *name)
     char *tmp = NULL;
     int exit = SUCCESS;
 
-    if (map->str != MAP_PLAY && map->str != MAP_CONTINUE)
+    if (map->str != MAP_PLAY && map->str != MAP_CONTINUE
+        && map->str != MAP_EDIT)
         return SUCCESS;
-    tmp = malloc(sizeof(char) * (strlen(name) + LEN_SAVE));
+    tmp = malloc(sizeof(char) * (strlen(name) + LEN_SAVE + strlen(sys->dir)));
     if (tmp == NULL)
         return ERROR;
-    if (map->str == MAP_PLAY)
+    if (map->str == MAP_PLAY || map->str == MAP_EDIT)
         sprintf(tmp, "%s/%s.legend", sys->dir, name);
     if (map->str == MAP_CONTINUE)
         sprintf(tmp, "save/%s.legend", name);
@@ -67,10 +68,15 @@ static void switch_scene(
 static void check_continue(select_map_t *map, int prev)
 {
     if (map->save == sfFalse) {
-        map->draw[MAP_CONTINUE].color = GREY;
         if (map->str == MAP_CONTINUE && prev == MAP_CONTINUE - 1)
             map->str++;
         if (map->str == MAP_CONTINUE && prev == MAP_CONTINUE + 1)
+            map->str--;
+    }
+    if (map->edit == sfFalse) {
+        if (map->str == MAP_EDIT && prev == MAP_EDIT - 1)
+            map->str++;
+        if (map->str == MAP_EDIT && prev == MAP_EDIT + 1)
             map->str--;
     }
 }

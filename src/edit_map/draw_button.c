@@ -7,13 +7,14 @@
 
 #include <stdio.h>
 #include "editor.h"
+#include "linked_list.h"
 
 static sfVector2f calculate_middle(sfFloatRect rect, sfFloatRect text,
     sfVector2f pos)
 {
     sfVector2f position = {0};
 
-    position.y = pos.y + (rect.height / 2 - text.height) + 3;
+    position.y = pos.y + (rect.height - text.height) / 2 - 5;
     position.x = pos.x + (rect.width - text.width) / 2 - 5;
     return position;
 }
@@ -33,6 +34,27 @@ static void draw_button_text(system_t *sys, buttons_t *buttons, int button)
     sfText_setPosition(sys->textbox->text, (sfVector2f){0, 0});
 }
 
+static void set_button_color(buttons_t *buttons, edit_map_t *edit, edit_t i)
+{
+    if (edit->current == NULL || edit->current->next == NULL)
+        edit->color[EDIT_PREV] = sfWhite;
+    else
+        edit->color[EDIT_PREV] = sfMagenta;
+    if (edit->current == NULL || edit->current->prev == NULL)
+        edit->color[EDIT_NEXT] = sfWhite;
+    else
+        edit->color[EDIT_NEXT] = sfMagenta;
+    sfRectangleShape_setOutlineColor(buttons->rectangle, sfBlack);
+    sfRectangleShape_setOutlineThickness(buttons->rectangle, 2);
+    if (buttons->hover[i] == sfTrue)
+        sfRectangleShape_setOutlineThickness(buttons->rectangle, 10);
+    if (buttons->hover[i] == sfFalse && edit->edit == i
+        && buttons->press == sfTrue) {
+        sfRectangleShape_setOutlineColor(buttons->rectangle, sfYellow);
+        sfRectangleShape_setOutlineThickness(buttons->rectangle, 10);
+    }
+}
+
 void draw_button(system_t *sys, buttons_t *buttons, edit_map_t *edit)
 {
     sfVector2i mouse_pos = sfMouse_getPositionRenderWindow(sys->window);
@@ -42,12 +64,7 @@ void draw_button(system_t *sys, buttons_t *buttons, edit_map_t *edit)
             &edit->buttons->bounds[i], mouse_pos.x, mouse_pos.y);
         sfRectangleShape_setPosition(buttons->rectangle, BUTTON[i].pos);
         sfRectangleShape_setFillColor(buttons->rectangle, edit->color[i]);
-        sfRectangleShape_setOutlineColor(buttons->rectangle, sfTransparent);
-        if (buttons->hover[i] == sfTrue)
-            sfRectangleShape_setOutlineColor(buttons->rectangle, sfBlack);
-        if (buttons->hover[i] == sfFalse && edit->edit == i
-            && buttons->press == sfTrue)
-            sfRectangleShape_setOutlineColor(buttons->rectangle, sfYellow);
+        set_button_color(buttons, edit, i);
         sfRenderWindow_drawRectangleShape(
             sys->window, buttons->rectangle, NULL);
         draw_button_text(sys, buttons, i);

@@ -11,7 +11,7 @@
     #include "wolf.h"
     #include <stdbool.h>
 
-    #define MAX_STRLEN 4
+    #define MAX_STRLEN 3
     #define MAX_NAME 15
 
     #define LEN_SAVE 13
@@ -103,6 +103,7 @@ typedef enum str_map_e {
     MAP_PLAY,
     MAP_CONTINUE,
     MAP_SCORE,
+    MAP_EDIT,
     MAP_BACK,
     NB_MAP,
 } str_map_t;
@@ -126,6 +127,7 @@ typedef struct select_map_s {
     draw_textbox_t *draw;
     sfBool save;
     sfBool check;
+    sfBool edit;
 } select_map_t;
 
 typedef struct check_s {

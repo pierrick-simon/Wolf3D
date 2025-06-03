@@ -6,6 +6,7 @@
 */
 
 #include "editor.h"
+#include "linked_list.h"
 #include <stdlib.h>
 
 void destroy_edit_map(void *structure)
@@ -17,6 +18,8 @@ void destroy_edit_map(void *structure)
     if (edit_map->draw_map != NULL) {
         if (edit_map->draw_map->shape != NULL)
             sfConvexShape_destroy(edit_map->draw_map->shape);
+        if (edit_map->draw_map->map != NULL)
+            free_map(edit_map->draw_map->size.y - 1, edit_map->draw_map->map);
         free(edit_map->draw_map);
     }
     if (edit_map->buttons != NULL) {
@@ -24,5 +27,7 @@ void destroy_edit_map(void *structure)
             sfRectangleShape_destroy(edit_map->buttons->rectangle);
         free(edit_map->buttons);
     }
+    if (edit_map->history != NULL)
+        free_linked_list(edit_map->history, &free_node_history);
     free(edit_map);
 }

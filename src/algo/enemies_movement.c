@@ -34,18 +34,35 @@ static sfBool is_arrived(entity_t *enemy)
     return sfFalse;
 }
 
+static sfBool return_value(entity_t *enemy, game_t *game, sfBool *return_value)
+{
+    if (is_wall_between(game, enemy) == sfFalse) {
+        *return_value = sfFalse;
+        return sfTrue;
+    }
+    if (enemy->see == sfFalse) {
+        *return_value = sfTrue;
+        return sfTrue;
+    }
+    if (enemy->next_pos.x == SKIP || enemy->next_pos.y == SKIP
+        || is_arrived(enemy) == sfTrue) {
+        if (get_next_pos(enemy, game) == sfFalse) {
+            *return_value = sfTrue;
+            return sfTrue;
+        }
+    }
+    return sfFalse;
+}
+
 static sfBool move_closer(entity_t *enemy, game_t *game, float difficulty)
 {
     float dist = 0;
     float coef = 0;
     sfVector2f mov = {0};
+    sfBool tmp = sfFalse;
 
-    if (is_wall_between(game, enemy) == sfFalse)
-        return sfFalse;
-    if (enemy->next_pos.x == SKIP || enemy->next_pos.y == SKIP
-        || is_arrived(enemy) == sfTrue)
-        if (get_next_pos(enemy, game) == sfFalse)
-            return sfTrue;
+    if (return_value(enemy, game, &tmp))
+        return tmp;
     dist = sqrt(pow(enemy->pos.x - enemy->next_pos.x, 2) +
         pow(enemy->pos.y - enemy->next_pos.y, 2));
     coef = ENEMY[enemy->type].speed * difficulty
@@ -65,6 +82,7 @@ static void get_new_position(entity_t *enemy, game_t *game, float difficulty)
     sfVector2f mov = {game->player->pos.x - enemy->pos.x,
         game->player->pos.y - enemy->pos.y};
 
+    enemy->see = sfTrue;
     enemy->next_pos = (sfVector2f){SKIP, SKIP};
     enemy->change_pos = SKIP;
     enemy->pos.x += mov.x * coef;
