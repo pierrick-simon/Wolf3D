@@ -14,7 +14,7 @@ static sfVector2f calculate_middle(sfFloatRect rect, sfFloatRect text,
 {
     sfVector2f position = {0};
 
-    position.y = pos.y + (rect.height / 2 - text.height) + 3;
+    position.y = pos.y + (rect.height - text.height) / 2 - 5;
     position.x = pos.x + (rect.width - text.width) / 2 - 5;
     return position;
 }

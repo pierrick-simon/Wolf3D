@@ -24,9 +24,9 @@
 
     #define MOVE 5
 
-    #define SIZE_X_BUTTON 130.00
-    #define SIZE_Y_BUTTON 80.00
-    #define SIZE_TEXT_BUTTON 30
+    #define SIZE_X_BUTTON 115.00
+    #define SIZE_Y_BUTTON 60.00
+    #define SIZE_TEXT_BUTTON 27
 
 typedef struct linked_list_s linked_list_t;
 typedef struct node_s node_t;
@@ -74,6 +74,10 @@ typedef enum str_edit_info_e {
 
 typedef enum str_edit_map_e {
     EDIT_MAP_TITLE,
+    EDIT_MAP_TOOLS,
+    EDIT_MAP_TILE,
+    EDIT_MAP_ENEMY,
+    EDIT_MAP_ITEM,
     EDIT_MAP_SAVE,
     EDIT_MAP_BACK,
     NB_EDIT_MAP,
@@ -140,35 +144,35 @@ void prev_button(system_t *sys, edit_map_t *edit);
 void next_button(system_t *sys, edit_map_t *edit);
 
 static const button_t BUTTON[] __maybe_unused = {
-    [EDIT_NONE] = {(sfVector2f){20, 50}, "none", STAY},
-    [EDIT_WALL] = {(sfVector2f){20, 200}, "wall", STAY},
-    [EDIT_DESTRUCTIBLE] = {(sfVector2f){20, 350}, "destrucitble", STAY},
-    [EDIT_DOOR] = {(sfVector2f){20, 500}, "door", STAY},
-    [EDIT_END] = {(sfVector2f){20, 650}, "end", STAY},
-    [EDIT_START] = {(sfVector2f){20, 800}, "start", STAY},
-    [EDIT_SMALL_HEALTH] = {(sfVector2f){1550, 14}, "small health", STAY},
-    [EDIT_BIG_HEALTH] = {(sfVector2f){1550, 122}, "big health", STAY},
-    [EDIT_STAMINA] = {(sfVector2f){1550, 230}, "staminat", STAY},
-    [EDIT_AMMO_PISTOL] = {(sfVector2f){1550, 338}, "ammo pistol", STAY},
-    [EDIT_AMMO_SHUTGUN] = {(sfVector2f){1550, 446}, "ammo shutgun", STAY},
-    [EDIT_AMMO_MINIGUN] = {(sfVector2f){1550, 554}, "ammo minigun", STAY},
-    [EDIT_FLASHLIGHT] = {(sfVector2f){1550, 662}, "flashlight", STAY},
-    [EDIT_WEAPON_TWO] = {(sfVector2f){1550, 770}, "pistol", STAY},
-    [EDIT_WEAPON_THREE] = {(sfVector2f){1550, 878}, "shutgun", STAY},
-    [EDIT_WEAPON_FOUR] = {(sfVector2f){1550, 986}, "minigun", STAY},
-    [EDIT_SWORD_ENEMY] = {(sfVector2f){1750, 37}, "sword", STAY},
-    [EDIT_GUN_ENEMY] = {(sfVector2f){1750, 191}, "gun", STAY},
-    [EDIT_SHEET_ENEMY] = {(sfVector2f){1750, 345}, "sheet", STAY},
-    [EDIT_CYBORG] = {(sfVector2f){1750, 499}, "cyborg", STAY},
-    [EDIT_GROWLER] = {(sfVector2f){1750, 653}, "growler", STAY},
-    [EDIT_PHANTOM] = {(sfVector2f){1750, 807}, "phantom", STAY},
-    [EDIT_BOSS] = {(sfVector2f){1750, 961}, "boss", STAY},
-    [EDIT_CENTER] = {(sfVector2f){220, 50}, "center", CLICK, &center_button},
-    [EDIT_RESET] = {(sfVector2f){220, 200}, "reset", CLICK, &reset_button},
-    [EDIT_REFRESH] = {(sfVector2f){220, 350},
+    [EDIT_NONE] = {(sfVector2f){55, 640}, "none", STAY},
+    [EDIT_WALL] = {(sfVector2f){205, 640}, "wall", STAY},
+    [EDIT_DESTRUCTIBLE] = {(sfVector2f){55, 730}, "destrucitble", STAY},
+    [EDIT_DOOR] = {(sfVector2f){205, 730}, "door", STAY},
+    [EDIT_END] = {(sfVector2f){55, 820}, "end", STAY},
+    [EDIT_START] = {(sfVector2f){205, 820}, "start", STAY},
+    [EDIT_SMALL_HEALTH] = {(sfVector2f){1600, 640}, "small health", STAY},
+    [EDIT_BIG_HEALTH] = {(sfVector2f){1750, 640}, "big health", STAY},
+    [EDIT_STAMINA] = {(sfVector2f){1600, 730}, "staminat", STAY},
+    [EDIT_AMMO_PISTOL] = {(sfVector2f){1750, 730}, "ammo pistol", STAY},
+    [EDIT_AMMO_SHUTGUN] = {(sfVector2f){1600, 820}, "ammo shutgun", STAY},
+    [EDIT_AMMO_MINIGUN] = {(sfVector2f){1750, 820}, "ammo minigun", STAY},
+    [EDIT_FLASHLIGHT] = {(sfVector2f){1600, 910}, "flashlight", STAY},
+    [EDIT_WEAPON_TWO] = {(sfVector2f){1750, 910}, "pistol", STAY},
+    [EDIT_WEAPON_THREE] = {(sfVector2f){1600, 1000}, "shutgun", STAY},
+    [EDIT_WEAPON_FOUR] = {(sfVector2f){1750, 1000}, "minigun", STAY},
+    [EDIT_SWORD_ENEMY] = {(sfVector2f){1600, 160}, "sword", STAY},
+    [EDIT_GUN_ENEMY] = {(sfVector2f){1750, 160}, "gun", STAY},
+    [EDIT_SHEET_ENEMY] = {(sfVector2f){1600, 250}, "sheet", STAY},
+    [EDIT_CYBORG] = {(sfVector2f){1750, 250}, "cyborg", STAY},
+    [EDIT_GROWLER] = {(sfVector2f){1600, 340}, "growler", STAY},
+    [EDIT_PHANTOM] = {(sfVector2f){1750, 340}, "phantom", STAY},
+    [EDIT_BOSS] = {(sfVector2f){1675, 430}, "boss", STAY},
+    [EDIT_RESET] = {(sfVector2f){55, 250}, "reset", CLICK, &reset_button},
+    [EDIT_REFRESH] = {(sfVector2f){205, 250},
         "refresh", CLICK, &refresh_button},
-    [EDIT_PREV] = {(sfVector2f){220, 500}, "prev", CLICK, &prev_button},
-    [EDIT_NEXT] = {(sfVector2f){220, 650}, "next", CLICK, &next_button},
+    [EDIT_PREV] = {(sfVector2f){55, 160}, "prev", CLICK, &prev_button},
+    [EDIT_NEXT] = {(sfVector2f){205, 160}, "next", CLICK, &next_button},
+    [EDIT_CENTER] = {(sfVector2f){130, 340}, "center", CLICK, &center_button},
 };
 
 void edit_info_events(system_t *sys, edit_info_t *edit_info);

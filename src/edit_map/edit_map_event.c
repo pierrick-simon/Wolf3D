@@ -119,7 +119,7 @@ static void switch_str(sfEvent event, edit_map_t *edit_map)
         edit_map->str++;
     if (edit_map->str == NB_EDIT_MAP)
         edit_map->str = EDIT_MAP_SAVE;
-    if (edit_map->str == EDIT_MAP_TITLE)
+    if (edit_map->str == EDIT_MAP_ITEM)
         edit_map->str = EDIT_MAP_BACK;
     edit_map->draw[edit_map->str].color = sfRed;
 }

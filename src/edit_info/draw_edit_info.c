@@ -18,14 +18,14 @@ static void update_info(edit_info_t *edit_info)
     sprintf(edit_info->str_tmp[EDIT_INF_NAME], "%s",
         edit_info->string[EDIT_INF_NAME]);
     for (int i = len; i < MAX_NAME; i++) {
-        edit_info->str_tmp[EDIT_INF_NAME][i] = '-';
+        edit_info->str_tmp[EDIT_INF_NAME][i] = '_';
     }
     edit_info->str_tmp[EDIT_INF_NAME][MAX_NAME] = '\0';
     for (int j = EDIT_INF_X; j < EDIT_INF_BACK; j++) {
         len = strlen(edit_info->string[j]);
         sprintf(edit_info->str_tmp[j], "%s", edit_info->string[j]);
         for (int i = len; i < MAX_STRLEN; i++) {
-            edit_info->str_tmp[j][i] = '-';
+            edit_info->str_tmp[j][i] = '_';
         }
         edit_info->str_tmp[j][MAX_NAME] = '\0';
     }

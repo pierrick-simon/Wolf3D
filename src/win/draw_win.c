@@ -61,7 +61,7 @@ static void update_win(save_t *save, win_t *win)
 
     sprintf(win->name_tmp, "%s", win->name);
     for (int i = len; i < MAX_NAME_SCORE; i++) {
-        win->name_tmp[i] = '-';
+        win->name_tmp[i] = '_';
     }
     win->name_tmp[MAX_NAME_SCORE] = '\0';
     if (win->score_update < save->info->score - win->score_step)
