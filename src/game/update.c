@@ -159,4 +159,6 @@ void update_all(system_t *sys, game_t *game)
     handle_items(sys->save, game);
     if (sys->save->info->item_info[INFO_HEALTH] <= 0)
         sys->state->scene = LOSE;
+    if (game->map->timer_weakness > 0)
+        game->map->timer_weakness -= game->time_info->delta;
 }
