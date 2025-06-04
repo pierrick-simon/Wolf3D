@@ -95,9 +95,9 @@ static void update_save(system_t *sys, edit_info_t *edit_info)
         sys->save->name = strdup(edit_info->string[EDIT_INF_NAME]);
     sys->save->size.x = atoi(edit_info->string[EDIT_INF_X]) + 2;
     sys->save->size.y = atoi(edit_info->string[EDIT_INF_Y]) + 2;
-    if (sys->save->size.x > 200 || sys->save->size.x < 3)
+    if (sys->save->size.x > 202 || sys->save->size.x < 3)
         sys->save->size.x = 100;
-    if (sys->save->size.y > 200 || sys->save->size.y < 3)
+    if (sys->save->size.y > 202 || sys->save->size.y < 3)
         sys->save->size.y = 100;
     sys->save->map = malloc(sizeof(int *) * sys->save->size.y);
     for (int i = 0; i < sys->save->size.y; i++) {

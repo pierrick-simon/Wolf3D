@@ -110,6 +110,7 @@ void update_save(system_t *sys, game_t *game)
 {
     update_doors(sys, game);
     if (sys->save->update == sfFalse) {
+        dprintf(1, "yes\n");
         game->player->pos = sys->save->info->start_pos;
         game->player->angle = sys->save->info->start_angle;
         game->player->save = sys->save;

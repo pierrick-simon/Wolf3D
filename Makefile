@@ -130,6 +130,9 @@ SRC =	$(addprefix src/,					\
 				map_event.c 				\
 				click_buttons.c				\
 				add_node_history.c 			\
+				generate_map.c				\
+				generate_calcul.c			\
+				generate_room.c				\
 			)								\
 			$(addprefix your_maps/,			\
 				your_maps_event.c			\

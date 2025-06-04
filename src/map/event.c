@@ -32,7 +32,8 @@ static int load_map(select_map_t *map, system_t *sys, char *name)
 
 static void reset_str(select_map_t *map, state_info_t *state, str_map_t id)
 {
-    if (id == MAP_BACK && state->old_scene != LEAVE)
+    if (id == MAP_BACK && state->old_scene != LEAVE
+        && state->old_scene != EDIT_MAP)
         state->scene = state->old_scene;
     else
         state->scene = map->draw[id].scene;

@@ -64,6 +64,10 @@ static int init_save(save_t *save)
     save->init = sfFalse;
     save->music = NULL;
     save->mini_map = NULL;
+    save->map = NULL;
+    save->name = NULL;
+    save->music_path = NULL;
+    save->music = NULL;
     return SUCCESS;
 }
 

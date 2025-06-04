@@ -60,6 +60,7 @@ typedef enum {
     EDIT_REFRESH,
     EDIT_PREV,
     EDIT_NEXT,
+    EDIT_GENERATE,
     NB_EDIT,
 } edit_t;
 
@@ -137,11 +138,21 @@ typedef struct button_s {
     void (*f)(system_t *sys, edit_map_t *edit);
 } button_t;
 
+typedef struct generate_s {
+    sfVector2i room;
+    sfVector2i wall_horizontal;
+    sfVector2i wall_vertical;
+    int room_map[52][52];
+    int map_horizontal[52][52];
+    int map_vertical[52][52];
+} generate_t;
+
 void reset_button(system_t *sys, edit_map_t *edit);
 void center_button(system_t *sys, edit_map_t *edit);
 void refresh_button(system_t *sys, edit_map_t *edit);
 void prev_button(system_t *sys, edit_map_t *edit);
 void next_button(system_t *sys, edit_map_t *edit);
+void generate_map(system_t *sys, edit_map_t *edit);
 
 static const button_t BUTTON[] __maybe_unused = {
     [EDIT_NONE] = {(sfVector2f){55, 640}, "none", STAY},
@@ -172,7 +183,9 @@ static const button_t BUTTON[] __maybe_unused = {
         "refresh", CLICK, &refresh_button},
     [EDIT_PREV] = {(sfVector2f){55, 160}, "prev", CLICK, &prev_button},
     [EDIT_NEXT] = {(sfVector2f){205, 160}, "next", CLICK, &next_button},
-    [EDIT_CENTER] = {(sfVector2f){130, 340}, "center", CLICK, &center_button},
+    [EDIT_CENTER] = {(sfVector2f){55, 340}, "center", CLICK, &center_button},
+    [EDIT_GENERATE] = {(sfVector2f){205, 340},
+        "generate", CLICK, &generate_map},
 };
 
 void edit_info_events(system_t *sys, edit_info_t *edit_info);
@@ -187,5 +200,9 @@ void add_node_history(edit_map_t *edit);
 void free_node_history(void *data);
 void del_head_history(edit_map_t *edit);
 void mouse_click(system_t *sys, edit_map_t *edit, sfVector2f **map);
+sfBool replace_nb_room(generate_t *generate, int one, int two);
+int count_wall(generate_t *generate);
+sfVector2i get_n_wall_pos(generate_t *generate, int n, sfBool *vertical);
+void generate_room(system_t *sys, edit_map_t *edit, generate_t *generate);
 
 #endif /* !EDITOR_H_ */

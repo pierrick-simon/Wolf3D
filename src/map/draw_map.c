@@ -19,7 +19,7 @@ static void check_save_map(char *name, select_map_t *map)
     char *tmp = NULL;
     int fd = 0;
 
-    if (map->check == sfTrue)
+    if (map->check == sfTrue || name == NULL)
         return;
     tmp = malloc(sizeof(char) * (strlen(name) + LEN_SAVE));
     if (tmp == NULL)

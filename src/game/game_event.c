@@ -121,6 +121,7 @@ static void interact(player_t *player,
             [casted_pos.y][casted_pos.x] == wall_textures[FINAL].value
             && game->tool->finish == sfTrue) {
             sys->state->scene = WIN;
+            sfMusic_pause(game->music[BOSS_MUSIC]);
             sfMusic_play(game->music[END_LEVEL]);
         }
     }
