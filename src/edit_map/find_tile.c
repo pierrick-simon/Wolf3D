@@ -54,6 +54,10 @@ sfVector2i which_tile(system_t *sys, draw_map_t *edit, sfVector2f **map)
     sfVector2i tile = {-1, -1};
     int x = -1;
 
+    if (sys->state->fullscreen == false) {
+        mouse.x *= 2.0;
+        mouse.y *= 2.0;
+    }
     for (int y = edit->size.y - 3; y >= 1; y--) {
         x = loop_tile(mouse, edit, y, map);
         if (x != -1) {

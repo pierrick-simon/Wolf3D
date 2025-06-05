@@ -59,6 +59,10 @@ void draw_button(system_t *sys, buttons_t *buttons, edit_map_t *edit)
 {
     sfVector2i mouse_pos = sfMouse_getPositionRenderWindow(sys->window);
 
+    if (sys->state->fullscreen == false) {
+        mouse_pos.x *= 2;
+        mouse_pos.y *= 2;
+    }
     for (edit_t i = 0; i < NB_EDIT; i++) {
         edit->buttons->hover[i] = sfFloatRect_contains(
             &edit->buttons->bounds[i], mouse_pos.x, mouse_pos.y);
