@@ -18,10 +18,10 @@ static int load_restart(lose_t *lose, system_t *sys, char *name)
 
     if (lose->str != LOSE_RESTART)
         return SUCCESS;
-    tmp = malloc(sizeof(char) * (strlen(name) + LEN_SAVE));
+    tmp = malloc(sizeof(char) * (strlen(name) + LEN_SAVE + strlen(sys->dir)));
     if (tmp == NULL)
         return ERROR;
-    sprintf(tmp, "maps/%s.legend", name);
+    sprintf(tmp, "%s/%s.legend", sys->dir, name);
     exit = get_save(tmp, sys->save);
     free(tmp);
     return exit;

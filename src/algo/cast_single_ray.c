@@ -122,3 +122,18 @@ float cast_single_ray(player_t *player, float angle_offset,
     *intersection_point = pos;
     return len;
 }
+
+float cast_single_ray_enemy(player_t *player, float angle_offset,
+    intersection_t *type, sfVector2f *intersection_point)
+{
+    sfVector2f pos = player->pos;
+    sfVector2f v = {cos(player->angle + angle_offset),
+        sin(player->angle + angle_offset)};
+    float len = 0.0;
+
+    while ((is_end(&pos, type, player->save) == sfFalse)) {
+        len += jump_to_next_line(&pos, &v, &type->type);
+    }
+    *intersection_point = pos;
+    return len;
+}

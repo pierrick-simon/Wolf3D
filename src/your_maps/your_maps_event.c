@@ -13,6 +13,8 @@ static int get_map_name(levels_t *your_maps, system_t *sys)
 {
     node_t *head = your_maps->info->current_file;
 
+    if (your_maps->str == LEVELS_SUB)
+        return ERROR;
     if (your_maps->str < LEVELS_SAVE1 || your_maps->str > LEVELS_SAVE3)
         return SUCCESS;
     if (your_maps->str == LEVELS_SAVE1)

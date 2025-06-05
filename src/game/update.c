@@ -89,20 +89,31 @@ static void update_toolbar(system_t *sys, game_t *game)
         sys->save->info->score);
 }
 
+static sfBool do_save(toolbar_t *tool, float sec, sfBool *one)
+{
+    if (tool->save == -1 || sec > 1) {
+        tool->saving = sfFalse;
+        *one = sfTrue;
+        return sfFalse;
+    }
+    return sfFalse;
+}
+
 static void update_saving(system_t *sys, toolbar_t *tool, float delta)
 {
     float sec = 0;
+    static sfBool one = sfTrue;
 
     tool->last_save += delta;
     if (tool->last_save > AUTO_SAVE)
         tool->save = sys->save->info->time;
     sec = (float)(sys->save->info->time - tool->save) / SEC_IN_MICRO;
-    if (tool->save == -1 || sec > 1) {
-        tool->saving = sfFalse;
+    if (do_save(tool, sec, &one) == sfFalse)
         return;
-    }
-    if (sec > 0.1)
+    if (one == sfTrue) {
         save_map(sys->save, "save");
+        one = sfFalse;
+    }
     tool->last_save = 0;
     tool->saving = sfTrue;
     sprintf(tool->draw[TOOL_SAVE].str, "saving...");
@@ -157,8 +168,10 @@ void update_all(system_t *sys, game_t *game)
         game->tool, sys->save->info->weapons);
     cast_all_rays(game, sys->save);
     handle_items(sys->save, game);
-    if (sys->save->info->item_info[INFO_HEALTH] <= 0)
+    if (sys->save->info->item_info[INFO_HEALTH] <= 0) {
         sys->state->scene = LOSE;
+        sfMusic_pause(game->music[BOSS_MUSIC]);
+    }
     if (game->map->timer_weakness > 0)
         game->map->timer_weakness -= game->time_info->delta;
 }

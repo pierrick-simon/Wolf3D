@@ -58,6 +58,7 @@ typedef struct save_s {
     player_info_t *info;
     linked_list_t *doors;
     linked_list_t *entities;
+    linked_list_t *boss;
 } save_t;
 
 typedef enum {

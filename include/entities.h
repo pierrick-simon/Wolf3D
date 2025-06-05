@@ -14,6 +14,7 @@
     #define DEATH_RECT 0.075
 
     #define NB_ITEM E_SWORD_ENEMY
+    #define NB_ENEMY (NB_ENTITIES - NB_ITEM)
 
     #define HEAD 2.0
 

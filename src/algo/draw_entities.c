@@ -98,7 +98,7 @@ static void draw_entitie(system_t *sys,
     float offset = (ENTITY[entity->type].y * DIST_OFFSET) / entity->dist;
 
     get_dist(entity, game, &info);
-    if (info.dist.y <= 0 || info.dist.y > RENDER_DISTANCE)
+    if (info.dist.y <= 0 || info.dist.y > RENDER_DISTANCE / (float)TILE_SIZE)
         return;
     info.x = (int)((WIN_WIDTH / 2) * (1 + (info.dist.x / info.dist.y)));
     info.size = abs(((int)((WIN_HEIGHT / info.dist.y) *

@@ -29,24 +29,37 @@ static void destroy_background(background_t *background)
         sfSprite_destroy(background->wallpaper_s);
 }
 
+void reset_to_null(save_t *save)
+{
+    if (save->map != NULL)
+        free_map(save->size.y, save->map);
+    save->map = NULL;
+    if (save->name != NULL)
+        free(save->name);
+    save->name = NULL;
+    if (save->music_path != NULL)
+        free(save->music_path);
+    save->music_path = NULL;
+    if (save->music != NULL)
+        sfMusic_destroy(save->music);
+    save->music = NULL;
+    if (save->mini_map != NULL)
+        free_mini_map_color(save->mini_map,
+            save->size.y + MINI_MAP_OFFSET * 2);
+    save->mini_map = NULL;
+}
+
 void destroy_save(save_t *save)
 {
     if (save->init == sfTrue) {
-        if (save->map != NULL)
-            free_map(save->size.y, save->map);
-        if (save->name != NULL)
-            free(save->name);
-        if (save->music_path != NULL)
-            free(save->music_path);
-        if (save->music != NULL)
-            sfMusic_destroy(save->music);
-        if (save->mini_map != NULL)
-            free_mini_map_color(save->mini_map,
-                save->size.y + MINI_MAP_OFFSET * 2);
+        save->init = sfFalse;
+        reset_to_null(save);
         if (save->doors != NULL)
             empty_linked_list(save->doors, free);
         if (save->entities != NULL)
             empty_linked_list(save->entities, free);
+        if (save->boss != NULL)
+            empty_linked_list(save->boss, free);
     }
 }
 
@@ -59,6 +72,8 @@ static void destroy_all_save(save_t *save)
         free_linked_list(save->doors, free);
     if (save->entities != NULL)
         free_linked_list(save->entities, free);
+    if (save->boss != NULL)
+        free_linked_list(save->boss, free);
     free(save);
 }
 

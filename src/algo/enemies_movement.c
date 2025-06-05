@@ -37,6 +37,7 @@ static sfBool is_arrived(entity_t *enemy)
 static sfBool return_value(entity_t *enemy, game_t *game, sfBool *return_value)
 {
     if (is_wall_between(game, enemy) == sfFalse) {
+        enemy->see = sfTrue;
         *return_value = sfFalse;
         return sfTrue;
     }
@@ -61,7 +62,7 @@ static sfBool move_closer(entity_t *enemy, game_t *game, float difficulty)
     sfVector2f mov = {0};
     sfBool tmp = sfFalse;
 
-    if (return_value(enemy, game, &tmp))
+    if (return_value(enemy, game, &tmp) == sfTrue)
         return tmp;
     dist = sqrt(pow(enemy->pos.x - enemy->next_pos.x, 2) +
         pow(enemy->pos.y - enemy->next_pos.y, 2));
@@ -82,7 +83,6 @@ static void get_new_position(entity_t *enemy, game_t *game, float difficulty)
     sfVector2f mov = {game->player->pos.x - enemy->pos.x,
         game->player->pos.y - enemy->pos.y};
 
-    enemy->see = sfTrue;
     enemy->next_pos = (sfVector2f){SKIP, SKIP};
     enemy->change_pos = SKIP;
     enemy->pos.x += mov.x * coef;
@@ -146,6 +146,15 @@ void change_death_rect(
         enemy->cooldown -= game->time_info->delta;
 }
 
+static void enemy_action(entity_t *enemy, game_t *game, save_t *save)
+{
+    if (enemy->dist < ENEMY[enemy->type].attack_range * save->info->difficulty
+        || enemy->change_pos > 0)
+        attack_player(enemy, save, game);
+    else
+        get_new_position(enemy, game, save->info->difficulty);
+}
+
 void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save)
 {
     entity_t *tmp = NULL;
@@ -156,16 +165,14 @@ void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save)
         tmp = head->data;
         if (tmp->dist > DISTANCE_ENEMY || tmp->type < NB_ITEM)
             continue;
+        if (tmp->type == E_BOSS && tmp->see == sfTrue)
+            add_node_boss(save->boss, tmp->health);
         if (tmp->is_alive == sfFalse) {
             change_death_rect(tmp, save, game, head);
             continue;
         }
         if (move_closer(tmp, game, save->info->difficulty) == sfTrue)
             continue;
-        if (tmp->dist < ENEMY[tmp->type].attack_range * save->info->difficulty
-            || tmp->change_pos > 0)
-            attack_player(tmp, save, game);
-        else
-            get_new_position(tmp, game, save->info->difficulty);
+        enemy_action(tmp, game, save);
     }
 }

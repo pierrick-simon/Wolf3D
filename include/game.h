@@ -179,6 +179,7 @@ typedef enum {
     TOOL_FPS,
     TOOL_SAVE,
     TOOL_INTERACT,
+    TOOL_BOSS,
     NB_TOOLBAR,
 } str_toolbar_t;
 
@@ -198,6 +199,7 @@ typedef enum {
     FOOTSTEPS,
     PICK_UP,
     HURT,
+    BOSS_MUSIC,
     NB_MUSIC,
 } music_id_t;
 
@@ -207,6 +209,7 @@ static const char *str_sound[] __maybe_unused = {
     [END_LEVEL] = "asset/end_level.ogg",
     [FOOTSTEPS] = "asset/footsteps.ogg",
     [HURT] = "asset/hurt.ogg",
+    [BOSS_MUSIC] = "asset/boss.ogg",
     [PICK_UP] = "asset/pick_up.ogg",
 };
 
@@ -333,6 +336,8 @@ typedef struct game_s {
 void cast_all_rays(game_t *game, save_t *save);
 float cast_single_ray(player_t *player, float angle_offset,
     intersection_t *type, sfVector2f *intersection_point);
+float cast_single_ray_enemy(player_t *player, float angle_offset,
+    intersection_t *type, sfVector2f *intersection_point);
 void move_player(game_t *game, double delta, int *head, sfMusic *footstepp);
 int init_weapons(weapon_t *weapon);
 void update_all(system_t *sys, game_t *game);
@@ -369,5 +374,8 @@ sfBool is_wall_between(game_t *game, entity_t *enemy);
 sfColor get_color(float len);
 void update_interact(toolbar_t *tool, player_t *player, int **map);
 void show_game_environement(system_t *sys, game_t *game);
+void add_node_boss(linked_list_t *boss, int health);
+void draw_boss_health(system_t *sys, linked_list_t *boss,
+    sfRectangleShape *rectangle, draw_textbox_t *draw);
 
 #endif
