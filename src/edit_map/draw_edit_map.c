@@ -33,6 +33,18 @@ static void set_point_draw_it(
         sys->window, edit->draw_map->shape, NULL);
 }
 
+static void update_saving(edit_map_t *edit)
+{
+    float sec = sfClock_getElapsedTime(edit->clock).microseconds /
+        SEC_IN_MICRO;
+
+    if (edit->saving == sfFalse)
+        return;
+    if (sec > SAVE_TIME * 3)
+        edit->saving = sfFalse;
+    sprintf(edit->draw[EDIT_MAP_SAVING].str, "saving");
+}
+
 static void tmp_map(system_t *sys, draw_map_t *draw_map, sfVector2i *size)
 {
     sfVector2i tile = {0, 0};
@@ -75,6 +87,15 @@ static void update_edit(
     draw_map->coor = create_2d_map(draw_map);
 }
 
+static void draw_edit_strings(system_t *sys, edit_map_t *edit_map)
+{
+    for (int i = 0; i < NB_EDIT_MAP; i++) {
+        if (i == EDIT_MAP_SAVING && edit_map->saving == sfFalse)
+            continue;
+        draw_string(sys, sys->textbox, &edit_map->draw[i]);
+    }
+}
+
 void draw_edit_map(system_t *sys, void *structure)
 {
     edit_map_t *edit_map = (edit_map_t *)structure;
@@ -82,13 +103,13 @@ void draw_edit_map(system_t *sys, void *structure)
     update_edit(sys, edit_map->draw_map, &sys->save->size, edit_map);
     sfRenderWindow_setMouseCursorVisible(sys->window, sfTrue);
     sfRenderWindow_clear(sys->window, EDIT_BACKGROUND);
+    update_saving(edit_map);
     for (int y = 0; y < edit_map->draw_map->size.y - 1; y++) {
         for (int x = 0; x < edit_map->draw_map->size.x - 1; x++)
             set_point_draw_it(sys, edit_map,
             (sfVector2i){x, y}, edit_map->draw_map->coor);
     }
-    for (int i = 0; i < NB_EDIT_MAP; i++)
-        draw_string(sys, sys->textbox, &edit_map->draw[i]);
+    draw_edit_strings(sys, edit_map);
     draw_button(sys, edit_map->buttons, edit_map);
     if (sfMusic_getStatus(sys->music) == sfStopped)
         sfMusic_play(sys->music);

@@ -57,6 +57,7 @@ typedef struct entity_s {
     sfVector2i prev_tile;
     sfVector2f offset;
     sfBool is_alive;
+    sfBool walk;
     float dist;
     int health;
     float cooldown;

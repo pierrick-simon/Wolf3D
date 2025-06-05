@@ -83,6 +83,10 @@ static void get_new_position(entity_t *enemy, game_t *game, float difficulty)
     sfVector2f mov = {game->player->pos.x - enemy->pos.x,
         game->player->pos.y - enemy->pos.y};
 
+    if (enemy->walk == sfFalse) {
+        enemy->walk = sfTrue;
+        enemy->offset = (sfVector2f){0, 0};
+    }
     enemy->next_pos = (sfVector2f){SKIP, SKIP};
     enemy->change_pos = SKIP;
     enemy->pos.x += mov.x * coef;
@@ -156,9 +160,10 @@ void change_death_rect(
 static void enemy_action(entity_t *enemy, game_t *game, save_t *save)
 {
     if (enemy->dist < ENEMY[enemy->type].attack_range * save->info->difficulty
-        || enemy->change_pos > 0)
+        || enemy->change_pos > 0) {
         attack_player(enemy, save, game);
-    else
+        enemy->walk = sfFalse;
+    } else
         get_new_position(enemy, game, save->info->difficulty);
 }
 

@@ -96,7 +96,7 @@ static sfBool do_save(toolbar_t *tool, float sec, sfBool *one)
         *one = sfTrue;
         return sfFalse;
     }
-    return sfFalse;
+    return sfTrue;
 }
 
 static void update_saving(system_t *sys, toolbar_t *tool, float delta)

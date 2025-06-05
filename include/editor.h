@@ -81,6 +81,7 @@ typedef enum str_edit_map_e {
     EDIT_MAP_ITEM,
     EDIT_MAP_SAVE,
     EDIT_MAP_BACK,
+    EDIT_MAP_SAVING,
     NB_EDIT_MAP,
 } str_edit_map_t;
 
@@ -119,6 +120,8 @@ typedef struct edit_map_s {
     sfBool update;
     linked_list_t *history;
     node_t *current;
+    sfClock *clock;
+    sfBool saving;
 } edit_map_t;
 
 typedef enum {

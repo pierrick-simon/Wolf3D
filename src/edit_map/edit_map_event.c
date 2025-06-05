@@ -85,6 +85,23 @@ static void get_info_save(save_t *save, edit_map_t *edit)
         }
     }
     save_map(save, "your_maps");
+    edit->saving = sfTrue;
+    sfClock_restart(edit->clock);
+}
+
+static void reset_edit(
+    system_t *sys, edit_map_t *edit_map, state_info_t *state)
+{
+    state->old_scene = EDIT_MAP;
+    edit_map->draw[edit_map->str].color = sfBlack;
+    edit_map->str = EDIT_MAP_SAVE;
+    edit_map->update = sfFalse;
+    free_map(sys->save->size.y, edit_map->draw_map->map);
+    empty_linked_list(edit_map->history, &free_node_history);
+    empty_linked_list(sys->save->entities, &free);
+    edit_map->draw_map->map = NULL;
+    sfRenderWindow_setMouseCursorVisible(sys->window, sfFalse);
+    edit_map->saving = sfFalse;
 }
 
 static void switch_scene(sfEvent event, system_t *sys,
@@ -100,30 +117,18 @@ static void switch_scene(sfEvent event, system_t *sys,
             state->scene = state->old_scene;
         else
             state->scene = edit_map->draw[edit_map->str].scene;
-        state->old_scene = EDIT_MAP;
-        edit_map->draw[edit_map->str].color = sfBlack;
-        edit_map->str = EDIT_MAP_SAVE;
-        edit_map->update = sfFalse;
-        free_map(sys->save->size.y, edit_map->draw_map->map);
-        empty_linked_list(edit_map->history, &free_node_history);
-        empty_linked_list(sys->save->entities, &free);
-        edit_map->draw_map->map = NULL;
-        sfRenderWindow_setMouseCursorVisible(sys->window, sfFalse);
+        reset_edit(sys, edit_map, state);
     }
 }
 
 static void switch_str(sfEvent event, edit_map_t *edit_map)
 {
     edit_map->draw[edit_map->str].color = sfBlack;
-    if (is_input(event, sfKeyUp, sfFalse, 0)
+    if (is_input(event, sfKeyLeft, sfFalse, 0)
         || sfJoystick_getAxisPosition(0, sfJoystickPovY) == - MAX_JOYSTICK)
-        edit_map->str--;
-    if (is_input(event, sfKeyDown, sfFalse, 0)
-        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK)
-        edit_map->str++;
-    if (edit_map->str == NB_EDIT_MAP)
         edit_map->str = EDIT_MAP_SAVE;
-    if (edit_map->str == EDIT_MAP_ITEM)
+    if (is_input(event, sfKeyRight, sfFalse, 0)
+        || sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK)
         edit_map->str = EDIT_MAP_BACK;
     edit_map->draw[edit_map->str].color = sfRed;
 }

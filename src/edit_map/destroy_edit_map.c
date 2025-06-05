@@ -9,12 +9,8 @@
 #include "linked_list.h"
 #include <stdlib.h>
 
-void destroy_edit_map(void *structure)
+static void destroy_draw_map(edit_map_t *edit_map)
 {
-    edit_map_t *edit_map = (edit_map_t *)structure;
-
-    if (edit_map->draw != NULL)
-        free_draw_textbox(edit_map->draw, -1);
     if (edit_map->draw_map != NULL) {
         if (edit_map->draw_map->shape != NULL)
             sfConvexShape_destroy(edit_map->draw_map->shape);
@@ -22,6 +18,15 @@ void destroy_edit_map(void *structure)
             free_map(edit_map->draw_map->size.y - 1, edit_map->draw_map->map);
         free(edit_map->draw_map);
     }
+}
+
+void destroy_edit_map(void *structure)
+{
+    edit_map_t *edit_map = (edit_map_t *)structure;
+
+    if (edit_map->draw != NULL)
+        free_draw_textbox(edit_map->draw, -1);
+    destroy_draw_map(edit_map);
     if (edit_map->buttons != NULL) {
         if (edit_map->buttons->rectangle != NULL)
             sfRectangleShape_destroy(edit_map->buttons->rectangle);
@@ -29,5 +34,7 @@ void destroy_edit_map(void *structure)
     }
     if (edit_map->history != NULL)
         free_linked_list(edit_map->history, &free_node_history);
+    if (edit_map->clock != NULL)
+        sfClock_destroy(edit_map->clock);
     free(edit_map);
 }

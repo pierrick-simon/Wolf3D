@@ -96,7 +96,7 @@ static void switch_str(sfEvent event, setting_t *setting)
         sfJoystick_getAxisPosition(0, sfJoystickPovY) == MAX_JOYSTICK)
         setting->str++;
     if (setting->str == NB_SETTINGS)
-        setting->str = SETTING_FPS;
+        setting->str = SETTING_FULL;
     if (setting->str == SETTING_TITLE)
         setting->str = SETTING_BACK;
     setting->draw[setting->str].color = sfRed;

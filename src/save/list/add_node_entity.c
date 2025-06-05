@@ -53,6 +53,7 @@ static void fill_node_entity(linked_list_t *enemies,
     entity->next_pos = (sfVector2f){SKIP, SKIP};
     entity->prev_tile = (sfVector2i){0, 0};
     entity->see = sfFalse;
+    entity->walk = sfFalse;
     handle_heal(entity);
     ++id;
     push_to_tail(enemies, entity);

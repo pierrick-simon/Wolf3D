@@ -10,10 +10,10 @@
 
 static void set_orientation(sfEvent event, edit_map_t *edit)
 {
-    if (is_input(event, sfKeyLeft, sfFalse, 0)) {
+    if (is_input(event, sfKeyA, sfFalse, 0)) {
         edit->draw_map->rotate -= RAD(1);
     }
-    if (is_input(event, sfKeyRight, sfFalse, 0)) {
+    if (is_input(event, sfKeyE, sfFalse, 0)) {
         edit->draw_map->rotate += RAD(1);
     }
 }
@@ -62,7 +62,7 @@ static void move_map(sfEvent event, edit_map_t *edit)
 
 static void reset_pos(sfEvent event, edit_map_t *edit)
 {
-    if (is_input(event, sfKeyA, sfFalse, 0)) {
+    if (is_input(event, sfKeyC, sfFalse, 0)) {
         edit->draw_map->pos = (sfVector2f){0, 0};
         edit->draw_map->rotate = 0;
         edit->draw_map->zoom = 1;

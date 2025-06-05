@@ -69,6 +69,7 @@ void init_edit(edit_map_t *edit_map)
     edit_map->update = sfFalse;
     edit_map->edit = EDIT_NONE;
     init_color(edit_map->color);
+    edit_map->saving = sfFalse;
 }
 
 void *init_edit_map(void)
@@ -87,6 +88,7 @@ void *init_edit_map(void)
     edit_map->str = EDIT_MAP_SAVE;
     edit_map->draw = init_from_conf(str_conf[CONF_EDIT_MAP]);
     edit_map->history = initialize_linked_list();
+    edit_map->clock = sfClock_create();
     if (edit_map->draw == NULL || edit_map->history == NULL)
         return NULL;
     init_edit(edit_map);
