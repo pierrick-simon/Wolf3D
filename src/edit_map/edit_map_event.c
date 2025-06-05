@@ -106,6 +106,7 @@ static void switch_scene(sfEvent event, system_t *sys,
         edit_map->update = sfFalse;
         free_map(sys->save->size.y, edit_map->draw_map->map);
         empty_linked_list(edit_map->history, &free_node_history);
+        empty_linked_list(sys->save->entities, &free);
         edit_map->draw_map->map = NULL;
         sfRenderWindow_setMouseCursorVisible(sys->window, sfFalse);
     }

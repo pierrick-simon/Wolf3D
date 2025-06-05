@@ -52,6 +52,7 @@ void reset_to_null(save_t *save)
 void destroy_save(save_t *save)
 {
     if (save->init == sfTrue) {
+        save->init = sfFalse;
         reset_to_null(save);
         if (save->doors != NULL)
             empty_linked_list(save->doors, free);

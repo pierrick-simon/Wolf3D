@@ -83,6 +83,21 @@ static void update_edit(edit_info_t *edit_info)
     }
 }
 
+static void handle_size(system_t *sys)
+{
+    int tmp = 0;
+
+    if (sys->save->size.x > 202 || sys->save->size.x < 3)
+        sys->save->size.x = 100;
+    if (sys->save->size.y > 202 || sys->save->size.y < 3)
+        sys->save->size.y = 100;
+    if (sys->save->size.y > sys->save->size.x) {
+        tmp = sys->save->size.x;
+        sys->save->size.x = sys->save->size.y;
+        sys->save->size.y = tmp;
+    }
+}
+
 static void update_save(system_t *sys, edit_info_t *edit_info)
 {
     update_edit(edit_info);
@@ -95,10 +110,7 @@ static void update_save(system_t *sys, edit_info_t *edit_info)
         sys->save->name = strdup(edit_info->string[EDIT_INF_NAME]);
     sys->save->size.x = atoi(edit_info->string[EDIT_INF_X]) + 2;
     sys->save->size.y = atoi(edit_info->string[EDIT_INF_Y]) + 2;
-    if (sys->save->size.x > 202 || sys->save->size.x < 3)
-        sys->save->size.x = 100;
-    if (sys->save->size.y > 202 || sys->save->size.y < 3)
-        sys->save->size.y = 100;
+    handle_size(sys);
     sys->save->map = malloc(sizeof(int *) * sys->save->size.y);
     for (int i = 0; i < sys->save->size.y; i++) {
         sys->save->map[i] = malloc(sizeof(int) * sys->save->size.x);
