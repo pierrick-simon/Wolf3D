@@ -16,7 +16,7 @@ static sfBool is_end(sfVector2f *pos, intersection_t *type, save_t *save)
 
     if (casted_pos.x < 0 || casted_pos.y < 0)
         return sfFalse;
-    if (casted_pos.x >= save->size.x || casted_pos.y >= save->size.x)
+    if (casted_pos.x >= save->size.x || casted_pos.y >= save->size.y)
         return sfTrue;
     for (size_t i = 0; i < NB_WALL_TXT; ++i) {
         if (i == DOOR && get_door_pourcentage(save, &casted_pos)
