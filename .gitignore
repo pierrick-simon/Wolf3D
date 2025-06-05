@@ -2,3 +2,5 @@
 *.a
 .vscode
 wolf3d
+your_maps/*
+save/*
