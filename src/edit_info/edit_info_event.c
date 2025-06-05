@@ -85,17 +85,10 @@ static void update_edit(edit_info_t *edit_info)
 
 static void handle_size(system_t *sys)
 {
-    int tmp = 0;
-
     if (sys->save->size.x > 202 || sys->save->size.x < 3)
         sys->save->size.x = 100;
     if (sys->save->size.y > 202 || sys->save->size.y < 3)
         sys->save->size.y = 100;
-    if (sys->save->size.y > sys->save->size.x) {
-        tmp = sys->save->size.x;
-        sys->save->size.x = sys->save->size.y;
-        sys->save->size.y = tmp;
-    }
 }
 
 static void update_save(system_t *sys, edit_info_t *edit_info)

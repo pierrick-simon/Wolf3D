@@ -24,7 +24,7 @@ static void change_movement_rect(entity_t *enemy, game_t *game, float speed)
         enemy->change_rect -= game->time_info->delta;
 }
 
-static sfBool is_arrived(entity_t *enemy)
+sfBool is_arrived(entity_t *enemy)
 {
     if (enemy->pos.x > enemy->next_pos.x - 5
         && enemy->pos.x < enemy->next_pos.x + 5
@@ -99,13 +99,14 @@ static void change_attack_rect(entity_t *enemy, game_t *game)
     if (ENTITY[enemy->type].max_second == 0)
         return;
     enemy->offset.y = ENTITY[enemy->type].text_size.y;
-    if (game->time_info->shot >= 0 && enemy->change_rect != SKIP) {
+    if (enemy->shot >= 0 && enemy->change_rect != SKIP) {
         if (enemy->change_rect <= 0) {
             enemy->offset.x += ENTITY[enemy->type].text_size.x;
             enemy->change_rect = TIME_OVERLAY
                 / (ENTITY[enemy->type].max_second - 1);
         } else
             enemy->change_rect -= game->time_info->delta;
+        enemy->shot -= game->time_info->delta;
     } else
         enemy->offset.x = 0;
 }
@@ -113,11 +114,17 @@ static void change_attack_rect(entity_t *enemy, game_t *game)
 static void attack_player(entity_t *enemy, save_t *save, game_t *game)
 {
     if (enemy->cooldown <= 0) {
-        save->info->item_info[INFO_HEALTH] -= ENEMY[enemy->type].attack;
+        if (enemy->type == E_BOSS) {
+            add_projectile(game, &enemy->pos, enemy->dist);
+        } else {
+            save->info->item_info[INFO_HEALTH] -= ENEMY[enemy->type].attack
+                * save->info->difficulty;
+            sfMusic_play(game->music[HURT]);
+            game->time_info->shot = TIME_OVERLAY;
+        }
+        enemy->shot = TIME_OVERLAY;
         enemy->cooldown = ENEMY[enemy->type].cooldown *
             (2 - save->info->difficulty);
-        game->time_info->shot = TIME_OVERLAY;
-        sfMusic_play(game->music[HURT]);
         enemy->offset.x = 0;
         if (ENTITY[enemy->type].max_second - 1 != 0)
             enemy->change_rect = 0;
@@ -163,7 +170,8 @@ void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save)
     for (node_t *head = enemies->head; head != NULL; head = next) {
         next = head->next;
         tmp = head->data;
-        if (tmp->dist > DISTANCE_ENEMY || tmp->type < NB_ITEM)
+        if (tmp->dist > DISTANCE_ENEMY || tmp->type < NB_ITEM
+            || tmp->type >= E_BOSS_PROJECTILE)
             continue;
         if (tmp->type == E_BOSS && tmp->see == sfTrue)
             add_node_boss(save->boss, tmp->health);

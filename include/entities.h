@@ -14,7 +14,7 @@
     #define DEATH_RECT 0.075
 
     #define NB_ITEM E_SWORD_ENEMY
-    #define NB_ENEMY (NB_ENTITIES - NB_ITEM)
+    #define NB_ENEMY (E_BOSS_PROJECTILE - NB_ITEM)
 
     #define HEAD 2.0
 
@@ -38,6 +38,7 @@ typedef enum entity_id_e {
     E_GROWLER,
     E_PHANTOM,
     E_BOSS,
+    E_BOSS_PROJECTILE,
     NB_ENTITIES,
 } entity_id_t;
 
@@ -63,6 +64,7 @@ typedef struct entity_s {
     float damage;
     float change_pos;
     sfBool see;
+    float shot;
     int id;
 } entity_t;
 
@@ -148,6 +150,9 @@ static const entity_info_t ENTITY[] __maybe_unused = {
     [E_BOSS] = {"asset/boss.png",
         {161, 85}, 2.5, -2, 5, 2, 11,
         {0.2, 0}, {0.8, 0.7}, {0.3, 0}, {0.7, 0.5}},
+    [E_BOSS_PROJECTILE] = {"asset/boss_projectile.png",
+        {53, 46}, 0.5, 1, 2, 3, 0,
+        {0, 0}, {53, 46}, {0, 0}, {53, 46}},
 };
 
 typedef struct enemy_info_s {
@@ -166,7 +171,8 @@ static const enemy_info_t ENEMY[] __maybe_unused = {
     [E_CYBORG] = {17, 450, 5, 30, 250, 150},
     [E_GROWLER] = {2, 250, 0.8, 50, 25, 50},
     [E_PHANTOM] = {17, 32, 4, 30, 250, 250},
-    [E_BOSS] = {13, 400, 4, 15, 5000, 1500},
+    [E_BOSS] = {13, 1000, 2, 15, 5000, 2000},
+    [E_BOSS_PROJECTILE] = {25, 400, 10, 1000, 1, 1},
 };
 
 typedef struct closer_tile_s {
@@ -188,5 +194,10 @@ typedef struct draw_entity_s {
 } draw_entity_t;
 
 void handle_items(save_t *save, game_t *game);
+void handle_projectiles(save_t *save, game_t *game);
+void get_angle(
+    float *angle, sfVector2f *first, sfVector2f *second, float dist);
+void add_projectile(game_t *game, sfVector2f *boss, int dist);
+sfBool is_arrived(entity_t *enemy);
 
 #endif /* !ELEMENT_H_ */

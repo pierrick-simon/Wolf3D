@@ -11,27 +11,28 @@
 #include <math.h>
 #include <stdlib.h>
 
-static void get_angle(player_t *tmp, game_t *game, entity_t *enemy)
+void get_angle(
+    float *angle, sfVector2f *first, sfVector2f *second, float current_dist)
 {
-    float dist = fabs(game->player->pos.x - enemy->pos.x) / enemy->dist;
-    float diff_x = game->player->pos.x - enemy->pos.x;
-    float diff_y = game->player->pos.y - enemy->pos.y;
+    float dist = fabs(first->x - second->x) / current_dist;
+    float diff_x = first->x - second->x;
+    float diff_y = first->y - second->y;
 
     if (dist > 1)
         dist = 1;
     if (dist < -1)
         dist = -1;
-    tmp->angle = asin(dist);
+    *angle = asin(dist);
     if (diff_y > 0) {
         if (diff_x > 0)
-            tmp->angle = M_PI / 2 - tmp->angle;
+            *angle = M_PI / 2 - *angle;
         else
-            tmp->angle += M_PI / 2;
+            *angle += M_PI / 2;
     } else {
         if (diff_x > 0)
-            tmp->angle = (M_PI / 2 - tmp->angle) * -1;
+            *angle = (M_PI / 2 - *angle) * -1;
         else
-            tmp->angle = (M_PI / 2 + tmp->angle) * -1;
+            *angle = (M_PI / 2 + *angle) * -1;
     }
 }
 
@@ -47,7 +48,7 @@ sfBool is_wall_between(game_t *game, entity_t *enemy)
     tmp.pos = enemy->pos;
     if (enemy->dist < 1)
         return sfFalse;
-    get_angle(&tmp, game, enemy);
+    get_angle(&tmp.angle, &game->player->pos, &enemy->pos, enemy->dist);
     value = cast_single_ray_enemy(&tmp, 0, &type, &intersection_point);
     if (value < enemy->dist)
         return sfTrue;

@@ -168,6 +168,7 @@ void update_all(system_t *sys, game_t *game)
         game->tool, sys->save->info->weapons);
     cast_all_rays(game, sys->save);
     handle_items(sys->save, game);
+    handle_projectiles(sys->save, game);
     if (sys->save->info->item_info[INFO_HEALTH] <= 0) {
         sys->state->scene = LOSE;
         sfMusic_pause(game->music[BOSS_MUSIC]);

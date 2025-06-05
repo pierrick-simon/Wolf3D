@@ -200,6 +200,7 @@ typedef enum {
     PICK_UP,
     HURT,
     BOSS_MUSIC,
+    PLASMA_EXPLOSION,
     NB_MUSIC,
 } music_id_t;
 
@@ -211,6 +212,7 @@ static const char *str_sound[] __maybe_unused = {
     [HURT] = "asset/hurt.ogg",
     [BOSS_MUSIC] = "asset/boss.ogg",
     [PICK_UP] = "asset/pick_up.ogg",
+    [PLASMA_EXPLOSION] = "asset/plasma_explosion.ogg",
 };
 
 typedef struct light_s {

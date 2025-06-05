@@ -57,7 +57,8 @@ static void delete_center(game_t *game)
         return;
     while (node != NULL) {
         data = node->data;
-        if (data->id == game->map->entity_center)
+        if (data->id == game->map->entity_center && data->type >= NB_ITEM
+            && data->type < E_BOSS_PROJECTILE)
             return damage_enemy(game, data);
         node = node->prev;
     }

@@ -87,6 +87,16 @@ static void distance_to_player(
         / TILE_SIZE + center.y;
 }
 
+static void color_item(entity_t *tmp, sfCircleShape *cursor)
+{
+    if (tmp->type < NB_ITEM)
+        sfCircleShape_setFillColor(cursor, sfBlue);
+    if (tmp->type >= NB_ITEM && tmp->type < E_BOSS_PROJECTILE)
+        sfCircleShape_setFillColor(cursor, sfRed);
+    if (tmp->type >= E_BOSS_PROJECTILE)
+        sfCircleShape_setFillColor(cursor, ORANGE);
+}
+
 void draw_minimap_entities(system_t *sys, linked_list_t *list,
     sfVector2i *player_tile, sfCircleShape *cursor)
 {
@@ -103,10 +113,7 @@ void draw_minimap_entities(system_t *sys, linked_list_t *list,
             continue;
         distance_to_player(&sys->save->info->start_pos, &tmp->pos, &pos);
         sfCircleShape_setPosition(cursor, pos);
-        if (tmp->type < NB_ITEM)
-            sfCircleShape_setFillColor(cursor, sfBlue);
-        else
-            sfCircleShape_setFillColor(cursor, sfRed);
+        color_item(tmp, cursor);
         sfRenderWindow_drawCircleShape(sys->window, cursor, NULL);
     }
 }
