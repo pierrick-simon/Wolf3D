@@ -27,7 +27,7 @@ static void set_center(game_t *game, draw_entity_t *info, ray_t center)
     entity_id_t type = -1;
 
     if (info->entity->type < NB_ITEM || !info->entity->is_alive ||
-        info->dist.y >= center.len / (float)TILE_SIZE)
+        (info->dist.y >= center.len / (float)TILE_SIZE && center.len != 0))
         return;
     type = info->entity->type;
     ratio = (sfVector2f){1 - ((info->end.x - ((float)WIN_WIDTH / 2.0)) /

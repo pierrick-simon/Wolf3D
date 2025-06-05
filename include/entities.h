@@ -149,10 +149,10 @@ static const entity_info_t ENTITY[] __maybe_unused = {
         {65, 60}, 0.8, 1, 3, 3, 6,
         {0.15, 0}, {0.85, 1}, {0.15, 0.4}, {0.85, 0.6}},
     [E_BOSS] = {"asset/boss.png",
-        {161, 85}, 2.5, -2, 5, 2, 11,
+        {161, 85}, 1.9, 0, 5, 2, 11,
         {0.2, 0}, {0.8, 0.7}, {0.3, 0}, {0.7, 0.5}},
     [E_BOSS_PROJECTILE] = {"asset/boss_projectile.png",
-        {53, 46}, 0.5, 1, 2, 3, 0,
+        {53, 46}, 0.5, 2.2, 2, 3, 0,
         {0, 0}, {53, 46}, {0, 0}, {53, 46}},
 };
 
@@ -172,8 +172,8 @@ static const enemy_info_t ENEMY[] __maybe_unused = {
     [E_CYBORG] = {17, 450, 5, 30, 250, 150},
     [E_GROWLER] = {2, 250, 0.8, 50, 25, 50},
     [E_PHANTOM] = {17, 32, 4, 30, 250, 250},
-    [E_BOSS] = {13, 1000, 2, 15, 5000, 2000},
-    [E_BOSS_PROJECTILE] = {25, 400, 10, 1000, 1, 1},
+    [E_BOSS] = {0, 500, 1, 50, 5000, 1500},
+    [E_BOSS_PROJECTILE] = {15, 400, 10, 900, 1, 1},
 };
 
 typedef struct closer_tile_s {
