@@ -163,6 +163,7 @@ static void enemy_action(entity_t *enemy, game_t *game, save_t *save)
         || enemy->change_pos > 0) {
         attack_player(enemy, save, game);
         enemy->walk = sfFalse;
+        enemy->offset = (sfVector2f){0, 0};
     } else
         get_new_position(enemy, game, save->info->difficulty);
 }
