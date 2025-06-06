@@ -101,38 +101,6 @@ static sfBool move_closer(entity_t *projectile, game_t *game, float difficulty)
     return sfTrue;
 }
 
-static void check_expolde_wall(
-    game_t *game, save_t *save, sfVector2i tile)
-{
-    if (save->map[tile.y][tile.x] == 3) {
-        save->map[tile.y][tile.x] = 0;
-        sfMusic_play(game->music[DESTROY_WALL]);
-        game->player->save->info->score += WALL_SCORE;
-    }
-}
-
-static void expolde_wall(game_t *game, entity_t *projectile, save_t *save)
-{
-    check_expolde_wall(game, save, (sfVector2i)
-        {floor((projectile->pos.x - 5) / TILE_SIZE),
-        floor(projectile->pos.y / TILE_SIZE)});
-    check_expolde_wall(game, save, (sfVector2i)
-        {floor(projectile->pos.x / TILE_SIZE),
-        floor((projectile->pos.y - 5) / TILE_SIZE)});
-    check_expolde_wall(game, save, (sfVector2i)
-        {floor((projectile->pos.x - 5) / TILE_SIZE),
-        floor((projectile->pos.y - 5) / TILE_SIZE)});
-    check_expolde_wall(game, save, (sfVector2i)
-        {floor((projectile->pos.x + 5) / TILE_SIZE),
-        floor(projectile->pos.y / TILE_SIZE)});
-    check_expolde_wall(game, save, (sfVector2i)
-        {floor(projectile->pos.x / TILE_SIZE),
-        floor((projectile->pos.y + 5) / TILE_SIZE)});
-    check_expolde_wall(game, save, (sfVector2i)
-        {floor((projectile->pos.x + 5) / TILE_SIZE),
-        floor((projectile->pos.y + 5) / TILE_SIZE)});
-}
-
 static void do_explosion(
     entity_t *projectile, save_t *save, game_t *game, node_t *node)
 {

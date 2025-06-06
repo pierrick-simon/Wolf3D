@@ -217,5 +217,6 @@ void add_projectile_player(player_t *player);
 sfBool is_arrived(entity_t *enemy);
 void change_death_rect(
     entity_t *enemy, save_t *save, game_t *game, node_t *node);
+void expolde_wall(game_t *game, entity_t *projectile, save_t *save);
 
 #endif /* !ELEMENT_H_ */

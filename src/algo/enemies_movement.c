@@ -143,9 +143,11 @@ static void enemy_action(entity_t *enemy, game_t *game, save_t *save)
 {
     if (enemy->dist < ENEMY[enemy->type].attack_range * save->info->difficulty
         || enemy->change_pos > 0) {
+        if (enemy->walk == sfTrue) {
+            enemy->walk = sfFalse;
+            enemy->offset = (sfVector2f){0, 0};
+        }
         attack_player(enemy, save, game);
-        enemy->walk = sfFalse;
-        enemy->offset = (sfVector2f){0, 0};
     } else
         get_new_position(enemy, game, save->info->difficulty);
 }
