@@ -64,7 +64,7 @@ void prev_button(system_t *sys, edit_map_t *edit)
     edit->draw_map->map = malloc(sizeof(int *) * sys->save->size.y);
     for (int i = 0; i < sys->save->size.y; i++) {
         edit->draw_map->map[i] = malloc(sizeof(int) * sys->save->size.x);
-        for (int j = 0; j < sys->save->size.y; j++)
+        for (int j = 0; j < sys->save->size.x; j++)
             edit->draw_map->map[i][j] = history->map[i][j];
     }
 }
@@ -81,7 +81,7 @@ void next_button(system_t *sys, edit_map_t *edit)
     edit->draw_map->map = malloc(sizeof(int *) * sys->save->size.y);
     for (int i = 0; i < sys->save->size.y; i++) {
         edit->draw_map->map[i] = malloc(sizeof(int) * sys->save->size.x);
-        for (int j = 0; j < sys->save->size.y; j++)
+        for (int j = 0; j < sys->save->size.x; j++)
             edit->draw_map->map[i][j] = history->map[i][j];
     }
 }
