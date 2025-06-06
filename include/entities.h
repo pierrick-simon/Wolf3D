@@ -183,9 +183,9 @@ static const enemy_info_t ENEMY[] __maybe_unused = {
     [E_GUN_ENEMY] = {7, 300, 2, 50, 175, 100},
     [E_SHEET_ENEMY] = {20, 15, 3, 150, 1, 1000000},
     [E_CYBORG] = {17, 450, 5, 30, 250, 150},
-    [E_GROWLER] = {2, 250, 0.8, 50, 25, 50},
+    [E_GROWLER] = {2, 350, 0.8, 50, 25, 50},
     [E_PHANTOM] = {17, 32, 4, 30, 250, 250},
-    [E_BOSS] = {0, 1000, 1.7, 50, 5000, 1500},
+    [E_BOSS] = {0, 750, 1.7, 50, 5000, 1500},
     [E_BOSS_PROJECTILE] = {15, 400, 10, 900, 1, 15},
     [E_PLAYER_PROJECTILE] = {250, 400, 10, 900, 1, 250},
 };

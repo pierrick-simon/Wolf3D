@@ -95,7 +95,7 @@
     #define FACTOR_INDEX 1
 
     #define Y_SPEED 750
-    #define Y_MAX 500
+    #define Y_MAX 750
     #define Y_MIN -Y_MAX
 
     #define NO_ENTITIE -1
@@ -103,8 +103,8 @@
     #define WEAPON_SCORE 10
     #define WALL_SCORE 5
 
-    #define START_BLACK 100.0
-    #define END_BLACK 3000.0
+    #define START_BLACK 750.0
+    #define END_BLACK 2000.0
     #define MAX_COLOR 255
 
     #define UV_VALUE 75
