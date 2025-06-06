@@ -32,7 +32,7 @@ static void write_entities(save_t *save, int fd)
 static void write_header(save_t *save, int fd)
 {
     dprintf(fd, "%s\n%d\n%d\n%f\n%f\n%f\n%.0f\n"
-        "%.0f\n%.0f\n%.0f\n%.0f\n%.0f\n%d\n%d\n%d\n%d\n%f\n%s\n",
+        "%.0f\n%.0f\n%.0f\n%.0f\n%.0f\n%.0f\n%d\n%d\n%d\n%d\n%f\n%s\n",
         save->name, save->size.x, save->size.y, save->info->start_pos.x,
         save->info->start_pos.y, save->info->start_angle,
         save->info->item_info[INFO_HEALTH],
@@ -40,6 +40,7 @@ static void write_header(save_t *save, int fd)
         save->info->item_info[INFO_AMMO_PISTOL],
         save->info->item_info[INFO_AMMO_SHUTGUN],
         save->info->item_info[INFO_AMMO_MINIGUN],
+        save->info->item_info[INFO_AMMO_PLASMA],
         save->info->item_info[INFO_STAMINA],
         save->info->score, (int)save->info->time / SEC_IN_MICRO,
         save->info->weapons, save->info->start_weapon,

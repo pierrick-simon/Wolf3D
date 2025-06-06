@@ -39,13 +39,6 @@ static void damage_enemy(game_t *game, entity_t *data)
     } else
         data->health -= game->weapon->info[game->weapon->weapon].damage;
     data->damage = TIME_OVERLAY;
-    if (data->health <= 0 && data->is_alive != sfFalse) {
-        game->player->save->info->score += ceil(ENEMY[data->type].score *
-            game->player->save->info->difficulty);
-        data->is_alive = sfFalse;
-        data->cooldown = DEATH_RECT;
-        data->offset.x = 0;
-    }
 }
 
 static void delete_center(game_t *game)
@@ -57,11 +50,26 @@ static void delete_center(game_t *game)
         return;
     while (node != NULL) {
         data = node->data;
-        if (data->id == game->map->entity_center && data->type >= NB_ITEM
-            && data->type < E_BOSS_PROJECTILE)
+        if (data->type < E_BOSS_PROJECTILE
+            && data->type >= NB_ITEM
+            && data->id == game->map->entity_center)
             return damage_enemy(game, data);
         node = node->prev;
     }
+}
+
+void handle_diff_weapon(system_t *sys, weapon_t *weapon, game_t *game)
+{
+    int ind = weapon->weapon;
+
+    if (weapon->weapon != PUNCH)
+        sys->save->info->item_info[ind]--;
+    if (weapon->weapon == PLASMA_GUN)
+        add_projectile_player(game->player);
+    weapon->shot = game->time_info->time;
+    delete_center(game);
+    sfMusic_play(weapon->info[weapon->weapon].sound);
+    destroy_wall(sys->save->map, game->player, game);
 }
 
 void shot(system_t *sys, weapon_t *weapon, game_t *game)
@@ -79,11 +87,6 @@ void shot(system_t *sys, weapon_t *weapon, game_t *game)
             sfMusic_play(weapon->empty);
             return;
         }
-        if (weapon->weapon != PUNCH)
-            sys->save->info->item_info[ind]--;
-        weapon->shot = game->time_info->time;
-        delete_center(game);
-        sfMusic_play(weapon->info[weapon->weapon].sound);
-        destroy_wall(sys->save->map, game->player, game);
+        handle_diff_weapon(sys, weapon, game);
     }
 }

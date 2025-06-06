@@ -82,6 +82,7 @@ SRC =	$(addprefix src/,					\
 				handle_items.c  			\
 				handle_boss.c  				\
 				handle_projectiles.c 		\
+				add_projectile.c 			\
 			)								\
 			$(addprefix save/,				\
 				$(addprefix list/,			\

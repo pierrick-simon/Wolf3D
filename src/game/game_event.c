@@ -23,7 +23,7 @@ static void scroll_weapon(sfEvent event, weapon_t *weapon)
     if (weapon->weapon == NB_WEAPON)
         weapon->weapon = PUNCH;
     if (weapon->weapon == NO_WEAPON)
-        weapon->weapon = MINIGUN;
+        weapon->weapon = PLASMA_GUN;
     } while (weapon->info[weapon->weapon].bag != sfTrue);
 }
 
@@ -45,7 +45,8 @@ static void change_weapons(sfEvent event, game_t *game, weapon_t *weapon)
 
     if (weapon->info[weapon->weapon].current_tile != 0)
         return;
-    game->tool->draw[prev + TOOL_ONE].color = sfWhite;
+    if (weapon->weapon != PUNCH)
+        game->tool->draw[prev + TOOL_TWO - 1].color = sfWhite;
     scroll_weapon(event, weapon);
     for (int i = 0; i < NB_WEAPON; i++) {
         if (is_input(event, weapon->info[i].key, sfFalse, 0)
@@ -54,7 +55,8 @@ static void change_weapons(sfEvent event, game_t *game, weapon_t *weapon)
     }
     if (prev != weapon->weapon)
         change_weapon(weapon);
-    game->tool->draw[weapon->weapon + TOOL_ONE].color = sfRed;
+    if (weapon->weapon != PUNCH)
+        game->tool->draw[weapon->weapon + TOOL_TWO - 1].color = sfRed;
 }
 
 static void switch_scene(

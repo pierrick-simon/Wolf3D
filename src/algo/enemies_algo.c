@@ -99,3 +99,21 @@ sfBool get_next_pos(entity_t *enemy, game_t *game)
     enemy->prev_tile.y = current.y;
     return sfTrue;
 }
+
+void change_death_rect(
+    entity_t *enemy, save_t *save, game_t *game, node_t *node)
+{
+    if (ENTITY[enemy->type].max_third == 0) {
+        delete_node(save->entities, node, &free);
+        return;
+    }
+    enemy->offset.y = ENTITY[enemy->type].text_size.y * 2;
+    if (enemy->cooldown <= 0) {
+        enemy->offset.x += ENTITY[enemy->type].text_size.x;
+        enemy->cooldown = DEATH_RECT;
+        if (enemy->offset.x >= ENTITY[enemy->type].max_third *
+            ENTITY[enemy->type].text_size.x)
+            delete_node(save->entities, node, &free);
+    } else
+        enemy->cooldown -= game->time_info->delta;
+}

@@ -113,7 +113,7 @@ static void switch_scene(sfEvent event, system_t *sys,
             edit_map->str = EDIT_MAP_BACK;
         if (edit_map->str == EDIT_MAP_SAVE)
             return get_info_save(sys->save, edit_map);
-        if (edit_map->str == EDIT_MAP_BACK)
+        if (edit_map->str == EDIT_MAP_BACK && state->old_scene == MAP)
             state->scene = state->old_scene;
         else
             state->scene = edit_map->draw[edit_map->str].scene;
@@ -148,5 +148,5 @@ void edit_map_events(system_t *sys, edit_map_t *edit_map)
     if (sys->state->fullscreen == sfFalse)
         sfConvexShape_setOutlineThickness(edit_map->draw_map->shape, 2);
     else
-        sfConvexShape_setOutlineThickness(edit_map->draw_map->shape, 1);
+        sfConvexShape_setOutlineThickness(edit_map->draw_map->shape, 2);
 }

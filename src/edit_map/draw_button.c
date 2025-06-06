@@ -60,6 +60,8 @@ void draw_button(system_t *sys, buttons_t *buttons, edit_map_t *edit)
     sfVector2i mouse_pos = sfMouse_getPositionRenderWindow(sys->window);
 
     for (edit_t i = 0; i < NB_EDIT; i++) {
+        if (i == EDIT_SHEET)
+            continue;
         edit->buttons->hover[i] = sfFloatRect_contains(
             &edit->buttons->bounds[i], mouse_pos.x, mouse_pos.y);
         sfRectangleShape_setPosition(buttons->rectangle, BUTTON[i].pos);

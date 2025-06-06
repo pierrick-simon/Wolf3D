@@ -22,6 +22,7 @@ static void switch_scene(sfEvent event, system_t *sys,
 {
     if (is_input(event, sfKeyEnter, sfTrue, 0)
         || is_input(event, sfKeyEscape, sfTrue, 7)) {
+        difficulty->draw[difficulty->str].color = sfWhite;
         if (is_input(event, sfKeyEscape, sfTrue, 7))
             difficulty->str = DIFF_BACK;
         change_difficulty(sys, difficulty->str);

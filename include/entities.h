@@ -19,6 +19,7 @@
     #define HEAD 2.0
 
 typedef struct game_s game_t;
+typedef struct player_s player_t;
 
 typedef enum entity_id_e {
     E_SMALL_HEALTH,
@@ -27,10 +28,12 @@ typedef enum entity_id_e {
     E_AMMO_PISTOL,
     E_AMMO_SHUTGUN,
     E_AMMO_MINIGUN,
+    E_AMMO_PLASMA,
     E_FLASHLIGHT,
     E_WEAPON_TWO,
     E_WEAPON_THREE,
     E_WEAPON_FOUR,
+    E_WEAPON_FIVE,
     E_SWORD_ENEMY,
     E_GUN_ENEMY,
     E_SHEET_ENEMY,
@@ -39,6 +42,7 @@ typedef enum entity_id_e {
     E_PHANTOM,
     E_BOSS,
     E_BOSS_PROJECTILE,
+    E_PLAYER_PROJECTILE,
     NB_ENTITIES,
 } entity_id_t;
 
@@ -86,11 +90,13 @@ static const get_item_t ITEM[] __maybe_unused = {
     [E_AMMO_PISTOL] = {&item_potion, MAX_AMMO, 15, INFO_AMMO_PISTOL},
     [E_AMMO_SHUTGUN] = {&item_potion, MAX_AMMO, 7, INFO_AMMO_SHUTGUN},
     [E_AMMO_MINIGUN] = {&item_potion, MAX_AMMO, 50, INFO_AMMO_MINIGUN},
+    [E_AMMO_PLASMA] = {&item_potion, MAX_AMMO, 3, INFO_AMMO_PLASMA},
     [E_STAMINA] = {&item_potion, MAX_HEALTH, MAX_HEALTH, INFO_STAMINA},
     [E_FLASHLIGHT] = {&item_potion, MAX_HEALTH, MAX_HEALTH, INFO_FLASHLIGHT},
     [E_WEAPON_TWO] = {&item_weapon},
     [E_WEAPON_THREE] = {&item_weapon},
     [E_WEAPON_FOUR] = {&item_weapon},
+    [E_WEAPON_FIVE] = {&item_weapon},
 };
 
 typedef struct entity_info_s {
@@ -122,6 +128,8 @@ static const entity_info_t ENTITY[] __maybe_unused = {
         {32, 12}, 0.3, 6},
     [E_AMMO_MINIGUN] = {"asset/minigun_ammo.png",
         {28, 16}, 0.3, 6},
+    [E_AMMO_PLASMA] = {"asset/plasma_ammo.png",
+        {32, 21}, 0.3, 6},
     [E_FLASHLIGHT] = {"asset/batterie.png",
         {7, 11}, 0.1, 6},
     [E_WEAPON_TWO] = {"asset/floor_gun.png",
@@ -129,6 +137,8 @@ static const entity_info_t ENTITY[] __maybe_unused = {
     [E_WEAPON_THREE] = {"asset/floor_shotgun.png",
         {63, 12}, 0.5, 6},
     [E_WEAPON_FOUR] = {"asset/floor_minigun.png",
+        {54, 16}, 0.4, 6},
+    [E_WEAPON_FIVE] = {"asset/floor_plasma_gun.png",
         {54, 16}, 0.4, 6},
     [E_SWORD_ENEMY] = {"asset/sword.png",
         {79, 83}, 1, 1, 4, 3, 9,
@@ -154,6 +164,9 @@ static const entity_info_t ENTITY[] __maybe_unused = {
     [E_BOSS_PROJECTILE] = {"asset/boss_projectile.png",
         {53, 46}, 0.5, 2.2, 2, 3, 0,
         {0, 0}, {53, 46}, {0, 0}, {53, 46}},
+    [E_PLAYER_PROJECTILE] = {"asset/boss_projectile.png",
+        {53, 46}, 0.5, 2.2, 2, 3, 0,
+        {0, 0}, {53, 46}, {0, 0}, {53, 46}},
 };
 
 typedef struct enemy_info_s {
@@ -172,8 +185,9 @@ static const enemy_info_t ENEMY[] __maybe_unused = {
     [E_CYBORG] = {17, 450, 5, 30, 250, 150},
     [E_GROWLER] = {2, 250, 0.8, 50, 25, 50},
     [E_PHANTOM] = {17, 32, 4, 30, 250, 250},
-    [E_BOSS] = {0, 500, 1, 50, 5000, 1500},
-    [E_BOSS_PROJECTILE] = {15, 400, 10, 900, 1, 1},
+    [E_BOSS] = {0, 750, 1, 50, 5000, 1500},
+    [E_BOSS_PROJECTILE] = {15, 400, 10, 900, 1, 15},
+    [E_PLAYER_PROJECTILE] = {250, 400, 10, 900, 1, 250},
 };
 
 typedef struct closer_tile_s {
@@ -198,7 +212,10 @@ void handle_items(save_t *save, game_t *game);
 void handle_projectiles(save_t *save, game_t *game);
 void get_angle(
     float *angle, sfVector2f *first, sfVector2f *second, float dist);
-void add_projectile(game_t *game, sfVector2f *boss, int dist);
+void add_projectile_boss(game_t *game, sfVector2f *boss, int dist);
+void add_projectile_player(player_t *player);
 sfBool is_arrived(entity_t *enemy);
+void change_death_rect(
+    entity_t *enemy, save_t *save, game_t *game, node_t *node);
 
 #endif /* !ELEMENT_H_ */

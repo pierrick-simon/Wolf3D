@@ -106,6 +106,14 @@ static void update_str(system_t *sys, draw_textbox_t *draw)
     }
 }
 
+static void update_save_time(time_info_t *time)
+{
+    time->time = 0;
+    time->item = 0;
+    time->weapon = 0;
+    time->shot = 0;
+}
+
 void update_save(system_t *sys, game_t *game)
 {
     update_doors(sys, game);
@@ -113,12 +121,12 @@ void update_save(system_t *sys, game_t *game)
         game->player->pos = sys->save->info->start_pos;
         game->player->angle = sys->save->info->start_angle;
         game->player->save = sys->save;
-        game->time_info->time = 0;
         game->tool->sprint = 0;
         game->tool->no_sprint = 0;
         game->tool->save = -1;
         game->tool->last_save = 0;
         update_str(sys, game->tool->draw);
+        update_save_time(game->time_info);
         update_save_light(sys, game->light, game->tool->flashlight);
         update_save_weapon(sys, game->weapon);
         update_health_enemi(sys->save->entities, sys->save->info->difficulty);

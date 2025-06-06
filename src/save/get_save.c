@@ -81,6 +81,7 @@ static int initiate_struct(char **tab, save_t *save, int offset)
     save->info->item_info[INFO_AMMO_PISTOL] = atoi(tab[AMMO_PISTOL]);
     save->info->item_info[INFO_AMMO_SHUTGUN] = atoi(tab[AMMO_SHUTGUN]);
     save->info->item_info[INFO_AMMO_MINIGUN] = atoi(tab[AMMO_MINIGUN]);
+    save->info->item_info[INFO_AMMO_PLASMA] = atoi(tab[AMMO_PLASMA]);
     save->info->item_info[INFO_STAMINA] = atoi(tab[STAMINA]);
     save->info->score = atoi(tab[CURRENT_SCORE]);
     save->info->time = atoi(tab[TIME]) * SEC_IN_MICRO;

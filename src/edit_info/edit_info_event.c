@@ -68,6 +68,7 @@ static void init_save_info(save_t *save)
     save->info->item_info[INFO_AMMO_PISTOL] = 15;
     save->info->item_info[INFO_AMMO_SHUTGUN] = 7;
     save->info->item_info[INFO_AMMO_MINIGUN] = 50;
+    save->info->item_info[INFO_AMMO_PLASMA] = 3;
     save->info->start_pos = (sfVector2f){70, 70};
 }
 

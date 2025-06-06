@@ -35,7 +35,8 @@ static void set_center(game_t *game, draw_entity_t *info, ray_t center)
         ((float)WIN_HEIGHT / 2.0)) / ((info->end.y) - (info->start.y)))};
     if (ratio.x > ENTITY[type].hit_start.x && ratio.x < ENTITY[type].hit_end.x
         && ratio.y > ENTITY[type].hit_start.y &&
-        ratio.y < ENTITY[type].hit_end.y) {
+        ratio.y < ENTITY[type].hit_end.y
+        && info->entity->type < E_BOSS_PROJECTILE) {
         game->map->entity_center = info->entity->id;
         set_weakness(game, info, &ratio);
     }

@@ -102,6 +102,9 @@ void mouse_click(system_t *sys, edit_map_t *edit, sfVector2f **map)
 {
     sfVector2i tile = {0, 0};
 
+    for (edit_t i = 0; i < NB_EDIT; i++)
+        if (edit->buttons->hover[i] == sfTrue)
+            return;
     if (sfMouse_isButtonPressed(sfMouseLeft)) {
         tile = which_tile(sys, edit->draw_map, map);
         if (tile.x != -1 && tile.y != -1

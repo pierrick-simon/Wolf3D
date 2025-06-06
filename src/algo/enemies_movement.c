@@ -119,7 +119,7 @@ static void attack_player(entity_t *enemy, save_t *save, game_t *game)
 {
     if (enemy->cooldown <= 0) {
         if (enemy->type == E_BOSS) {
-            add_projectile(game, &enemy->pos, enemy->dist);
+            add_projectile_boss(game, &enemy->pos, enemy->dist);
         } else {
             save->info->item_info[INFO_HEALTH] -= ENEMY[enemy->type].attack
                 * save->info->difficulty;
@@ -139,24 +139,6 @@ static void attack_player(entity_t *enemy, save_t *save, game_t *game)
     change_attack_rect(enemy, game);
 }
 
-void change_death_rect(
-    entity_t *enemy, save_t *save, game_t *game, node_t *node)
-{
-    if (ENTITY[enemy->type].max_third == 0) {
-        delete_node(save->entities, node, &free);
-        return;
-    }
-    enemy->offset.y = ENTITY[enemy->type].text_size.y * 2;
-    if (enemy->cooldown <= 0) {
-        enemy->offset.x += ENTITY[enemy->type].text_size.x;
-        enemy->cooldown = DEATH_RECT;
-        if (enemy->offset.x >= ENTITY[enemy->type].max_third *
-            ENTITY[enemy->type].text_size.x)
-            delete_node(save->entities, node, &free);
-    } else
-        enemy->cooldown -= game->time_info->delta;
-}
-
 static void enemy_action(entity_t *enemy, game_t *game, save_t *save)
 {
     if (enemy->dist < ENEMY[enemy->type].attack_range * save->info->difficulty
@@ -165,6 +147,17 @@ static void enemy_action(entity_t *enemy, game_t *game, save_t *save)
         enemy->walk = sfFalse;
     } else
         get_new_position(enemy, game, save->info->difficulty);
+}
+
+void handle_life(entity_t *data, game_t *game)
+{
+    if (data->health <= 0 && data->is_alive != sfFalse) {
+        game->player->save->info->score += ceil(ENEMY[data->type].score *
+            game->player->save->info->difficulty);
+        data->is_alive = sfFalse;
+        data->cooldown = DEATH_RECT;
+        data->offset.x = 0;
+    }
 }
 
 void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save)
@@ -178,6 +171,7 @@ void enemies_movement(game_t *game, linked_list_t *enemies, save_t *save)
         if (tmp->dist > DISTANCE_ENEMY || tmp->type < NB_ITEM
             || tmp->type >= E_BOSS_PROJECTILE)
             continue;
+        handle_life(tmp, game);
         if (tmp->type == E_BOSS && tmp->see == sfTrue)
             add_node_boss(save->boss, tmp->health);
         if (tmp->is_alive == sfFalse) {

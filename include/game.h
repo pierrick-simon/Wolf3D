@@ -165,10 +165,10 @@ typedef enum {
     TOOL_HEALTH_NB,
     TOOL_HEALTH_STR,
     TOOL_FLASH_NB,
-    TOOL_ONE,
     TOOL_TWO,
     TOOL_THREE,
     TOOL_FOUR,
+    TOOL_FIVE,
     TOOL_ARM,
     TOOL_STAM_NB,
     TOOL_STAM_STR,
@@ -189,6 +189,7 @@ typedef enum {
     PISTOL,
     SHOTGUN,
     MINIGUN,
+    PLASMA_GUN,
     NB_WEAPON,
 } weapon_id_t;
 

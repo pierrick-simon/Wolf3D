@@ -7,8 +7,9 @@ angle (0 is right)
 health = 100
 flash = 100
 ammo_pistol = 15
-shotgun_pistol = 7
-mini_pistol = 50
+ammo_shotgun = 7
+ammo_minigun = 50
+ammo_plama_gun = 3
 stamina = 100
 score = 0
 time = 0

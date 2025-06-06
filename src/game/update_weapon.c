@@ -12,12 +12,12 @@
 
 static void update_inbag(weapon_t *weapon, toolbar_t *tool, int bag)
 {
-    for (int i = 0; i < NB_WEAPON; i++) {
+    for (int i = 1; i < NB_WEAPON; i++) {
         if (((int)pow(2, i) & bag) == 0) {
-            tool->draw[i + TOOL_ONE].color = GREY;
+            tool->draw[i + TOOL_TWO - 1].color = GREY;
             weapon->info[i].bag = sfFalse;
         } else {
-            tool->draw[i + TOOL_ONE].color = sfWhite;
+            tool->draw[i + TOOL_TWO - 1].color = sfWhite;
             weapon->info[i].bag = sfTrue;
         }
     }
@@ -49,7 +49,8 @@ static void update_guns(weapon_t *weapon, toolbar_t *tool, int bag)
     int ind = weapon->weapon;
 
     update_inbag(weapon, tool, bag);
-    tool->draw[weapon->weapon + TOOL_ONE].color = sfRed;
+    if (weapon->weapon != PUNCH)
+        tool->draw[weapon->weapon + TOOL_TWO - 1].color = sfRed;
     if (weapon->info[ind].current_tile == weapon->info[ind].nb_tile)
         weapon->info[ind].current_tile = 0;
     if (ind == PUNCH) {

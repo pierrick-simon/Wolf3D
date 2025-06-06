@@ -20,14 +20,14 @@ static void init_color(sfColor *color)
     color[EDIT_DOOR] = DARK_GREY;
     color[EDIT_END] = sfGreen;
     color[EDIT_START] = sfBlue;
-    for (int i = 1; i <= 10; i++) {
+    for (int i = 1; i <= 12; i++) {
         offset = 100 * i / 10;
         color[EDIT_START + i] =
             sfColor_fromRGB(255 - offset, 128 - offset / 2, 0);
     }
     for (int i = 1; i <= 7; i++) {
         offset = 100 * i / 7;
-        color[EDIT_WEAPON_FOUR + i] = sfColor_fromRGB(255 - offset, 0, 0);
+        color[EDIT_WEAPON_FIVE + i] = sfColor_fromRGB(255 - offset, 0, 0);
     }
     for (int i = EDIT_BOSS + 1; i < NB_EDIT; i++)
         color[i] = sfMagenta;
