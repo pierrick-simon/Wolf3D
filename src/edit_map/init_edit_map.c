@@ -55,6 +55,7 @@ static int init_buttons(buttons_t *buttons)
     sfRectangleShape_setOutlineThickness(buttons->rectangle, 5);
     sfRectangleShape_setOutlineColor(buttons->rectangle, sfTransparent);
     for (int i = 0; i < NB_EDIT; i++) {
+        buttons->hover[i] = sfFalse;
         sfRectangleShape_setPosition(buttons->rectangle, BUTTON[i].pos);
         buttons->bounds[i] = sfRectangleShape_getGlobalBounds(
             buttons->rectangle);

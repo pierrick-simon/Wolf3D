@@ -20,11 +20,22 @@ static sfBool one_use(
     return sfTrue;
 }
 
+static sfVector2i get_pos(system_t *sys)
+{
+    sfVector2i mouse_pos = sfMouse_getPositionRenderWindow(sys->window);
+
+    if (sys->state->fullscreen == false) {
+        mouse_pos.x *= 2;
+        mouse_pos.y *= 2;
+    }
+    return mouse_pos;
+}
+
 static void check_press_button(
     system_t *sys, buttons_t *buttons, edit_map_t *edit, edit_t i)
 {
     sfBool change = sfFalse;
-    sfVector2i mouse_pos = sfMouse_getPositionRenderWindow(sys->window);
+    sfVector2i mouse_pos = get_pos(sys);
 
     if (sfFloatRect_contains(&edit->buttons->bounds[i],
         mouse_pos.x, mouse_pos.y) == sfFalse
@@ -49,7 +60,7 @@ static void is_on_button(
     sfEvent event, system_t *sys, buttons_t *buttons, edit_map_t *edit)
 {
     if (event.type == sfEvtMouseButtonPressed &&
-        event.mouseButton.button == sfMouseLeft){
+        event.mouseButton.button == sfMouseLeft) {
         for (edit_t i = 0; i < NB_EDIT; i++) {
             check_press_button(sys, buttons, edit, i);
         }
@@ -58,7 +69,7 @@ static void is_on_button(
 
 static void dispatch_info(save_t *save, int i, int j, edit_map_t *edit)
 {
-    char tmp[2048];
+    char tmp[2048] = {0};
 
     if (edit->draw_map->map[i][j] == EDIT_START) {
         save->info->start_pos = (sfVector2f){j * TILE_SIZE + TILE_SIZE / 2,

@@ -27,10 +27,10 @@
 
     #define MAX_DISTANCE 100.0
 
-    #define RENDER_DISTANCE 2000
+    #define RENDER_DISTANCE 3000
     #define DISTANCE_ENEMY RENDER_DISTANCE
 
-    #define PLAYER_SPEED 100
+    #define PLAYER_SPEED 120
     #define ROTATION_SPEED RAD(100)
     #define FORWARD_COEF 1.5
 
@@ -103,8 +103,8 @@
     #define WEAPON_SCORE 10
     #define WALL_SCORE 5
 
-    #define START_BLACK 500.0
-    #define END_BLACK 1500.0
+    #define START_BLACK 100.0
+    #define END_BLACK 3000.0
     #define MAX_COLOR 255
 
     #define UV_VALUE 75

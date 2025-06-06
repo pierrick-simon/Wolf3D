@@ -34,6 +34,13 @@ static void handle_heal(entity_t *entity)
     }
 }
 
+static void handle_cooldown(entity_t *entity)
+{
+    entity->walk = sfFalse;
+    if (entity->type >= NB_ITEM && entity->type < E_BOSS_PROJECTILE)
+        entity->cooldown = ENEMY[entity->type].cooldown;
+}
+
 static void fill_node_entity(linked_list_t *enemies,
     entity_t *entity, char **tab)
 {
@@ -53,8 +60,8 @@ static void fill_node_entity(linked_list_t *enemies,
     entity->next_pos = (sfVector2f){SKIP, SKIP};
     entity->prev_tile = (sfVector2i){0, 0};
     entity->see = sfFalse;
-    entity->walk = sfFalse;
     handle_heal(entity);
+    handle_cooldown(entity);
     ++id;
     push_to_tail(enemies, entity);
 }

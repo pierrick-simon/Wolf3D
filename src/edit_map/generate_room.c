@@ -25,6 +25,8 @@ static void generate_enemy_item(
                 rand() % sys->save->size.y};
         edit->draw_map->map[pos.y][pos.x] = rand() % NB_ENEMY
             + EDIT_SWORD_ENEMY;
+        if (edit->draw_map->map[pos.y][pos.x] == EDIT_SHEET_ENEMY)
+            edit->draw_map->map[pos.y][pos.x] = EDIT_SWORD_ENEMY;
     }
 }
 

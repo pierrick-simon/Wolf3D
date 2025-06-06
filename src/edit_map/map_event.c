@@ -38,22 +38,22 @@ static void set_zoom(sfEvent event, edit_map_t *edit)
 
 static void move_map(sfEvent event, edit_map_t *edit)
 {
-    if (is_input(event, sfKeyZ, sfFalse, 0)) {
+    if (is_input(event, sfKeyS, sfFalse, 0)) {
         edit->draw_map->pos.y -= MOVE;
         if (edit->draw_map->pos.y < -1 * (WIN_HEIGHT / 2))
             edit->draw_map->pos.y = -1 * (WIN_HEIGHT / 2);
     }
-    if (is_input(event, sfKeyS, sfFalse, 0)) {
+    if (is_input(event, sfKeyZ, sfFalse, 0)) {
         edit->draw_map->pos.y += MOVE;
         if (edit->draw_map->pos.y > WIN_HEIGHT / 2)
             edit->draw_map->pos.y = WIN_HEIGHT / 2;
     }
-    if (is_input(event, sfKeyQ, sfFalse, 0)) {
+    if (is_input(event, sfKeyD, sfFalse, 0)) {
         edit->draw_map->pos.x -= MOVE;
         if (edit->draw_map->pos.x < -1 * (WIN_WIDTH / 2))
             edit->draw_map->pos.x = -1 * (WIN_WIDTH / 2);
     }
-    if (is_input(event, sfKeyD, sfFalse, 0)) {
+    if (is_input(event, sfKeyQ, sfFalse, 0)) {
         edit->draw_map->pos.x += MOVE;
         if (edit->draw_map->pos.x > WIN_WIDTH / 2)
             edit->draw_map->pos.x = WIN_WIDTH / 2;
